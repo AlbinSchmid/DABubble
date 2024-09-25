@@ -1,0 +1,25 @@
+@use "@angular/material" as mat;
+@include mat.theme($theme);
+
+$theme: (
+  primary: (
+    default: #009688,
+    light: #B2DFDB,
+    dark: #00695F
+  ),
+  accent: (
+    default: #ff4081,
+    light: #ff80ab,
+    dark: #c00052
+  ),
+  warn: (
+    default: #ff0000,
+    light: #ff4040,
+    dark: #c00000
+  ),
+  hover: (
+    primary: #00796B,
+    accent: #ff306f,
+    warn: #cc0000
+  )
+);
