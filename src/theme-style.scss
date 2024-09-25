@@ -3,23 +3,15 @@
 
 $theme: (
   primary: (
-    default: #009688,
-    light: #B2DFDB,
-    dark: #00695F
+    default: #007bff, // Adjust the hex code as needed
+    light: #66b1ff,
+    dark: #00478d,
+    hover: #0066cc
   ),
-  accent: (
-    default: #ff4081,
-    light: #ff80ab,
-    dark: #c00052
-  ),
-  warn: (
-    default: #ff0000,
-    light: #ff4040,
-    dark: #c00000
-  ),
-  hover: (
-    primary: #00796B,
-    accent: #ff306f,
-    warn: #cc0000
+  secondary: (
+    default: #c0c0c0, // Adjust the hex code as needed
+    light: #e0e0e0,
+    dark: #808080,
+    hover: #b0b0b0
   )
 );
