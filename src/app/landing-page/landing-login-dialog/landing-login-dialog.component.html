@@ -7,7 +7,7 @@
   <a routerLink="policy">Datenschutz</a>
 </div>
 <section class="login">
-  
+
   <h1>Anmeldung</h1>
   <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der arbeit verwendest</p>
   <div class="max-width inputs">
@@ -23,10 +23,10 @@
 
       <div class="error-message" *ngIf="emailFormControl.invalid && emailFormControl.touched">
         @if (emailFormControl.hasError('email')) {
-          <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>>
+        <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>>
         }
         @if (emailFormControl.hasError('required')) {
-          <span>Geben sie ein <strong>E-Mail</strong> ein</span>
+        <span>Geben sie ein <strong>E-Mail</strong> ein</span>
         }
       </div>
     </div>
@@ -48,11 +48,11 @@
     </div>
   </div>
   <div class="oder-container">
-      <div class="line"></div>
-      <span>ODER</span>
-      <div class="line"></div>
+    <div class="line"></div>
+    <span>ODER</span>
+    <div class="line"></div>
   </div>
-  <button  class="google"> <img src="\assets\img\landing\google.png" alt=""> Anmelden mit Google</button>
+  <button class="google"> <img src="/assets/img/landing/Google.png" alt=""> Anmelden mit Google</button>
   <div class="buttons-area">
     <button mat-flat-button class="primary">Anmelden</button>
     <button mat-flat-button class="secondary">Anmelden</button>
