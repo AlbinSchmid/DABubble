@@ -48,8 +48,9 @@ mat-icon {
   align-items: center; /* Align items vertically */
   background-color: #ECEEFE; /* Set background color */
   border-radius: 30px; /* Rounded corners */
-  padding-left: 12px; /* Space from the left */
-  gap: 10px; /* Space between items */
+  padding-left: 12px; 
+  padding-right: 12px;
+  gap: 10px; 
   
   &.focused {
     border: 1px solid #535AF1; /* Change border color on focus */
@@ -68,6 +69,7 @@ input{
   border: none;
   background-color: #ECEEFE ;
   width: 500px;
+  font-size: 18px;
   &:focus{
     outline: none;
   }
@@ -92,24 +94,24 @@ input{
 
 .error-message {
   color: red;
-  font-size: 0.8em;
-  position: absolute; /* Absolute positioning */
-  left: 0; /* Align to the left of the input */
-  bottom: -20px; /* Position it below the input, adjust as needed */
-  opacity: 0; /* Hide by default */
-  transition: opacity 0.2s ease; /* Smooth transition */
+  font-size: 12px;
+  position: absolute; 
+  left: 0; 
+  bottom: -25px;
+  opacity: 0; 
+  transition: opacity 0.2s ease; 
 }
 
 .input-error ~ .error-message {
-  opacity: 1; /* Show error message when input has error */
+  opacity: 1; 
 }
 
 .oder-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30px; /* Adjust the height as needed */
-  width: 100%; /* Adjust the width as needed */
+  height: 30px; 
+  width: 100%; 
   
 }
 
@@ -126,5 +128,30 @@ input{
 
 .google{
   width: 100%;
+  background-color: #ECEEFE !important;
+  color: #444df4!important;
+  font-weight: 400 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  height: 60px;
+  &:hover{
+    transform: scale(1.01);
+    border: 1px solid #444df4;
+    cursor: pointer;
+    transition: 125ms ease-in-out;
+    font-weight: 700 !important;
+  }
+}
+
+.buttons-area{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 30px;
+  padding-top: 30px;
 }
 

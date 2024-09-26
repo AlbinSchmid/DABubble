@@ -14,10 +14,10 @@
 
       <div class="error-message" *ngIf="emailFormControl.invalid && emailFormControl.touched">
         @if (emailFormControl.hasError('email')) {
-        <span>Please enter a valid email address</span>
+          <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>>
         }
         @if (emailFormControl.hasError('required')) {
-        <span>Email is <strong>required</strong></span>
+          <span>Geben sie ein <strong>E-Mail</strong> ein</span>
         }
       </div>
     </div>
@@ -43,5 +43,9 @@
       <span>ODER</span>
       <div class="line"></div>
   </div>
-  <button  class="google" mat-flat-button>Anmelden mit Google</button>
+  <button  class="google"> <img src="/assets/img/landing/google.png" alt=""> Anmelden mit Google</button>
+  <div class="buttons-area">
+    <button mat-flat-button>Anmelden</button>
+    <button mat-flat-button class="secondary">Anmelden</button>
+  </div>
 </section>
