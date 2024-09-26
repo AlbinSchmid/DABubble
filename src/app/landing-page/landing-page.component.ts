@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LandingLoginDialogComponent } from "../landing-login-dialog/landing-login-dialog.component";
+import { LandingLoginDialogComponent } from "./landing-login-dialog/landing-login-dialog.component";
 
 @Component({
   selector: 'app-landing-page',
