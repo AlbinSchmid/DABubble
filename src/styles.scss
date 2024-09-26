@@ -72,11 +72,6 @@ button {
     }
 }
 
-.material-icons-outlined {
-    font-family: 'Material Icons Outlined' !important;
-    /* Outlined Icons */
-}
-
 mat-icon {
     display: flex !important;
     justify-content: center !important;
@@ -85,6 +80,7 @@ mat-icon {
     width: 40px !important;
     height: 40px !important;
     border-radius: 100% !important;
+    font-family: 'Material Icons Outlined' !important;
 
     &:hover {
         background-color: #ECEEFE;
