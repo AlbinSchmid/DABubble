@@ -15,13 +15,13 @@ import {
 
 
 import { MyErrorStateMatcher } from '../services/error.service';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-landing-login-dialog',
   standalone: true,
   imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule,
-     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton],
+     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton, RouterLink, RouterLinkActive],
   templateUrl: './landing-login-dialog.component.html',
   styleUrl: './landing-login-dialog.component.scss',
 })
