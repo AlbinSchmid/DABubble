@@ -10,5 +10,20 @@ import {MatInputModule} from '@angular/material/input';
   styleUrl: './landing-login-dialog.component.scss'
 })
 export class LandingLoginDialogComponent {
+  isInputFocused: boolean = false;
+  isEmailFocused: boolean = false
+  onFocus() {
+    this.isInputFocused = true;
+  }
 
+  onBlur() {
+    this.isInputFocused = false;
+  }
+  
+  onEmailFocus(){
+    this.isEmailFocused = true
+  }
+  onEmailBlur(){
+    this.isEmailFocused = false
+  }
 }
