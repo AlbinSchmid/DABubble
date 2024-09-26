@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation } from '@angular/core';
-import {MatIcon, MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import {
   FormControl,
@@ -15,11 +15,12 @@ import {
 
 
 import { MyErrorStateMatcher } from '../services/error.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-landing-login-dialog',
   standalone: true,
-  imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  imports: [CommonModule, MatIconModule, RouterLink, MatInputModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './landing-login-dialog.component.html',
   styleUrl: './landing-login-dialog.component.scss',
   encapsulation: ViewEncapsulation.None // Disable encapsulatio
