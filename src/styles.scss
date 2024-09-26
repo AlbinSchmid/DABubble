@@ -11,6 +11,65 @@ html {
     width: 100vw;
     max-width: 100%;
     overflow: hidden;
+
+    button {
+        &.primary {
+            .mat-ripple-element {
+                background-color: #444DF2 !important;
+            }
+        }
+
+        &.secondary {
+            .mat-ripple-element {
+                background-color: #444DF2 !important;
+            }
+        }
+    }
+}
+
+button {
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24.55px;
+    min-width: 116px;
+    min-height: 49px;
+
+    &.primary {
+        color: white;
+
+        &:enabled {
+            background-color: #444DF2 !important;
+        }
+
+        &:disabled {
+            background-color: #686868 !important;
+        }
+
+        &:hover {
+            background-color: #797EF3;
+        }
+    }
+
+    &.secondary {
+        color: #444DF2;
+        border: 1px solid #797EF3;
+
+        &:enabled {
+            background-color: white !important;
+        }
+
+        &:disabled {
+            background-color: white !important;
+            color: #686868;
+            border-color: #686868;
+        }
+
+        &:hover {
+            background-color: #535AF1 !important;
+            color: white;
+        }
+    }
 }
 
 
