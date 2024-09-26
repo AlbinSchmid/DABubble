@@ -1,5 +1,4 @@
 @import '../../../styles.scss';
-$purple: #444DF2;
 
 
 .login{
@@ -123,5 +122,9 @@ input{
   width: 100%;
   height: 1px;
   background-color: #ADB0D9;
+}
+
+.google{
+  width: 100%;
 }
 

@@ -5,6 +5,8 @@
     font-family: 'Nunito', sans-serif !important;
 }
 
+$purple: #444DF2;
+
 html {
     height: auto;
     max-height: 100%;
@@ -15,13 +17,13 @@ html {
     button {
         &.primary {
             .mat-ripple-element {
-                background-color: #444DF2 !important;
+                background-color: $purple!important;
             }
         }
 
         &.secondary {
             .mat-ripple-element {
-                background-color: #444DF2 !important;
+                background-color: $purple !important;
             }
         }
     }
@@ -39,7 +41,7 @@ button {
         color: white !important;
 
         &:enabled {
-            background-color: #444DF2 !important;
+            background-color: $purple !important;
         }
 
         &:disabled {
