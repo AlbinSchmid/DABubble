@@ -1,0 +1,29 @@
+<section>
+  
+  <mat-form-field>
+    <mat-icon 
+      matPrefix 
+      [ngClass]="{'active-icon': isEmailFocused}">email
+    </mat-icon>
+    <input 
+      matInput 
+      placeholder="beispielname@email.com" 
+      type="email" 
+      required 
+      (focus)="onEmailFocus()" 
+      (blur)="onEmailBlur()"/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-icon 
+      matPrefix 
+      [ngClass]="{'active-icon': isInputFocused}">lock
+    </mat-icon>
+    <input 
+      matInput 
+      placeholder="password" 
+      type="password" 
+      required 
+      (focus)="onFocus()" 
+      (blur)="onBlur()"/>
+  </mat-form-field>
+</section>
