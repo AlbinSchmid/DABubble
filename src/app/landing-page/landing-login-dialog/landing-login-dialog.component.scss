@@ -1,5 +1,4 @@
 
-
 mat-icon {
   color: gray; 
 }
@@ -7,3 +6,9 @@ mat-icon {
 .active-icon {
   color: black; 
 }
+
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 28px;
+}
+
+
