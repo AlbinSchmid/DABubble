@@ -5,4 +5,5 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: MessengerComponent },
+  { path: 'landing', component: LandingPageComponent },
 ];

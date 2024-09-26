@@ -1,40 +1,47 @@
-<section>
-  <mat-form-field appearance="outline">
-    <mat-icon 
-      matPrefix 
-      [ngClass]="{'active-icon': isFocused.email}">email
-    </mat-icon>
-    <input 
-      type="email" 
-      matInput 
-      [formControl]="emailFormControl" 
-      [errorStateMatcher]="matcher"
-      placeholder="Ex. pat@example.com" 
-      (focus)="onInputFocus('email')" 
-      (blur)="onInputBlur('email')">
-    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
-      <mat-error>Please enter a valid email address</mat-error>
-    }
-    @if (emailFormControl.hasError('required')) {
-      <mat-error>Email is <strong>required</strong></mat-error>
-    }
-  </mat-form-field>
+<section class="login">
+  <h1>Anmeldung</h1>
+  <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der arbeit verwendest</p>
+  <div class="max-width inputs">
+    <a href="#" class="forgotten">Passwort vergessen?</a>
+    <div class="form-group" [ngClass]="{'focused': isFocused.email}">
+      <mat-icon matPrefix
+        [ngClass]="{'active-icon': isFocused.email, 'error-icon': emailFormControl.invalid && emailFormControl.touched}"
+        class="material-icons-outlined">email
+      </mat-icon>
+      <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com"
+        (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
+        [ngClass]="{'input-error': emailFormControl.invalid && emailFormControl.touched}">
 
-  <mat-form-field appearance="outline">
-    <mat-icon 
-      matPrefix 
-      [ngClass]="{'active-icon': isFocused.password}">lock
-    </mat-icon>
-    <input 
-      type="password" 
-      matInput 
-      [formControl]="passwordFormControl" 
-      [errorStateMatcher]="matcher"
-      placeholder="Passwort" 
-      (focus)="onInputFocus('password')" 
-      (blur)="onInputBlur('password')">
-    @if (passwordFormControl.hasError('required')) {
-      <mat-error>Falsches <b>Passwort</b> oder <b>E-Mail</b></mat-error>
-    }
-  </mat-form-field>
+      <div class="error-message" *ngIf="emailFormControl.invalid && emailFormControl.touched">
+        @if (emailFormControl.hasError('email')) {
+        <span>Please enter a valid email address</span>
+        }
+        @if (emailFormControl.hasError('required')) {
+        <span>Email is <strong>required</strong></span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{'focused': isFocused.password}">
+      <mat-icon matPrefix
+        [ngClass]="{'active-icon': isFocused.password, 'error-icon': passwordFormControl.invalid && passwordFormControl.touched}"
+        class="material-icons-outlined">lock
+      </mat-icon>
+      <input type="password" matInput [formControl]="passwordFormControl" placeholder="Passwort"
+        (focus)="onInputFocus('password')" (blur)="onInputBlur('password')"
+        [ngClass]="{'input-error': passwordFormControl.invalid && passwordFormControl.touched}">
+
+      <div class="error-message" *ngIf="passwordFormControl.invalid && passwordFormControl.touched">
+        @if (passwordFormControl.hasError('required')) {
+        <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="oder-container">
+      <div class="line"></div>
+      <span>ODER</span>
+      <div class="line"></div>
+  </div>
+  <button mat-flat-button>Anmelden mit Google</button>
 </section>

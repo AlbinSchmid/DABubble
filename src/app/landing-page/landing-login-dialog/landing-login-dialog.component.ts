@@ -3,7 +3,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import {MatButton, MatButtonModule} from '@angular/material/button';
 import {
   FormControl,
   FormGroupDirective,
@@ -19,10 +19,10 @@ import { MyErrorStateMatcher } from '../services/error.service';
 @Component({
   selector: 'app-landing-login-dialog',
   standalone: true,
-  imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
+  imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule,
+     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton],
   templateUrl: './landing-login-dialog.component.html',
   styleUrl: './landing-login-dialog.component.scss',
-  encapsulation: ViewEncapsulation.None // Disable encapsulatio
 })
 export class LandingLoginDialogComponent {
 
