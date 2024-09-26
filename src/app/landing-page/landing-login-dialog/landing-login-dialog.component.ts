@@ -1,29 +1,50 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+
+import {
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+
+
+import { MyErrorStateMatcher } from '../services/error.service';
+
 @Component({
   selector: 'app-landing-login-dialog',
   standalone: true,
-  imports: [CommonModule,MatIconModule, MatInputModule, MatIcon],
+  imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './landing-login-dialog.component.html',
-  styleUrl: './landing-login-dialog.component.scss'
+  styleUrl: './landing-login-dialog.component.scss',
+  encapsulation: ViewEncapsulation.None // Disable encapsulatio
 })
 export class LandingLoginDialogComponent {
-  isInputFocused: boolean = false;
-  isEmailFocused: boolean = false
-  onFocus() {
-    this.isInputFocused = true;
+
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 
-  onBlur() {
-    this.isInputFocused = false;
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  passwordFormControl = new FormControl('', [Validators.required]);
+  matcher = new MyErrorStateMatcher();
+
+  isFocused = {
+    email: false,
+    password: false,
+  };
+
+  onInputFocus(inputType: 'email' | 'password') {
+    this.isFocused[inputType] = true;
   }
-  
-  onEmailFocus(){
-    this.isEmailFocused = true
-  }
-  onEmailBlur(){
-    this.isEmailFocused = false
+
+  onInputBlur(inputType: 'email' | 'password') {
+    this.isFocused[inputType] = false;
   }
 }

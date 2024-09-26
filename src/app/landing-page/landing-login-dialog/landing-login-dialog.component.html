@@ -1,29 +1,40 @@
 <section>
-  
-  <mat-form-field>
+  <mat-form-field appearance="outline">
     <mat-icon 
       matPrefix 
-      [ngClass]="{'active-icon': isEmailFocused}">email
+      [ngClass]="{'active-icon': isFocused.email}">email
     </mat-icon>
     <input 
-      matInput 
-      placeholder="beispielname@email.com" 
       type="email" 
-      required 
-      (focus)="onEmailFocus()" 
-      (blur)="onEmailBlur()"/>
+      matInput 
+      [formControl]="emailFormControl" 
+      [errorStateMatcher]="matcher"
+      placeholder="Ex. pat@example.com" 
+      (focus)="onInputFocus('email')" 
+      (blur)="onInputBlur('email')">
+    @if (emailFormControl.hasError('email') && !emailFormControl.hasError('required')) {
+      <mat-error>Please enter a valid email address</mat-error>
+    }
+    @if (emailFormControl.hasError('required')) {
+      <mat-error>Email is <strong>required</strong></mat-error>
+    }
   </mat-form-field>
-  <mat-form-field>
+
+  <mat-form-field appearance="outline">
     <mat-icon 
       matPrefix 
-      [ngClass]="{'active-icon': isInputFocused}">lock
+      [ngClass]="{'active-icon': isFocused.password}">lock
     </mat-icon>
     <input 
-      matInput 
-      placeholder="password" 
       type="password" 
-      required 
-      (focus)="onFocus()" 
-      (blur)="onBlur()"/>
+      matInput 
+      [formControl]="passwordFormControl" 
+      [errorStateMatcher]="matcher"
+      placeholder="Passwort" 
+      (focus)="onInputFocus('password')" 
+      (blur)="onInputBlur('password')">
+    @if (passwordFormControl.hasError('required')) {
+      <mat-error>Falsches <b>Passwort</b> oder <b>E-Mail</b></mat-error>
+    }
   </mat-form-field>
 </section>
