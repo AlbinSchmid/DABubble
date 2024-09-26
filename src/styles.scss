@@ -28,15 +28,15 @@ html {
 }
 
 button {
-    overflow: hidden;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 24.55px;
-    min-width: 116px;
-    min-height: 49px;
+    overflow: hidden !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    line-height: 24.55px !important;
+    min-width: 116px !important;
+    min-height: 49px !important;
 
     &.primary {
-        color: white;
+        color: white !important;
 
         &:enabled {
             background-color: #444DF2 !important;
@@ -47,13 +47,13 @@ button {
         }
 
         &:hover {
-            background-color: #797EF3;
+            background-color: #797EF3 !important;
         }
     }
 
     &.secondary {
-        color: #444DF2;
-        border: 1px solid #797EF3;
+        color: #444DF2 !important;
+        border: 1px solid #797EF3 !important;
 
         &:enabled {
             background-color: white !important;
@@ -61,19 +61,46 @@ button {
 
         &:disabled {
             background-color: white !important;
-            color: #686868;
-            border-color: #686868;
+            color: #686868 !important;
+            border-color: #686868 !important;
         }
 
         &:hover {
             background-color: #535AF1 !important;
-            color: white;
+            color: white !important;
         }
     }
 }
 
-.material-icons {
-    font-family: 'Material Icons' !important;
+.material-icons-outlined {
+    font-family: 'Material Icons Outlined' !important;
+    /* Outlined Icons */
+}
+
+mat-icon {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 24px !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 100% !important;
+
+    &:hover {
+        background-color: #ECEEFE;
+        color: #535AF1;
+        cursor: pointer;
+    }
+
+    &:active {
+        font-weight: 900;
+        color: black;
+    }
+}
+
+mat-icon,
+button {
+    transition: background-color 170ms ease, box-shadow 170ms ease, color 170ms ease !important;
 }
 
 
