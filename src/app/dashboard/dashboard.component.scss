@@ -1,0 +1,22 @@
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100vw;
+    max-width: 100%;
+    height: 100vh;
+    background-color: #ECEEFE;
+    padding: 20px;
+    overflow: hidden;
+}
+
+section {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+}
+
+app-messenger {
+    flex: 1 1 auto;
+    width: 100%;
+}
