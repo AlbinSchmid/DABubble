@@ -6,3 +6,26 @@ section{
   display: flex;
   flex-direction: column;
 }
+
+.links{
+  display: flex;
+  flex-direction: row;
+  text-align: right;
+  position: absolute;
+  font-size: 18px;
+  gap: 10px;
+  bottom: 36px;
+  right: 50%;
+  transform: translate(50%);
+  >a{
+    padding: 10px 15px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: #797EF3 ;
+    border: 1px solid transparent;
+    &:hover{
+      color: #444df4;
+      border: 1px solid #797EF3;
+    }
+  }
+}
