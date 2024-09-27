@@ -5,6 +5,7 @@ h1 {
   font-size: 46px;
   font-weight: 700 !important;
   margin: 0;
+  text-align: center;
 }
 
 p {
@@ -38,7 +39,7 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 60px;
+  padding: 40px 60px;
   position: absolute;
   left: 50%;
   top: 156px;
@@ -97,3 +98,34 @@ form{
   flex-direction: column;
   gap: 30px;
 }
+
+.arrow-back{
+  position: absolute;
+  left: 30px;
+  top: 50px;
+}
+
+.response{
+  border-bottom-left-radius: 30px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding: 30px;
+  border: none;
+  position: fixed;
+  bottom: 30%;
+  right: 0;
+  width: fit-content;
+  animation: fadeIn 2s ease 0s infinite alternate ;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translateX(20%);
+    opacity: 0;
+    }
+  
+    100% {
+    transform: translateX(-70%);
+    opacity: 1;
+    }
+  }
