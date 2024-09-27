@@ -155,7 +155,7 @@ input{
   padding-top: 30px;
 }
 
-.register, .links{
+.register{
   display: flex;
   flex-direction: column;
   text-align: right;
@@ -178,10 +178,3 @@ input{
 }
 
 
-.links{
-  flex-direction: row;
-  top: auto;
-  right: 50%;
-  transform: translate(50%);
-  bottom: 36px;
-}
