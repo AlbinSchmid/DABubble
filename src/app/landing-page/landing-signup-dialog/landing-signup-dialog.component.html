@@ -53,10 +53,10 @@
         (focus)="onInputFocus('checkbox')" (blur)="onInputBlur('checkbox')"
           [ngClass]="{'input-error': accountForm.get('privacyPolicy')?.invalid && accountForm.get('privacyPolicy')?.touched}">
         <label for="privacyPolicy">
-          Bitte akeptieren sie die <a routerLink="/privacy-policy">Datenschutzrichtlinien</a>
+          Ich stimme der <a routerLink="/privacy-policy">Datenschutzerklärung</a> zu.
         </label>
         <div *ngIf="accountForm.get('privacyPolicy')?.touched && accountForm.get('privacyPolicy')?.invalid" class="error-message checkbox-error">
-          Bitte akzeptiere die Datenschutzrichtlinie.
+          Bitte stimmen Sie der <strong>Datenschutzerklärung</strong> zu.
         </div>
       </div>
 

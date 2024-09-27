@@ -9,40 +9,33 @@
   <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der arbeit verwendest</p>
   <div class="max-width inputs">
     <a href="#" class="forgotten">Passwort vergessen?</a>
-    <div class="form-group" [ngClass]="{'focused': isFocused.email}">
-      <mat-icon matPrefix
-        [ngClass]="{'active-icon': isFocused.email, 'error-icon': emailFormControl.invalid && emailFormControl.touched}"
-        class="material-icons-outlined">email
-      </mat-icon>
-      <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com"
-        (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
-        [ngClass]="{'input-error': emailFormControl.invalid && emailFormControl.touched}">
-
-      <div class="error-message" *ngIf="emailFormControl.invalid && emailFormControl.touched">
-        @if (emailFormControl.hasError('email')) {
-        <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>>
-        }
-        @if (emailFormControl.hasError('required')) {
-        <span>Geben sie ein <strong>E-Mail</strong> ein</span>
-        }
+    <form action="" [formGroup]="loginForm">
+      <div class="form-group" [ngClass]="{'focused': isFocused.email}">
+        <mat-icon matPrefix
+          [ngClass]="{'active-icon': isFocused.email, 'error-icon': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
+          class="mat-icon-gray">email</mat-icon>
+        <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com"
+          (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
+          [ngClass]="{'input-error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.hasError('email')">Falsches <strong>E-Mail</strong> or
+            <strong>Passwort</strong></span>
+          <span *ngIf="loginForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
+        </div>
       </div>
-    </div>
-
-    <div class="form-group" [ngClass]="{'focused': isFocused.password}">
-      <mat-icon matPrefix
-        [ngClass]="{'active-icon': isFocused.password, 'error-icon': passwordFormControl.invalid && passwordFormControl.touched}"
-        class="material-icons-outlined">lock
-      </mat-icon>
-      <input type="password" matInput [formControl]="passwordFormControl" placeholder="Passwort"
-        (focus)="onInputFocus('password')" (blur)="onInputBlur('password')"
-        [ngClass]="{'input-error': passwordFormControl.invalid && passwordFormControl.touched}">
-
-      <div class="error-message" *ngIf="passwordFormControl.invalid && passwordFormControl.touched">
-        @if (passwordFormControl.hasError('required')) {
-        <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>
-        }
+      <div class="form-group" [ngClass]="{'focused': isFocused.password}">
+        <mat-icon matPrefix
+          [ngClass]="{'active-icon': isFocused.password, 'error-icon': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
+          class="mat-icon-gray">lock</mat-icon>
+        <input type="password" matInput formControlName="password" placeholder="Passwort"
+          (focus)="onInputFocus('password')" (blur)="onInputBlur('password')"
+          [ngClass]="{'input-error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong>
+            ein</span>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
   <div class="oder-container">
     <div class="line"></div>
@@ -51,7 +44,7 @@
   </div>
   <button class="google"> <img src="/assets/img/landing/google.png" alt=""> Anmelden mit Google</button>
   <div class="buttons-area">
-    <button mat-flat-button class="primary">Anmelden</button>
+    <button mat-flat-button class="primary" [disabled]="loginForm.invalid">Anmelden</button>
     <button mat-flat-button class="secondary" routerLink="dashboard">Anmelden als gast</button>
   </div>
 </section>

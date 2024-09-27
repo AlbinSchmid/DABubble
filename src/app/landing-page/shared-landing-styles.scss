@@ -91,3 +91,9 @@ input{
 .input-error ~ .error-message {
   opacity: 1; 
 }
+
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
