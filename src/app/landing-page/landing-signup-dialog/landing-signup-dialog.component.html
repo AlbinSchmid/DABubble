@@ -1,14 +1,26 @@
-<div class="register">
-  <span>Neu bei DABubble?</span>
-  <a routerLink="signup">Konto Erstellen</a>
-</div>
+<section>
+  <div class="logo"> 
+    <img src="/assets/img/logo.png" alt="DABubble Logo">
+    <h2>DABubble</h2>
+  </div>
+  <div class="login">
+    <h1>Konto erstellen</h1>
+    <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
+    <div class="form-group" [ngClass]="{'focused': isFocused.name}">
+      <mat-icon matPrefix
+        [ngClass]="{'active-icon': isFocused.name, 'error-icon': nameFormControl.invalid && nameFormControl.touched}"
+        class="material-icons-outlined">person
+      </mat-icon>
+      <input type="text" matInput [formControl]="nameFormControl" placeholder="Name und Nachname"
+        (focus)="onInputFocus('name')" (blur)="onInputBlur('name')"
+        [ngClass]="{'input-error': nameFormControl.invalid && nameFormControl.touched}">
 
-<section class="login">
-
-  <h1>Anmeldung</h1>
-  <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der arbeit verwendest</p>
-  <div class="max-width inputs">
-    <a href="#" class="forgotten">Passwort vergessen?</a>
+      <div class="error-message" *ngIf="nameFormControl.invalid && nameFormControl.touched">
+        @if (emailFormControl.hasError('required')) {
+        <span>Geben sie ein <strong>Name</strong> und ein <strong>Nachnahme</strong> ein</span>
+        }
+      </div>
+    </div>
     <div class="form-group" [ngClass]="{'focused': isFocused.email}">
       <mat-icon matPrefix
         [ngClass]="{'active-icon': isFocused.email, 'error-icon': emailFormControl.invalid && emailFormControl.touched}"
@@ -27,7 +39,6 @@
         }
       </div>
     </div>
-
     <div class="form-group" [ngClass]="{'focused': isFocused.password}">
       <mat-icon matPrefix
         [ngClass]="{'active-icon': isFocused.password, 'error-icon': passwordFormControl.invalid && passwordFormControl.touched}"
@@ -44,14 +55,5 @@
       </div>
     </div>
   </div>
-  <div class="oder-container">
-    <div class="line"></div>
-    <span>ODER</span>
-    <div class="line"></div>
-  </div>
-  <button class="google"> <img src="/assets/img/landing/google.png" alt=""> Anmelden mit Google</button>
-  <div class="buttons-area">
-    <button mat-flat-button class="primary">Anmelden</button>
-    <button mat-flat-button class="secondary" routerLink="dashboard">Anmelden als gast</button>
-  </div>
+
 </section>
