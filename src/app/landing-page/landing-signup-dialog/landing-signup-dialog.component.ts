@@ -11,10 +11,12 @@ import {
 
 
 import { MyErrorStateMatcher } from '../services/error.service';
+import { LinksComponent } from '../landing-shared/links/links.component';
+import { RouterModule, RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-landing-signup-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LinksComponent,],
   templateUrl: './landing-signup-dialog.component.html',
   styleUrl: './landing-signup-dialog.component.scss'
 })

@@ -30,3 +30,88 @@ section{
   }
 }
 
+.checkbox-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2); /* Make checkbox slightly larger */
+}
+
+input[type="checkbox"]{
+  width: auto;
+  color: #797EF3;
+}
+
+
+label {
+  font-size: 18px;
+  &:hover{
+    cursor: pointer;
+  }
+  display: flex;
+  align-items: center;
+}
+
+label a {
+  color: #797EF3; 
+  padding: 5px 5px;
+  border-radius: 20px;
+  text-decoration: none;
+  &:hover{
+    cursor: pointer;
+    background-color: #ECEEFE;
+    color: $purple;
+  }
+}
+
+.checkbox-group input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border: 2px solid #797EF3;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+}
+
+.checkbox-group input[type="checkbox"]:checked + label .custom-checkbox {
+  background-color: white;
+}
+
+.checkbox-group input[type="checkbox"]:checked + label .custom-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #797EF3;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-group input[type="checkbox"]:hover + label .custom-checkbox {
+  border-color: $purple; 
+  border-width: 2.5px;
+  scale: 1.1;
+  box-shadow: #797EF3 0px 0px 8px 0px ;
+}
+
+
+.checkbox-group input[type="checkbox"]:checked:hover + label .custom-checkbox {
+  border-color: $purple; 
+  border-width: 2.5px;
+  scale: 1.1;
+}
