@@ -16,10 +16,11 @@ import { LinksComponent } from '../landing-shared/links/links.component';
 import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { LogoComponent } from "../landing-shared/logo/logo.component";
 @Component({
   selector: 'app-landing-signup-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LinksComponent, RouterLink, MatButton, MatIcon, MatIconModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LinksComponent, RouterLink, MatButton, MatIcon, MatIconModule, LogoComponent],
   templateUrl: './landing-signup-dialog.component.html',
   styleUrl: './landing-signup-dialog.component.scss'
 })

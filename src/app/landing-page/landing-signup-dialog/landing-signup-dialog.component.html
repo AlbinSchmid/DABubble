@@ -1,13 +1,11 @@
 <section>
-  <div class="logo"> 
-    <img src="/assets/img/logo.png" alt="DABubble Logo">
-    <h2>DABubble</h2>
-  </div>
+  <app-logo></app-logo>
   <div class="login">
     <h1>Konto erstellen</h1>
     <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
     <mat-icon routerLink="/" fontIcon="arrow_back" class="arrow-back" ></mat-icon>
   <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+    
       <div class="form-group" [ngClass]="{'focused': isFocused.name}">
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.name, 'error-icon': accountForm.get('name')?.invalid && accountForm.get('name')?.touched}"
@@ -34,7 +32,7 @@
           <span *ngIf="accountForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
         </div>
       </div>
-    
+
       <div class="form-group" [ngClass]="{'focused': isFocused.password}">
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.password, 'error-icon': accountForm.get('password')?.invalid && accountForm.get('password')?.touched}"
@@ -46,8 +44,7 @@
           <span *ngIf="accountForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong> ein</span>
         </div>
       </div>
-    
-    
+
       <div class="form-group checkbox-group bg-white">
         <input type="checkbox" id="privacyPolicy" formControlName="privacyPolicy"
         (focus)="onInputFocus('checkbox')" (blur)="onInputBlur('checkbox')"
@@ -60,9 +57,8 @@
         </div>
       </div>
 
+      <button type="submit" mat-flat-button class="primary button"  [disabled]="accountForm.invalid" routerLink="/avatar-wählen">Weiter</button>
 
-    
-      <button type="submit" mat-flat-button class="primary button"  [disabled]="accountForm.invalid">Weiter</button>
     </form>
   </div>
   <app-links></app-links>
