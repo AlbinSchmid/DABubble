@@ -1,7 +1,12 @@
 <header>
-    <div>
+    <div class="img-contain">
         <img src="/assets/img/logo-with-text.png" alt="DABubble Logo">
     </div>
-    <input class="search-bar" type="text">
+    <div class="search-bar-contain" (click)="focusSearchInput()">
+        <input #searchInput placeholder="Devspace durchsuchen . . ." type="text">
+        <div>
+            <mat-icon fontIcon="search"></mat-icon>
+        </div>
+    </div>
     <div class="profile-menu">USER PROFILE</div>
 </header>

@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [
+    MatIconModule
+  ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  @ViewChild('searchInput') searchInput!: ElementRef;
 
+  focusSearchInput(): void {
+    this.searchInput.nativeElement.focus();
+  }
 }
