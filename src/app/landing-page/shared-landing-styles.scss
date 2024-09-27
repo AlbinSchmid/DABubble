@@ -47,7 +47,7 @@ p {
   gap: 20px;
 }
 
-mat-icon {
+.mat-icon-gray {
   color: gray !important; 
 }
 
@@ -79,7 +79,7 @@ input{
 }
 
 .error-message {
-  color: red;
+  color: #ED1E79;
   font-size: 14px;
   position: absolute; 
   left: 24px; 

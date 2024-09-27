@@ -8,58 +8,47 @@ import {
   FormsModule,
   ReactiveFormsModule,
   FormGroup,
+  FormBuilder,
 } from '@angular/forms';
 
 
 import { MyErrorStateMatcher } from '../services/error.service';
 import { LinksComponent } from '../landing-shared/links/links.component';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
+import { MatButton } from '@angular/material/button';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-landing-signup-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LinksComponent,],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LinksComponent, RouterLink, MatButton, MatIcon, MatIconModule],
   templateUrl: './landing-signup-dialog.component.html',
   styleUrl: './landing-signup-dialog.component.scss'
 })
 export class LandingSignupDialogComponent {
-  form: FormGroup;
-  isFocused = { name: false, email: false, password: false };
-  constructor() {
-    this.form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-      policy: new FormControl(false, [Validators.requiredTrue]),
+  accountForm: FormGroup;
+  isFocused = { name: false, email: false, password: false, checkbox: false, };
+
+  constructor(private fb: FormBuilder) {
+    this.accountForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      privacyPolicy: [false, Validators.requiredTrue]
     });
   }
 
-  get nameFormControl() {
-    return this.form.get('name') as FormControl;
-  }
+ 
 
-  get emailFormControl() {
-    return this.form.get('email') as FormControl;
+  onSubmit() {
+    if (this.accountForm.valid) {
+      console.log(this.accountForm.value);
+    }
   }
-
-  get passwordFormControl() {
-    return this.form.get('password') as FormControl;
-  }
-
-  get policyFormControl() {
-    return this.form.get('policy') as FormControl;
-  }
-
-  onInputFocus(inputType: 'name' | 'email' | 'password') {
+  onInputFocus(inputType: 'name' | 'email' | 'password'| 'checkbox') {
     this.isFocused[inputType] = true;
   }
 
-  onInputBlur(inputType: 'name' | 'email' | 'password') {
+  onInputBlur(inputType: 'name' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = false;
-  }
-
-  toggleCheckbox(event: Event) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.policyFormControl.setValue(isChecked);
-    this.policyFormControl.markAsTouched(); // Mark as touched to show error if unchecked
   }
 }
