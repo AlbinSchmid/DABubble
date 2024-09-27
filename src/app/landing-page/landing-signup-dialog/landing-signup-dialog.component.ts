@@ -7,6 +7,7 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  FormGroup,
 } from '@angular/forms';
 
 
@@ -21,27 +22,44 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   styleUrl: './landing-signup-dialog.component.scss'
 })
 export class LandingSignupDialogComponent {
-  isFocused = {
-    email: false,
-    password: false,
-    name: false,
-  };
-
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  passwordFormControl = new FormControl('', [Validators.required]);
-  nameFormControl = new FormControl('', [Validators.required]);
-  matcher = new MyErrorStateMatcher();
-
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  form: FormGroup;
+  isFocused = { name: false, email: false, password: false };
+  constructor() {
+    this.form = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+      policy: new FormControl(false, [Validators.requiredTrue]),
+    });
   }
 
-  onInputFocus(inputType: 'email' | 'password' | 'name') {
+  get nameFormControl() {
+    return this.form.get('name') as FormControl;
+  }
+
+  get emailFormControl() {
+    return this.form.get('email') as FormControl;
+  }
+
+  get passwordFormControl() {
+    return this.form.get('password') as FormControl;
+  }
+
+  get policyFormControl() {
+    return this.form.get('policy') as FormControl;
+  }
+
+  onInputFocus(inputType: 'name' | 'email' | 'password') {
     this.isFocused[inputType] = true;
   }
 
-  onInputBlur(inputType: 'email' | 'password'| 'name') {
+  onInputBlur(inputType: 'name' | 'email' | 'password') {
     this.isFocused[inputType] = false;
+  }
+
+  toggleCheckbox(event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.policyFormControl.setValue(isChecked);
+    this.policyFormControl.markAsTouched(); // Mark as touched to show error if unchecked
   }
 }

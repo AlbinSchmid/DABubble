@@ -6,6 +6,7 @@
   <div class="login">
     <h1>Konto erstellen</h1>
     <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
+    
     <div class="form-group" [ngClass]="{'focused': isFocused.name}">
       <mat-icon matPrefix
         [ngClass]="{'active-icon': isFocused.name, 'error-icon': nameFormControl.invalid && nameFormControl.touched}"
@@ -14,13 +15,11 @@
       <input type="text" matInput [formControl]="nameFormControl" placeholder="Name und Nachname"
         (focus)="onInputFocus('name')" (blur)="onInputBlur('name')"
         [ngClass]="{'input-error': nameFormControl.invalid && nameFormControl.touched}">
-
       <div class="error-message" *ngIf="nameFormControl.invalid && nameFormControl.touched">
-        @if (emailFormControl.hasError('required')) {
-        <span>Geben sie ein <strong>Name</strong> und ein <strong>Nachnahme</strong> ein</span>
-        }
+        <span *ngIf="nameFormControl.hasError('required')">Geben Sie ein <strong>Name</strong> und ein <strong>Nachname</strong> ein</span>
       </div>
     </div>
+    
     <div class="form-group" [ngClass]="{'focused': isFocused.email}">
       <mat-icon matPrefix
         [ngClass]="{'active-icon': isFocused.email, 'error-icon': emailFormControl.invalid && emailFormControl.touched}"
@@ -29,16 +28,12 @@
       <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com"
         (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
         [ngClass]="{'input-error': emailFormControl.invalid && emailFormControl.touched}">
-
       <div class="error-message" *ngIf="emailFormControl.invalid && emailFormControl.touched">
-        @if (emailFormControl.hasError('email')) {
-        <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>>
-        }
-        @if (emailFormControl.hasError('required')) {
-        <span>Geben sie ein <strong>E-Mail</strong> ein</span>
-        }
+        <span *ngIf="emailFormControl.hasError('email')">Falsches <strong>E-Mail</strong></span>
+        <span *ngIf="emailFormControl.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
       </div>
     </div>
+    
     <div class="form-group" [ngClass]="{'focused': isFocused.password}">
       <mat-icon matPrefix
         [ngClass]="{'active-icon': isFocused.password, 'error-icon': passwordFormControl.invalid && passwordFormControl.touched}"
@@ -47,20 +42,26 @@
       <input type="password" matInput [formControl]="passwordFormControl" placeholder="Passwort"
         (focus)="onInputFocus('password')" (blur)="onInputBlur('password')"
         [ngClass]="{'input-error': passwordFormControl.invalid && passwordFormControl.touched}">
-
-      <div class="error-message" *ngIf="passwordFormControl.invalid && passwordFormControl.touched">
-        @if (passwordFormControl.hasError('required')) {
-        <span>Falsches <strong>Passwort</strong> oder <strong>E-Mail</strong></span>
-        }
-      </div>
+        <div class="error-message" *ngIf="policyFormControl.invalid && policyFormControl.touched">
+          <span *ngIf="policyFormControl.hasError('required')">Bitte akzeptieren Sie unsere Datenschutzerklärung.</span>
+        </div>
     </div>
+    
     <div class="checkbox-group">
-      <input type="checkbox" id="privacyPolicy" formControlName="privacyPolicy">
+      <input type="checkbox" 
+             id="privacyPolicy" 
+             [formControl]="policyFormControl" 
+             (change)="toggleCheckbox($event)">
       <label for="privacyPolicy">
-        <span class="custom-checkbox"></span>
+        <span class="custom-checkbox" [class.checked]="policyFormControl.value"></span>
         Ich stimme der <a routerLink="policy">Datenschutzerklärung</a> zu.
       </label>
+      <div class="error-message" *ngIf="policyFormControl.invalid && policyFormControl.touched">
+        <span *ngIf="policyFormControl.hasError('required')">Bitte akzeptieren Sie unsere Datenschutzerklärung.</span>
+      </div>
     </div>
+    
   </div>
+  
   <app-links></app-links>
 </section>
