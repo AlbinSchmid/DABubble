@@ -5,8 +5,14 @@
     <div class="search-bar-contain" (click)="focusSearchInput()">
         <input #searchInput placeholder="Devspace durchsuchen . . ." type="text">
         <div>
-            <mat-icon fontIcon="search"></mat-icon>
+            <mat-icon fontIcon="search" class="search-icon"></mat-icon>
         </div>
     </div>
-    <div class="profile-menu">USER PROFILE</div>
+    <div class="profile-contain">
+        <div class="username-menu-contain">
+            <span>Frederik Beck</span>
+            <img src="assets/img/avatar.png" alt="user_profile_img">
+            <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>
+        </div>
+    </div>
 </header>

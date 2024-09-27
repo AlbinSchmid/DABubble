@@ -39,18 +39,76 @@ input {
     cursor: url('/assets/img/search_cursor.png'), auto;
 }
 
-mat-icon {
+.search-icon {
     font-size: 35px !important;
     color: #686868;
     margin-right: 45px;
+    cursor: url('/assets/img/search_cursor.png'), auto !important;
 }
 
 .img-contain {
     width: 366px;
 }
 
-.profile-menu {
+.profile-contain {
     display: flex;
     justify-content: end;
+    align-items: center;
     width: 485px;
+}
+
+.username-menu-contain {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 20px;
+    transition: font-weight 2s ease;
+
+    img {
+        width: 70px;
+        height: 70px;
+        border-radius: 100%;
+    }
+
+    span {
+        color: black;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    .profile-menu-icon {
+        font-size: 30px !important;
+        color: black !important;
+        background-color: transparent;
+        padding-right: 16px;
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        span {
+            color: #797EF3;
+        }
+
+        .profile-menu-icon {
+            color: #797EF3 !important;
+        }
+    }
+
+    &:active {
+        cursor: pointer;
+
+        span {
+            font-weight: 800;
+            margin-right: -2px;
+        }
+
+        .profile-menu-icon {
+            font-weight: 800;
+        }
+
+        img {
+            transform: scale(1.03);
+        }
+    }
 }
