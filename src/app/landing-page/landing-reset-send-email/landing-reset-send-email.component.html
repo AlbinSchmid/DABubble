@@ -21,4 +21,7 @@
       <button type="submit" mat-flat-button class="primary button" [disabled]="resetForm.invalid" >Weiter</button>
     </form>
   </div>
+  @if(showSuccessMessage){
+    <button class="response primary button"> <mat-icon>send</mat-icon> E-Mail gesendet</button>
+  }
 </section>

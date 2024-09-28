@@ -18,6 +18,7 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
 })
 export class LandingResetSendEmailComponent {
   isFocused = {email: false,  };
+  showSuccessMessage = false;
   resetForm: FormGroup;
   constructor(private fb: FormBuilder, private router: Router) {
     this.resetForm = this.fb.group({
@@ -36,7 +37,11 @@ export class LandingResetSendEmailComponent {
   onSubmit() {
     if (this.resetForm.valid) {
       console.log(this.resetForm.value);
-      this.router.navigate(['/']); 
+      this.showSuccessMessage = true;
+      setTimeout(() => {
+        this.showSuccessMessage = false; 
+        this.router.navigate(['/']);
+      }, 2000);
     }
   }
 }
