@@ -5,6 +5,7 @@ import { LinksComponent } from "../landing-shared/links/links.component";
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { FormDataService } from '../services/form-data.service';
 
 @Component({
   selector: 'app-landing-avatar-dialog',
@@ -15,30 +16,33 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
   styleUrl: './landing-avatar-dialog.component.scss'
 })
 export class LandingAvatarDialogComponent {
-  
-  constructor(private router: Router) { }
-  avatars = [0, 1, 2, 3, 4, 5];
-  defaultAvatar = 'assets/img/landing/avatar/avatar-clean.png';
-  selectedAvatar = this.defaultAvatar;
-  showSuccessMessage = false;
-
-  onSelectAvatar(avatar: number) {
-    this.selectedAvatar = `assets/img/landing/avatar/avatar${avatar}.png`; 
-  }
-  
-  isAvatarSelected(): boolean {
-    return this.selectedAvatar !== this.defaultAvatar; 
-  }
-
-
-  onContinue() {
-    if (this.isAvatarSelected()) {
-      this.showSuccessMessage = true;
-      setTimeout(() => {
-        this.showSuccessMessage = false; 
-        this.router.navigate(['/']);
-      }, 2000);
-    }
-  }
+   avatars = [0, 1, 2, 3, 4, 5];
+   defaultAvatar = 'assets/img/landing/avatar/avatar-clean.png';
+   selectedAvatar = this.defaultAvatar;
+   showSuccessMessage = false;
+ 
+   constructor(private router: Router, private formDataService: FormDataService) {}
+ 
+   onSelectAvatar(avatar: number) {
+     this.selectedAvatar = `assets/img/landing/avatar/avatar${avatar}.png`; 
+     this.formDataService.updateAvatar(this.selectedAvatar); 
+   }
+   
+   isAvatarSelected(): boolean {
+     return this.selectedAvatar !== this.defaultAvatar; 
+   }
+ 
+   onContinue() {
+     if (this.isAvatarSelected()) {
+       this.showSuccessMessage = true;
+       this.formDataService.currentFormData.subscribe(formData => {
+        console.log('Current Form Data in Avatar Component:', formData);
+      });
+       setTimeout(() => {
+         this.showSuccessMessage = false; 
+         this.router.navigate(['/']);
+       }, 2000);
+     }
+   }
 }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   Validators,
   FormsModule,
@@ -14,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from "../landing-shared/logo/logo.component";
+import { FormDataService } from '../services/form-data.service';
 @Component({
   selector: 'app-landing-signup-dialog',
   standalone: true,
@@ -21,32 +22,44 @@ import { LogoComponent } from "../landing-shared/logo/logo.component";
   templateUrl: './landing-signup-dialog.component.html',
   styleUrl: './landing-signup-dialog.component.scss'
 })
-export class LandingSignupDialogComponent {
+export class LandingSignupDialogComponent implements OnInit {
   accountForm: FormGroup;
-  isFocused = { name: false, email: false, password: false, checkbox: false, };
-
-  constructor(private fb: FormBuilder, private router : Router) {
+  selectedAvatar: string = '';
+  isFocused = {
+    name: false,
+    email: false,
+    password: false,
+    checkbox:false,
+  };
+  constructor(private fb: FormBuilder, private formDataService: FormDataService, private router:Router,) {
     this.accountForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      privacyPolicy: [false, Validators.requiredTrue]
+      privacyPolicy: [false, Validators.requiredTrue],
     });
   }
 
- 
+  ngOnInit() {
+    this.accountForm.valueChanges.subscribe(value => {
+      this.formDataService.updateFormData(value); 
+    });
+  }
 
   onSubmit() {
     if (this.accountForm.valid) {
-      console.log(this.accountForm.value);
-      this.router.navigate(['/avatar-wählen']);
+      const formData = { ...this.accountForm.value, avatar: this.selectedAvatar };
+      console.log('Form Data with Avatar:', formData);
+      this.router.navigate(['/avatar-picker']);
     }
   }
-  onInputFocus(inputType: 'name' | 'email' | 'password'| 'checkbox') {
+
+  onInputFocus(inputType: 'name' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = true;
   }
 
   onInputBlur(inputType: 'name' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = false;
   }
+
 }
