@@ -10,7 +10,7 @@ import {
 
 
 import { LinksComponent } from '../landing-shared/links/links.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from "../landing-shared/logo/logo.component";
@@ -25,7 +25,7 @@ export class LandingSignupDialogComponent {
   accountForm: FormGroup;
   isFocused = { name: false, email: false, password: false, checkbox: false, };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router : Router) {
     this.accountForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -39,6 +39,7 @@ export class LandingSignupDialogComponent {
   onSubmit() {
     if (this.accountForm.valid) {
       console.log(this.accountForm.value);
+      this.router.navigate(['/avatar-wählen']);
     }
   }
   onInputFocus(inputType: 'name' | 'email' | 'password'| 'checkbox') {

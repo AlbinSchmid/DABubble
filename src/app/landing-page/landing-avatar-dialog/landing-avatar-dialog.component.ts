@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, OutputEmitterRef } from '@angular/core';
 import { LogoComponent } from '../landing-shared/logo/logo.component';
 import { LinksComponent } from "../landing-shared/links/links.component";
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -10,12 +10,12 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
   selector: 'app-landing-avatar-dialog',
   standalone: true,
   imports: [CommonModule, LogoComponent, LinksComponent, MatIcon,
-    MatIconModule, RouterLink, RouterLinkActive, MatButton, MatButtonModule],
+    MatIconModule, RouterLink, RouterLinkActive, MatButton, MatButtonModule,],
   templateUrl: './landing-avatar-dialog.component.html',
   styleUrl: './landing-avatar-dialog.component.scss'
 })
 export class LandingAvatarDialogComponent {
-
+  
   constructor(private router: Router) { }
   avatars = [0, 1, 2, 3, 4, 5];
   defaultAvatar = 'assets/img/landing/avatar/avatar-clean.png';
@@ -25,7 +25,7 @@ export class LandingAvatarDialogComponent {
   onSelectAvatar(avatar: number) {
     this.selectedAvatar = `assets/img/landing/avatar/avatar${avatar}.png`; 
   }
-
+  
   isAvatarSelected(): boolean {
     return this.selectedAvatar !== this.defaultAvatar; 
   }
