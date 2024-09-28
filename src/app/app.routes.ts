@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PrivacyPolicyComponent } from './shared/privacy-policy/privacy-policy.component';
 import { LandingSignupDialogComponent } from './landing-page/landing-signup-dialog/landing-signup-dialog.component';
 import { LandingAvatarDialogComponent } from './landing-page/landing-avatar-dialog/landing-avatar-dialog.component';
+import { LandingResetSendEmailComponent } from './landing-page/landing-reset-send-email/landing-reset-send-email.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -14,5 +15,6 @@ export const routes: Routes = [
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'dashboard/privacy-policy', component: PrivacyPolicyComponent },
   { path: 'imprint', component: ImprintComponent },
-  { path: 'dashboard/imprint', component: ImprintComponent }
+  { path: 'dashboard/imprint', component: ImprintComponent },
+  { path: 'passwort-zurücksetzen', component: LandingResetSendEmailComponent },
 ];

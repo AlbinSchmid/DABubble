@@ -8,7 +8,7 @@
   <h1>Anmeldung</h1>
   <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der arbeit verwendest</p>
   <div class="max-width inputs">
-    <a href="#" class="forgotten">Passwort vergessen?</a>
+    <a routerLink="/passwort-zurücksetzen" class="forgotten">Passwort vergessen?</a>
     <form action="" [formGroup]="loginForm">
       <div class="form-group" [ngClass]="{'focused': isFocused.email}">
         <mat-icon matPrefix
