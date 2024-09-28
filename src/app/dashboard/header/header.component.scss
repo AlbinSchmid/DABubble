@@ -112,3 +112,48 @@ input {
         }
     }
 }
+
+button {
+    border: none;
+    background-color: transparent;
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    line-height: 32.74px !important;
+    width: 100%;
+    border-radius: 100px;
+    transition: transform 140ms ease, background-color 140ms ease, color 140ms ease !important;
+    padding: 0 !important;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.03);
+        background-color: #ECEEFE;
+        color: #444DF2;
+    }
+}
+
+.log-out-btn {
+    border: none;
+    background-color: transparent;
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    line-height: 32.74px !important;
+    width: 100%;
+    border-radius: 100px;
+    transition: background-color 140ms ease, color 140ms ease !important;
+
+    &:hover {
+        background-color: #444DF2;
+        color: #ECEEFE;
+    }
+}
+
+a {
+    width: 100%;
+    color: black;
+}
+
+a,
+button {
+    pointer-events: auto !important;
+}

@@ -8,11 +8,17 @@
             <mat-icon fontIcon="search" class="search-icon"></mat-icon>
         </div>
     </div>
-    <div class="profile-contain">
+    <div class="profile-contain" [matMenuTriggerFor]="menu">
         <div class="username-menu-contain">
             <span>Frederik Beck</span>
             <img src="assets/img/avatar.png" alt="user_profile_img">
             <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>
         </div>
+        <mat-menu #menu="matMenu" xPosition="before">
+            <button class="profile-btn">Profile</button>
+            <a [routerLink]="['/dashboard/imprint']"><button>Impressum</button></a>
+            <a [routerLink]="['/dashboard/privacy-policy']"><button>Datenschutz</button></a>
+            <button class="log-out-btn">Log out</button>
+        </mat-menu>
     </div>
 </header>
