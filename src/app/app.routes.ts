@@ -6,6 +6,7 @@ import { PrivacyPolicyComponent } from './shared/privacy-policy/privacy-policy.c
 import { LandingSignupDialogComponent } from './landing-page/landing-signup-dialog/landing-signup-dialog.component';
 import { LandingAvatarDialogComponent } from './landing-page/landing-avatar-dialog/landing-avatar-dialog.component';
 import { LandingResetSendEmailComponent } from './landing-page/landing-reset-send-email/landing-reset-send-email.component';
+import { LandingNewPasswordComponent } from './landing-page/landing-new-password/landing-new-password.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -17,4 +18,5 @@ export const routes: Routes = [
   { path: 'imprint', component: ImprintComponent },
   { path: 'dashboard/imprint', component: ImprintComponent },
   { path: 'passwort-zurücksetzen', component: LandingResetSendEmailComponent },
+  { path: 'neues-passwort', component: LandingNewPasswordComponent },
 ];

@@ -42,8 +42,8 @@ p {
   padding: 40px 60px;
   position: absolute;
   left: 50%;
-  top: 156px;
-  transform: translate(-50%);
+  top: 50%;
+  transform: translate(-50% ,-50%);
   border-radius: 30px ;
   gap: 20px;
 }
@@ -61,7 +61,6 @@ p {
 }
 
 input{
-  
   border: none;
   background-color: #ECEEFE ;
   width: 500px;
