@@ -126,6 +126,16 @@ input {
     font-weight: 700;
 }
 
+.menu-contain {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 222px;
+    height: 256px;
+    gap: 20px !important;
+}
+
 button {
     border: none;
     background-color: transparent;
@@ -194,7 +204,7 @@ mat-icon {
 
 @keyframes openProfileMenuWidth {
     0% {
-        max-width: 205px;
+        max-width: 215px;
     }
 
     100% {
@@ -228,7 +238,7 @@ mat-icon {
     }
 
     100% {
-        max-width: 205px;
+        max-width: 215px;
     }
 }
 
@@ -238,7 +248,7 @@ mat-icon {
     gap: 38px;
     width: 100vw;
     height: 100vh;
-    max-width: 205px;
+    max-width: 215px;
     max-height: 239px;
     padding: 15px 10px 15px 10px;
     opacity: 0;
