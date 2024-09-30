@@ -78,7 +78,7 @@ input{
   padding-bottom: 32px;
 }
 
-.error-message {
+.error-message, .global-error-message {
   color: #ED1E79;
   font-size: 14px;
   position: absolute; 
@@ -90,6 +90,13 @@ input{
 
 .input-error ~ .error-message {
   opacity: 1; 
+}
+
+
+
+
+.show-error {
+  opacity: 1;
 }
 
 form{

@@ -6,10 +6,14 @@
 <section class="login">
 
   <h1>Anmeldung</h1>
-  <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der arbeit verwendest</p>
+  <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest</p>
+
   <div class="max-width inputs">
     <a routerLink="/passwort-zurücksetzen" class="forgotten">Passwort vergessen?</a>
-    <form action="" [formGroup]="loginForm">
+    
+    <form [formGroup]="loginForm">
+      
+      <!-- Email Input -->
       <div class="form-group" [ngClass]="{'focused': isFocused.email}">
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.email, 'error-icon': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
@@ -18,11 +22,13 @@
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          <span *ngIf="loginForm.get('email')?.hasError('email')">Falsches <strong>E-Mail</strong> or
+          <span *ngIf="loginForm.get('email')?.hasError('email')">Falsches <strong>E-Mail</strong> oder
             <strong>Passwort</strong></span>
           <span *ngIf="loginForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
         </div>
       </div>
+
+      <!-- Password Input -->
       <div class="form-group" [ngClass]="{'focused': isFocused.password}">
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.password, 'error-icon': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
@@ -31,20 +37,27 @@
           (focus)="onInputFocus('password')" (blur)="onInputBlur('password')"
           [ngClass]="{'input-error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-          <span *ngIf="loginForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong>
-            ein</span>
+          <span *ngIf="loginForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong> ein</span>
+        </div>
+        <div class="global-error-message" [ngClass]="{'show-error': errorMessage}">
+          <span>{{ errorMessage }}</span>
         </div>
       </div>
     </form>
   </div>
+
+  
   <div class="oder-container">
     <div class="line"></div>
     <span>ODER</span>
     <div class="line"></div>
   </div>
+
+  
   <button class="google"> <img src="/assets/img/landing/login/google.png" alt=""> Anmelden mit Google</button>
   <div class="buttons-area">
-    <button mat-flat-button class="primary" [disabled]="loginForm.invalid">Anmelden</button>
-    <button mat-flat-button class="secondary" routerLink="dashboard">Anmelden als gast</button>
+    <button mat-flat-button class="primary" (click)="onSubmit()" type="submit" [disabled]="loginForm.invalid">Anmelden</button>
+    <button mat-flat-button class="secondary" routerLink="dashboard">Anmelden als Gast</button>
   </div>
+
 </section>

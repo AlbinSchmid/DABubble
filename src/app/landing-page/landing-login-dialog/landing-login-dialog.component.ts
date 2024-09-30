@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component,
+import { ChangeDetectorRef, Component, inject,
   
 } from '@angular/core';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
@@ -15,19 +15,25 @@ import {
 } from '@angular/forms';
 
 
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthserviceService } from '../services/authservice.service';
 
 @Component({
   selector: 'app-landing-login-dialog',
   standalone: true,
   imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule,
-     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton, RouterLink, RouterLinkActive, ],
+     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton, RouterLink, RouterLinkActive,],
   templateUrl: './landing-login-dialog.component.html',
   styleUrl: './landing-login-dialog.component.scss',
 })
 export class LandingLoginDialogComponent {
   loginForm: FormGroup;
-  constructor(private fb: FormBuilder) {
+  authService = inject(AuthserviceService)
+  errorMessage!: string | null;
+  
+
+
+  constructor(private fb: FormBuilder, private router:Router, private cdr: ChangeDetectorRef) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -47,4 +53,24 @@ export class LandingLoginDialogComponent {
   onInputBlur(inputType: 'email' | 'password') {
     this.isFocused[inputType] = false;
   }
+
+  onSubmit(): void {
+    const rawForm = this.loginForm.getRawValue();
+  
+    this.authService.login(rawForm.email, rawForm.password).subscribe({
+      next: () => {
+        // Navigate to dashboard on success
+        this.router.navigateByUrl('/dashboard');
+      },
+      error: (err) => {
+        // Set the error message based on the custom message from the service
+        this.errorMessage = err.message;
+        
+        // Optionally, log only the message to console for debugging without spamming
+        console.log('Login failed:', err.message);
+      }
+    });
+  }
 }
+
+

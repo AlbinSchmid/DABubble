@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   Validators,
   FormsModule,
@@ -15,6 +15,7 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from "../landing-shared/logo/logo.component";
 import { FormDataService } from '../services/form-data.service';
+import { AuthserviceService } from '../services/authservice.service';
 @Component({
   selector: 'app-landing-signup-dialog',
   standalone: true,
@@ -26,19 +27,22 @@ export class LandingSignupDialogComponent implements OnInit {
   accountForm: FormGroup;
   selectedAvatar: string = '';
   isFocused = {
-    name: false,
+    username: false,
     email: false,
     password: false,
     checkbox:false,
   };
+  authService = inject(AuthserviceService)
   constructor(private fb: FormBuilder, private formDataService: FormDataService, private router:Router,) {
     this.accountForm = this.fb.group({
-      name: ['', Validators.required],
+      username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       privacyPolicy: [false, Validators.requiredTrue],
     });
   }
+
+  errorMessage: string | null = null;
 
   ngOnInit() {
     this.accountForm.valueChanges.subscribe(value => {
@@ -46,19 +50,44 @@ export class LandingSignupDialogComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.accountForm.valid) {
       const formData = { ...this.accountForm.value, avatar: this.selectedAvatar };
+  
+   
       console.log('Form Data with Avatar:', formData);
-      this.router.navigate(['/avatar-picker']);
+      
+      this.authService.register(formData.email, formData.username, formData.password)
+        .subscribe({
+          next: () => {
+            this.router.navigateByUrl('/');
+          },
+          error: (err) => {
+            this.errorMessage = this.getErrorMessage(err.code);
+          },
+        });
     }
   }
 
-  onInputFocus(inputType: 'name' | 'email' | 'password' | 'checkbox') {
+  private getErrorMessage(errorCode: string): string {
+    switch (errorCode) {
+      case 'auth/email-already-exists':
+        return 'Die angegebene E-Mail-Adresse wird bereits verwendet.';
+      case 'auth/weak-password':
+        return 'Das Passwort ist zu schwach.';
+      case 'auth/invalid-email':
+        return 'Die angegebene E-Mail-Adresse ist ungültig.';
+      // Add more error handling as needed
+      default:
+        return 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+    }
+  }
+
+  onInputFocus(inputType: 'username' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = true;
   }
 
-  onInputBlur(inputType: 'name' | 'email' | 'password' | 'checkbox') {
+  onInputBlur(inputType: 'username' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = false;
   }
 
