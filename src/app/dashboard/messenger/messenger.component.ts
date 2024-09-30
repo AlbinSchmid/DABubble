@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-messenger',
@@ -16,4 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class MessengerComponent {
 
+  show(event: any) {
+    console.log(event);
+    
+  }
 }

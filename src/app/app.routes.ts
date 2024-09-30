@@ -7,6 +7,7 @@ import { LandingSignupDialogComponent } from './landing-page/landing-signup-dial
 import { LandingAvatarDialogComponent } from './landing-page/landing-avatar-dialog/landing-avatar-dialog.component';
 import { LandingResetSendEmailComponent } from './landing-page/landing-reset-send-email/landing-reset-send-email.component';
 import { LandingNewPasswordComponent } from './landing-page/landing-new-password/landing-new-password.component';
+import { MessengerComponent } from './dashboard/messenger/messenger.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -19,4 +20,5 @@ export const routes: Routes = [
   { path: 'dashboard/imprint', component: ImprintComponent },
   { path: 'passwort-zurücksetzen', component: LandingResetSendEmailComponent },
   { path: 'neues-passwort', component: LandingNewPasswordComponent },
+  { path: 'messenger', component: MessengerComponent },
 ];
