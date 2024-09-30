@@ -8,17 +8,20 @@
             <mat-icon fontIcon="search" class="search-icon"></mat-icon>
         </div>
     </div>
-    <div class="profile-contain" [matMenuTriggerFor]="menu">
-        <div class="username-menu-contain">
-            <span>Frederik Beck</span>
-            <img src="assets/img/avatar.png" alt="user_profile_img">
+    <div class="profile-contain-header" [matMenuTriggerFor]="menu">
+        <div class=" username-menu-contain-header">
+            <span class="user-name">Frederik Beck</span>
+            <div class="profile-img-wrapper">
+                <img src="assets/img/avatar.png" alt="user_profile_img">
+                <div [ngClass]="{'status-online-icon': userStatus == 'on'}"></div>
+                <div [ngClass]="{'status-offline-icon': userStatus == 'off'}"></div>
+                <div [ngClass]="{'status-busy-icon': userStatus == 'busy'}"></div>
+            </div>
             <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>
         </div>
-        <mat-menu #menu="matMenu" xPosition="before">
-            <button class="profile-btn">Profile</button>
-            <a [routerLink]="['/dashboard/imprint']"><button>Impressum</button></a>
-            <a [routerLink]="['/dashboard/privacy-policy']"><button>Datenschutz</button></a>
-            <button class="log-out-btn">Log out</button>
+        <mat-menu #menu="matMenu" xPosition="before" (closed)="closeProfileMenu()">
+            <app-menu class="menu-contain" [(userStatus)]="userStatus" [(isProfileMenuOpen)]="isProfileMenuOpen"
+                [(isUnderMenuOpen)]="isUnderMenuOpen"></app-menu>
         </mat-menu>
     </div>
 </header>

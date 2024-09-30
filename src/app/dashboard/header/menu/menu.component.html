@@ -1,0 +1,66 @@
+@if (!isProfileMenuOpen) {
+<div class="menu-contain">
+    <button (click)="toggleProfileMenu($event)" class="profile-btn">Profil</button>
+    <a [routerLink]="['/dashboard/imprint']"><button>Impressum</button></a>
+    <a [routerLink]="['/dashboard/privacy-policy']"><button>Datenschutz</button></a>
+    <button class="log-out-btn">Log out</button>
+</div>
+} @else {
+<div class="profile-menu-contain open">
+    <div class="profile-menu-top">
+        <span>Profil</span>
+        <div>
+            <mat-icon fontIcon="arrow_back" class="back-to-menu" (click)="toggleProfileMenu($event)"></mat-icon>
+        </div>
+    </div>
+    <div>
+        <img src="assets/img/avatar.png" alt="user_profile_img">
+    </div>
+    <div class="profil-info-edit-contain">
+        <div class="name-and-edit">
+            <span class="user-name">Frederik Beck</span>
+            <span class="edit-user">Bearbeiten</span>
+        </div>
+    </div>
+    <div class="status-contain">
+        <div *ngIf="!isUnderMenuOpen && userIsOnline()" class="status-info" (click)="openUnderMenuStatus($event)">
+            <div class="status-online-icon"></div>
+            <span class="status-online-txt">Online</span>
+        </div>
+        <div *ngIf="!isUnderMenuOpen && userIsOffline()" class="status-info" (click)="openUnderMenuStatus($event)">
+            <div class="status-offline-icon"></div>
+            <span class="status-offline-txt">Offline</span>
+        </div>
+        <div *ngIf="!isUnderMenuOpen && userIsBusy()" class="status-info" (click)="openUnderMenuStatus($event)">
+            <div class="status-busy-icon"></div>
+            <span class="status-busy-txt">Beschäftigt</span>
+        </div>
+        <div *ngIf="isUnderMenuOpen" class="status-undermenu">
+            <div *ngIf="!userIsOnline()">
+                <span (click)="setUserOnline($event)" class="status-online-txt">Online</span>
+            </div>
+            <div *ngIf="!userIsBusy()">
+                <span (click)="setUserBusy($event)" class="status-busy-txt">Beschäftigt</span>
+            </div>
+            <div *ngIf="!userIsOffline()">
+                <span (click)="setUserOffline($event)" class="status-offline-txt">Offline</span>
+            </div>
+        </div>
+        <mat-icon *ngIf="!isUnderMenuOpen" (click)="openUnderMenuStatus($event)" class="change-status-icon"
+            fontIcon="navigate_next">
+        </mat-icon>
+        <mat-icon *ngIf="isUnderMenuOpen" (click)="openUnderMenuStatus($event)" class="change-status-close-icon"
+            fontIcon="close">
+        </mat-icon>
+    </div>
+    <div class="email-menu-contain">
+        <div class="email-wrapper">
+            <mat-icon class="email-icon" fontIcon="email"></mat-icon>
+        </div>
+        <div>
+            <span class="email-title">E-Mail-Adresse</span>
+            <span class="user-email">fred.beck&#64;email.com</span>
+        </div>
+    </div>
+</div>
+}

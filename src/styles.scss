@@ -118,19 +118,18 @@ mat-card {
 }
 
 .mat-mdc-menu-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
     padding: 30px !important;
-    gap: 20px !important;
 }
 
 .mat-mdc-menu-panel {
     display: flex !important;
-    min-width: auto;
-    max-width: none;
-    width: 282px;
+    min-width: unset !important;
+    max-width: none !important;
+    height: auto;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
@@ -170,6 +169,45 @@ mat-card {
 .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: none !important;
 } 
+
+.status-busy-icon,
+.status-offline-icon,
+.status-online-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+}
+
+.status-online-icon {
+    background-color: #92C83E;
+}
+
+.status-offline-icon {
+    background-color: #686868;
+}
+
+.status-busy-icon {
+    background-color: #FBB03B;
+}
+
+.status-online-txt {
+    color: #92C83E;
+}
+
+.status-offline-txt {
+    color: #686868;
+}
+
+.status-busy-txt {
+    color: #FBB03B;
+}
+
+.status-online-txt,
+.status-offline-txt,
+.status-busy-txt {
+    font-size: 20px;
+    font-weight: 400;
+}
 
 
 /* nunito-200 - latin */
