@@ -152,13 +152,23 @@ mat-card {
 .cdk-overlay-backdrop {
     opacity: 1;
     visibility: visible;
-    background-color: rgba(0, 0, 0, 0);
+    // background-color: rgba(0, 0, 0, 0);
     transition: background-color 130ms ease-in-out, opacity 130ms ease-in-out, visibility 0s 130ms;
 }
 
 .cdk-overlay-connected-position-bounding-box {
     top: 112px !important;
 }
+
+.mat-mdc-dialog-container {
+    width: auto !important;
+    min-width: 100px !important;
+    max-width: none !important;
+}
+
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+    max-width: none !important;
+} 
 
 .status-busy-icon,
 .status-offline-icon,
@@ -198,6 +208,7 @@ mat-card {
     font-size: 20px;
     font-weight: 400;
 }
+
 
 /* nunito-200 - latin */
 @font-face {

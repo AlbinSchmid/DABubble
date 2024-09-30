@@ -1,3 +1,5 @@
+@import "./../../../styles.scss";
+
 a {
     text-decoration: none;
     color: #535AF1;
@@ -8,6 +10,8 @@ a {
         transition: ease-in-out 125ms;
     }
 }
+
+
 
 button {
     display: flex;
