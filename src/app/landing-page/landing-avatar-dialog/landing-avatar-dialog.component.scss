@@ -1,0 +1,81 @@
+@import '../shared-landing-styles.scss';
+@import '../../../styles.scss';
+
+section{
+  width: 100vw;
+  max-width: 100%;
+  height: 100vh;
+  background-color: #ECEEFE;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.choose-avatar{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.big-avatar{
+  object-fit: cover;
+  border:  4px solid transparent;
+  border-radius: 100%;
+  width: 168px;
+  height: 168px;
+  &:hover{
+    border:  4px solid #e6e6e6;
+    cursor: pointer;
+  }
+}
+
+.small-avatar{
+  border-radius: 100%;
+  border:  4px solid transparent;
+  &:hover{
+    border:  4px solid #e6e6e6;
+    cursor: pointer;
+  }
+}
+
+.name-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+  >:last-child{
+    text-align: start;
+    width: 100%;
+  }
+}
+
+.name{
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.avatars{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.self-image{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 24px;
+}
+
+.next{
+  align-self: flex-end;
+}
+
+
+
+
+
+
