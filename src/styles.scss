@@ -34,6 +34,7 @@ button {
     font-size: 18px !important;
     font-weight: 700 !important;
     line-height: 24.55px !important;
+    transition: background-color 140ms ease, color 140ms ease !important;
     // min-width: 116px !important;
     // min-height: 49px !important;
 
@@ -168,7 +169,7 @@ mat-card {
 
 .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: none !important;
-} 
+}
 
 .status-busy-icon,
 .status-offline-icon,
