@@ -79,7 +79,6 @@ mat-icon {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    font-size: 24px !important;
     width: 40px !important;
     height: 40px !important;
     border-radius: 100% !important;
@@ -208,6 +207,13 @@ mat-card {
 .status-busy-txt {
     font-size: 20px;
     font-weight: 400;
+}
+
+
+@font-face {
+    font-family: "Symbola";
+    src: url("/fonts/Symbola-Emoji.woff") format("woff"),
+        url("/fonts/Symbola-Emoji.ttf") format("ttf");
 }
 
 
