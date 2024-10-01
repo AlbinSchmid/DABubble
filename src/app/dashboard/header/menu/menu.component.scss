@@ -120,11 +120,23 @@ input {
     }
 }
 
+.user-name-contain {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    max-width: 300px;
+    overflow: hidden;
+}
+
 .user-name {
     color: black;
     font-size: 32px;
     font-weight: 700;
-    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 43.65px;
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: start;
 }
 
 .menu-contain {
@@ -246,7 +258,7 @@ mat-icon {
 .profile-menu-contain {
     display: flex;
     flex-direction: column;
-    gap: 38px;
+    gap: 30px;
     width: 100vw;
     height: 100vh;
     max-width: 215px;
@@ -256,8 +268,8 @@ mat-icon {
     overflow: hidden;
 
     img {
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
     }
 }
 
@@ -313,7 +325,7 @@ mat-icon {
 .name-and-edit {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     width: 100%;
 }
 
@@ -328,6 +340,7 @@ mat-icon {
     height: max-content !important;
     transform: scale(1.01) !important;
     margin-right: -1px !important;
+    min-width: fit-content;
 
     &:hover {
         font-weight: 700 !important;
@@ -406,11 +419,13 @@ mat-icon {
             font-weight: 700;
             color: black;
         }
-
-        .user-email {
-            font-size: 18px;
-            font-weight: 500;
-            color: #1381FF;
-        }
     }
+}
+
+.user-email {
+    width: 100%;
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1381FF;
 }

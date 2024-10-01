@@ -6,7 +6,7 @@
     <button class="log-out-btn">Log out</button>
 </div>
 } @else {
-<div class="profile-menu-contain open">
+<div (click)="noClickable($event)" class="profile-menu-contain open">
     <div class="profile-menu-top">
         <span *ngIf="!isOpenEditEditor">Profil</span>
         <span *ngIf="isOpenEditEditor">Dein Profil bearbeiten</span>
@@ -23,7 +23,9 @@
     @if(!isOpenEditEditor){
     <div class="profil-info-edit-contain">
         <div class="name-and-edit">
-            <span class="user-name">HAUTMSHSJSJSLOLPTZSHGSGTROWSGHTR</span>
+            <div class="user-name-contain">
+                <span class="user-name">LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL</span>
+            </div>
             <button (click)="toggleEditUserEditor($event)" class="edit-user-btn">Bearbeiten</button>
         </div>
     </div>
@@ -64,7 +66,7 @@
         </div>
         <div>
             <span class="email-title">E-Mail-Adresse</span>
-            <span class="user-email">fred.beck&#64;email.com</span>
+            <span class="user-email">fred.asasadadasdasasasadbeck&#64;email.com</span>
         </div>
     </div>
     } @else {

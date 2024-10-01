@@ -95,4 +95,8 @@ export class MenuComponent {
     this.isOpenEditEditor = !this.isOpenEditEditor;
     this.isOpenEditEditorChange.emit(this.isOpenEditEditor);
   }
+
+  noClickable(e: Event) {
+    e.stopPropagation();
+  }
 }
