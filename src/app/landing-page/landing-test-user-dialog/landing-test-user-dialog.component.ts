@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthserviceService } from '../services/authservice.service';
 import { UserInterface } from '../interfaces/userinterface';
@@ -12,24 +12,21 @@ import { CommonModule } from '@angular/common';
   styleUrl: './landing-test-user-dialog.component.scss'
 })
 export class LandingTestUserDialogComponent implements OnInit {
-  user?: UserInterface | null; // Change from Observable to the actual UserInterface
-  constructor(private authService: AuthserviceService) {}
+  authService = inject(AuthserviceService)
 
   ngOnInit(): void {
-    this.authService.user$.subscribe((user: UserInterface | null) => {
-      this.user = user; // Store the user data directly
+    this.authService.user$.subscribe((user: any) => {
       if (user) {
-        const userInfo: UserInterface = {
-          email: user.email!,
-          username: user.username,
-        };
-        this.authService.setCurrentUser(userInfo); // Use the setCurrentUser method
+        this.authService.currentUserSig.set({
+          email: user.email,
+          username: user.displayName,
+          avatar: user.photoURL  
+        });
       } else {
-        this.authService.setCurrentUser(null); // Handle null case
+        this.authService.setCurrentUser(null);
       }
-
-      // Log the currentUserSig after setting
-      console.log('Current User Signature:', this.authService.currentUserSig()); // Use () to get the value of the signal
+  
+      console.log('Current User Signature:', this.authService.currentUserSig());
     });
   }
 }

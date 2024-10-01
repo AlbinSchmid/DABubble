@@ -1,7 +1,8 @@
-<div *ngIf="user">
-  <h2>Welcome, {{ user.username }}!</h2>
-  <p>Your email: {{ user.email }}</p>
+<div>
+  <h2>Welcome, {{ authService.currentUserSig()?.username }}!</h2>
+  <p>Your email: {{ authService.currentUserSig()?.email }}</p>
+  <p>Your foto: <img src="{{ authService.currentUserSig()?.avatar }}" alt=""></p>
 </div>
-<div *ngIf="!user">
+<div>
   <p>No user information available.</p>
 </div>
