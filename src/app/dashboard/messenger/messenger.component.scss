@@ -23,18 +23,11 @@ button {
     transition: 125ms ease-in-out !important;
 }
 
-#test {
-    display: flex;
-    flex-direction: column;
-    max-height: calc(100vh - 110px);
-    padding-bottom: 40px;
-}
-
 section {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;
+    height: 100%;
     border-radius: 25px;
     background-color: rgb(255, 255, 255);
     width: 100%;
@@ -42,7 +35,8 @@ section {
 
     header {
         box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
-        padding: 32px 45px 20px 45px;
+        padding: 20px 45px 20px 45px;
+        border-radius: 25px 25px 0 0;
 
         button {
             border-radius: 30px;
@@ -68,301 +62,311 @@ section {
 
     #content {
         display: flex;
-        flex-direction: column-reverse;
-        padding: 20px 0;
-        overflow-y: auto;
+        flex-direction: column;
+        max-height: 100% !important;
+        overflow: hidden;
+        padding-bottom: 20px;
 
-        &::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: #535AF1;
-            border-radius: 25px;
-        }
-
-
-        #info {
-            padding: 0 30px;
-
-            div {
-                display: flex;
-                align-items: flex-end;
-
-                img {
-                    width: 100px;
-                    height: 100px;
-                }
-
-                h4 {
-                    font-size: 24px;
-                    font-weight: 800;
-                    margin-left: 20px;
-                    margin-bottom: 0;
-                }
-            }
-
-            p {
-                margin-top: 20px;
-                font-size: 20px;
-            }
-        }
-
-        .date-container {
-            position: relative;
-            height: 40px;
+        #messages-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            padding: 0 30px;
+            flex-direction: column-reverse;
+            padding: 20px 0;
+            overflow-y: auto;
 
-            div {
-
-                &:nth-child(1) {
-                    position: absolute;
-                    padding: 5px 15px;
-                    border-radius: 30px;
-                    border: 1px solid #ADB0D9;
-                    background-color: white;
-                }
-
-                &:nth-child(2) {
-                    width: 100%;
-                    border: 1px solid rgba(#ADB0D9, 0.5);
-                }
-            }
-        }
-
-        .message {
-            position: relative;
-            display: flex;
-            direction: ltr;
-            margin: 15px 0;
-            padding: 5px 30px;
-            transition: 150ms ease-in-out;
-
-            &:hover {
-                background-color: #ECEEFE;
-                cursor: pointer;
+            &::-webkit-scrollbar {
+                width: 5px;
             }
 
-            &:hover > #message-content > :nth-child(2) {
-                background-color: white;
+            &::-webkit-scrollbar-thumb {
+                background: #535AF1;
+                border-radius: 25px;
             }
 
-            img {
-                width: 70px;
-                height: 70px;
-            }
 
-            #message-content {
-                display: flex;
-                flex-direction: column;
-                margin-left: 30px;
-                gap: 8px;
-                
+            #info {
+                padding: 0 30px;
+
                 div {
-                    transition: 150ms ease-in-out;
-
-                    &:nth-child(1) {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-
-                        h6 {
-                            margin: 0;
-                            font-size: 18px;
-                            font-weight: 700;
-                        }
-
-                        p {
-                            margin: 0;
-                            font-size: 14px;
-                        }
-                    }
-
-                    &:nth-child(2) {
-                        background-color: #ECEEFE;
-                        padding: 15px;
-                        border-radius: 0 30px 30px 30px;
-
-                        p {
-                            font-size: 18px;
-                            font-weight: 400;
-                        }
-                    }
-
-                    &:nth-child(3) {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-
-                        p {
-                            font-size: 14px;
-                            font-weight: 400;
-                            margin: 0;
-                        }
-
-                        a {
-                            font-size: 18px;
-                        }
-                    }
-                }
-
-            }
-
-            .interaction {
-                position: absolute;
-                background-color: white;
-                display: flex;
-                border-radius: 30px 30px 0px 30px;
-                right: 50px;
-                padding: 4px;
-                top: -20px;
-                border: 1px solid #ADB0D9;
-                gap: 4px;
-                
-                button {
-                    padding: 8px;
-
-                    &:hover {
-                        background-color: #ECEEFE;
-                        border-radius: 100%;
-                    }
+                    display: flex;
+                    align-items: flex-end;
 
                     img {
-                        width: 16px;
-                        height: 16px;
+                        width: 100px;
+                        height: 100px;
+                    }
+
+                    h4 {
+                        font-size: 24px;
+                        font-weight: 800;
+                        margin-left: 20px;
+                        margin-bottom: 0;
                     }
                 }
-            }
-        }
 
-        .message-from-you {
-            display: flex;
-            flex-direction: row-reverse;
-
-            .interaction {
-                left: 50px !important;
-                right: auto;
+                p {
+                    margin-top: 20px;
+                    font-size: 20px;
+                }
             }
 
-            #message-content {
+            .date-container {
+                position: relative;
+                height: 40px;
                 display: flex;
-                flex-direction: column;
-                margin-right: 30px;
-                margin-left: 0;
-                gap: 8px;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 20px;
+                padding: 0 30px;
 
                 div {
 
                     &:nth-child(1) {
-                        flex-direction: row-reverse;
+                        position: absolute;
+                        padding: 5px 15px;
+                        border-radius: 30px;
+                        border: 1px solid #ADB0D9;
+                        background-color: white;
                     }
 
                     &:nth-child(2) {
-                        border-radius: 30px 0px 30px 30px;
-                    }
-
-                    &:nth-child(3) {
-                        flex-direction: row-reverse;
+                        width: 100%;
+                        border: 1px solid rgba(#ADB0D9, 0.5);
                     }
                 }
-
             }
 
-        }
-    }
-
-    #input-container {
-        border: 1px solid #535AF1;
-        border-radius: 30px;
-        margin: 1px 40px;
-        padding: 20px;
-
-        textarea {
-            width: 100%;
-            height: 80px;
-            max-height: 80px;
-            border: none;
-            resize: none;
-            font-size: 18px;
-
-            &:focus {
-                outline: none;
-            }
-        }
-
-        div {
-            display: flex;
-            justify-content: space-between;
-
-            #send-message-btn {
-
-                &:hover {
-                    opacity: 0.6;
-                }
-            }
-        }
-
-        #button-container-left {
-            display: flex;
-            gap: 5px;
-
-            div {
-                width: 1px;
-                background-color: #ADB0D9;
-            }
-
-            button {
-                border-radius: 100%;
-                padding: 20px;
-                width: 30px;
-                height: 30px;
+            .message {
+                position: relative;
+                display: flex;
+                direction: ltr;
+                margin: 15px 0;
+                padding: 5px 30px;
+                transition: 150ms ease-in-out;
 
                 &:hover {
                     background-color: #ECEEFE;
+                    cursor: pointer;
                 }
 
-                &:nth-child(1) {
-                    background-image: url(./../../../../public/assets/icons/add-white.png);
-                    background-position: center;
-                    background-size: 24px;
-                    background-repeat: no-repeat;
-
-                    &:hover {
-                        background-image: url(./../../../../public/assets/icons/add-blue.png);
-                    }
-                }
-
-                &:nth-child(3) {
-                    background-image: url(./../../../../public/assets/icons/emoij-white.png);
-                    background-position: center;
-                    background-size: 24px;
-                    background-repeat: no-repeat;
-
-                    &:hover {
-                        background-image: url(./../../../../public/assets/icons/emoij-blue.png);
-                    }
-                }
-
-                &:nth-child(4) {
-                    background-image: url(./../../../../public/assets/icons/tag-white.png);
-                    background-position: center;
-                    background-size: 24px;
-                    background-repeat: no-repeat;
-
-                    &:hover {
-                        background-image: url(./../../../../public/assets/icons/tag-blue.png);
-                    }
+                &:hover>#message-content> :nth-child(2) {
+                    background-color: white;
                 }
 
                 img {
-                    width: 24px;
-                    height: 24px;
+                    width: 70px;
+                    height: 70px;
+                }
+
+                #message-content {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 30px;
+                    gap: 8px;
+
+                    div {
+                        transition: 150ms ease-in-out;
+
+                        &:nth-child(1) {
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+
+                            h6 {
+                                margin: 0;
+                                font-size: 18px;
+                                font-weight: 700;
+                            }
+
+                            p {
+                                margin: 0;
+                                font-size: 14px;
+                            }
+                        }
+
+                        &:nth-child(2) {
+                            background-color: #ECEEFE;
+                            padding: 15px;
+                            border-radius: 0 30px 30px 30px;
+
+                            p {
+                                font-size: 18px;
+                                font-weight: 400;
+                            }
+                        }
+
+                        &:nth-child(3) {
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+
+                            p {
+                                font-size: 14px;
+                                font-weight: 400;
+                                margin: 0;
+                            }
+
+                            a {
+                                font-size: 18px;
+                            }
+                        }
+                    }
+
+                }
+
+                .interaction {
+                    position: absolute;
+                    background-color: white;
+                    display: flex;
+                    border-radius: 30px 30px 0px 30px;
+                    right: 50px;
+                    padding: 4px;
+                    top: -20px;
+                    border: 1px solid #ADB0D9;
+                    gap: 4px;
+
+                    button {
+                        padding: 8px;
+
+                        &:hover {
+                            background-color: #ECEEFE;
+                            border-radius: 100%;
+                        }
+
+                        img {
+                            width: 16px;
+                            height: 16px;
+                        }
+                    }
+                }
+            }
+
+            .message-from-you {
+                display: flex;
+                flex-direction: row-reverse;
+
+                .interaction {
+                    left: 50px !important;
+                    right: auto;
+                }
+
+                #message-content {
+                    display: flex;
+                    flex-direction: column;
+                    margin-right: 30px;
+                    margin-left: 0;
+                    gap: 8px;
+
+                    div {
+
+                        &:nth-child(1) {
+                            flex-direction: row-reverse;
+                        }
+
+                        &:nth-child(2) {
+                            border-radius: 30px 0px 30px 30px;
+                        }
+
+                        &:nth-child(3) {
+                            flex-direction: row-reverse;
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        #input-container {
+            border: 1px solid #535AF1;
+            border-radius: 30px;
+            margin: 1px 40px;
+            padding: 20px;
+
+            textarea {
+                width: 100%;
+                height: 80px;
+                max-height: 80px;
+                border: none;
+                resize: none;
+                font-size: 18px;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            div {
+                display: flex;
+                justify-content: space-between;
+
+                #send-message-btn {
+
+                    &:hover {
+                        opacity: 0.6;
+                    }
+                }
+            }
+
+            #button-container-left {
+                display: flex;
+                gap: 5px;
+
+                div {
+                    width: 1px;
+                    background-color: #ADB0D9;
+                }
+
+                button {
+                    border-radius: 100%;
+                    padding: 20px;
+                    width: 30px;
+                    height: 30px;
+
+                    &:hover {
+                        background-color: #ECEEFE;
+                    }
+
+                    &:nth-child(1) {
+                        background-image: url(./../../../../public/assets/icons/add-white.png);
+                        background-position: center;
+                        background-size: 24px;
+                        background-repeat: no-repeat;
+
+                        &:hover {
+                            background-image: url(./../../../../public/assets/icons/add-blue.png);
+                        }
+                    }
+
+                    &:nth-child(3) {
+                        background-image: url(./../../../../public/assets/icons/emoij-white.png);
+                        background-position: center;
+                        background-size: 24px;
+                        background-repeat: no-repeat;
+
+                        &:hover {
+                            background-image: url(./../../../../public/assets/icons/emoij-blue.png);
+                        }
+                    }
+
+                    &:nth-child(4) {
+                        background-image: url(./../../../../public/assets/icons/tag-white.png);
+                        background-position: center;
+                        background-size: 24px;
+                        background-repeat: no-repeat;
+
+                        &:hover {
+                            background-image: url(./../../../../public/assets/icons/tag-blue.png);
+                        }
+                    }
+
+                    img {
+                        width: 24px;
+                        height: 24px;
+                    }
                 }
             }
         }
     }
+
+
 }
