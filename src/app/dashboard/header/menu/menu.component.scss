@@ -124,7 +124,6 @@ input {
     display: flex;
     justify-content: start;
     width: 100%;
-    max-width: 300px;
     overflow: hidden;
 }
 
@@ -134,9 +133,7 @@ input {
     font-weight: 700;
     overflow: hidden;
     line-height: 43.65px;
-    white-space: normal;
-    word-wrap: break-word;
-    text-align: start;
+    text-overflow: ellipsis;
 }
 
 .menu-contain {
@@ -268,8 +265,8 @@ mat-icon {
     overflow: hidden;
 
     img {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
     }
 }
 
@@ -323,6 +320,7 @@ mat-icon {
 }
 
 .name-and-edit {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: start;
@@ -330,6 +328,9 @@ mat-icon {
 }
 
 .edit-user-btn {
+    position: absolute;
+    top: -30px;
+    right: 0;
     font-size: 18px !important;
     font-weight: 600 !important;
     color: #535AF1 !important;
@@ -400,6 +401,8 @@ mat-icon {
 
 .email-menu-contain {
     display: flex;
+    padding-top: 10px;
+    margin-left: -3px;
     gap: 20px;
 
     .email-wrapper {
@@ -432,4 +435,11 @@ mat-icon {
     font-size: 18px;
     font-weight: 500;
     color: #1381FF;
+}
+
+.email-title-user-email {
+    display: flex;
+    flex-direction: column;
+    margin-left: -8px;
+    gap: 23px !important;
 }
