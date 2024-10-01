@@ -25,6 +25,10 @@ export class MenuComponent {
   @Input() isUnderMenuOpen: boolean = false;
   @Output() isUnderMenuOpenChange = new EventEmitter<boolean>();
 
+  @Input() isOpenEditEditor: boolean = false;
+  @Output() isOpenEditEditorChange = new EventEmitter<boolean>();
+
+
   toggleProfileMenu(e: Event): void {
     e.stopPropagation();
 
@@ -84,5 +88,11 @@ export class MenuComponent {
     this.isUnderMenuOpen = false;
     this.userStatusChange.emit(this.userStatus);
     this.isUnderMenuOpenChange.emit(this.isUnderMenuOpen);
+  }
+
+  toggleEditUserEditor(e: Event) {
+    e.stopPropagation();
+    this.isOpenEditEditor = !this.isOpenEditEditor;
+    this.isOpenEditEditorChange.emit(this.isOpenEditEditor);
   }
 }

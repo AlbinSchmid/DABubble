@@ -10,7 +10,7 @@
     </div>
     <div class="profile-contain-header" [matMenuTriggerFor]="menu">
         <div class=" username-menu-contain-header">
-            <span class="user-name">Frederik Beck</span>
+            <span #userName class="user-name">Ein sehr langer Namee</span>
             <div class="profile-img-wrapper">
                 <img src="assets/img/avatar.png" alt="user_profile_img">
                 <div [ngClass]="{'status-online-icon': userStatus == 'on'}"></div>
@@ -21,7 +21,7 @@
         </div>
         <mat-menu #menu="matMenu" xPosition="before" (closed)="closeProfileMenu()">
             <app-menu class="menu-contain" [(userStatus)]="userStatus" [(isProfileMenuOpen)]="isProfileMenuOpen"
-                [(isUnderMenuOpen)]="isUnderMenuOpen"></app-menu>
+                [(isUnderMenuOpen)]="isUnderMenuOpen" [(isOpenEditEditor)]="isOpenEditEditor"></app-menu>
         </mat-menu>
     </div>
 </header>

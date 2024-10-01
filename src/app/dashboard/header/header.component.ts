@@ -23,18 +23,19 @@ import { MenuComponent } from './menu/menu.component';
 export class HeaderComponent {
   @ViewChild('searchInput') searchInput!: ElementRef;
 
+
   userStatus = 'on';
   isProfileMenuOpen = false;
   isUnderMenuOpen = false;
+  isOpenEditEditor = false;
 
   focusSearchInput(): void {
     this.searchInput.nativeElement.focus();
   }
 
   closeProfileMenu(): void {
-    console.log('CLOSE');
-
     let menuElement = document.querySelector('.profile-menu-contain');
+
     if (this.isProfileMenuOpen) {
       menuElement!.classList.remove('open');
       menuElement!.classList.add('close');
@@ -45,15 +46,20 @@ export class HeaderComponent {
     if (this.isUnderMenuOpen) {
       setTimeout(() => this.isUnderMenuOpen = false, 120);
     }
+    if (this.isOpenEditEditor) {
+      setTimeout(() => this.isOpenEditEditor = false, 120);
+    }
   }
 
   onStatusChange(newStatus: string): void {
-    this.userStatus = newStatus;  // Aktualisiere den Status im Header
-    console.log(`User status updated to: ${newStatus}`);
+    this.userStatus = newStatus;
   }
 
   onUnderMenuStatusChange(isOpen: boolean): void {
-    this.isUnderMenuOpen = isOpen;  // Aktualisiere isUnderMenuOpen im Header
-    console.log(`Under menu status updated to: ${isOpen}`);
+    this.isUnderMenuOpen = isOpen;
+  }
+
+  onEditEditorChange(isOpen: boolean): void {
+    this.isUnderMenuOpen = isOpen;
   }
 }
