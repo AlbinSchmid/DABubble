@@ -6,7 +6,7 @@
     <button class="log-out-btn">Log out</button>
 </div>
 } @else {
-<div (click)="noClickable($event)" class="profile-menu-contain open">
+<div (click)="noClickable($event)" class="profile-menu-contain open ">
     <div class="profile-menu-top">
         <span *ngIf="!isOpenEditEditor">Profil</span>
         <span *ngIf="isOpenEditEditor">Dein Profil bearbeiten</span>
@@ -70,9 +70,7 @@
         </div>
     </div>
     } @else {
-    <div>
-        SERVUS !
-    </div>
+    <app-edit-user [(isOpenEditEditor)]="isOpenEditEditor"></app-edit-user>
     }
 </div>
 }

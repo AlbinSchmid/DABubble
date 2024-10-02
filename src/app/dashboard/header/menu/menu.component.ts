@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 @Component({
   selector: 'app-menu',
@@ -9,7 +10,8 @@ import { RouterLink } from '@angular/router';
   imports: [
     CommonModule,
     MatIconModule,
-    RouterLink
+    RouterLink,
+    EditUserComponent
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -39,6 +41,7 @@ export class MenuComponent {
       let menuElement = document.querySelector('.profile-menu-contain');
       if (menuElement) {
         menuElement.classList.remove('open');
+        menuElement.classList.remove('min-height');
         menuElement.classList.add('close');
         setTimeout(() => {
           this.isProfileMenuOpen = false;
@@ -92,8 +95,18 @@ export class MenuComponent {
 
   toggleEditUserEditor(e: Event) {
     e.stopPropagation();
-    this.isOpenEditEditor = !this.isOpenEditEditor;
-    this.isOpenEditEditorChange.emit(this.isOpenEditEditor);
+    let menuElement = document.querySelector('.profile-menu-contain');
+    if (menuElement && !this.isOpenEditEditor) {
+      menuElement.classList.add('min-height');
+      this.isOpenEditEditor = !this.isOpenEditEditor;
+      this.isOpenEditEditorChange.emit(this.isOpenEditEditor);
+    } else {
+      if (menuElement) {
+        menuElement.classList.remove('min-height');
+        this.isOpenEditEditor = !this.isOpenEditEditor;
+        this.isOpenEditEditorChange.emit(this.isOpenEditEditor);
+      }
+    }
   }
 
   noClickable(e: Event) {

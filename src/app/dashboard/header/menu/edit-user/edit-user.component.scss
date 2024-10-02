@@ -1,0 +1,83 @@
+input,
+button {
+    pointer-events: auto;
+}
+
+button {
+    height: 49px;
+}
+
+mat-icon {
+    font-size: 30px;
+}
+
+span {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 27.28px;
+}
+
+input {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    max-width: 420px;
+    height: 52px;
+    font-size: 18px;
+    color: #686868;
+    border: 1px solid #ADB0D9;
+    border-radius: 30px;
+    padding: 15px 20px 15px 20px;
+
+    &:hover {
+        border-color: rgba($color: #444DF2, $alpha: 0.7);
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.border-red {
+    border-color: red;
+}
+
+.inputs-contain {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.single-input-contain {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.input-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.edit-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    height: max-content;
+}
+
+.btn-contain {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 32px;
+
+    .secondary {
+        width: 141px;
+    }
+
+    .primary {
+        width: 133px;
+    }
+}
