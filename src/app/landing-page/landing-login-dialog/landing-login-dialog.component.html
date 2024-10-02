@@ -22,7 +22,7 @@
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-          <span *ngIf="loginForm.get('email')?.hasError('email')">Falsches <strong>E-Mail</strong> oder
+          <span *ngIf="loginForm.get('email')?.hasError('pattern')">Falsches <strong>E-Mail</strong> oder
             <strong>Passwort</strong></span>
           <span *ngIf="loginForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
         </div>

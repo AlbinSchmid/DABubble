@@ -17,7 +17,6 @@ import {
 
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthserviceService } from '../services/authservice.service';
-import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-landing-login-dialog',
@@ -60,27 +59,17 @@ export class LandingLoginDialogComponent {
   
     this.authService.login(rawForm.email, rawForm.password).subscribe({
       next: () => {
-       
+      
         this.router.navigateByUrl('/dashboard');
       },
-      error: (error) => {
-       
-        const errorCode = error.code;
-  
-        if (
-          errorCode === 'auth/wrong-password' || 
-          errorCode === 'auth/user-not-found' || 
-          errorCode === 'auth/invalid-credential' || 
-          errorCode === 'auth/invalid-email' || 
-          errorCode === 'auth/operation-not-allowed'
-        ) {
-          console.warn('Login failed with known issue:', error.message);
+      error: (err) => {
         
-        }
+        this.errorMessage = err.message;
+        
+        console.log('Login failed:', err.message);
       }
     });
   }
-
 }
 
 
