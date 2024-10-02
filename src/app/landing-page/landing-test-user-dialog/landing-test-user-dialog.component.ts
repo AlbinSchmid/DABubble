@@ -18,6 +18,7 @@ export class LandingTestUserDialogComponent implements OnInit {
     this.authService.user$.subscribe((user: any) => {
       if (user) {
         this.authService.currentUserSig.set({
+          password: user.password,
           email: user.email,
           username: user.displayName,
           avatar: user.photoURL  

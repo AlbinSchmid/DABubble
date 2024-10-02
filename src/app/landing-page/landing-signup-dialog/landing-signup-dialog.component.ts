@@ -51,16 +51,13 @@ export class LandingSignupDialogComponent implements OnInit {
     const rawForm = this.accountForm.getRawValue();
   
     if (this.accountForm.valid) {
-      this.authService.register(rawForm.email, rawForm.username, rawForm.password)
-        .subscribe({
-          next: () => {
-            console.log('User registered successfully');
-            this.router.navigateByUrl('/avatar-picker');  
-          },
-          error: (err) => {
-            this.errorMessage = this.getErrorMessage(err.code);
-          },
-        });
+      this.authService.setTempUserData({
+        email: rawForm.email,
+        username: rawForm.username,
+        password: rawForm.password,
+        avatar: '',
+      });
+      this.router.navigateByUrl('/avatar-picker');  
     }
   }
 

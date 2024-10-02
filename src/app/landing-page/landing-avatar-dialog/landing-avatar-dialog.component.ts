@@ -33,31 +33,38 @@ export class LandingAvatarDialogComponent {
    }
 
    async onContinue() {
-     if (this.isAvatarSelected()) {
-       if (this.selectedFile) {
-         const compressedFile = await this.compressImage(this.selectedFile);
-         const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
-         uploadBytes(storageRef, compressedFile).then(() => {
-           getDownloadURL(storageRef).then((url) => {
-             this.selectedAvatar = url;
-             this.updateUserAvatar(url);
-             this.showSuccessMessage = true;
-             setTimeout(() => {
-               this.showSuccessMessage = false;
-               this.router.navigate(['/']);
-             }, 2000);
-           }).catch(error => console.error('Error getting download URL:', error));
-         }).catch(error => console.error('Error uploading file:', error));
-       } else {
-         this.updateUserAvatar(this.selectedAvatar);
-         this.showSuccessMessage = true;
-         setTimeout(() => {
-           this.showSuccessMessage = false;
-           this.router.navigate(['/']);
-         }, 2000);
-       }
-     }
-   }
+    const tempUserData = this.authService.getTempUserData();
+  
+    if (tempUserData) {
+      await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password).toPromise();
+      this.authService.clearTempUserData(); 
+    }
+  
+    if (this.isAvatarSelected()) {
+      if (this.selectedFile) {
+        const compressedFile = await this.compressImage(this.selectedFile);
+        const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
+        uploadBytes(storageRef, compressedFile).then(() => {
+          getDownloadURL(storageRef).then((url) => {
+            this.selectedAvatar = url;
+            this.updateUserAvatar(url);
+            this.showSuccessMessage = true;
+            setTimeout(() => {
+              this.showSuccessMessage = false;
+              this.router.navigate(['/']);
+            }, 2000);
+          }).catch(error => console.error('Error getting download URL:', error));
+        }).catch(error => console.error('Error uploading file:', error));
+      } else {
+        this.updateUserAvatar(this.selectedAvatar);
+        this.showSuccessMessage = true;
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+          this.router.navigate(['/']);
+        }, 2000);
+      }
+    }
+  }
 
    onSelectAvatar(avatar: number) {
      this.selectedAvatar = `https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar${avatar}.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208`;

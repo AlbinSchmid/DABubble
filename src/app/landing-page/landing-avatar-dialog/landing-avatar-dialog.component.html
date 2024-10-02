@@ -9,7 +9,7 @@
       <img class="big-avatar" [src]="filePreview || selectedAvatar" alt="Selected Avatar">
 
       <div class="name-container">
-        <span class="name">Paul Ivan</span>
+        <span class="name">{{authService.firebaseAuth.currentUser?.displayName?.toUpperCase()}}</span>
         <span>Aus der Liste wählen</span>
       </div>
 

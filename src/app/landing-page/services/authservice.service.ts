@@ -58,4 +58,19 @@ export class AuthserviceService {
     const promise = signOut(this.firebaseAuth);
     return from(promise)
   }
+
+
+private tempUserData: UserInterface | null = null;
+
+setTempUserData(userData: UserInterface) {
+  this.tempUserData = userData;
+}
+
+getTempUserData(): UserInterface | null {
+  return this.tempUserData;
+}
+
+clearTempUserData() {
+  this.tempUserData = null;
+}
 }
