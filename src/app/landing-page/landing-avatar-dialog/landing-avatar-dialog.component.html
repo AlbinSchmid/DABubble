@@ -5,11 +5,15 @@
     <mat-icon routerLink="/signup" fontIcon="arrow_back" class="arrow-back"></mat-icon>
     <h1 style="width: 600px;">Wähle deinen Avatar</h1>
     <div class="choose-avatar">
-      <img class="big-avatar" [src]="selectedAvatar" alt="Selected Avatar">
+    
+      <img class="big-avatar" [src]="filePreview || selectedAvatar" alt="Selected Avatar">
+
       <div class="name-container">
         <span class="name">Paul Ivan</span>
         <span>Aus der Liste wählen</span>
       </div>
+
+     
       <div class="avatars">
         @for(avatar of avatars; track avatar) {
           <img class="small-avatar" 
@@ -18,14 +22,20 @@
                (click)="onSelectAvatar(avatar)">
         }
       </div>
+
       <div class="self-image">
         <span>eigenes Bild verwenden</span>
-        <button mat-flat-button class="secondary"> Datei Hochladen</button>
+        <button mat-flat-button class="secondary" (click)="fileInput.click()">Datei Hochladen</button>
+        <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none;">
       </div>
     </div>
+
+
     <button mat-flat-button [disabled]="!isAvatarSelected()" (click)="onContinue()" class="primary next">Weiter</button>
   </div>
-  @if(showSuccessMessage){
-    <button class="response primary"> Konto erfolgreich erstellt</button>
+
+  
+  @if(showSuccessMessage) {
+    <button class="response primary">Konto erfolgreich erstellt</button>
   }
 </section>

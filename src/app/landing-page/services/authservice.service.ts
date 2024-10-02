@@ -17,7 +17,7 @@ export class AuthserviceService {
       email,
       password
     ).then((response) => 
-      updateProfile(response.user, { displayName: username }) // No avatar here
+      updateProfile(response.user, { displayName: username }) 
     );
     return from(promise);
   }

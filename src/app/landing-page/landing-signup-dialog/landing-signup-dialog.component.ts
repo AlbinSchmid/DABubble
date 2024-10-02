@@ -55,7 +55,7 @@ export class LandingSignupDialogComponent implements OnInit {
         .subscribe({
           next: () => {
             console.log('User registered successfully');
-            this.router.navigateByUrl('/avatar-picker');  // Redirect to avatar selection
+            this.router.navigateByUrl('/avatar-picker');  
           },
           error: (err) => {
             this.errorMessage = this.getErrorMessage(err.code);

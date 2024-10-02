@@ -1,55 +1,133 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output, OutputEmitterRef } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LogoComponent } from '../landing-shared/logo/logo.component';
 import { LinksComponent } from "../landing-shared/links/links.component";
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { AuthserviceService } from '../services/authservice.service';
 import { updateProfile } from '@firebase/auth';
+import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-landing-avatar-dialog',
   standalone: true,
-  imports: [CommonModule, LogoComponent, LinksComponent, MatIcon,
-    MatIconModule, RouterLink, RouterLinkActive, MatButton, MatButtonModule,],
+  imports: [CommonModule, LogoComponent, LinksComponent, MatIconModule, RouterLink, RouterLinkActive, MatButtonModule],
   templateUrl: './landing-avatar-dialog.component.html',
-  styleUrl: './landing-avatar-dialog.component.scss'
+  styleUrls: ['./landing-avatar-dialog.component.scss']
 })
 export class LandingAvatarDialogComponent {
    avatars = [0, 1, 2, 3, 4, 5];
    defaultAvatar = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
    selectedAvatar = this.defaultAvatar;
    showSuccessMessage = false;
-   authService = inject(AuthserviceService)
-   constructor(private router: Router,) {}
- 
-   
+   authService = inject(AuthserviceService);
+   storage = getStorage();
+   selectedFile: File | null = null; 
+   filePreview: string | ArrayBuffer | null = null; 
+
+   constructor(private router: Router) {}
+
    isAvatarSelected(): boolean {
-     return this.selectedAvatar !== this.defaultAvatar; 
+     return this.selectedAvatar !== this.defaultAvatar || !!this.filePreview;
    }
- 
-   onContinue() {
+
+   async onContinue() {
      if (this.isAvatarSelected()) {
-       this.showSuccessMessage = true;
-       setTimeout(() => {
-         this.showSuccessMessage = false; 
-         this.router.navigate(['/']);
-       }, 2000);
+       if (this.selectedFile) {
+         const compressedFile = await this.compressImage(this.selectedFile);
+         const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
+         uploadBytes(storageRef, compressedFile).then(() => {
+           getDownloadURL(storageRef).then((url) => {
+             this.selectedAvatar = url;
+             this.updateUserAvatar(url);
+             this.showSuccessMessage = true;
+             setTimeout(() => {
+               this.showSuccessMessage = false;
+               this.router.navigate(['/']);
+             }, 2000);
+           }).catch(error => console.error('Error getting download URL:', error));
+         }).catch(error => console.error('Error uploading file:', error));
+       } else {
+         this.updateUserAvatar(this.selectedAvatar);
+         this.showSuccessMessage = true;
+         setTimeout(() => {
+           this.showSuccessMessage = false;
+           this.router.navigate(['/']);
+         }, 2000);
+       }
      }
    }
 
    onSelectAvatar(avatar: number) {
-    this.selectedAvatar = `https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar${avatar}.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208`;
-    const currentUser = this.authService.firebaseAuth.currentUser;
-    
-    if (currentUser) {
-      updateProfile(currentUser, { photoURL: this.selectedAvatar }).then(() => {
-        console.log('Avatar updated successfully');
-      }).catch((error) => {
-        console.error('Error updating avatar:', error);
-      });
+     this.selectedAvatar = `https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar${avatar}.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208`;
+     this.filePreview = null; 
+     this.selectedFile = null; 
+   }
+
+   onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedFile = file; 
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.filePreview = e.target?.result ?? null; 
+      };
+      reader.readAsDataURL(file);
     }
   }
+
+   async compressImage(file: File): Promise<File> {
+     return new Promise((resolve, reject) => {
+       const reader = new FileReader();
+       reader.onload = (event) => {
+         const img = new Image();
+         img.onload = () => {
+           const canvas = document.createElement('canvas');
+           const ctx = canvas.getContext('2d');
+
+           const maxWidth = 400;
+           const maxHeight = 400;
+           let width = img.width;
+           let height = img.height;
+
+           if (width > height) {
+             if (width > maxWidth) {
+               height *= maxWidth / width;
+               width = maxWidth;
+             }
+           } else {
+             if (height > maxHeight) {
+               width *= maxHeight / height;
+               height = maxHeight;
+             }
+           }
+
+           canvas.width = width;
+           canvas.height = height;
+           ctx?.drawImage(img, 0, 0, width, height);
+           canvas.toBlob((blob) => {
+             if (blob) {
+               const compressedFile = new File([blob], file.name, { type: file.type });
+               resolve(compressedFile);
+             } else {
+               reject(new Error('Compression failed'));
+             }
+           }, file.type, 1); 
+         };
+         img.src = event.target?.result as string; 
+       };
+       reader.readAsDataURL(file);
+     });
+   }
+
+   updateUserAvatar(avatarUrl: string) {
+     const currentUser = this.authService.firebaseAuth.currentUser;
+     if (currentUser) {
+       updateProfile(currentUser, { photoURL: avatarUrl }).then(() => {
+         console.log('Avatar updated successfully');
+       }).catch(error => console.error('Error updating avatar:', error));
+     }
+   }
 }
 
