@@ -35,8 +35,8 @@ export class LandingSignupDialogComponent implements OnInit {
 
   
   accountForm = this.fb.nonNullable.group({
-    username: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.pattern(/^(?=.{1,23}$)([a-zA-Z]{1,23}\s[a-zA-Z]{1,23})$/)]],
+    email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
     password: ['', Validators.required],
     privacyPolicy: [false, Validators.requiredTrue],
   });

@@ -15,7 +15,10 @@
           [ngClass]="{'input-error': accountForm.get('username')?.invalid && accountForm.get('username')?.touched}">
         <div class="error-message" *ngIf="accountForm.get('username')?.invalid && accountForm.get('username')?.touched">
           <span *ngIf="accountForm.get('username')?.hasError('required')">
-            Geben Sie ein <strong>Name</strong> und ein <strong>Nachname</strong> ein
+            Geben Sie ein <strong>Name</strong> und ein <strong>Nachname</strong> ein.
+          </span>
+          <span *ngIf="accountForm.get('username')?.hasError('pattern')">
+            Geben sie mindestens<strong> zwei Wörtern </strong> und max. <strong>23 Zeichen </strong> ein.
           </span>
         </div>
       </div>
@@ -28,7 +31,7 @@
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': accountForm.get('email')?.invalid && accountForm.get('email')?.touched}">
         <div class="error-message" *ngIf="accountForm.get('email')?.invalid && accountForm.get('email')?.touched">
-          <span *ngIf="accountForm.get('email')?.hasError('email')">Falsches <strong>E-Mail</strong></span>
+          <span *ngIf="accountForm.get('email')?.hasError('pattern')">Falsches <strong>E-Mail</strong></span>
           <span *ngIf="accountForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
         </div>
       </div>
