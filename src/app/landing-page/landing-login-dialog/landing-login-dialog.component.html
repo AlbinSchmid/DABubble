@@ -18,7 +18,7 @@
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.email, 'error-icon': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
           class="mat-icon-gray">email</mat-icon>
-        <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com"
+        <input type="email" matInput formControlName="email" placeholder="max.mustermann.@muster.de" maxlength="25"
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
@@ -28,20 +28,19 @@
         </div>
       </div>
 
-      <!-- Password Input -->
+    
       <div class="form-group" [ngClass]="{'focused': isFocused.password}">
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.password, 'error-icon': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
           class="mat-icon-gray">lock</mat-icon>
-        <input type="password" matInput formControlName="password" placeholder="Passwort"
+        <input type="password" matInput formControlName="password" placeholder="Passwort" maxlength="25"
           (focus)="onInputFocus('password')" (blur)="onInputBlur('password')"
           [ngClass]="{'input-error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
           <span *ngIf="loginForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong> ein</span>
+          <span *ngIf="loginForm.get('password')?.hasError('pattern')"> Passwort muss mindestens <strong> 8</strong> Zeichen lang sein, z.B. <strong>Abc123!.</strong> </span>
         </div>
-        <div class="global-error-message" [ngClass]="{'show-error': errorMessage}">
-          <span>{{ errorMessage }}</span>
-        </div>
+        
       </div>
     </form>
   </div>
@@ -58,6 +57,9 @@
   <div class="buttons-area">
     <button mat-flat-button class="primary" (click)="onSubmit()" type="submit" [disabled]="loginForm.invalid">Anmelden</button>
     <button mat-flat-button class="secondary" routerLink="dashboard">Anmelden als Gast</button>
+    <div class="global-error-message" [ngClass]="{'show-error': errorMessage}">
+      <span>{{ errorMessage }}</span>
+    </div>
   </div>
 
 </section>

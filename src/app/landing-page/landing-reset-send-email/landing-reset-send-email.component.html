@@ -10,11 +10,11 @@
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.email, 'error-icon': resetForm.get('email')?.invalid && resetForm.get('email')?.touched}"
           class="mat-icon-gray">email</mat-icon>
-        <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com"
+        <input type="email" matInput formControlName="email" placeholder="max.mustermann.@muster.de" maxlength="25"
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': resetForm.get('email')?.invalid && resetForm.get('email')?.touched}">
         <div class="error-message" *ngIf="resetForm.get('email')?.invalid && resetForm.get('email')?.touched">
-          <span *ngIf="resetForm.get('email')?.hasError('email')">Falsches <strong>E-Mail</strong></span>
+          <span *ngIf="resetForm.get('email')?.hasError('pattern')">Falsches <strong>E-Mail</strong></span>
           <span *ngIf="resetForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
         </div>
       </div>

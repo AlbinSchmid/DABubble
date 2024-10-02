@@ -37,7 +37,7 @@ export class LandingSignupDialogComponent implements OnInit {
   accountForm = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.pattern(/^(?=.{1,23}$)([a-zA-Z]{1,23}\s[a-zA-Z]{1,23})$/)]],
     email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-    password: ['', Validators.required],
+    password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)]],
     privacyPolicy: [false, Validators.requiredTrue],
   });
 
@@ -61,18 +61,7 @@ export class LandingSignupDialogComponent implements OnInit {
     }
   }
 
-  private getErrorMessage(errorCode: string): string {
-    switch (errorCode) {
-      case 'auth/email-already-exists':
-        return 'Die angegebene E-Mail-Adresse wird bereits verwendet.';
-      case 'auth/weak-password':
-        return 'Das Passwort ist zu schwach.';
-      case 'auth/invalid-email':
-        return 'Die angegebene E-Mail-Adresse ist ungültig.';
-      default:
-        return 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
-    }
-  }
+ 
 
   onInputFocus(inputType: 'username' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = true;

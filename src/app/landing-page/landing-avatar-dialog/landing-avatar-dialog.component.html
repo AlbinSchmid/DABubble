@@ -6,8 +6,8 @@
     <h1 style="width: 600px;">Wähle deinen Avatar</h1>
     <div class="choose-avatar">
     
-      <img class="big-avatar" [src]="filePreview || selectedAvatar" alt="Selected Avatar">
-
+      <img class="big-avatar" (click)="fileInput.click()"  [src]="filePreview || selectedAvatar" alt="Selected Avatar">
+      <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none;">
       <div class="name-container">
         <span class="name">{{authService.firebaseAuth.currentUser?.displayName?.toUpperCase()}}</span>
         <span>Aus der Liste wählen</span>

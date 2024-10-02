@@ -22,7 +22,7 @@ export class LandingResetSendEmailComponent {
   resetForm: FormGroup;
   constructor(private fb: FormBuilder, private router: Router) {
     this.resetForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
     });
   }
 
