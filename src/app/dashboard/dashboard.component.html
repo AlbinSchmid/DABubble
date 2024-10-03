@@ -1,12 +1,24 @@
 <main>
     <app-header></app-header>
     <section>
-        <app-channels-userlist></app-channels-userlist>
-        <app-messenger></app-messenger>
-        <app-thread></app-thread>
+        <mat-drawer-container>
+            <mat-drawer #drawer mode="side" [opened]="isSideNavOpen">
+                <app-channels-userlist></app-channels-userlist>
+            </mat-drawer>
+
+            <mat-drawer-content>
+                <app-messenger></app-messenger>
+                <app-thread></app-thread>
+            </mat-drawer-content>
+        </mat-drawer-container>
     </section>
-    <button>
-        <span>Workspace-Menü schließen</span>
-        <mat-icon fontIcon="open_in_browser"></mat-icon>
+    <button class="toggle-btn" (click)="toggleSideNav()"
+        [ngClass]="{ 'close-btn': isSideNavOpen, 'open-btn': !isSideNavOpen }">
+        <div class="txt-icon-contain">
+            <span>
+                {{ isSideNavOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen' }}
+            </span>
+            <mat-icon fontIcon="open_in_browser"></mat-icon>
+        </div>
     </button>
 </main>

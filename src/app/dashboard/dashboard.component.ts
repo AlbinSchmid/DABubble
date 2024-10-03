@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { ChannelsUserlistComponent } from './channels-userlist/channels-userlist.component';
 import { MessengerComponent } from './messenger/messenger.component';
 import { ThreadComponent } from './thread/thread.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -18,11 +19,19 @@ import { MatIconModule } from '@angular/material/icon';
     ThreadComponent,
     MatSidenavModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    CommonModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+  @ViewChild('drawer') drawer!: MatDrawer;
 
+  isSideNavOpen: boolean = true;
+
+  toggleSideNav(): void {
+    this.drawer.toggle();
+    setTimeout(() => this.isSideNavOpen = !this.isSideNavOpen, 100);
+  }
 }
