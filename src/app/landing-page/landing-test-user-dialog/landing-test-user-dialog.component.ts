@@ -37,6 +37,6 @@ export class LandingTestUserDialogComponent implements OnInit {
   onImageError() {
     console.error('Image failed to load. Current Avatar URL:', this.avatarUrl);
     // Optionally, you can set a default image or remove the current one
-    this.avatarUrl = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'; // Change this to your default avatar path if desired
+    this.avatarUrl = 'path/to/default/avatar.png'; // Change this to your default avatar path if desired
   }
 }
