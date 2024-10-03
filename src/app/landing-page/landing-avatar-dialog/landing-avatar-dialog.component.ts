@@ -25,7 +25,7 @@ export class LandingAvatarDialogComponent {
    storage = getStorage();
    selectedFile: File | null = null; 
    filePreview: string | ArrayBuffer | null = null; 
-
+   tempUserData = this.authService.getTempUserData();
    constructor(private router: Router) {}
 
    isAvatarSelected(): boolean {
@@ -36,32 +36,28 @@ export class LandingAvatarDialogComponent {
     const tempUserData = this.authService.getTempUserData();
   
     if (tempUserData) {
-      await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password).toPromise();
-      this.authService.clearTempUserData(); 
-    }
-  
-    if (this.isAvatarSelected()) {
-      if (this.selectedFile) {
-        const compressedFile = await this.compressImage(this.selectedFile);
-        const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
-        uploadBytes(storageRef, compressedFile).then(() => {
-          getDownloadURL(storageRef).then((url) => {
-            this.selectedAvatar = url;
-            this.updateUserAvatar(url);
-            this.showSuccessMessage = true;
-            setTimeout(() => {
-              this.showSuccessMessage = false;
-              this.router.navigate(['/']);
-            }, 2000);
-          }).catch(error => console.error('Error getting download URL:', error));
-        }).catch(error => console.error('Error uploading file:', error));
-      } else {
-        this.updateUserAvatar(this.selectedAvatar);
+      if (this.isAvatarSelected()) {
+        if (this.selectedFile) {
+          const compressedFile = await this.compressImage(this.selectedFile);
+          const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
+          await uploadBytes(storageRef, compressedFile);
+          const avatarUrl = await getDownloadURL(storageRef);
+          tempUserData.avatar = avatarUrl;
+          
+          await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
+        } else {
+          tempUserData.avatar = this.selectedAvatar;
+          await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
+        }
+        
+        this.authService.clearTempUserData();
         this.showSuccessMessage = true;
         setTimeout(() => {
           this.showSuccessMessage = false;
           this.router.navigate(['/']);
         }, 2000);
+      } else {
+        await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
       }
     }
   }

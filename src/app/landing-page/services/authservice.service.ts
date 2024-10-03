@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -10,15 +11,26 @@ export class AuthserviceService {
   firebaseAuth = inject(Auth)
   user$ = user(this.firebaseAuth);
   currentUserSig = signal<UserInterface|null|undefined>(undefined)
+  firestore = inject(Firestore);
 
-  register(email: string, username: string, password: string): Observable<void> {
-    const promise = createUserWithEmailAndPassword(
-      this.firebaseAuth,
-      email,
-      password
-    ).then((response) => 
-      updateProfile(response.user, { displayName: username }) 
-    );
+  register(email: string, username: string, password: string, avatar: string): Observable<void> {
+    const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
+      .then((response) => {
+  
+        return updateProfile(response.user, {
+          displayName: username,
+          photoURL: avatar 
+        }).then(() => {
+          const userRef = doc(this.firestore, `users/${response.user.uid}`);
+          const userData = {
+            email: response.user.email ?? '',
+            username: username,
+            photoURL: avatar
+          };
+          return setDoc(userRef, userData); 
+        });
+      });
+  
     return from(promise);
   }
 
