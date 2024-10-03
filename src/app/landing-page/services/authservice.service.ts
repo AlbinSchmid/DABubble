@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword,sendPasswordResetEmail, signOut, updateProfile, user, updatePassword, confirmPasswordReset } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
@@ -84,5 +84,30 @@ getTempUserData(): UserInterface | null {
 
 clearTempUserData() {
   this.tempUserData = null;
+}
+
+
+resetPassword(email: string): Observable<void> {
+  const promise = sendPasswordResetEmail(this.firebaseAuth, email);
+  return from(promise).pipe(
+    catchError((error) => {
+      console.error('Error sending password reset email:', error);
+      return throwError(() => error);
+    })
+  );
+}
+
+confirmPasswordReset(oobCode: string, newPassword: string): Observable<void> {
+  const promise = confirmPasswordReset(this.firebaseAuth, oobCode, newPassword);
+  
+  return from(promise).pipe(
+    map(() => {
+      // Optionally, you can return any value or nothing
+    }),
+    catchError((error) => {
+      console.error('Error confirming password reset:', error);
+      return throwError(() => error);
+    })
+  );
 }
 }
