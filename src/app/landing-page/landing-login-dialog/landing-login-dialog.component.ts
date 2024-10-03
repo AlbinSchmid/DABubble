@@ -70,6 +70,18 @@ export class LandingLoginDialogComponent {
       }
     });
   }
+
+  loginWithGoogle() {
+    this.authService.signInWithGoogle().subscribe({
+      next: () => {
+        this.router.navigateByUrl('/dashboard'); // Navigate after successful login
+      },
+      error: (err) => {
+        this.errorMessage = err.message;
+        console.log('Google login failed:', err.message);
+      }
+    });
+  }
 }
 
 

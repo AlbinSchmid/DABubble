@@ -1,8 +1,19 @@
 <div>
   <h2>Welcome, {{ authService.currentUserSig()?.username }}!</h2>
   <p>Your email: {{ authService.currentUserSig()?.email }}</p>
-  <p>Your foto: <img class="avatar" src="{{ authService.currentUserSig()?.avatar }}" alt=""></p>
+  <p>Your photo: 
+    <img 
+      *ngIf="avatarUrl; else loading" 
+      class="avatar" 
+      [src]="avatarUrl" 
+      alt="avatar" 
+      (error)="onImageError()" 
+      style="max-width: 100px; max-height: 100px;">
+    <ng-template #loading>
+      <span>Loading avatar...</span>
+    </ng-template>
+  </p>
 </div>
-<div>
+<div *ngIf="!authService.currentUserSig()">
   <p>No user information available.</p>
 </div>
