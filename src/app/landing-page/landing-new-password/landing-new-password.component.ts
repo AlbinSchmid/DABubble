@@ -90,7 +90,7 @@ export class LandingNewPasswordComponent {
           this.showSuccessMessage = true; 
           setTimeout(() => {
             this.showSuccessMessage = false; 
-            this.router.navigate(['/login']); 
+            this.router.navigate(['/']); 
           }, 2000);
         },
         error: (error) => {
