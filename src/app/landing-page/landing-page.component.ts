@@ -6,11 +6,12 @@ import { StartAnimationComponent } from './start-animation/start-animation.compo
 import { LinksComponent } from './landing-shared/links/links.component';
 import { SessionService } from './services/session.service';
 import { LogoComponent } from "./landing-shared/logo/logo.component";
+import { LandingLoginRegisterButtonComponent } from './landing-login-register-button/landing-login-register-button.component';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, LandingLoginDialogComponent, StartAnimationComponent, RouterLink, RouterLinkActive, LinksComponent, LogoComponent],
+  imports: [CommonModule, RouterOutlet, LandingLoginDialogComponent, StartAnimationComponent, RouterLink, RouterLinkActive, LinksComponent, LogoComponent, LandingLoginRegisterButtonComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss'
 })

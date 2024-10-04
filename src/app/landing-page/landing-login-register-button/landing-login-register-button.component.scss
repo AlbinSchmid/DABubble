@@ -1,19 +1,21 @@
-.links{
+.register {
   display: flex;
-  flex-direction: row;
-  text-align: center;
-  width:100%;
+  flex-direction: column;
+  text-align: right;
+  padding-right: 55px;
+  padding-top: 30px;
   font-size: 18px;
   gap: 10px;
-  bottom: 36px;
-  justify-content: center;
-  >a{
+  z-index: 99;
+  width: fit-content;
+  >a {
     padding: 10px 15px;
     border-radius: 30px;
     text-decoration: none;
-    color: #797EF3 ;
+    color: #797EF3;
     border: 1px solid transparent;
-    &:hover{
+
+    &:hover {
       color: #444df4;
       border: 1px solid #797EF3;
     }
