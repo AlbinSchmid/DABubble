@@ -16,22 +16,30 @@ section{
   width: 100%;
   justify-content: space-between;
 }
-app-logo{
-  width: 300px;
-  display: flex;
-}
+
 
 .register-under-550px{
   display: none;
 }
 
-@media (max-width:550px){
-  .register-under-550px{
+.place-for-logo{
+  display: none;
+}
+
+@media (max-width:650px){
+  .register-under-650px{
     display: flex;
     justify-content: center;
   }
+  
+  .place-for-logo{
+    display: flex;
+    color: transparent;
+    height: 110px;
+    width: 0px;
+  }
 
-  .register-over-550px{
+  .register-over-650px{
     display: none;
   }
   .logo-section{

@@ -65,7 +65,7 @@ section {
         height: 70px;
         width: 250px;
         margin-left: 38px;
-        margin-top: 35px;
+        margin-top: 30px;
     }
 }
 
@@ -110,3 +110,95 @@ section {
         background: rgba(#313AE5, 0.0);
     }
 }
+
+
+
+
+@media (max-width: 650px) {
+    section {
+        justify-content: center; /* Center content horizontally */
+        align-items: flex-start; /* Align items to the top */
+        translate: 0;
+        align-items: center;
+        animation: mid-to-center-animation ease-in-out 1s forwards 2s, background-animation ease-in-out 200ms forwards 2s !important;
+    }
+
+    #headline-container {
+        transform: translateX(40px) !important;
+        h2 {
+            animation: headline-mobile-animation ease-in-out 800ms forwards 500ms, headline-center-animation ease-in-out 1000ms forwards 2s !important;;
+            font-size: 24px !important; 
+            text-align: center; 
+            transform: translateX(-100px);  
+        }
+    }
+
+    img {
+       
+        animation: img-mobile-animation ease-in-out 400ms forwards 500ms, img-center-animation ease-in-out 1000ms forwards 2s !important;
+        width: 70px !important;
+        height: 70px !important;
+
+    }
+
+}
+
+
+@keyframes headline-center-animation {
+    from {
+        font-size: 24px;
+        color: white;
+    }
+    to {
+        font-size: 24px;
+        color: black;
+    }
+}
+
+
+@keyframes img-center-animation {
+    from {
+        width: 70px;
+        height: 70px;
+        transform: translateX(-80px);
+    }
+    to {
+        width: 70px;
+        height: 70px;
+        transform: translateX(-63px);
+    }
+}
+
+@keyframes headline-mobile-animation {
+    from {
+        transform: translateX(-100px); 
+        display: none;
+    }
+
+    to {
+        transform: translateX(0);
+        display: flex;
+    }
+}
+
+@keyframes mid-to-center-animation {
+    from {
+        height: 100vh;
+        width: 100vw;
+    }
+    to {
+        height: 70px;
+        margin-top: 30px;
+    }
+}
+
+@keyframes img-mobile-animation {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100px);
+    }
+}
+

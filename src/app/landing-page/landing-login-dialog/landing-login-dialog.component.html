@@ -9,13 +9,11 @@
     
     
     <form [formGroup]="loginForm">
-      
-      <!-- Email Input -->
       <div class="form-group" [ngClass]="{'focused': isFocused.email}">
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.email, 'error-icon': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
           class="mat-icon-gray">email</mat-icon>
-        <input type="email" matInput formControlName="email" placeholder="max.mustermann.@muster.de" maxlength="25"
+        <input type="email" matInput formControlName="email" placeholder="max.@muster.de" maxlength="25"
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">

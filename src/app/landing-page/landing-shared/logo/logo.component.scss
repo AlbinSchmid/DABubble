@@ -20,3 +20,11 @@
     cursor: pointer;
   }
 }
+
+@media(max-width:650px){
+  .logo{
+    padding-left: 0;
+    width: fit-content;
+    justify-content: center;
+  }
+}
