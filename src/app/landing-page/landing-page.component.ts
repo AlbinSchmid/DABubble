@@ -6,37 +6,36 @@ import { StartAnimationComponent } from './start-animation/start-animation.compo
 import { LinksComponent } from './landing-shared/links/links.component';
 import { SessionService } from './services/session.service';
 import { LogoComponent } from "./landing-shared/logo/logo.component";
+import { LandingLoginRegisterButtonComponent } from './landing-login-register-button/landing-login-register-button.component';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, LandingLoginDialogComponent, StartAnimationComponent, RouterLink, RouterLinkActive, LinksComponent, LogoComponent],
+  imports: [CommonModule, RouterOutlet, LandingLoginDialogComponent, StartAnimationComponent, RouterLink, RouterLinkActive, LinksComponent, LogoComponent, LandingLoginRegisterButtonComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss'
 })
 export class LandingPageComponent implements OnInit, AfterViewInit {
-  showAnimation: boolean = true; // Initially show the animation
-  showLogo: boolean = false; // Control the visibility of the logo
+  showAnimation: boolean = true; 
+  showLogo: boolean = false; 
 
   constructor(private sessionService: SessionService) { }
 
   ngOnInit(): void {
-    // Check if it's the first visit
     if (this.sessionService.isFirstVisit()) {
-      this.showAnimation = true; // Show animation for the first visit
+      this.showAnimation = true; 
     } else {
-      this.showAnimation = false; // Skip animation on subsequent visits
-      this.showLogo = true; // Show logo immediately
+      this.showAnimation = false; 
+      this.showLogo = true; 
     }
   }
 
   ngAfterViewInit() {
-    // If it's the first visit, wait for the animation duration to show the logo
     if (this.showAnimation) {
       setTimeout(() => {
-        this.showAnimation = false; // Hide the animation
-        this.showLogo = true; // Show the logo after 4 seconds
-      }, 4000); // Adjust this time according to your animation duration
+        this.showAnimation = false; 
+        this.showLogo = true; 
+      }, 4000); 
     }
   }
 }

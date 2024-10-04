@@ -64,25 +64,3 @@
   position: relative;
 }
 
-.register {
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-  position: absolute;
-  right: 75px;
-  top: 55px;
-  font-size: 18px;
-  gap: 10px;
-  >a {
-    padding: 10px 15px;
-    border-radius: 30px;
-    text-decoration: none;
-    color: #797EF3;
-    border: 1px solid transparent;
-
-    &:hover {
-      color: #444df4;
-      border: 1px solid #797EF3;
-    }
-  }
-}

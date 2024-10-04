@@ -5,5 +5,20 @@ section{
   background-color: #ECEEFE;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  position: relative;
 }
+
+.logo-section{
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+app-logo{
+  width: 300px;
+  display: flex;
+}
+
+
 
