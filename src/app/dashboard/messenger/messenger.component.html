@@ -7,72 +7,39 @@
     </header>
     <div id="content">
         <div id="messages-container" #content>
-            <div class="message message-from-you">
+            @for (message of firebase.messages; track $index) {
+            <div class="message message-from-you" (mouseenter)="hoveredMessage = $index"
+                (mouseleave)="hoveredMessage = -1; hoveredMenu = false;">
                 <img src="/assets/img/avatar.png" alt="Profile">
                 <div id="message-content">
                     <div>
-                        <h6>Noah Braun</h6>
-                        <p>14:25 Uhr</p>
+                        <h6>Albin Schmid</h6>
+                        <p>{{ message.date | date:'H:mm' }}
+                            <span>Uhr</span>
+                        </p>
                     </div>
                     <div>
-                        Welche Version ist aktuell von Angular
+                        {{ message.content }}
                     </div>
                     <div>
                         <a href="">2 Anworten</a>
                         <p>Letzte Antwort 14:56</p>
                     </div>
                 </div>
-                <div class="interaction">
+                <div class="interaction" *ngIf="hoveredMessage == $index">
                     <button><img src="/assets/icons/check.png" alt=""></button>
                     <button><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
-                    <button><img src="/assets/icons/add-reaction.png" alt=""></button>
+                    <button><mat-icon>add_reaction</mat-icon></button>
                     <button><img src="/assets/icons/comment.png" alt=""></button>
+                    <button id="intercation-more-btn" (click)="showOrHideMenu()">
+                        <mat-icon>more_vert</mat-icon>
+                        <div *ngIf="hoveredMenu == true" (mouseleave)="hoveredMenu = false">
+                            <p>Nachricht bearbeiten</p>
+                        </div>
+                    </button>
                 </div>
             </div>
-            <div class="message message-from-you">
-                <img src="/assets/img/avatar.png" alt="Profile">
-                <div id="message-content">
-                    <div>
-                        <h6>Noah Braun</h6>
-                        <p>14:25 Uhr</p>
-                    </div>
-                    <div>
-                        Welche Version ist aktuell von Angular
-                    </div>
-                    <div>
-                        <a href="">2 Anworten</a>
-                        <p>Letzte Antwort 14:56</p>
-                    </div>
-                </div>
-                <div class="interaction">
-                    <button><img src="/assets/icons/check.png" alt=""></button>
-                    <button><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
-                    <button><img src="/assets/icons/add-reaction.png" alt=""></button>
-                    <button><img src="/assets/icons/comment.png" alt=""></button>
-                </div>
-            </div>
-            <div class="message message-from-you">
-                <img src="/assets/img/avatar.png" alt="Profile">
-                <div id="message-content">
-                    <div>
-                        <h6>Noah Braun</h6>
-                        <p>14:25 Uhr</p>
-                    </div>
-                    <div>
-                        Welche Version ist aktuell von Angular
-                    </div>
-                    <div>
-                        <a href="">2 Anworten</a>
-                        <p>Letzte Antwort 14:56</p>
-                    </div>
-                </div>
-                <div class="interaction">
-                    <button><img src="/assets/icons/check.png" alt=""></button>
-                    <button><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
-                    <button><img src="/assets/icons/add-reaction.png" alt=""></button>
-                    <button><img src="/assets/icons/comment.png" alt=""></button>
-                </div>
-            </div>
+            }
             <div class="message">
                 <img src="/assets/img/avatar.png" alt="Profile">
                 <div id="message-content">
@@ -108,7 +75,8 @@
             </div>
         </div>
         <div id="input-container">
-            <textarea name="" id="" placeholder="Schreibe eine Nachricht an Noah Braun"></textarea>
+            <textarea [(ngModel)]="firebase.content" name="textarea"
+                placeholder="Schreibe eine Nachricht an Noah Braun"></textarea>
             <div>
                 <div id="button-container-left">
                     <button></button>
@@ -116,7 +84,8 @@
                     <button></button>
                     <button></button>
                 </div>
-                <button id="send-message-btn"><img src="/assets/icons/send.png" alt="send-icon"></button>
+                <button id="send-message-btn" (click)="firebase.createMessage()"><img src="/assets/icons/send.png"
+                        alt="send-icon"></button>
             </div>
         </div>
     </div>
