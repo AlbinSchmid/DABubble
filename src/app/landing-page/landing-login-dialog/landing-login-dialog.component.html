@@ -6,7 +6,7 @@
   <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest</p>
 
   <div class="max-width inputs">
-    <a routerLink="/passwort-zurücksetzen" class="forgotten">Passwort vergessen?</a>
+    
     
     <form [formGroup]="loginForm">
       
@@ -40,6 +40,7 @@
         
       </div>
     </form>
+    <a routerLink="/passwort-zurücksetzen" class="forgotten">Passwort vergessen?</a>
   </div>
 
   
@@ -55,7 +56,7 @@
   </button>
   <div class="buttons-area">
     <button mat-flat-button class="primary" (click)="onSubmit()" type="submit" [disabled]="loginForm.invalid">Anmelden</button>
-    <button mat-flat-button class="secondary" routerLink="dashboard">Anmelden als Gast</button>
+    <button mat-flat-button class="secondary" routerLink="dashboard">Gäste-Login</button>
     <div class="global-error-message" [ngClass]="{'show-error': errorMessage}">
       <span>{{ errorMessage }}</span>
     </div>

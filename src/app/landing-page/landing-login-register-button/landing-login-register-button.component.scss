@@ -6,7 +6,6 @@
   padding-top: 30px;
   font-size: 18px;
   gap: 10px;
-  z-index: 99;
   width: fit-content;
   >a {
     padding: 10px 15px;
@@ -17,6 +16,15 @@
 
     &:hover {
       color: #444df4;
+      border: 1px solid #797EF3;
+    }
+  }
+}
+
+@media (max-width:550px){
+  .register{
+    padding: 0;
+    >a{
       border: 1px solid #797EF3;
     }
   }

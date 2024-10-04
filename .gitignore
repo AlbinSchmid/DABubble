@@ -6,6 +6,7 @@
 /out-tsc
 /bazel-out
 /up.bat
+src/app/app-config.ts
 
 # Node
 /node_modules
