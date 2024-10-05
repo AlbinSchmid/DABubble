@@ -140,8 +140,16 @@ form{
     padding: 20px;
     margin: 20px 20px;
   }
+  form{
+    width: 100%;
+  }
+
+  .form-group{
+    width: 100%;
+  }
+
   input{
-    width: auto;
+    width: 100%;
   }
   
 }

@@ -8,7 +8,7 @@ section {
     align-items: center;
     position: absolute;
     z-index: 4;
-
+    overflow: hidden;
     #headline-container {
         position: relative;
         padding: 10px;
@@ -119,17 +119,21 @@ section {
         justify-content: center; /* Center content horizontally */
         align-items: flex-start; /* Align items to the top */
         translate: 0;
+        width: 100%;
         align-items: center;
+        overflow: hidden !important;
         animation: mid-to-center-animation ease-in-out 1s forwards 2s, background-animation ease-in-out 200ms forwards 2s !important;
     }
 
     #headline-container {
         transform: translateX(40px) !important;
+        overflow: hidden !important;
         h2 {
             animation: headline-mobile-animation ease-in-out 800ms forwards 500ms, headline-center-animation ease-in-out 1000ms forwards 2s !important;;
             font-size: 24px !important; 
             text-align: center; 
-            transform: translateX(-100px);  
+            transform: translateX(-100px); 
+            overflow: hidden !important; 
         }
     }
 
@@ -138,6 +142,7 @@ section {
         animation: img-mobile-animation ease-in-out 400ms forwards 500ms, img-center-animation ease-in-out 1000ms forwards 2s !important;
         width: 70px !important;
         height: 70px !important;
+        overflow: hidden !important;
 
     }
 
