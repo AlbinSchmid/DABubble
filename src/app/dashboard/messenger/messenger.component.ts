@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DetailPersonComponent } from './detail-person/detail-person.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MessengerService } from '../../shared/firebase-services/messenger.service';
+import { MessengerService } from '../../shared/services/firebase-services/messenger.service';
 import { Message } from '../../shared/interfaces/message';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

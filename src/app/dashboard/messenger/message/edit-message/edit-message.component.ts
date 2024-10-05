@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Message } from '../../../../shared/interfaces/message';
-import { MessengerService } from '../../../../shared/firebase-services/messenger.service';
+import { MessengerService } from '../../../../shared/services/firebase-services/messenger.service';
 
 @Component({
   selector: 'app-edit-message',

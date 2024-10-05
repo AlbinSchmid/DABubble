@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MessageComponent } from './messenger/message/message.component';
-import { DataService } from '../shared/services/data.service';
+import { ThreadService } from '../shared/services/thread.service';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class DashboardComponent {
   isSideNavOpen: boolean = true;
 
 
-  constructor(public dataService: DataService) {
+  constructor(public threadService: ThreadService) {
 
   }
 

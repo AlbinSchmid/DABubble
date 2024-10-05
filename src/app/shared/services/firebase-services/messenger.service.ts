@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, Firestore, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { doc, query, where, } from 'firebase/firestore';
-import { Message } from '../interfaces/message';
+import { Message } from '../../interfaces/message';
 
 @Injectable({
   providedIn: 'root'
@@ -92,7 +92,7 @@ export class MessengerService {
       date: timeStamp,
       type: 'text',
     }
-    this.addMessage(message);
+    this.addMessage(message, '');
     this.content = '';
   }
 
@@ -102,7 +102,7 @@ export class MessengerService {
    * @param message - the sent message
    */
   async addMessage(message: any, messageId: string) {
-    await addDoc(collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges}`), message).catch(
+    await addDoc(collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges${this.checkMessageId(messageId)}`), message).catch(
       (err) => {
         console.error(err);
       }
@@ -116,9 +116,9 @@ export class MessengerService {
 
   checkMessageId(messageId: string) {
     if (messageId == '') {
-        return
+      return '';
     } else {
-      return `/${messageId}`
+      return `/${messageId}`;
     }
   }
 
@@ -161,10 +161,6 @@ export class MessengerService {
    */
   getSingleDocRef(messageId: string) {
     return doc(collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges'), messageId)
-  }
-
-  test() {
-    return collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges');
   }
 
 

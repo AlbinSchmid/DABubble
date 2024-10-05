@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MessengerComponent } from '../messenger/messenger.component';
-import { DataService } from '../../shared/services/data.service';
-import { MessengerService } from '../../shared/firebase-services/messenger.service';
+import { MessengerService } from '../../shared/services/firebase-services/messenger.service';
+import { ThreadService } from '../../shared/services/thread.service';
 
 @Component({
   selector: 'app-thread',
@@ -18,8 +18,8 @@ import { MessengerService } from '../../shared/firebase-services/messenger.servi
 export class ThreadComponent {
   unsubAnswerList;
 
-  constructor(public dataService: DataService, public firebase: MessengerService) {
-    this.unsubAnswerList = firebase.subAnswersList(dataService.messageId);    
+  constructor(public threadService: ThreadService, public firebase: MessengerService) {
+    this.unsubAnswerList = firebase.subAnswersList(threadService.messageId);    
   }
 
   ngOnDestroy() {

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, output } from '@angular/core';
-import { MessengerService } from '../../../shared/firebase-services/messenger.service';
+import { MessengerService } from '../../../shared/services/firebase-services/messenger.service';
 import { Message } from '../../../shared/interfaces/message';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { EditMessageComponent } from './edit-message/edit-message.component';
-import { DataService } from '../../../shared/services/data.service';
+import { ThreadService } from '../../../shared/services/thread.service';
 
 @Component({
   selector: 'app-message',
@@ -31,7 +31,7 @@ export class MessageComponent {
   editMessage: boolean;
   hoveredMenu = false;
 
-  constructor(public firebase: MessengerService, private dataService: DataService) {      
+  constructor(public firebase: MessengerService, private threadService: ThreadService) {      
   }
 
 
@@ -45,8 +45,8 @@ export class MessageComponent {
 
 
   openThead() {
-    this.dataService.showThread = true;
-    this.dataService.messageId = this.message.id;    
+    this.threadService.showThread = true;
+    this.threadService.messageId = this.message.id;    
   }
 
   closeEdit(closeEditMessage: boolean) {
