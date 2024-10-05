@@ -4,6 +4,10 @@
   object-fit: cover;
   object-position: top;
 }
+
+
+//emoji board
+
 .emoji-board {
   max-width: 300px;
   border: 1px solid #ccc; 
@@ -12,8 +16,6 @@
   background-color: white; 
   overflow: hidden;
 }
-
-
 
 .emoji-tabs {
   display: flex; 
