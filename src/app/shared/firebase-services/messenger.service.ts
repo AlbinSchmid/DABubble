@@ -8,18 +8,19 @@ import { Message } from '../interfaces/message';
 })
 export class MessengerService {
   firestore: Firestore = inject(Firestore)
-  unsubList;
+  unsubChatList;
   content = '';
   messages: Message[] = [];
+  anwers: Message[] = [];
 
 
   constructor() {
-    this.unsubList = this.subChatsList();
+    this.unsubChatList = this.subChatsList();
   }
 
 
   ngDestroy() {
-    this.unsubList
+    this.unsubChatList
   }
 
 
@@ -35,7 +36,16 @@ export class MessengerService {
         this.messages.push(this.setMessageObject(element.data(), element.id))
       });
       this.messages = this.sortByDate(this.messages);
-      console.log(this.messages);
+    })
+  }
+
+
+  subAnswersList(messageId: string) {
+    const messegeRef = collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges/${messageId}/answers`);
+    return onSnapshot(messegeRef, (list) => {
+      list.forEach(element => {
+        console.log(element.data());
+      });
     })
   }
 
@@ -91,8 +101,8 @@ export class MessengerService {
    * We save the message in our firebase.
    * @param message - the sent message
    */
-  async addMessage(message: any) {
-    await addDoc(collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges'), message).catch(
+  async addMessage(message: any, messageId: string) {
+    await addDoc(collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges}`), message).catch(
       (err) => {
         console.error(err);
       }
@@ -104,6 +114,20 @@ export class MessengerService {
   }
 
 
+  checkMessageId(messageId: string) {
+    if (messageId == '') {
+        return
+    } else {
+      return `/${messageId}`
+    }
+  }
+
+
+  /**
+   * We update the message in the firebase
+   * @param message - message array
+   * @param messageId - message id (firebase)
+   */
   async updateMessage(message: any, messageId: string) {
     let ref = this.getSingleDocRef(messageId);
     await updateDoc(ref, this.getCleanJson(message)).catch(
@@ -114,6 +138,11 @@ export class MessengerService {
   }
 
 
+  /**
+   * Everything in this should be updated
+   * @param message - message array
+   * @returns - clean array
+   */
   getCleanJson(message: any) {
     return {
       content: message.content,
@@ -125,8 +154,17 @@ export class MessengerService {
   }
 
 
+  /**
+   * Get single path in firebase
+   * @param messageId - the messageId in this path of chat
+   * @returns - returns the correct path
+   */
   getSingleDocRef(messageId: string) {
     return doc(collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges'), messageId)
+  }
+
+  test() {
+    return collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges');
   }
 
 

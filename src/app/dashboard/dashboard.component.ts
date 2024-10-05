@@ -7,6 +7,8 @@ import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { MessageComponent } from './messenger/message/message.component';
+import { DataService } from '../shared/services/data.service';
 
 
 @Component({
@@ -27,8 +29,13 @@ import { CommonModule } from '@angular/common';
 })
 export class DashboardComponent {
   @ViewChild('drawer') drawer!: MatDrawer;
-
   isSideNavOpen: boolean = true;
+
+
+  constructor(public dataService: DataService) {
+
+  }
+
 
   toggleSideNav(): void {
     this.drawer.toggle();
