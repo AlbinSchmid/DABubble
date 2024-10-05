@@ -9,6 +9,7 @@ import { Message } from '../../shared/interfaces/message';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { timestamp } from 'rxjs';
+import { MessageComponent } from './message/message.component';
 
 @Component({
   selector: 'app-messenger',
@@ -21,6 +22,7 @@ import { timestamp } from 'rxjs';
     MatIconModule,
     DetailPersonComponent,
     MatDialogModule,
+    MessageComponent
   ],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, Firestore, onSnapshot } from '@angular/fire/firestore';
-import { query, where, } from 'firebase/firestore';
+import { addDoc, collection, Firestore, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { doc, query, where, } from 'firebase/firestore';
 import { Message } from '../interfaces/message';
 
 @Injectable({
@@ -11,9 +11,6 @@ export class MessengerService {
   unsubList;
   content = '';
   messages: Message[] = [];
-
-
-
 
 
   constructor() {
@@ -35,7 +32,7 @@ export class MessengerService {
     return onSnapshot(messegeRef, (list) => {
       this.messages = [];
       list.forEach(element => {
-        this.messages.push(this.setMessageObject(element.data()))
+        this.messages.push(this.setMessageObject(element.data(), element.id))
       });
       this.messages = this.sortByDate(this.messages);
       console.log(this.messages);
@@ -48,13 +45,14 @@ export class MessengerService {
    * @param element - is the array in the Firebase where the message are saved
    * @returns - return the filled array
    */
-  setMessageObject(element: any) {
+  setMessageObject(element: any, id: string) {
     return {
       content: element.content || '',
       isRead: element.isRead || false,
       senderId: element.senderId || 0,
       date: new Date(element.date) || 0,
       type: element.type || '',
+      id: id || '',
     }
   }
 
@@ -77,12 +75,12 @@ export class MessengerService {
   createMessage() {
     let date = new Date();
     let timeStamp = date.getTime();
-    let message: Message = {
+    let message = {
       content: this.content,
       isRead: false,
       senderId: 0,
       date: timeStamp,
-      type: 'text'
+      type: 'text',
     }
     this.addMessage(message);
     this.content = '';
@@ -103,6 +101,32 @@ export class MessengerService {
         console.log('Document written with ID: ', docRef?.id);
       }
     )
+  }
+
+
+  async updateMessage(message: any, messageId: string) {
+    let ref = this.getSingleDocRef(messageId);
+    await updateDoc(ref, this.getCleanJson(message)).catch(
+      (err) => {
+        console.error(err);
+      }
+    )
+  }
+
+
+  getCleanJson(message: any) {
+    return {
+      content: message.content,
+      isRead: message.isRead,
+      senderId: message.senderId,
+      date: message.date.getTime(),
+      type: message.type,
+    }
+  }
+
+
+  getSingleDocRef(messageId: string) {
+    return doc(collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges'), messageId)
   }
 
 

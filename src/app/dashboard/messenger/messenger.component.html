@@ -8,39 +8,9 @@
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebase.messages; track $index) {
-            <div class="message message-from-you" (mouseenter)="hoveredMessage = $index"
-                (mouseleave)="hoveredMessage = -1; hoveredMenu = false;">
-                <img src="/assets/img/avatar.png" alt="Profile">
-                <div id="message-content">
-                    <div>
-                        <h6>Albin Schmid</h6>
-                        <p>{{ message.date | date:'H:mm' }}
-                            <span>Uhr</span>
-                        </p>
-                    </div>
-                    <div>
-                        {{ message.content }}
-                    </div>
-                    <div>
-                        <a href="">2 Anworten</a>
-                        <p>Letzte Antwort 14:56</p>
-                    </div>
-                </div>
-                <div class="interaction" *ngIf="hoveredMessage == $index">
-                    <button><img src="/assets/icons/check.png" alt=""></button>
-                    <button><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
-                    <button><mat-icon>add_reaction</mat-icon></button>
-                    <button><img src="/assets/icons/comment.png" alt=""></button>
-                    <button id="intercation-more-btn" (click)="showOrHideMenu()">
-                        <mat-icon>more_vert</mat-icon>
-                        <div *ngIf="hoveredMenu == true" (mouseleave)="hoveredMenu = false">
-                            <p>Nachricht bearbeiten</p>
-                        </div>
-                    </button>
-                </div>
-            </div>
+            <app-message [message]="message" [messageId]="$index"></app-message>
             }
-            <div class="message">
+            <!-- <div class="message">
                 <img src="/assets/img/avatar.png" alt="Profile">
                 <div id="message-content">
                     <div>
@@ -61,7 +31,7 @@
                     <button><img src="/assets/icons/add-reaction.png" alt=""></button>
                     <button><img src="/assets/icons/comment.png" alt=""></button>
                 </div>
-            </div>
+            </div> -->
             <div class="date-container">
                 <div>Heute</div>
                 <div></div>

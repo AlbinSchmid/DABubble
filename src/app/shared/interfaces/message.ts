@@ -4,4 +4,5 @@ export interface Message {
     senderId: number,
     date: any,
     type: string,
+    id: string,
 }
