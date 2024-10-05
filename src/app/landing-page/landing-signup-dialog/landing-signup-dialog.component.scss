@@ -3,7 +3,7 @@
 section{
   width: 100vw;
   max-width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #ECEEFE;
   display: flex;
   flex-direction: column;
@@ -92,4 +92,43 @@ label a{
 .bg-white{
   background-color: white;
   padding-left: 24px;
+}
+
+@media (max-width: 500px){
+  h1{
+    font-size: 36px;
+  }
+  p{
+    font-size: 16px;
+  }
+  .bg-white{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  label{
+    font-size: 16px;
+  }
+  
+}
+
+@media (max-width:430px){
+  .arrow-title{
+    gap: 0px;
+  }
+  h1{
+    font-size: 32px;
+  }
+  .arrow-back{
+    font-size: 24px;
+    width: 28px;
+    height: 28px;
+    margin-left: -10px;
+  }
+ 
+  label{
+    flex-wrap: wrap;
+    a{
+      padding:  0px 3px;
+    }
+  }
 }

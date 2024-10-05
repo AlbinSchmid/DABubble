@@ -1,9 +1,13 @@
 <section>
   <app-logo></app-logo>
   <div class="login">
-    <h1>Konto erstellen</h1>
+    <div class="arrow-title">
+      <mat-icon routerLink="/" fontIcon="arrow_back" class="arrow-back" ></mat-icon>
+      <h1>Konto erstellen</h1>
+    </div>
+    
     <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
-    <mat-icon routerLink="/" fontIcon="arrow_back" class="arrow-back" ></mat-icon>
+    
   <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
     
       <div class="form-group" [ngClass]="{'focused': isFocused.username}">
@@ -27,7 +31,7 @@
         <mat-icon matPrefix
           [ngClass]="{'active-icon': isFocused.email, 'error-icon': accountForm.get('email')?.invalid && accountForm.get('email')?.touched}"
           class="mat-icon-gray">email</mat-icon>
-        <input type="email" matInput formControlName="email" placeholder="max.mustermann.@muster.de" maxlength="25"
+        <input type="email" matInput formControlName="email" placeholder="max@muster.de" maxlength="25"
           (focus)="onInputFocus('email')" (blur)="onInputBlur('email')"
           [ngClass]="{'input-error': accountForm.get('email')?.invalid && accountForm.get('email')?.touched}">
         <div class="error-message" *ngIf="accountForm.get('email')?.invalid && accountForm.get('email')?.touched">
