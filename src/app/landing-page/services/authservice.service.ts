@@ -26,27 +26,30 @@ export class AuthserviceService {
   firestore = inject(Firestore);
   router = inject(Router);
 
-  register(email: string, username: string, password: string, avatar: string): Observable<void> {
-    const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
-      .then((response) => {
-        // Update user profile with username and avatar
-        return updateProfile(response.user, {
-          displayName: username,
-          photoURL: avatar,
-        }).then(() => {
-          const userRef = doc(this.firestore, `users/${response.user.uid}`);
-          const userData: UserInterface = {
-            email: response.user.email ?? '',
-            username: username,
-            password: password, // Save password if needed (consider security)
-            avatar: avatar,
-          };
-          return setDoc(userRef, userData);
-        });
-      });
+register(email: string, username: string, password: string, avatar: string): Observable<void> {
+  const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
+    .then((response) => {
+      const uid = response.user.uid; // Get the user ID
 
-    return from(promise);
-  }
+      // Update user profile with username and avatar
+      return updateProfile(response.user, {
+        displayName: username,
+        photoURL: avatar,
+      }).then(() => {
+        const userRef = doc(this.firestore, `users/${uid}`);
+        const userData: UserInterface = {
+          userID: uid, // Add the user ID here
+          email: response.user.email ?? '',
+          username: username,
+          password: password, // Save password if needed (consider security)
+          avatar: avatar,
+        };
+        return setDoc(userRef, userData);
+      });
+    });
+
+  return from(promise);
+}
 
   setCurrentUser(user: UserInterface | null) {
     this.currentUserSig.set(user);
@@ -83,6 +86,7 @@ export class AuthserviceService {
 
       const userRef = doc(this.firestore, `users/${user.uid}`);
       const userData: UserInterface = {
+        userID:user.uid || '',
         email: user.email || '',
         username: user.displayName || '',
         password: '', // Password is not applicable for Google sign-in

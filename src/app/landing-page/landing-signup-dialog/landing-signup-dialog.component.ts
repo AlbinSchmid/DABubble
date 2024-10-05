@@ -52,6 +52,7 @@ export class LandingSignupDialogComponent implements OnInit {
   
     if (this.accountForm.valid) {
       this.authService.setTempUserData({
+        userID: '',
         email: rawForm.email,
         username: rawForm.username,
         password: rawForm.password,

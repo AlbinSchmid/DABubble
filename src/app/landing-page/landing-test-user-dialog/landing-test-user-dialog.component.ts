@@ -18,6 +18,7 @@ export class LandingTestUserDialogComponent implements OnInit {
     this.authService.user$.subscribe((user: any) => {
       if (user) {
         const newUser: UserInterface = {
+          userID: user.uid,
           password: '',
           email: user.email,
           username: user.displayName,
