@@ -1,0 +1,32 @@
+<section class="message-from-you" (mouseenter)="hoveredMessageId = messageId"
+    (mouseleave)="hoveredMessageId = -1; hoveredMenu = false;">
+    <img src="/assets/img/avatar.png" alt="Profile">
+    <div id="message-content" *ngIf="!editMessage">
+        <div>
+            <h6>Albin Schmid</h6>
+            <p>{{ message.date | date:'H:mm' }}
+                <span>Uhr</span>
+            </p>
+        </div>
+        <div>
+            {{ message.content }}
+        </div>
+        <div>
+            <a (click)="openThead()">2 Anworten</a>
+            <p>Letzte Antwort 14:56</p>
+        </div>
+    </div>
+    <div class="interaction" *ngIf="hoveredMessageId == messageId && !editMessage">
+        <button><img src="/assets/icons/check.png" alt=""></button>
+        <button><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
+        <button><mat-icon>add_reaction</mat-icon></button>
+        <button><img src="/assets/icons/comment.png" alt=""></button>
+        <button id="intercation-more-btn" (click)="showOrHideMenu()">
+            <mat-icon>more_vert</mat-icon>
+            <div (click)="editMessage = true" *ngIf="hoveredMenu == true" (mouseleave)="hoveredMenu = false">
+                <p>Nachricht bearbeiten</p>
+            </div>
+        </button>
+    </div>
+    <app-edit-message *ngIf="editMessage" [message]="message" (closeEditMessage)="closeEdit($event)"></app-edit-message>
+</section>

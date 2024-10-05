@@ -5,11 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { DetailPersonComponent } from './detail-person/detail-person.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MessengerService } from '../../shared/services/firebase-services/messenger.service';
-import { Message } from '../../shared/interfaces/message';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { timestamp } from 'rxjs';
-import { MessageComponent } from './message/message.component';
+import { EditMessageComponent } from '../../shared/components/message/edit-message/edit-message.component';
+import { MessageComponent } from '../../shared/components/message/message.component';
 
 @Component({
   selector: 'app-messenger',
@@ -22,8 +22,9 @@ import { MessageComponent } from './message/message.component';
     MatIconModule,
     DetailPersonComponent,
     MatDialogModule,
-    MessageComponent
-  ],
+    EditMessageComponent,
+    MessageComponent,
+],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'
 })

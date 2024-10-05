@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { ImprintComponent } from './shared/imprint/imprint.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { PrivacyPolicyComponent } from './shared/privacy-policy/privacy-policy.component';
+import { PrivacyPolicyComponent } from './shared/components/privacy-policy/privacy-policy.component';
 import { LandingSignupDialogComponent } from './landing-page/landing-signup-dialog/landing-signup-dialog.component';
 import { LandingAvatarDialogComponent } from './landing-page/landing-avatar-dialog/landing-avatar-dialog.component';
 import { LandingResetSendEmailComponent } from './landing-page/landing-reset-send-email/landing-reset-send-email.component';

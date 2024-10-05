@@ -10,8 +10,9 @@ export class MessengerService {
   firestore: Firestore = inject(Firestore)
   unsubChatList;
   content = '';
+  answerConent = '';
   messages: Message[] = [];
-  anwers: Message[] = [];
+  answers: Message[] = [];
 
 
   constructor() {
@@ -40,12 +41,20 @@ export class MessengerService {
   }
 
 
+  /**
+   * 
+   * @param messageId - messageId where we get the answeres
+   * @returns get the path of the answere chat
+   */
   subAnswersList(messageId: string) {
     const messegeRef = collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges/${messageId}/answers`);
     return onSnapshot(messegeRef, (list) => {
+      this.answers = [];
       list.forEach(element => {
-        console.log(element.data());
+        this.answers.push(this.setMessageObject(element.data(), element.id))
       });
+      console.log(this.answers);
+      
     })
   }
 
@@ -82,7 +91,25 @@ export class MessengerService {
   /**
    * Get the time when message is created and filled the array. 
    */
-  createMessage() {
+  createAnswer(messageId: string) {
+    let date = new Date();
+    let timeStamp = date.getTime();
+    let message = {
+      content: this.answerConent,
+      isRead: false,
+      senderId: 0,
+      date: timeStamp,
+      type: 'text',
+    }
+    this.addMessage(message, messageId);
+    this.answerConent = '';
+  }
+
+
+  /**
+   * Get the time when message is created and filled the array. 
+   */
+  createMessage(messageId: string) {
     let date = new Date();
     let timeStamp = date.getTime();
     let message = {
@@ -92,7 +119,8 @@ export class MessengerService {
       date: timeStamp,
       type: 'text',
     }
-    this.addMessage(message, '');
+    
+    this.addMessage(message, messageId);
     this.content = '';
   }
 
@@ -114,11 +142,16 @@ export class MessengerService {
   }
 
 
+  /**
+   * we check where the message should be saved in the firebase
+   * @param messageId - id from the message
+   * @returns - return the path where should be saved in the firebase
+   */
   checkMessageId(messageId: string) {
     if (messageId == '') {
       return '';
     } else {
-      return `/${messageId}`;
+      return `/${messageId}/answers`;
     }
   }
 

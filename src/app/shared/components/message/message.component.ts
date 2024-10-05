@@ -1,18 +1,19 @@
-import { Component, EventEmitter, Input, Output, output } from '@angular/core';
-import { MessengerService } from '../../../shared/services/firebase-services/messenger.service';
-import { Message } from '../../../shared/interfaces/message';
-import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, Input } from '@angular/core';
+import { MessengerService } from '../../services/messenger.service';
+import { ThreadService } from '../../services/thread.service';
 import { EditMessageComponent } from './edit-message/edit-message.component';
-import { ThreadService } from '../../../shared/services/thread.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { Message } from '../../interfaces/message';
 
 @Component({
   selector: 'app-message',
   standalone: true,
   imports: [
+    EditMessageComponent,
     CommonModule,
     MatIconModule,
-    EditMessageComponent,
   ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
@@ -33,13 +34,15 @@ export class MessageComponent {
   hoveredMenu = false;
 
 
-  constructor(public firebase: MessengerService, private threadService: ThreadService) {      
+
+
+  constructor(public firebase: MessengerService, private threadService: ThreadService) {
   }
 
 
   showOrHideMenu() {
     if (this.hoveredMenu == false) {
-        this.hoveredMenu = true;
+      this.hoveredMenu = true;
     } else {
       this.hoveredMenu = false;
     }
@@ -47,8 +50,13 @@ export class MessageComponent {
 
 
   openThead() {
-    this.threadService.showThread = true;
-    this.threadService.messageId = this.message.id;    
+    this.threadService.showThread = false;
+    this.threadService.messageId = this.message.id;
+    this.threadService.answeredMessage = this.message;
+    setTimeout(() => {
+      this.threadService.showThread = true;
+      
+    }, 10);
   }
 
 
