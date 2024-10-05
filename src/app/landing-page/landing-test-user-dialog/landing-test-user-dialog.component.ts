@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { AuthserviceService } from '../services/authservice.service';
 import { UserInterface } from '../interfaces/userinterface';
 import { CommonModule } from '@angular/common';
@@ -39,4 +39,35 @@ export class LandingTestUserDialogComponent implements OnInit {
     console.error('Image failed to load. Current Avatar URL:', this.avatarUrl);
     this.avatarUrl = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'; 
   }
+
+
+  
+
+  normalEmojis: string[] = [
+    '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
+    '😋', '😎', '😍', '😗', '😙', '🙂', '🤗', '🤔', '😐', '😑', 
+    '😶', '🙄', '😏', '😣', '😥', '😮', '🤐', '😯', '😪', '😫',
+    '😴', '😌', '😜', '🤤', '😛', '🤑', '😲', '🙃', '😷', '🤒', 
+    '🤕', '🤧', '😵', '🤯', '😤', '😭', '😢', '😨'
+  ];
+
+  workEmojis: string[] = [
+    '💼', '📁', '📅', '🖥️', '📊', '📈', '📉', '📝', '💻', '🖱️',
+    '📋', '📌', '🖇️', '📄', '✏️', '📤', '📥', '📧', '📞', '📡', 
+    '🔒', '🔓', '🗑️', '🧾', '📆', '🏢', '🏛️'
+  ];
+
+  
+  activeBoard: string = 'normal';
+
+  @Output() emojiSelected = new EventEmitter<string>();
+
+  
+  selectEmoji(emoji: string): void {
+    this.emojiSelected.emit(emoji);
+  }
+  switchBoard(board: string): void {
+    this.activeBoard = board;
+  }
 }
+
