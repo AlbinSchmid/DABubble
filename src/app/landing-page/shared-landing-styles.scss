@@ -141,6 +141,18 @@ form{
     }
   }
 
+  @keyframes fadeInMobile {
+    0% {
+      transform: translateX(20%);
+      opacity: 0;
+      }
+    
+      100% {
+      transform: translateX(-30%);
+      opacity: 1;
+      }
+    }
+
 @media (max-width:750px){
   .login{
     padding: 20px;
@@ -160,6 +172,16 @@ form{
   
 }
 
+@media (max-width:600px){
+  .response{
+    bottom: 25%;
+    right: 0;
+    width: 70%;
+    padding: 12px;
+    animation: fadeInMobile 2s ease 0s infinite alternate
+  }
+}
+
 @media(max-width:400px){
   .login{
     margin: 20px 0px;
@@ -170,3 +192,5 @@ form{
     left: 0;
   }
 }
+
+

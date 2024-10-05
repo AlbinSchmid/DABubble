@@ -1,9 +1,12 @@
 <section>
   <app-logo></app-logo>
-  <app-links></app-links>
+  
   <div class="login">
-    <mat-icon routerLink="/signup" fontIcon="arrow_back" class="arrow-back"></mat-icon>
-    <h1 style="width: 600px;">Wähle deinen Avatar</h1>
+    <div class="arrow-title">
+      <mat-icon routerLink="/signup" fontIcon="arrow_back" class="arrow-back"></mat-icon>
+      <h1 style="width: 600px;">Wähle deinen Avatar</h1>
+    </div>
+    
     <div class="choose-avatar">
     
       <img class="big-avatar" (click)="fileInput.click()"  [src]="filePreview || selectedAvatar" alt="Selected Avatar">
@@ -24,7 +27,7 @@
       </div>
 
       <div class="self-image">
-        <span>eigenes Bild verwenden</span>
+        <p>eigenes Bild verwenden</p>
         <button mat-flat-button class="secondary" (click)="fileInput.click()">Datei Hochladen</button>
         <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none;">
       </div>
@@ -38,4 +41,6 @@
   @if(showSuccessMessage) {
     <button class="response primary">Konto erfolgreich erstellt</button>
   }
+  <button class="response primary">Konto erfolgreich erstellt</button>
+  <app-links></app-links>
 </section>

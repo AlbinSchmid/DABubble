@@ -78,6 +78,57 @@ section{
 }
 
 
+@media (max-width:600px){
+  h1{
+    font-size: 36px;
+  }
+  .small-avatar{
+    width: 60px;
+    height: 60px;
+  }
+  .big-avatar{
+    width: 120px;
+    height: 120px;
+  }
+  .self-image{
+    button{
+      width: 100% !important;
+      padding: 0px 4px !important;
+      font-size: 16px !important;
+    }
+  }
+}
+
+@media (max-width:500px){
+  h1{
+    font-size: 32px;
+    line-height: 32px;
+  }
+  .avatars{
+    gap: 0px;
+  }
+  p{
+    text-align: left;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .small-avatar{
+    width: 45px;
+    height: 45px;
+  }
+  .arrow-title{
+    gap: 4px;
+  }
+ 
+  .arrow-back{
+    font-size: 24px;
+    width: 60px;
+    height: 30px;
+  }
+
+}
+
 
 
 
