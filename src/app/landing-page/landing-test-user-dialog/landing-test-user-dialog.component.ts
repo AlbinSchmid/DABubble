@@ -1,12 +1,13 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, input, OnInit, Output } from '@angular/core';
 import { AuthserviceService } from '../services/authservice.service';
 import { UserInterface } from '../interfaces/userinterface';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-landing-test-user-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './landing-test-user-dialog.component.html',
   styleUrls: ['./landing-test-user-dialog.component.scss']
 })
@@ -59,15 +60,30 @@ export class LandingTestUserDialogComponent implements OnInit {
 
   
   activeBoard: string = 'normal';
+  message: string = ''; 
+  selectedEmoji: string | null = null;
 
   @Output() emojiSelected = new EventEmitter<string>();
 
   
-  selectEmoji(emoji: string): void {
-    this.emojiSelected.emit(emoji);
+  selectEmoji(emoji: string, inputField: HTMLInputElement): void {
+    this.selectedEmoji = emoji;
+    
+    const start = inputField.selectionStart ?? 0;
+    const end = inputField.selectionEnd ?? 0;
+
+    this.message = this.message.slice(0, start) + emoji + this.message.slice(end);
+    
+    
+    setTimeout(() => {
+      inputField.selectionStart = inputField.selectionEnd = start + emoji.length;
+      inputField.focus();
+    }, 0);
   }
+
   switchBoard(board: string): void {
     this.activeBoard = board;
   }
 }
+
 
