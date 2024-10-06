@@ -55,7 +55,7 @@ export class LandingAvatarDialogComponent {
         setTimeout(() => {
           this.showSuccessMessage = false;
           this.router.navigate(['/']);
-        }, 100000);
+        }, 2000);
       } else {
         await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
       }

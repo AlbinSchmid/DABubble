@@ -89,7 +89,7 @@ register(email: string, username: string, password: string, avatar: string): Obs
         userID:user.uid || '',
         email: user.email || '',
         username: user.displayName || '',
-        password: '', // Password is not applicable for Google sign-in
+        password: '', 
         avatar: user.photoURL || '',
       };
       return setDoc(userRef, userData).then(() => {
@@ -107,6 +107,7 @@ register(email: string, username: string, password: string, avatar: string): Obs
 
   logout(): Observable<void> {
     const promise = signOut(this.firebaseAuth);
+    this.router.navigate(['/']);
     return from(promise);
   }
 

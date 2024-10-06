@@ -10,9 +10,10 @@
     </div>
     <div class="profile-contain-header" [matMenuTriggerFor]="menu">
         <div class=" username-menu-contain-header">
-            <span #userName class="user-name">Ein sehr langer Namee</span>
+            <span #userName class="user-name">{{ authService.currentUserSig()?.username }}</span>
             <div class="profile-img-wrapper">
-                <img src="assets/img/avatar.png" alt="user_profile_img">
+                <img  src="{{authService.currentUserSig()?.avatar}}" 
+                alt="avatar" > 
                 <div [ngClass]="{'status-online-icon': userStatus == 'on'}"></div>
                 <div [ngClass]="{'status-offline-icon': userStatus == 'off'}"></div>
                 <div [ngClass]="{'status-busy-icon': userStatus == 'busy'}"></div>

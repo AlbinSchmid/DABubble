@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { EditUserComponent } from './edit-user/edit-user.component';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-menu',
@@ -30,6 +31,9 @@ export class MenuComponent {
   @Input() isOpenEditEditor: boolean = false;
   @Output() isOpenEditEditorChange = new EventEmitter<boolean>();
 
+  @Input() avatarUrl:string
+
+  authService = inject(AuthserviceService)
 
   toggleProfileMenu(e: Event): void {
     e.stopPropagation();

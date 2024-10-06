@@ -3,7 +3,7 @@
     <button (click)="toggleProfileMenu($event)" class="profile-btn">Profil</button>
     <a [routerLink]="['/dashboard/imprint']"><button>Impressum</button></a>
     <a [routerLink]="['/dashboard/privacy-policy']"><button>Datenschutz</button></a>
-    <button class="log-out-btn">Log out</button>
+    <button class="log-out-btn" (click)="authService.logout()">Log out</button>
 </div>
 } @else {
 <div (click)="noClickable($event)" class="profile-menu-contain open ">
@@ -18,13 +18,13 @@
         </div>
     </div>
     <div>
-        <img src="assets/img/avatar.png" alt="user_profile_img">
+      <img src="{{authService.currentUserSig()?.avatar}}" alt="user_profile_img">
     </div>
     @if(!isOpenEditEditor){
     <div class="profil-info-edit-contain">
         <div class="name-and-edit">
             <div class="user-name-contain">
-                <span class="user-name">LLLLLLLLLLLLLLLLLLLLLLL</span>
+                <span class="user-name">{{authService.currentUserSig()?.username}}</span>
             </div>
             <button (click)="toggleEditUserEditor($event)" class="edit-user-btn">Bearbeiten</button>
         </div>
@@ -66,7 +66,7 @@
         </div>
         <div class="email-title-user-email">
             <span class="email-title">E-Mail-Adresse</span>
-            <span class="user-email">fred.asasadadasdasasasadbeck&#64;email.com</span>
+            <span class="user-email">{{authService.currentUserSig()?.email}}</span>
         </div>
     </div>
     } @else {

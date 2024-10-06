@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, inject, Output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { MenuComponent } from './menu/menu.component';
+import { AuthserviceService } from '../../landing-page/services/authservice.service';
+import { UserInterface } from '../../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-header',
@@ -22,8 +24,9 @@ import { MenuComponent } from './menu/menu.component';
 })
 export class HeaderComponent {
   @ViewChild('searchInput') searchInput!: ElementRef;
+  authService = inject(AuthserviceService)
 
-
+  
   userStatus = 'on';
   isProfileMenuOpen = false;
   isUnderMenuOpen = false;
@@ -61,5 +64,22 @@ export class HeaderComponent {
 
   onEditEditorChange(isOpen: boolean): void {
     this.isUnderMenuOpen = isOpen;
+  }
+
+  ngOnInit(): void {
+    this.authService.user$.subscribe((user: any) => {
+      if (user) {
+        const newUser: UserInterface = {
+          userID: user.uid,
+          password: '',
+          email: user.email,
+          username: user.displayName,
+          avatar: user.photoURL
+        };
+        this.authService.currentUserSig.set(newUser);
+      } else {
+        this.authService.setCurrentUser(null);
+      }
+    });
   }
 }

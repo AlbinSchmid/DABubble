@@ -1,6 +1,7 @@
 <div>
   <h2>Welcome, {{ authService.currentUserSig()?.username }}!</h2>
   <p>Your email: {{ authService.currentUserSig()?.email }}</p>
+  <p>Your email: {{ authService.currentUserSig()?.userID }}</p>
   <p>Your photo: 
     <img 
       *ngIf="avatarUrl; else loading" 
