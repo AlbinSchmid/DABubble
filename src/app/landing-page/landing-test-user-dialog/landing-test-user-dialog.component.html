@@ -22,7 +22,8 @@
 <!--emoji board-->
 
 <div class="message-input">
-  <input type="text" [(ngModel)]="message" #inputField placeholder="Type your message..." />
+  <!-- Use textarea instead of input -->
+  <textarea [(ngModel)]="message" #inputField placeholder="Type your message..." rows="4"></textarea>
 </div>
 
 <div class="emoji-board">
@@ -41,7 +42,7 @@
   </div>
 </div>
 
-
+<!-- Display current message -->
 <div class="message-preview">
   <p>Current message: {{ message }}</p>
 </div>

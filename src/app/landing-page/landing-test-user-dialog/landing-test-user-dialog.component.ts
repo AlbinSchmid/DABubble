@@ -66,7 +66,7 @@ export class LandingTestUserDialogComponent implements OnInit {
   @Output() emojiSelected = new EventEmitter<string>();
 
   
-  selectEmoji(emoji: string, inputField: HTMLInputElement): void {
+  selectEmoji(emoji: string, inputField: HTMLTextAreaElement): void {
     this.selectedEmoji = emoji;
     
     const start = inputField.selectionStart ?? 0;
