@@ -9,8 +9,27 @@ mat-card-content {
     padding: 0 !important;
 }
 
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.image-title-contain {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 h1 {
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 800;
     line-height: 32.7px;
+    margin: 0;
+}
+
+mat-icon {
+    font-size: 26px;
+    width: 40px !important;
+    height: 40px !important;
 }

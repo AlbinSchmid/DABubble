@@ -42,6 +42,8 @@ input {
 
 .search-icon {
     font-size: 35px !important;
+    width: 40px !important;
+    height: 40px !important;
     color: #686868;
     margin-right: 45px;
     cursor: url('/assets/img/search_cursor.png'), auto !important;
@@ -89,6 +91,8 @@ input {
 
     .profile-menu-icon {
         font-size: 30px !important;
+        height: 40px !important;
+        width: 40px !important;
         color: black !important;
         background-color: transparent;
         padding-right: 16px;
