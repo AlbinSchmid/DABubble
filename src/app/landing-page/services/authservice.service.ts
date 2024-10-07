@@ -10,11 +10,14 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   confirmPasswordReset,
+  updateEmail,
+  sendEmailVerification,
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
-import { doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +42,7 @@ register(email: string, username: string, password: string, avatar: string): Obs
           userID: uid, 
           email: response.user.email ?? '',
           username: username,
-          password: password, 
+          password: '', 
           avatar: avatar,
         };
         return setDoc(userRef, userData);
@@ -49,23 +52,25 @@ register(email: string, username: string, password: string, avatar: string): Obs
   return from(promise);
 }
 
-  setCurrentUser(user: UserInterface | null) {
-    this.currentUserSig.set(user);
-  }
+
 
   
-  private setUserData(user: any): void {
-    this.currentUserSig.set({
-      email: user.email,
-      username: user.displayName || '',
-      password: '', 
-      avatar: user.photoURL || '',
-    } as UserInterface);
-  }
+ setCurrentUser(userData: UserInterface | null): void {
+  this.currentUserSig.set(userData);
+}
 
   login(email: string, password: string): Observable<void> {
-    const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then((response) => {
-      this.setUserData(response.user);
+    const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
+      // Fetch user data from Firestore after logging in
+      const userRef = doc(this.firestore, `users/${response.user.uid}`);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userData: UserInterface = userDoc.data() as UserInterface; // Cast to UserInterface
+        this.setCurrentUser(userData);
+      } else {
+        console.error('No such document!');
+      }
     });
 
     return from(promise).pipe(
@@ -78,23 +83,47 @@ register(email: string, username: string, password: string, avatar: string): Obs
 
   signInWithGoogle(): Observable<void> {
     const provider = new GoogleAuthProvider();
-    const promise = signInWithPopup(this.firebaseAuth, provider).then((result) => {
+    const promise = signInWithPopup(this.firebaseAuth, provider).then(async (result) => {
       const user = result.user;
-      this.setUserData(user);
-
-      const userRef = doc(this.firestore, `users/${user.uid}`);
-      const userData: UserInterface = {
-        userID:user.uid || '',
-        email: user.email || '',
-        username: user.displayName || '',
-        password: '', 
-        avatar: user.photoURL || '',
+      const photoURL = user.photoURL; // Get the photo URL from Google
+  
+      if (!photoURL) {
+        console.error('No photo URL available from Google.');
+        return;
+      }
+  
+      // Upload the image to Firebase Storage
+      const storage = getStorage();
+      const storageRef = ref(storage, `avatars/${user.uid}.png`); // Naming convention
+  
+      // Convert photoURL to a Blob and upload
+      const response = await fetch(photoURL);
+      const blob = await response.blob();
+      const reader = new FileReader();
+      
+      reader.readAsDataURL(blob);
+      reader.onloadend = async () => {
+        const base64data = reader.result as string; // Type assertion
+        await uploadString(storageRef, base64data, 'data_url'); // Upload image to Firebase Storage
+  
+        // Get the download URL
+        const downloadURL = await getDownloadURL(storageRef);
+  
+        // Fetch user data from Firestore
+        const userRef = doc(this.firestore, `users/${user.uid}`);
+        const userData: UserInterface = {
+          userID: user.uid,
+          email: user.email || '',
+          username: user.displayName || '',
+          password: '',
+          avatar: downloadURL, // Store the download URL instead of the photoURL from Google
+        };
+        await setDoc(userRef, userData);
+        this.setCurrentUser(userData);
+        this.router.navigate(['/dashboard']);
       };
-      return setDoc(userRef, userData).then(() => {
-        this.router.navigate(['/avatar-picker']);
-      });
     });
-
+  
     return from(promise).pipe(
       catchError((error) => {
         console.error('Google sign-in error:', error);
@@ -151,9 +180,18 @@ register(email: string, username: string, password: string, avatar: string): Obs
     const guestPassword = 'abcdABCD1234!"§$'; 
   
     const promise = signInWithEmailAndPassword(this.firebaseAuth, guestEmail, guestPassword)
-      .then((response) => {
-        this.setUserData(response.user); 
-        this.router.navigate(['/dashboard']); 
+      .then(async (response) => {
+       
+        const userRef = doc(this.firestore, `users/${response.user.uid}`);
+        const userDoc = await getDoc(userRef);
+  
+        if (userDoc.exists()) {
+          const userData: UserInterface = userDoc.data() as UserInterface; 
+          this.setCurrentUser(userData);
+          this.router.navigate(['/dashboard']); 
+        } else {
+          console.error('No such document for guest user!');
+        }
       });
   
     return from(promise).pipe(
@@ -163,4 +201,26 @@ register(email: string, username: string, password: string, avatar: string): Obs
       })
     );
   }
+
+  async changeEmail(newEmail: string): Promise<void> {
+    const user = this.firebaseAuth.currentUser;
+
+    if (!user) {
+        return Promise.reject(new Error('Kein Benutzer ist derzeit angemeldet.'));
+    }
+
+    const isGoogleUser = user.providerData.some(provider => provider.providerId === 'google.com');
+
+    if (isGoogleUser) {
+        return Promise.reject(new Error('E-Mail kann bei Google-Anmeldungen nicht geändert werden. Bitte erstelle ein neues Konto.'));
+    }
+
+    // Setze die neue E-Mail
+    await updateEmail(user, newEmail);
+
+    // Sende die Verifizierungs-E-Mail
+    await sendEmailVerification(user);
+    
+    console.log('Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.');
+}
 }

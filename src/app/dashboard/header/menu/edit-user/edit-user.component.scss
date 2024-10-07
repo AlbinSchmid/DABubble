@@ -46,9 +46,11 @@ input {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    position: relative;
 }
 
 .single-input-contain {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 7px;
@@ -81,3 +83,9 @@ input {
         width: 133px;
     }
 }
+
+.error-container {
+    position: absolute;
+    color: red;
+    bottom: -20px;
+  }

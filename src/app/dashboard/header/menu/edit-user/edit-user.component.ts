@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -19,11 +20,12 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './edit-user.component.scss'
 })
 export class EditUserComponent {
-
-  name: string = 'René Theis';
+  authService = inject(AuthserviceService)
   email: string = 'contact@rene-theis.de';
   inputName: string = '';
   inputEmail: string = '';
+  errorMessage: string | null = null; 
+  successMessage: string | null = null
 
   @Input() isOpenEditEditor: boolean = false;
 
@@ -43,4 +45,15 @@ export class EditUserComponent {
       this.isOpenEditEditorChange.emit(this.isOpenEditEditor);
     }
   }
+
+  changeEmail() {
+    this.authService.changeEmail(this.inputEmail).then(() => {
+        this.successMessage = 'Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.';
+        this.errorMessage = null; 
+    }).catch((error) => {
+        this.errorMessage = error.message; 
+        this.successMessage = null; 
+    });
+  }
+
 }

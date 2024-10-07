@@ -26,7 +26,7 @@
             <div class="user-name-contain">
                 <span class="user-name">{{authService.currentUserSig()?.username}}</span>
             </div>
-            <button (click)="toggleEditUserEditor($event)" class="edit-user-btn">Bearbeiten</button>
+            <button (click)="toggleEditUserEditor($event)" [disabled]="authService.currentUserSig()?.email === 'gast@gast.de'" class="edit-user-btn">Bearbeiten</button>
         </div>
     </div>
     <div class="status-contain">

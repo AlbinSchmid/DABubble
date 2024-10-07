@@ -263,10 +263,13 @@ mat-icon {
     padding: 15px 10px 15px 10px;
     opacity: 0;
     overflow: hidden;
-
+    
     img {
+        object-fit: cover;
+        object-position: top;
         width: 200px;
         height: 200px;
+        border-radius: 100%;
     }
 }
 

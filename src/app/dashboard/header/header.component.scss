@@ -84,6 +84,8 @@ input {
     width: 100%;
 
     img {
+        object-fit: cover;
+        object-position: top;
         width: 70px;
         height: 70px;
         border-radius: 100%;
