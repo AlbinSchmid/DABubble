@@ -82,6 +82,10 @@ export class LandingLoginDialogComponent {
       }
     });
   }
+
+  guestLogin(){
+    this.authService.guestLogin()
+  }
 }
 
 

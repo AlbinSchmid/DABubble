@@ -29,19 +29,17 @@ export class AuthserviceService {
 register(email: string, username: string, password: string, avatar: string): Observable<void> {
   const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
     .then((response) => {
-      const uid = response.user.uid; // Get the user ID
-
-      // Update user profile with username and avatar
+      const uid = response.user.uid; 
       return updateProfile(response.user, {
         displayName: username,
         photoURL: avatar,
       }).then(() => {
         const userRef = doc(this.firestore, `users/${uid}`);
         const userData: UserInterface = {
-          userID: uid, // Add the user ID here
+          userID: uid, 
           email: response.user.email ?? '',
           username: username,
-          password: password, // Save password if needed (consider security)
+          password: password, 
           avatar: avatar,
         };
         return setDoc(userRef, userData);
@@ -55,12 +53,12 @@ register(email: string, username: string, password: string, avatar: string): Obs
     this.currentUserSig.set(user);
   }
 
-  // Unified method to set user data
+  
   private setUserData(user: any): void {
     this.currentUserSig.set({
       email: user.email,
       username: user.displayName || '',
-      password: '', // Not set for logged in users for security reasons
+      password: '', 
       avatar: user.photoURL || '',
     } as UserInterface);
   }
@@ -140,11 +138,28 @@ register(email: string, username: string, password: string, avatar: string): Obs
 
     return from(promise).pipe(
       map(() => {
-        // Optionally, you can return any value or nothing
       }),
       catchError((error) => {
         console.error('Error confirming password reset:', error);
         return throwError(() => error);
+      })
+    );
+  }
+
+  guestLogin(): Observable<void> {
+    const guestEmail = 'gast@gast.de';
+    const guestPassword = 'abcdABCD1234!"§$'; 
+  
+    const promise = signInWithEmailAndPassword(this.firebaseAuth, guestEmail, guestPassword)
+      .then((response) => {
+        this.setUserData(response.user); 
+        this.router.navigate(['/dashboard']); 
+      });
+  
+    return from(promise).pipe(
+      catchError((error) => {
+        console.error('Guest login error:', error);
+        return throwError(() => new Error('Guest login failed.'));
       })
     );
   }
