@@ -28,6 +28,7 @@ export class MessageComponent {
     id: '',
   };
   @Input() messageId: number;
+  @Input() reduceContent: boolean;
   hoveredMessageId: number;
   editMessageId: number;
   editMessage: boolean;
@@ -36,7 +37,7 @@ export class MessageComponent {
 
 
 
-  constructor(public firebase: MessengerService, private threadService: ThreadService) {
+  constructor(public firebase: MessengerService, public threadService: ThreadService) {
   }
 
 
@@ -55,7 +56,6 @@ export class MessageComponent {
     this.threadService.answeredMessage = this.message;
     setTimeout(() => {
       this.threadService.showThread = true;
-      
     }, 10);
   }
 

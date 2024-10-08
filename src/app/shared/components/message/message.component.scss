@@ -8,7 +8,7 @@ button {
     transition: 125ms ease-in-out !important;
 }
 
-app-edit-message{
+app-edit-message {
     display: flex;
     justify-content: flex-end;
     width: 100%;
@@ -117,37 +117,9 @@ section {
         button {
             padding: 8px;
 
-            &:nth-child(5) {
-                display: none;
-
-                div {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    position: absolute;
-                    top: 25px;
-                    right: -185px;
-                    background-color: white;
-                    border-radius: 0 25px 25px 25px;
-                    padding: 8px 12px;
-                    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
 
 
-                    p {
-                        font-size: 16px;
-                        margin: 0;
-                        padding: 4px 8px;
-                        transition: ease-in-out 125ms;
 
-                        &:hover {
-                            color: #535AF1;
-                            background-color: #ECEEFE;
-                            border-radius: 25px;
-                            font-weight: 700;
-                        }
-                    }
-                }
-            }
 
             &:hover {
                 background-color: #ECEEFE;
@@ -167,6 +139,38 @@ section {
             }
         }
     }
+
+    #intercation-more-btn {
+        display: none;
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 25px;
+            right: -185px;
+            background-color: white;
+            border-radius: 0 25px 25px 25px;
+            padding: 8px 12px;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
+
+
+            p {
+                font-size: 16px;
+                margin: 0;
+                padding: 4px 8px;
+                transition: ease-in-out 125ms;
+
+                &:hover {
+                    color: #535AF1;
+                    background-color: #ECEEFE;
+                    border-radius: 25px;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
 }
 
 .message-from-you {
@@ -177,11 +181,8 @@ section {
         left: 70px !important;
         right: auto;
 
-        button {
-
-            &:nth-child(5) {
-                display: block !important;
-            }
+        #intercation-more-btn {
+            display: block !important;
         }
     }
 

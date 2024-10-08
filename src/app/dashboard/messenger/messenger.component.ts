@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { timestamp } from 'rxjs';
 import { EditMessageComponent } from '../../shared/components/message/edit-message/edit-message.component';
 import { MessageComponent } from '../../shared/components/message/message.component';
+import { ThreadService } from '../../shared/services/thread.service';
 
 @Component({
   selector: 'app-messenger',
@@ -33,8 +34,7 @@ export class MessengerComponent {
   hoveredMessage: number;
   hoveredMenu = false;
 
-  constructor(public firebase: MessengerService) {
-
+  constructor(public firebase: MessengerService, public threadService: ThreadService) {
   }
 
   showOrHideMenu() {
