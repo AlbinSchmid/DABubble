@@ -65,9 +65,12 @@
 }
 
 
-@media (max-width:400px){
+@media (max-width:450px){
   .buttons-area{
     gap: 10px;
     flex-direction: column;
+  }
+  .form-group{
+    margin-bottom: 30px;
   }
 }

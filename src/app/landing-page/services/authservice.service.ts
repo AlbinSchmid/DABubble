@@ -76,7 +76,7 @@ register(email: string, username: string, password: string, avatar: string): Obs
     return from(promise).pipe(
       catchError((error) => {
         console.error('Login error:', error);
-        return throwError(() => new Error('Login failed.'));
+        return throwError(() => new Error('Die E-Mail-Adresse oder das Passwort ist falsch.'));
       })
     );
   }
@@ -85,38 +85,35 @@ register(email: string, username: string, password: string, avatar: string): Obs
     const provider = new GoogleAuthProvider();
     const promise = signInWithPopup(this.firebaseAuth, provider).then(async (result) => {
       const user = result.user;
-      const photoURL = user.photoURL; // Get the photo URL from Google
+      const photoURL = user.photoURL; 
   
       if (!photoURL) {
         console.error('No photo URL available from Google.');
         return;
       }
   
-      // Upload the image to Firebase Storage
       const storage = getStorage();
-      const storageRef = ref(storage, `avatars/${user.uid}.png`); // Naming convention
+      const storageRef = ref(storage, `avatars/${user.uid}.png`); 
   
-      // Convert photoURL to a Blob and upload
       const response = await fetch(photoURL);
       const blob = await response.blob();
       const reader = new FileReader();
       
       reader.readAsDataURL(blob);
       reader.onloadend = async () => {
-        const base64data = reader.result as string; // Type assertion
-        await uploadString(storageRef, base64data, 'data_url'); // Upload image to Firebase Storage
+        const base64data = reader.result as string; 
+        await uploadString(storageRef, base64data, 'data_url'); 
   
-        // Get the download URL
+        
         const downloadURL = await getDownloadURL(storageRef);
   
-        // Fetch user data from Firestore
         const userRef = doc(this.firestore, `users/${user.uid}`);
         const userData: UserInterface = {
           userID: user.uid,
           email: user.email || '',
           username: user.displayName || '',
           password: '',
-          avatar: downloadURL, // Store the download URL instead of the photoURL from Google
+          avatar: downloadURL, 
         };
         await setDoc(userRef, userData);
         this.setCurrentUser(userData);

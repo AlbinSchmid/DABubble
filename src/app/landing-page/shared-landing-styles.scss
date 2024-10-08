@@ -88,6 +88,11 @@ input{
   transition: opacity 0.2s ease; 
 }
 
+.global-error-message{
+  top: auto;
+  bottom: 0;
+}
+
 .input-error ~ .error-message {
   opacity: 1; 
 }
@@ -155,7 +160,7 @@ form{
 
 @media (max-width:750px){
   .login{
-    padding: 20px;
+    padding: 60px 20px;
     margin: 20px 20px;
   }
   form{

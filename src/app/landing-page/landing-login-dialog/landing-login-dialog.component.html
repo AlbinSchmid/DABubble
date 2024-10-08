@@ -55,9 +55,10 @@
   <div class="buttons-area">
     <button mat-flat-button class="primary" (click)="onSubmit()" type="submit" [disabled]="loginForm.invalid">Anmelden</button>
     <button mat-flat-button class="secondary" (click)="guestLogin()" routerLink="dashboard">Gäste-Login</button>
-    <div class="global-error-message" [ngClass]="{'show-error': errorMessage}">
-      <span>{{ errorMessage }}</span>
-    </div>
+    
+  </div>
+  <div class="global-error-message" style="font-size: 18px;" [ngClass]="{'show-error': errorMessage}">
+    <span>{{ errorMessage }}</span>
   </div>
 
 </section>
