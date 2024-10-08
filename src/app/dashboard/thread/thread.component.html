@@ -11,27 +11,8 @@
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebase.answers; track $index) {
-                <app-message [message]="message" [messageId]="$index"></app-message>
+                <app-message [message]="message" [messageId]="$index" [reduceContent]="reduceInteraktionBtn"></app-message>
             }
-            <!-- <div class="message message-from-you">
-                <img src="/assets/img/avatar.png" alt="Profile">
-                <div id="message-content">
-                    <div>
-                        <h6>Noah Braun</h6>
-                        <p>14:25 Uhr</p>
-                    </div>
-                    <div>
-                        Welche Version ist aktuell von Angular
-                    </div>
-                    <div>
-                        <mat-icon>add_reaction</mat-icon>
-                        <div>
-                            &#128077;
-                            <p>1</p>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div id="answers-info">
                 <p>2 Antworten</p>
                 <div></div>

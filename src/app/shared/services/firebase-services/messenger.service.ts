@@ -53,7 +53,7 @@ export class MessengerService {
       list.forEach(element => {
         this.answers.push(this.setMessageObject(element.data(), element.id))
       });
-      console.log(this.answers);
+      this.answers = this.sortByDate(this.answers);
       
     })
   }

@@ -23,6 +23,7 @@ import { MessageComponent } from '../../shared/components/message/message.compon
 })
 export class ThreadComponent {
   unsubAnswerList;
+  reduceInteraktionBtn = true;
 
   constructor(public threadService: ThreadService, public firebase: MessengerService) {
     this.unsubAnswerList = firebase.subAnswersList(threadService.messageId);   

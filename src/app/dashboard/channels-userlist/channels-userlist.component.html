@@ -4,6 +4,54 @@
             <img src="assets/img/workspace_logo.png" alt="devspace_logo">
             <h1>Devspace</h1>
         </div>
-        <mat-icon fontIcon="rate_review"></mat-icon>
+        <mat-icon class="new-message-icon" fontIcon="rate_review"></mat-icon>
     </header>
+    <div class="scroll-contain">
+        <div class="channels-and-dm-contain">
+            <div>
+                <div class="tab-header">
+                    <div (click)="toggleChannels()" class="arrow-tab-title-contain">
+                        <div>
+                            <mat-icon id="channelIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
+                        </div>
+                        <div class="channels-title-contain">
+                            <mat-icon class="tab-icon" fontIcon="workspaces"></mat-icon>
+                            <span>Channels</span>
+                        </div>
+                    </div>
+                    <div>
+                        <mat-icon class="add-channel-icon" fontIcon="add"></mat-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="btns-contain channels-contain"
+                [ngStyle]="{'max-height': isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
+                <button *ngFor="let channel of channels; let i = index"
+                    [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
+                    [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
+                    <mat-icon fontIcon="tag"></mat-icon>{{ channel.name }}
+                </button>
+            </div>
+            <div id="dmTab">
+                <div class="tab-header">
+                    <div (click)="toggleDirectMessages()" class="arrow-tab-title-contain">
+                        <div>
+                            <mat-icon id="dmIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
+                        </div>
+                        <div class="channels-title-contain">
+                            <mat-icon class="tab-icon" fontIcon="people"></mat-icon>
+                            <span>Direktnachrichten</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection" class="btns-contain">
+                <button *ngFor="let dm of direct_messages; let i = index"
+                    [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
+                    [ngClass]="{'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
+                    <mat-icon fontIcon="tag"></mat-icon>{{ dm.name }}
+                </button>
+            </div>
+        </div>
+    </div>
 </mat-card>

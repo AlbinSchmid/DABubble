@@ -8,17 +8,18 @@
             <mat-icon fontIcon="search" class="search-icon"></mat-icon>
         </div>
     </div>
-    <div class="profile-contain-header" [matMenuTriggerFor]="menu">
-        <div class=" username-menu-contain-header">
-            <span #userName class="user-name">{{ authService.currentUserSig()?.username }}</span>
-            <div class="profile-img-wrapper">
-                <img  src="{{authService.currentUserSig()?.avatar}}" 
-                alt="avatar" > 
-                <div [ngClass]="{'status-online-icon': userStatus == 'on'}"></div>
-                <div [ngClass]="{'status-offline-icon': userStatus == 'off'}"></div>
-                <div [ngClass]="{'status-busy-icon': userStatus == 'busy'}"></div>
+    <div class="profile-contain-header">
+        <div [matMenuTriggerFor]="menu">
+            <div class=" username-menu-contain-header">
+                <span #userName class="user-name">{{ authService.currentUserSig()?.username }}</span>
+                <div class="profile-img-wrapper">
+                    <img src="{{authService.currentUserSig()?.avatar}}" alt="avatar">
+                    <div [ngClass]="{'status-online-icon': userStatus == 'on'}"></div>
+                    <div [ngClass]="{'status-offline-icon': userStatus == 'off'}"></div>
+                    <div [ngClass]="{'status-busy-icon': userStatus == 'busy'}"></div>
+                </div>
+                <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>
             </div>
-            <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>
         </div>
         <mat-menu #menu="matMenu" xPosition="before" (closed)="closeProfileMenu()">
             <app-menu class="menu-contain" [(userStatus)]="userStatus" [(isProfileMenuOpen)]="isProfileMenuOpen"
