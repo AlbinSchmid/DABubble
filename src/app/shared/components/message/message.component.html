@@ -1,4 +1,4 @@
-<section class="message-from-you" (mouseenter)="hoveredMessageId = messageId"
+<section class="message-from-you" (mouseenter)="hoveredMessageId = messageIndex"
     (mouseleave)="hoveredMessageId = -1; hoveredMenu = false;">
     <img src="/assets/img/avatar.png" alt="Profile">
     <div id="message-content" *ngIf="!editMessage">
@@ -12,15 +12,15 @@
             {{ message.content }}
         </div>
         <div *ngIf="!reduceContent">
-            <a (click)="openThead()">2 Anworten</a>
+            <a (click)="openThead()">1</a>
             <p>Letzte Antwort 14:56</p>
         </div>
     </div>
-    <div class="interaction" *ngIf="hoveredMessageId == messageId && !editMessage">
+    <div class="interaction" *ngIf="hoveredMessageId == messageIndex && !editMessage">
         <button *ngIf="!reduceContent"><img src="/assets/icons/check.png" alt=""></button>
         <button *ngIf="!reduceContent"><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
         <button><mat-icon>add_reaction</mat-icon></button>
-        <button *ngIf="!reduceContent"><img src="/assets/icons/comment.png" alt=""></button>
+        <button *ngIf="!reduceContent" (click)="openThead()"><img src="/assets/icons/comment.png" alt=""></button>
         <button id="intercation-more-btn" (click)="showOrHideMenu()">
             <mat-icon>more_vert</mat-icon>
             <div (click)="editMessage = true" *ngIf="hoveredMenu == true" (mouseleave)="hoveredMenu = false">

@@ -37,6 +37,7 @@ export class MessengerComponent {
   constructor(public firebase: MessengerService, public threadService: ThreadService) {
   }
 
+
   showOrHideMenu() {
     if (this.hoveredMenu == false) {
         this.hoveredMenu = true;

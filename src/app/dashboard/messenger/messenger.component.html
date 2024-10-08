@@ -8,7 +8,7 @@
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebase.messages; track $index) {
-            <app-message [message]="message" [messageId]="$index"></app-message>
+            <app-message [message]="message" [messageIndex]="$index"></app-message>
             }
             <!-- <div class="message">
                 <img src="/assets/img/avatar.png" alt="Profile">
@@ -46,7 +46,7 @@
         </div>
         <div id="input-container">
             <textarea [(ngModel)]="firebase.content" name="textarea"
-                placeholder="Schreibe eine Nachricht an Noah Braun"></textarea>
+                placeholder="Schreibe eine Nachricht an Noah Braun" #texterea="ngModel"required></textarea>
             <div>
                 <div id="button-container-left">
                     <button></button>
@@ -54,7 +54,7 @@
                     <button></button>
                     <button></button>
                 </div>
-                <button id="send-message-btn" (click)="firebase.createMessage('')"><img src="/assets/icons/send.png"
+                <button id="send-message-btn" (click)="firebase.createMessage('')" *ngIf="texterea.valid"><img src="/assets/icons/send.png"
                         alt="send-icon"></button>
             </div>
         </div>

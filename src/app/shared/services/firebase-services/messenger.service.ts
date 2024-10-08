@@ -54,7 +54,6 @@ export class MessengerService {
         this.answers.push(this.setMessageObject(element.data(), element.id))
       });
       this.answers = this.sortByDate(this.answers);
-      
     })
   }
 
