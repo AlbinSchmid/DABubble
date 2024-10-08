@@ -24,7 +24,7 @@
     </div>
     <div class="btn-contain">
         <button mat-button class="secondary" (click)="cancelProcess()">Abbrechen</button>
-        <button mat-button class="primary" [disabled]="emailInput.value == 0 && nameInput.value == 0" (click)="changeEmail()">Speichern</button>
+        <button mat-button class="primary" [disabled]="(emailInput.value.length === 0 && nameInput.value.length === 0) && !avatarChanged" (click)="changeEmail()">Speichern</button>
     </div>
 </div>
 }
