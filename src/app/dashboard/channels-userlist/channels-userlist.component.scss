@@ -1,8 +1,12 @@
 mat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
     width: 366px;
     height: 100%;
     margin-right: 20px;
     padding: 32px 30px 32px 30px;
+    color: black;
 }
 
 mat-card-content {
@@ -28,8 +32,219 @@ h1 {
     margin: 0;
 }
 
-mat-icon {
+.new-message-icon {
     font-size: 26px;
-    width: 40px !important;
-    height: 40px !important;
+    width: 40px;
+    height: 40px;
+}
+
+.channels-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.channels-and-dm-contain {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.channels-title-contain {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+
+    span {
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 27.28px;
+        transition: color 170ms ease !important;
+    }
+}
+
+.arrow-channel-title-contain {
+    display: flex;
+    gap: 15px;
+}
+
+.drop-down-icon {
+    background-color: transparent;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+}
+
+.workspace-icon {
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    pointer-events: none;
+}
+
+.add-channel-icon {
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
+}
+
+.arrow-channel-title-contain {
+
+    &:hover {
+        cursor: pointer;
+        color: #444DF2
+    }
+}
+
+.channels-contain {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding-left: 25px;
+    width: 100%;
+    gap: 13px;
+}
+
+button {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border: none !important;
+    gap: 10px !important;
+    border-radius: 20px !important;
+    padding: 4px 20px !important;
+    color: black !important;
+    background-color: transparent !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    line-height: 24.55px !important;
+
+
+    mat-icon {
+        font-size: 26px;
+        font-weight: 400;
+        transform: skew(-10deg, -5deg) rotate(5deg);
+        display: inline-block;
+        transition: none !important;
+        animation: none;
+    }
+
+    &:hover {
+        background-color: #ECEEFE !important;
+        cursor: pointer !important;
+
+        mat-icon {
+            color: #444DF2 !important;
+            font-weight: 700 !important;
+        }
+    }
+}
+
+.focus-channel {
+    color: #444DF2 !important;
+    font-weight: 800 !important;
+    background-color: #ECEEFE !important;
+
+    mat-icon {
+        font-weight: 700 !important;
+    }
+}
+
+@keyframes rotate-channel-icon-down {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes rotate-channel-icon-right {
+    0% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes channel-blob-in {
+    0% {
+        opacity: 0;
+        transform: scale(1.5) translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes channel-blob-out {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.5) translateY(-10px);
+    }
+}
+
+.rotate-down {
+    animation: rotate-channel-icon-down 140ms ease-in-out forwards;
+}
+
+.rotate-right {
+    animation: rotate-channel-icon-right 140ms ease-in-out forwards;
+}
+
+.channel-blob-in {
+    opacity: 0;
+    animation: channel-blob-in 0.3s ease-in-out forwards;
+}
+
+.channel-blob-out {
+    opacity: 1;
+    animation: channel-blob-out 0.3s ease-in-out forwards;
+}
+
+@keyframes channel-blob-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes channel-blob-out {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.5) translateY(10px);
+    }
+}
+
+.scroll-contain {
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.scroll-contain::-webkit-scrollbar {
+    display: none;
 }

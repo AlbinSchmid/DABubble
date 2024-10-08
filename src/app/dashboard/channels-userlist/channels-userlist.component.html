@@ -4,6 +4,33 @@
             <img src="assets/img/workspace_logo.png" alt="devspace_logo">
             <h1>Devspace</h1>
         </div>
-        <mat-icon fontIcon="rate_review"></mat-icon>
+        <mat-icon class="new-message-icon" fontIcon="rate_review"></mat-icon>
     </header>
+    <div class="scroll-contain">
+        <div class="channels-and-dm-contain">
+            <div>
+                <div class="channels-header">
+                    <div (click)="toggleChannels()" class="arrow-channel-title-contain">
+                        <div>
+                            <mat-icon id="channelIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
+                        </div>
+                        <div class="channels-title-contain">
+                            <mat-icon class="workspace-icon" fontIcon="workspaces"></mat-icon>
+                            <span>Channels</span>
+                        </div>
+                    </div>
+                    <div>
+                        <mat-icon class="add-channel-icon" fontIcon="add"></mat-icon>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isChannelOpen || isCloseChannelSection" class="channels-contain">
+                <button *ngFor="let channel of channels; let i = index"
+                    [ngStyle]="{'animation-delay': getAnimationDelay(i) + 's'}"
+                    [ngClass]="{'channel-blob-in': isChannelOpen, 'channel-blob-out': isCloseChannelSection && !isChannelOpen}">
+                    <mat-icon fontIcon="tag"></mat-icon>{{ channel.name }}
+                </button>
+            </div>
+        </div>
+    </div>
 </mat-card>
