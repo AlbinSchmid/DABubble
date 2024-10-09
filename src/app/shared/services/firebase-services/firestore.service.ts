@@ -11,8 +11,9 @@ type EntityTypes = UserInterface | Channel;
 export class FirestoreService {
 
   firestore: Firestore = inject(Firestore);
-  user: UserInterface[] = [];
-  channel: Channel[] = [];
+
+  userList: UserInterface[] = [];
+  channelList: Channel[] = [];
 
   unsubList!: () => void;
 
@@ -33,12 +34,12 @@ export class FirestoreService {
    */
   startUserSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (list) => {
-      this.user = [];
+      this.userList = [];
       list.forEach(el => {
         let userObj = this.setDummyObject(el.data() as UserInterface, el.id) as UserInterface;
-        this.user.push(userObj);
+        this.userList.push(userObj);
       });
-      console.log(this.user);
+      console.log(this.userList);
     });
   }
 
@@ -48,12 +49,12 @@ export class FirestoreService {
    */
   startChannelSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (list) => {
-      this.channel = [];
+      this.channelList = [];
       list.forEach(el => {
         let channelObj = this.setDummyObject(el.data() as Channel, el.id) as Channel;
-        this.channel.push(channelObj);
+        this.channelList.push(channelObj);
       });
-      console.log(this.channel);
+      console.log(this.channelList);
     });
   }
 

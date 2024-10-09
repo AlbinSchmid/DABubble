@@ -97,7 +97,7 @@ export class ChannelsUserlistComponent {
     if (this.isChannelOpen) {
       return index * 0.10;
     } else {
-      let totalButtons = this.firestoreService.channel.length;
+      let totalButtons = this.firestoreService.channelList.length;
       return (totalButtons - index - 1) * 0.10;
     }
   }
@@ -106,25 +106,25 @@ export class ChannelsUserlistComponent {
     if (this.isDirectMessagesOpen) {
       return index * 0.10;
     } else {
-      let totalButtons = this.firestoreService.user.length;
+      let totalButtons = this.firestoreService.userList.length;
       return (totalButtons - index - 1) * 0.10;
     }
   }
 
   arrayTimerChannels(): number {
-    return (this.firestoreService.channel.length * 100) + 50;
+    return (this.firestoreService.channelList.length * 100) + 50;
   }
 
   arrayTimerDM(): number {
-    return (this.firestoreService.user.length * 100) + 50;
+    return (this.firestoreService.userList.length * 100) + 50;
   }
 
   getChannelsMaxHeight(): number {
-    return this.firestoreService.channel.length * 50;
+    return this.firestoreService.channelList.length * 50;
   }
 
   getChannelsTransitionDuration(): string {
-    let duration = this.firestoreService.channel.length * 0.12;
+    let duration = this.firestoreService.channelList.length * 0.12;
     return `max-height ${duration}s ease-in-out`;
   }
 }

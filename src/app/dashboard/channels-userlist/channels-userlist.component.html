@@ -26,7 +26,7 @@
             </div>
             <div class="btns-contain channels-contain"
                 [ngStyle]="{'max-height': isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
-                <button *ngFor="let channel of firestoreService.channel; let i = index"
+                <button *ngFor="let channel of firestoreService.channelList; let i = index"
                     [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
                     [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
                     <mat-icon fontIcon="tag"></mat-icon>{{ channel.title }}
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection" class="btns-contain">
-                <button *ngFor="let user of firestoreService.user; let i = index"
+                <button *ngFor="let user of firestoreService.userList; let i = index"
                     [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
                     [ngClass]="{'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
                     <mat-icon fontIcon="tag"></mat-icon>{{ user.username }}
