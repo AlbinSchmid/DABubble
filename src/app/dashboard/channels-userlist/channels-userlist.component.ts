@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTreeModule } from '@angular/material/tree';
+import { FirestoreService } from '../../shared/services/firebase-services/firestore.service';
 
 @Component({
   selector: 'app-channels-userlist',
@@ -17,6 +18,10 @@ import { MatTreeModule } from '@angular/material/tree';
   styleUrls: ['./channels-userlist.component.scss']
 })
 export class ChannelsUserlistComponent {
+
+  firestoreService: FirestoreService = inject(FirestoreService);
+
+
   isChannelOpen: boolean = false;
   isCloseChannelSection: boolean = false;
   isChannelButtonDisable: boolean = false;
@@ -45,6 +50,16 @@ export class ChannelsUserlistComponent {
     { name: 'Maximilian Mustermann' },
     { name: 'Maximilian Mustermann' }
   ];
+
+  constructor() { }
+
+  ngOnInit(): void {
+    this.firestoreService.startSnapshot('users');
+  }
+
+  ngOnDestroy(): void {
+    this.firestoreService.stopSnapshot();
+  }
 
   toggleChannels() {
     if (this.isChannelButtonDisable) return;
