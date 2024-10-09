@@ -1,0 +1,29 @@
+<div>
+    <div class="tab-header">
+        <div (click)="toggleChannels()" class="arrow-tab-title-contain">
+            <div>
+                <mat-icon id="channelIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
+            </div>
+            <div class="channels-title-contain">
+                <mat-icon class="tab-icon" fontIcon="workspaces"></mat-icon>
+                <span>Channels</span>
+            </div>
+        </div>
+        <div>
+            <mat-icon class="add-channel-icon" fontIcon="add"></mat-icon>
+        </div>
+    </div>
+</div>
+<div class="btns-contain max-height-contain"
+    [ngStyle]="{'max-height': isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
+    <button *ngFor="let channel of firestoreService.channelList; let i = index"
+        [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
+        [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
+        <mat-icon fontIcon="tag"></mat-icon>{{ channel.title }}
+    </button>
+    <button (click)="addChannel()" class="add-channel-btn"
+        [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"
+        [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
+        <mat-icon class="add-channel-icon" fontIcon="maps_ugc"></mat-icon>Channel hinzufügen
+    </button>
+</div>

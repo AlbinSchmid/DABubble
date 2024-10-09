@@ -1,0 +1,27 @@
+<div id="dmTab">
+    <div class="tab-header">
+        <div (click)="toggleDirectMessages()" class="arrow-tab-title-contain">
+            <div>
+                <mat-icon id="dmIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
+            </div>
+            <div class="channels-title-contain">
+                <mat-icon class="tab-icon" fontIcon="people"></mat-icon>
+                <span>Direktnachrichten</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="btns-contain max-height-contain" *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection"
+    [ngStyle]="{'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0','transition': getDMTransitionDuration()}">
+    <button *ngFor="let user of firestoreService.userList; let i = index"
+        [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
+        [ngClass]="{'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
+        <div class="profile-img-wrapper">
+            <img src="{{ user.avatar }}" alt="avatar">
+            <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>
+            <div [ngClass]="{'status-offline-icon': user.userStatus == 'off'}"></div>
+            <div [ngClass]="{'status-busy-icon': user.userStatus == 'busy'}"></div>
+        </div>
+        <img src="{{ user.avatar }}" alt="user_avatar_img">{{ user.username }}
+    </button>
+</div>

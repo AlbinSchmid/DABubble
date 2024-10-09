@@ -29,35 +29,36 @@ export class AuthserviceService {
   firestore = inject(Firestore);
   router = inject(Router);
 
-register(email: string, username: string, password: string, avatar: string): Observable<void> {
-  const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
-    .then((response) => {
-      const uid = response.user.uid; 
-      return updateProfile(response.user, {
-        displayName: username,
-        photoURL: avatar,
-      }).then(() => {
-        const userRef = doc(this.firestore, `users/${uid}`);
-        const userData: UserInterface = {
-          userID: uid, 
-          email: response.user.email ?? '',
-          username: username,
-          password: '', 
-          avatar: avatar,
-        };
-        return setDoc(userRef, userData);
+  register(email: string, username: string, password: string, avatar: string): Observable<void> {
+    const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        return updateProfile(response.user, {
+          displayName: username,
+          photoURL: avatar,
+        }).then(() => {
+          const userRef = doc(this.firestore, `users/${uid}`);
+          const userData: UserInterface = {
+            userID: uid,
+            email: response.user.email ?? '',
+            username: username,
+            password: '',
+            avatar: avatar,
+            userStatus: 'on'
+          };
+          return setDoc(userRef, userData);
+        });
       });
-    });
 
-  return from(promise);
-}
-
+    return from(promise);
+  }
 
 
-  
- setCurrentUser(userData: UserInterface | null): void {
-  this.currentUserSig.set(userData);
-}
+
+
+  setCurrentUser(userData: UserInterface | null): void {
+    this.currentUserSig.set(userData);
+  }
 
   login(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
@@ -85,42 +86,42 @@ register(email: string, username: string, password: string, avatar: string): Obs
     const provider = new GoogleAuthProvider();
     const promise = signInWithPopup(this.firebaseAuth, provider).then(async (result) => {
       const user = result.user;
-      const photoURL = user.photoURL; 
-  
+      const photoURL = user.photoURL;
+
       if (!photoURL) {
         console.error('No photo URL available from Google.');
         return;
       }
-  
+
       const storage = getStorage();
-      const storageRef = ref(storage, `avatars/${user.uid}.png`); 
-  
+      const storageRef = ref(storage, `avatars/${user.uid}.png`);
+
       const response = await fetch(photoURL);
       const blob = await response.blob();
       const reader = new FileReader();
-      
+
       reader.readAsDataURL(blob);
       reader.onloadend = async () => {
-        const base64data = reader.result as string; 
-        await uploadString(storageRef, base64data, 'data_url'); 
-  
-        
+        const base64data = reader.result as string;
+        await uploadString(storageRef, base64data, 'data_url');
+
+
         const downloadURL = await getDownloadURL(storageRef);
-  
+
         const userRef = doc(this.firestore, `users/${user.uid}`);
         const userData: UserInterface = {
           userID: user.uid,
           email: user.email || '',
           username: user.displayName || '',
           password: '',
-          avatar: downloadURL, 
+          avatar: downloadURL,
         };
         await setDoc(userRef, userData);
         this.setCurrentUser(userData);
         this.router.navigate(['/dashboard']);
       };
     });
-  
+
     return from(promise).pipe(
       catchError((error) => {
         console.error('Google sign-in error:', error);
@@ -174,23 +175,23 @@ register(email: string, username: string, password: string, avatar: string): Obs
 
   guestLogin(): Observable<void> {
     const guestEmail = 'gast@gast.de';
-    const guestPassword = 'abcdABCD1234!"§$'; 
-  
+    const guestPassword = 'abcdABCD1234!"§$';
+
     const promise = signInWithEmailAndPassword(this.firebaseAuth, guestEmail, guestPassword)
       .then(async (response) => {
-       
+
         const userRef = doc(this.firestore, `users/${response.user.uid}`);
         const userDoc = await getDoc(userRef);
-  
+
         if (userDoc.exists()) {
-          const userData: UserInterface = userDoc.data() as UserInterface; 
+          const userData: UserInterface = userDoc.data() as UserInterface;
           this.setCurrentUser(userData);
-          this.router.navigate(['/dashboard']); 
+          this.router.navigate(['/dashboard']);
         } else {
           console.error('No such document for guest user!');
         }
       });
-  
+
     return from(promise).pipe(
       catchError((error) => {
         console.error('Guest login error:', error);
@@ -203,13 +204,13 @@ register(email: string, username: string, password: string, avatar: string): Obs
     const user = this.firebaseAuth.currentUser;
 
     if (!user) {
-        return Promise.reject(new Error('Kein Benutzer ist derzeit angemeldet.'));
+      return Promise.reject(new Error('Kein Benutzer ist derzeit angemeldet.'));
     }
 
     const isGoogleUser = user.providerData.some(provider => provider.providerId === 'google.com');
 
     if (isGoogleUser) {
-        return Promise.reject(new Error('E-Mail kann bei Google-Anmeldungen nicht geändert werden. Bitte erstelle ein neues Konto.'));
+      return Promise.reject(new Error('E-Mail kann bei Google-Anmeldungen nicht geändert werden. Bitte erstelle ein neues Konto.'));
     }
 
     // Setze die neue E-Mail
@@ -217,7 +218,7 @@ register(email: string, username: string, password: string, avatar: string): Obs
 
     // Sende die Verifizierungs-E-Mail
     await sendEmailVerification(user);
-    
+
     console.log('Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.');
-}
+  }
 }
