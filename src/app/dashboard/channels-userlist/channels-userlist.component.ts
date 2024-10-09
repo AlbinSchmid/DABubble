@@ -30,31 +30,11 @@ export class ChannelsUserlistComponent {
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
 
-  channels = [
-    { name: 'Entwicklerteam' },
-    { name: 'Office-Team' },
-    { name: 'Support-Team' },
-    { name: 'Support-Team' },
-    { name: 'Support-Team' },
-    { name: 'Support-Team' },
-    { name: 'Support-Team' }
-  ];
-
-  direct_messages = [
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' },
-    { name: 'Maximilian Mustermann' }
-  ];
-
   constructor() { }
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
+    this.firestoreService.startSnapshot('channels');
   }
 
   ngOnDestroy(): void {
@@ -117,7 +97,7 @@ export class ChannelsUserlistComponent {
     if (this.isChannelOpen) {
       return index * 0.10;
     } else {
-      let totalButtons = this.channels.length;
+      let totalButtons = this.firestoreService.channel.length;
       return (totalButtons - index - 1) * 0.10;
     }
   }
@@ -126,25 +106,25 @@ export class ChannelsUserlistComponent {
     if (this.isDirectMessagesOpen) {
       return index * 0.10;
     } else {
-      let totalButtons = this.direct_messages.length;
+      let totalButtons = this.firestoreService.user.length;
       return (totalButtons - index - 1) * 0.10;
     }
   }
 
   arrayTimerChannels(): number {
-    return (this.channels.length * 100) + 50;
+    return (this.firestoreService.channel.length * 100) + 50;
   }
 
   arrayTimerDM(): number {
-    return (this.direct_messages.length * 100) + 50;
+    return (this.firestoreService.user.length * 100) + 50;
   }
 
   getChannelsMaxHeight(): number {
-    return this.channels.length * 50;
+    return this.firestoreService.channel.length * 50;
   }
 
   getChannelsTransitionDuration(): string {
-    let duration = this.channels.length * 0.12;
+    let duration = this.firestoreService.channel.length * 0.12;
     return `max-height ${duration}s ease-in-out`;
   }
 }
