@@ -34,8 +34,8 @@ export class UploadImageService {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
 
-          const maxWidth = 400;
-          const maxHeight = 400;
+          const maxWidth = 300;
+          const maxHeight = 300;
           let width = img.width;
           let height = img.height;
 
@@ -61,7 +61,7 @@ export class UploadImageService {
             } else {
               reject(new Error('Compression failed'));
             }
-          }, file.type, 1);
+          }, file.type, 0.5);
         };
         img.src = event.target?.result as string;
       };
@@ -70,10 +70,16 @@ export class UploadImageService {
   }
 
   async uploadUserAvatar(file: File): Promise<string> {
-    const compressedFile = await this.compressImage(file);
-    const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
-    await uploadBytes(storageRef, compressedFile);
-    return await getDownloadURL(storageRef);
+    try {
+      const compressedFile = await this.compressImage(file);
+      const storageRef = ref(this.storage, `avatars/${compressedFile.name}`);
+      await uploadBytes(storageRef, compressedFile);
+      const downloadUrl = await getDownloadURL(storageRef);
+      return downloadUrl;
+    } catch (error) {
+      console.error('Error uploading avatar:', error);
+      throw error;
+    }
   }
 
   async updateUserAvatar(avatarUrl: string) {
@@ -84,7 +90,7 @@ export class UploadImageService {
         console.log('Avatar updated successfully');
       } catch (error) {
         console.error('Error updating avatar:', error);
-        throw error; // Re-throw error if needed
+        throw error;
       }
     } else {
       return Promise.reject('No user logged in');
@@ -98,4 +104,6 @@ export class UploadImageService {
     }
     await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
   }
+
+ 
 }

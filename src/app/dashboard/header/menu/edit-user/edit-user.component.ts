@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +29,8 @@ export class EditUserComponent implements OnInit{
   successMessage: string | null = null
   avatarChanged: boolean = false;
   imgUpload= inject(UploadImageService)
-  newAvatar: string | null = null;
+  newAvatar: string;
+  
 
   @Input() isOpenEditEditor: boolean = false;
 
@@ -38,7 +39,8 @@ export class EditUserComponent implements OnInit{
   ngOnInit() {
     this.imgUpload.avatarChanged.subscribe((newAvatar) => {
       if (newAvatar) {
-        this.avatarChanged = true; 
+        this.avatarChanged = true;
+        this.newAvatar = newAvatar; 
       }
     });
   }
@@ -60,29 +62,35 @@ export class EditUserComponent implements OnInit{
   }
 
   changeEmail() {
-    console.log('Change email method called'); // Debugging line
     let emailUpdated = false;
-
+  
     // Email update logic
     if (this.inputEmail && this.inputEmail.length > 0) {
-        emailUpdated = true;
-        this.authService.changeEmail(this.inputEmail).then(() => {
-            this.successMessage = 'Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.';
-            this.errorMessage = null;
-        }).catch((error) => {
-            this.errorMessage = error.message;
-            this.successMessage = null;
-        });
+      emailUpdated = true;
+      this.authService.changeEmail(this.inputEmail).then(() => {
+        this.successMessage = 'Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.';
+        this.errorMessage = null;
+      }).catch((error) => {
+        this.errorMessage = error.message;
+        this.successMessage = null;
+      });
     }
-
-    // Avatar update logic
-    if (!this.avatarChanged && this.newAvatar) {
-        console.log('Updating avatar with:', this.newAvatar); // Debugging line
-        this.imgUpload.updateUserAvatar(this.newAvatar).then(() => {
-            console.log('Avatar updated successfully');
-        }).catch(error => {
-            console.error('Error updating avatar:', error);
+  
+    if (this.avatarChanged && this.imgUpload.selectedFile) {
+      this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile).then((downloadUrl) => {
+        this.newAvatar = downloadUrl;
+        return this.imgUpload.updateUserAvatar(this.newAvatar);
+      }).then(() => {
+        this.authService.firebaseAuth.currentUser?.reload().then(() => {
+          const currentUser = this.authService.currentUserSig();
+          if (currentUser) {
+            currentUser.avatar = this.newAvatar; 
+            console.log('Avatar updated and UI refreshed');
+          }
         });
+      }).catch(error => {
+        console.error('Error updating avatar:', error);
+      });
     }
-}
+  }
 }
