@@ -5,4 +5,5 @@ export interface UserInterface {
   username: string;
   avatar: string;
   userStatus?: string;
+  isFocus?: boolean;
 }
