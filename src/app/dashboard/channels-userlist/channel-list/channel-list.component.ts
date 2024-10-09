@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
+import { Channel } from '../../../shared/interfaces/channel';
 
 @Component({
   selector: 'app-channel-list',
@@ -21,6 +22,15 @@ export class ChannelListComponent {
   isChannelOpen: boolean = false;
   isCloseChannelSection: boolean = false;
   isChannelButtonDisable: boolean = false;
+
+
+  dummyChannel: Channel = {
+    title: 'test',
+    description: 'test',
+    createdBy: 'test',
+    user: [],
+    messages: []
+  }
 
   constructor() { }
 
@@ -94,5 +104,9 @@ export class ChannelListComponent {
   getChannelsTransitionDuration(): string {
     let duration = this.firestoreService.channelList.length * 0.35;
     return `max-height ${duration}s ease-in-out`;
+  }
+
+  addChannel() {
+    this.firestoreService.addDoc(this.dummyChannel, 'channels');
   }
 }

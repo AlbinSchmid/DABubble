@@ -21,7 +21,8 @@
         [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
         <mat-icon fontIcon="tag"></mat-icon>{{ channel.title }}
     </button>
-    <button class="add-channel-btn" [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"
+    <button (click)="addChannel()" class="add-channel-btn"
+        [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"
         [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
         <mat-icon class="add-channel-icon" fontIcon="maps_ugc"></mat-icon>Channel hinzufügen
     </button>

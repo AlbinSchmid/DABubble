@@ -117,7 +117,7 @@ export class FirestoreService {
    * @returns {obj is Channel} - True if the object is a `Channel`.
    */
   isChannel(obj: EntityTypes): obj is Channel {
-    return 'channelID' in obj;
+    return 'createdBy' in obj;
   }
 
   /**
