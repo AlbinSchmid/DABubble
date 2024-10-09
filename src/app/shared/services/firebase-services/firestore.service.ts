@@ -3,6 +3,9 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../interfaces/channel';
 
+
+type EntityTypes = UserInterface | Channel;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +14,7 @@ export class FirestoreService {
   firestore: Firestore = inject(Firestore);
   user: UserInterface[] = [];
   channel: Channel[] = [];
+
 
   unsubList!: () => void;
 
@@ -50,7 +54,7 @@ export class FirestoreService {
     }
   }
 
-  async addDoc(obj: UserInterface | Channel, callId: string) {
+  async addDoc(obj: EntityTypes, callId: string) {
     await addDoc(this.getCollectionRef(callId), obj).catch(
       (err) => { console.error(err) }
     ).then(
@@ -62,18 +66,18 @@ export class FirestoreService {
     await deleteDoc(doc(this.firestore, collId, docId));
   }
 
-  setDummyObject(obj: UserInterface | Channel, id: string): UserInterface | Channel {
+  setDummyObject(obj: EntityTypes, id: string): EntityTypes {
     if (this.isUserInterface(obj)) return this.getUserDummyObject(obj, id);
     if (this.isChannel(obj)) return this.getChannelDummyObject(obj, id);
 
     throw new Error('Invalid object type');
   }
 
-  isUserInterface(obj: any): obj is UserInterface {
+  isUserInterface(obj: EntityTypes): obj is UserInterface {
     return 'userID' in obj;
   }
 
-  isChannel(obj: any): obj is Channel {
+  isChannel(obj: EntityTypes): obj is Channel {
     return 'channelID' in obj;
   }
 
