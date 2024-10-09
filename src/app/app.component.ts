@@ -13,4 +13,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'DaBubble';
+
+  onDragStart(event: DragEvent) {
+    event.preventDefault();
+  }
 }
