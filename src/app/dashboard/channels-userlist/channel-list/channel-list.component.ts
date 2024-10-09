@@ -102,11 +102,18 @@ export class ChannelListComponent {
   }
 
   getChannelsTransitionDuration(): string {
-    let duration = this.firestoreService.channelList.length * 0.35;
+    let duration = this.firestoreService.channelList.length * 0.12;
     return `max-height ${duration}s ease-in-out`;
   }
 
-  addChannel() {
-    this.firestoreService.addDoc(this.dummyChannel, 'channels');
+  async addChannel() {
+    try {
+      this.toggleChannels();
+      await new Promise(resolve => setTimeout(resolve, this.arrayTimerChannels() + 200));
+      await this.firestoreService.addDoc(this.dummyChannel, 'channels');
+      this.toggleChannels();
+    } catch (error) {
+      console.error("Failed to add the channel:", error);
+    }
   }
 }

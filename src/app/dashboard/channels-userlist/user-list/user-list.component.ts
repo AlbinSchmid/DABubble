@@ -33,15 +33,6 @@ export class UserListComponent {
     this.firestoreService.stopSnapshot();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.isDirectMessagesOpen = true, this.isChannelsFinishedLoading());
-  }
-
-  isChannelsFinishedLoading(): number {
-    let time = (this.firestoreService.channelList.length * 140) + 1500;
-    return time;
-  }
-
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
 
@@ -83,7 +74,12 @@ export class UserListComponent {
     return (this.firestoreService.userList.length * 100) + 50;
   }
 
+  getDMMaxHeight(): number {
+    return this.firestoreService.userList.length * 50 + 50;
+  }
 
-
-
+  getDMTransitionDuration(): string {
+    let duration = this.firestoreService.userList.length * 0.12;
+    return `max-height ${duration}s ease-in-out`;
+  }
 }

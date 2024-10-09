@@ -11,7 +11,8 @@
         </div>
     </div>
 </div>
-<div *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection" class="btns-contain">
+<div class="btns-contain max-height-contain" *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection"
+    [ngStyle]="{'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0','transition': getDMTransitionDuration()}">
     <button *ngFor="let user of firestoreService.userList; let i = index"
         [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
         [ngClass]="{'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">

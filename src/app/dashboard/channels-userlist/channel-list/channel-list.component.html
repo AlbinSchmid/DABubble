@@ -14,7 +14,7 @@
         </div>
     </div>
 </div>
-<div class="btns-contain channels-contain"
+<div class="btns-contain max-height-contain"
     [ngStyle]="{'max-height': isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
     <button *ngFor="let channel of firestoreService.channelList; let i = index"
         [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
