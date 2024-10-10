@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, Firestore, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { doc, query, where, } from 'firebase/firestore';
 import { Message } from '../../interfaces/message';
+import { ThreadService } from '../thread.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class MessengerService {
   answers: Message[] = [];
 
 
-  constructor() {
+  constructor(private threadService: ThreadService) {
     this.unsubChatList = this.subChatsList();
   }
 
@@ -50,8 +51,10 @@ export class MessengerService {
     const messegeRef = collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges/${messageId}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
+      this.threadService.test = [];
       list.forEach(element => {
-        this.answers.push(this.setMessageObject(element.data(), element.id))
+        this.answers.push(this.setMessageObject(element.data(), element.id));
+        this.threadService.test.push(this.setMessageObject(element.data(), element.id));
       });
       this.answers = this.sortByDate(this.answers);
     })

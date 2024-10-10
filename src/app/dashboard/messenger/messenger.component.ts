@@ -25,7 +25,7 @@ import { ThreadService } from '../../shared/services/thread.service';
     MatDialogModule,
     EditMessageComponent,
     MessageComponent,
-],
+  ],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'
 })
@@ -35,12 +35,17 @@ export class MessengerComponent {
   hoveredMenu = false;
 
   constructor(public firebase: MessengerService, public threadService: ThreadService) {
+    // setTimeout(() => {
+    //   console.log(firebase.messages);
+      
+    // }, 1000);
+
   }
 
 
   showOrHideMenu() {
     if (this.hoveredMenu == false) {
-        this.hoveredMenu = true;
+      this.hoveredMenu = true;
     } else {
       this.hoveredMenu = false;
     }

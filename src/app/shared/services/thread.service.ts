@@ -15,4 +15,7 @@ export class ThreadService {
   }
   showThread = false;
   messageId: string;
+  test: Message[] = [
+
+  ]
 }

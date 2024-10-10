@@ -35,8 +35,25 @@ export class MessageComponent {
 
 
   constructor(public firebase: MessengerService, public threadService: ThreadService) {
+    setTimeout(() => {
+      this.getAnswersArrayLength();      
+    });
+    
+    // firebase.subAnswersList(this.message.id);
+    // setTimeout(() => {
+    //   console.log(firebase.answers);
+    // }, 1000);
+    
   }
 
+
+  async getAnswersArrayLength() {
+    await this.firebase.subAnswersList(this.message.id);
+    setTimeout(() => {
+      console.log(this.threadService.test);
+      
+    }, 100);
+  }
 
 
   showOrHideMenu() {

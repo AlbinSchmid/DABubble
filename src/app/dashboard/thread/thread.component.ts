@@ -42,6 +42,8 @@ export class ThreadComponent {
   checkAnswerArrayLength() {
     if (this.firebase.answers.length > 1) {
       return `${this.firebase.answers.length} Antworten`;
+    } else if (this.firebase.answers.length == 0) {
+      return `Keine Antworten`;
     } else {
       return `${this.firebase.answers.length} Antwort`;
     }
