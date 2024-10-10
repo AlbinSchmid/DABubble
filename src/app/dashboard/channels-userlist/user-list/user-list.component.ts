@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { Channel } from '../../../shared/interfaces/channel';
+
 
 @Component({
   selector: 'app-user-list',
@@ -22,6 +24,9 @@ export class UserListComponent {
   userList: UserInterface[] = [];
   userListSubscription!: Subscription;
 
+  channelList: Channel[] = [];
+  channelListSubscription!: Subscription;
+
 
   isDirectMessagesOpen: boolean = false;
   isCloseDirectMessagesSection: boolean = false;
@@ -35,6 +40,10 @@ export class UserListComponent {
 
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.userList = users;
+    });
+
+    this.channelListSubscription = this.firestoreService.channelList$.subscribe(channels => {
+      this.channelList = channels;
     });
   }
 
@@ -91,7 +100,7 @@ export class UserListComponent {
   }
 
   getDMMaxHeight(): number {
-    return this.userList.length * 70 + 60;
+    return (this.userList.length * 100) + 50;
   }
 
   getDMTransitionDuration(): string {
@@ -100,6 +109,12 @@ export class UserListComponent {
   }
 
   focusUser(user: UserInterface) {
-    console.log('click on user:', user.username);
+    this.resetChannelFocus();
+    this.userList.forEach(u => u.isFocus = false);
+    user.isFocus = true;
+  }
+
+  resetChannelFocus(): void {
+    this.channelList.forEach(channel => channel.isFocus = false);
   }
 }

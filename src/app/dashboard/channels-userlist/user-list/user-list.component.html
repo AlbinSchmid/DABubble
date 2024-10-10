@@ -15,7 +15,7 @@
     [ngStyle]="{'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0','transition': getDMTransitionDuration()}">
     <button *ngFor="let user of userList; let i = index" [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
         (click)="focusUser(user)"
-        [ngClass]="{'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
+        [ngClass]="{'focus-btn': user.isFocus,'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
         <div class="profile-img-wrapper">
             <img src="{{ user.avatar }}" alt="user_avatar_img">
             <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>

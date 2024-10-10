@@ -6,6 +6,7 @@ export interface Channel {
     title: string,
     description: string,
     createdBy: string,
+    isFocus: boolean,
     user: UserInterface[],
     messages: Message[],
 }
