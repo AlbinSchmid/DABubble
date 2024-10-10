@@ -17,11 +17,11 @@
         [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
         [ngClass]="{'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
         <div class="profile-img-wrapper">
-            <img src="{{ user.avatar }}" alt="avatar">
+            <img src="{{ user.avatar }}" alt="user_avatar_img">
             <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>
             <div [ngClass]="{'status-offline-icon': user.userStatus == 'off'}"></div>
             <div [ngClass]="{'status-busy-icon': user.userStatus == 'busy'}"></div>
         </div>
-        <img src="{{ user.avatar }}" alt="user_avatar_img">{{ user.username }}
+        <span>{{ user.username }}</span>
     </button>
 </div>

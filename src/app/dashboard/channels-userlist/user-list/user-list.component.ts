@@ -33,6 +33,10 @@ export class UserListComponent {
     this.firestoreService.stopSnapshot();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => this.toggleDirectMessages(), 1000);
+  }
+
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
 
@@ -75,11 +79,11 @@ export class UserListComponent {
   }
 
   getDMMaxHeight(): number {
-    return this.firestoreService.userList.length * 50 + 50;
+    return this.firestoreService.userList.length * 60 + 50;
   }
 
   getDMTransitionDuration(): string {
-    let duration = this.firestoreService.userList.length * 0.12;
+    let duration = this.firestoreService.userList.length * 0.10;
     return `max-height ${duration}s ease-in-out`;
   }
 }
