@@ -21,7 +21,16 @@ export class FirestoreService {
   channelList$ = new BehaviorSubject<Channel[]>([]);
   unsubList!: () => void;
 
+  currentlyFocusedChat: EntityTypes;
+
   constructor() { }
+
+
+  setAndGetCurrentlyFocusedChat(obj: EntityTypes) {
+    this.currentlyFocusedChat = obj;
+
+    console.log('currently focus on: ', obj);
+  }
 
   /**
    * Starts a Firestore snapshot listener for the specified collection ID.

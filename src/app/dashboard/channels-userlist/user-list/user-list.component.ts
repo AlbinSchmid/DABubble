@@ -111,6 +111,7 @@ export class UserListComponent {
   focusUser(user: UserInterface) {
     this.resetChannelFocus();
     this.userList.forEach(u => u.isFocus = false);
+    this.firestoreService.setAndGetCurrentlyFocusedChat(user);
     user.isFocus = true;
   }
 

@@ -137,6 +137,7 @@ export class ChannelListComponent {
   focusChannel(channel: Channel) {
     this.resetUserFocus();
     this.channelList.forEach(c => c.isFocus = false);
+    this.firestoreService.setAndGetCurrentlyFocusedChat(channel);
     channel.isFocus = true;
   }
 
