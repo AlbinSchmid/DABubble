@@ -114,8 +114,6 @@ export class MenuComponent {
     
     if (currentUser) {
       const userDocRef = doc(this.firestore, `users/${currentUser.userID}`);
-      
-      // Update the 'status' field in the user's Firestore document
       updateDoc(userDocRef, { userStatus: this.userStatus })
         .then(() => {
           console.log('User status updated successfully in Firestore');
