@@ -57,6 +57,8 @@ export class LandingSignupDialogComponent implements OnInit {
         username: rawForm.username,
         password: rawForm.password,
         avatar: '',
+        userStatus: 'on',
+        isFocus: true,
       });
       this.router.navigateByUrl('/avatar-picker');  
     }

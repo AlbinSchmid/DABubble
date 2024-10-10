@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
 import { MenuComponent } from './menu/menu.component';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { UserInterface } from '../../landing-page/interfaces/userinterface';
+import { isFormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -74,7 +75,9 @@ export class HeaderComponent {
           password: '',
           email: user.email,
           username: user.displayName,
-          avatar: user.photoURL
+          avatar: user.photoURL,
+          isFocus: user.isFocus,
+          userStatus: user.userStatus
         };
         this.authService.currentUserSig.set(newUser);
       } else {

@@ -23,7 +23,9 @@ export class LandingTestUserDialogComponent implements OnInit {
           password: '',
           email: user.email,
           username: user.displayName,
-          avatar: user.photoURL
+          avatar: user.photoURL,
+          isFocus: false,
+          userStatus: ''
         };
 
         this.authService.currentUserSig.set(newUser);

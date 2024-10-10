@@ -44,7 +44,8 @@ export class AuthserviceService {
             username: username,
             password: '',
             avatar: avatar,
-            userStatus: 'on'
+            userStatus: 'on',
+            isFocus: false,
           };
           return setDoc(userRef, userData);
         });
@@ -115,6 +116,9 @@ export class AuthserviceService {
           username: user.displayName || '',
           password: '',
           avatar: downloadURL,
+          userStatus: 'on',
+          isFocus:false,
+
         };
         await setDoc(userRef, userData);
         this.setCurrentUser(userData);
