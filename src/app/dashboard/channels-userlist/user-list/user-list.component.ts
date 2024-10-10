@@ -83,7 +83,7 @@ export class UserListComponent {
   }
 
   getDMTransitionDuration(): string {
-    let duration = this.firestoreService.userList.length * 0.10;
+    let duration = this.firestoreService.userList.length * 0.60;
     return `max-height ${duration}s ease-in-out`;
   }
 }
