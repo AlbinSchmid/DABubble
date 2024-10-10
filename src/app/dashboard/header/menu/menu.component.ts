@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { UploadImageService } from '../../../shared/services/upload-image.service';
+import { Firestore } from '@angular/fire/firestore';
+import { collection, doc, updateDoc } from '@firebase/firestore';
 
 @Component({
   selector: 'app-menu',
@@ -38,6 +40,7 @@ export class MenuComponent {
 
   authService = inject(AuthserviceService)
   imgUpload = inject(UploadImageService)
+  firestore = inject(Firestore)
 
   toggleProfileMenu(e: Event): void {
     e.stopPropagation();
@@ -77,28 +80,13 @@ export class MenuComponent {
     return this.userStatus !== 'off' && this.userStatus !== 'on';
   }
 
-  setUserOnline(e: Event) {
+  setUserStatus(e: Event, status: 'on' | 'off' | 'busy') {
     e.stopPropagation();
-    this.userStatus = 'on';
+    this.userStatus = status;
     this.isUnderMenuOpen = false;
     this.userStatusChange.emit(this.userStatus);
     this.isUnderMenuOpenChange.emit(this.isUnderMenuOpen);
-  }
-
-  setUserOffline(e: Event) {
-    e.stopPropagation();
-    this.userStatus = 'off';
-    this.isUnderMenuOpen = false;
-    this.userStatusChange.emit(this.userStatus);
-    this.isUnderMenuOpenChange.emit(this.isUnderMenuOpen);
-  }
-
-  setUserBusy(e: Event) {
-    e.stopPropagation();
-    this.userStatus = 'busy';
-    this.isUnderMenuOpen = false;
-    this.userStatusChange.emit(this.userStatus);
-    this.isUnderMenuOpenChange.emit(this.isUnderMenuOpen);
+    this.updateUserStatus()
   }
 
   toggleEditUserEditor(e: Event) {
@@ -119,5 +107,24 @@ export class MenuComponent {
 
   noClickable(e: Event) {
     e.stopPropagation();
+  }
+
+  updateUserStatus() {
+    const currentUser = this.authService.currentUserSig(); 
+    
+    if (currentUser) {
+      const userDocRef = doc(this.firestore, `users/${currentUser.userID}`);
+      
+      // Update the 'status' field in the user's Firestore document
+      updateDoc(userDocRef, { userStatus: this.userStatus })
+        .then(() => {
+          console.log('User status updated successfully in Firestore');
+        })
+        .catch((error) => {
+          console.error('Error updating user status in Firestore:', error);
+        });
+    } else {
+      console.error('No user found to update status');
+    }
   }
 }

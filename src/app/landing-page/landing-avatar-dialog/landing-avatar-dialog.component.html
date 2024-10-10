@@ -20,7 +20,7 @@
       <div class="avatars">
         @for(avatar of avatars; track avatar) {
           <img class="small-avatar" 
-               src="https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar{{avatar}}.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208" 
+               src="{{avatar}}" 
                alt="Avatar {{avatar}}"
                (click)="onSelectAvatar(avatar)">
         }
