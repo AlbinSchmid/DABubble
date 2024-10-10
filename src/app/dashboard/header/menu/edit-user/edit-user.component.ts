@@ -92,21 +92,21 @@ export class EditUserComponent implements OnInit{
     });
   }
   
-  updateAvatar() {
-    const currentUser = this.authService.currentUserSig();
+  async updateAvatar() {
+    const currentUser = this.authService.currentUserSig();  
     const oldAvatarUrl = currentUser?.avatar;
     if (this.imgUpload.selectedFile) {
-      this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile).then((downloadUrl) => {
+      try {
+        const downloadUrl = await this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile);
         this.newAvatar = downloadUrl;
-        return this.imgUpload.updateUserAvatar(this.newAvatar);
-      }).then(() => {
+        await this.imgUpload.updateUserAvatar(downloadUrl);
+        await this.imgUpload.updateAvatarInFirestore(downloadUrl);
         this.handleOldAvatarDeletion(oldAvatarUrl);
-      }).then(() => {
         this.reloadCurrentUser();
-        this.cancelProcess()
-      }).catch(error => {
+        this.cancelProcess();
+      } catch (error) {
         console.error('Error updating avatar:', error);
-      });
+      }
     }
   }
   
@@ -122,6 +122,8 @@ export class EditUserComponent implements OnInit{
       return;
     }
   }
+
+  
   
   reloadCurrentUser() {
     const currentUser = this.authService.currentUserSig();

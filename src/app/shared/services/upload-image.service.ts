@@ -2,6 +2,8 @@ import { EventEmitter, inject, Injectable } from '@angular/core';
 import { updateProfile } from '@angular/fire/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
+import { Firestore, doc, updateDoc, collection } from '@angular/fire/firestore';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ export class UploadImageService {
   filePreview: string | ArrayBuffer | null = null;
   authService = inject(AuthserviceService);
   avatarChanged = new EventEmitter<string | null>();
+  firestore :Firestore = inject(Firestore)
   onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
@@ -87,9 +90,9 @@ export class UploadImageService {
     if (currentUser) {
       try {
         await updateProfile(currentUser, { photoURL: avatarUrl });
-        console.log('Avatar updated successfully');
+        console.log('Avatar updated successfully in Firebase Auth');
       } catch (error) {
-        console.error('Error updating avatar:', error);
+        console.error('Error updating avatar in Firebase Auth:', error);
         throw error;
       }
     } else {
@@ -105,5 +108,17 @@ export class UploadImageService {
     await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
   }
 
- 
+  async updateAvatarInFirestore(avatarUrl: string) {
+    const currentUser = this.authService.currentUserSig();
+    if (currentUser) {
+      try {
+        const userDocRef = doc(this.firestore, `users/${currentUser.userID}`);  
+        await updateDoc(userDocRef, { avatar: avatarUrl }); 
+        console.log('Avatar updated successfully in Firestore');
+      } catch (error) {
+        console.error('Error updating avatar in Firestore:', error);
+        throw error;
+      }
+    }
+}
 }
