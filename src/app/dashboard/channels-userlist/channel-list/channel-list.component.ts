@@ -42,9 +42,9 @@ export class ChannelListComponent {
     this.firestoreService.stopSnapshot();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.toggleChannels(), 1000);
-  }
+  // ngAfterViewInit() {
+  //   setTimeout(() => this.toggleChannels(), 1000);
+  // }
 
   toggleChannels() {
     if (this.isChannelButtonDisable) return;

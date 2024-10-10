@@ -45,9 +45,9 @@ export class UserListComponent {
     }
   }
 
-  // ngAfterViewInit() {
-  //   setTimeout(() => this.toggleDirectMessages(), 1000);
-  // }
+  ngAfterViewInit() {
+    setTimeout(() => this.toggleDirectMessages(), 1000);
+  }
 
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
@@ -91,11 +91,15 @@ export class UserListComponent {
   }
 
   getDMMaxHeight(): number {
-    return this.userList.length * 60 + 66;
+    return this.userList.length * 70 + 60;
   }
 
   getDMTransitionDuration(): string {
     let duration = this.userList.length * 0.2;
     return `max-height ${duration}s ease-in-out`;
+  }
+
+  focusUser(user: UserInterface) {
+    console.log('click on user:', user.username);
   }
 }
