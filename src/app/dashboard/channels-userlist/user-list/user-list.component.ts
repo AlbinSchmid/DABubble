@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Subscription } from 'rxjs';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-user-list',
@@ -17,6 +19,9 @@ export class UserListComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
 
+  userList: UserInterface[] = [];
+  userListSubscription!: Subscription;
+
 
   isDirectMessagesOpen: boolean = false;
   isCloseDirectMessagesSection: boolean = false;
@@ -27,15 +32,22 @@ export class UserListComponent {
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
     this.firestoreService.startSnapshot('channels');
+
+    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
+      this.userList = users;
+    });
   }
 
   ngOnDestroy(): void {
     this.firestoreService.stopSnapshot();
+    if (this.userListSubscription) {
+      this.userListSubscription.unsubscribe();
+    }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.toggleDirectMessages(), 1000);
-  }
+  // ngAfterViewInit() {
+  //   setTimeout(() => this.toggleDirectMessages(), 1000);
+  // }
 
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
@@ -69,21 +81,21 @@ export class UserListComponent {
     if (this.isDirectMessagesOpen) {
       return index * 0.10;
     } else {
-      let totalButtons = this.firestoreService.userList.length;
+      let totalButtons = this.userList.length;
       return (totalButtons - index - 1) * 0.10;
     }
   }
 
   arrayTimerDM(): number {
-    return (this.firestoreService.userList.length * 100) + 50;
+    return (this.userList.length * 100) + 50;
   }
 
   getDMMaxHeight(): number {
-    return this.firestoreService.userList.length * 60 + 50;
+    return this.userList.length * 60 + 50;
   }
 
   getDMTransitionDuration(): string {
-    let duration = this.firestoreService.userList.length * 0.60;
+    let duration = this.userList.length * 0.60;
     return `max-height ${duration}s ease-in-out`;
   }
 }

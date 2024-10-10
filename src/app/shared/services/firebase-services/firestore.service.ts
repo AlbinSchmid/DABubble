@@ -2,9 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../interfaces/channel';
+import { BehaviorSubject } from 'rxjs';
 
 type EntityTypes = UserInterface | Channel;
 
+/**
+ * Service for managing Firestore operations, including creating, updating, deleting,
+ * and listening to changes in Firestore collections and documents.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -12,16 +17,15 @@ export class FirestoreService {
 
   firestore: Firestore = inject(Firestore);
 
-  userList: UserInterface[] = [];
+  userList$ = new BehaviorSubject<UserInterface[]>([]);
   channelList: Channel[] = [];
-
   unsubList!: () => void;
 
   constructor() { }
 
   /**
    * Starts a Firestore snapshot listener for the specified collection ID.
-   * @param {string} collId - The collection ID to start the snapshot for (e.g., 'users' or 'channels').
+   * @param {string} collId - The collection ID to listen to (e.g., 'users' or 'channels').
    */
   startSnapshot(collId: string) {
     if (collId === 'users') this.startUserSnapshot(collId);
@@ -29,29 +33,33 @@ export class FirestoreService {
   }
 
   /**
-   * Sets up a snapshot listener for the 'users' collection.
-   * @param {string} collId - The collection ID for the users (typically 'users').
+   * Sets up a snapshot listener for the 'users' collection and updates `userList$`.
+   * @param {string} collId - The collection ID to listen to (typically 'users').
    */
   startUserSnapshot(collId: string) {
-    this.unsubList = onSnapshot(this.getCollectionRef(collId), (list) => {
-      this.userList = [];
-      list.forEach(el => {
-        let userObj = this.setDummyObject(el.data() as UserInterface, el.id) as UserInterface;
-        this.userList.push(userObj);
+    this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
+      let userList: UserInterface[] = [];
+      snapshot.forEach(doc => {
+        let userObj = this.setDummyObject(doc.data() as UserInterface, doc.id) as UserInterface;
+        userList.push(userObj);
       });
-      console.log(this.userList);
+
+      // Filter out unwanted users and sort by username
+      userList = userList.filter(user => user.username !== 'Neuer Gast');
+      userList.sort((a, b) => a.username.localeCompare(b.username));
+      this.userList$.next(userList);
     });
   }
 
   /**
-   * Sets up a snapshot listener for the 'channels' collection.
-   * @param {string} collId - The collection ID for the channels (typically 'channels').
+   * Sets up a snapshot listener for the 'channels' collection and updates `channelList`.
+   * @param {string} collId - The collection ID to listen to (typically 'channels').
    */
   startChannelSnapshot(collId: string) {
-    this.unsubList = onSnapshot(this.getCollectionRef(collId), (list) => {
+    this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
       this.channelList = [];
-      list.forEach(el => {
-        let channelObj = this.setDummyObject(el.data() as Channel, el.id) as Channel;
+      snapshot.forEach(doc => {
+        let channelObj = this.setDummyObject(doc.data() as Channel, doc.id) as Channel;
         this.channelList.push(channelObj);
       });
       console.log(this.channelList);
@@ -69,15 +77,13 @@ export class FirestoreService {
 
   /**
    * Adds a new document to the specified Firestore collection.
-   * @param {EntityTypes} obj - The object to be added (either a `UserInterface` or `Channel`).
-   * @param {string} callId - The collection ID to add the document to.
+   * @param {EntityTypes} obj - The entity to be added (either a `UserInterface` or a `Channel` object).
+   * @param {string} collId - The collection ID to add the document to.
    */
-  async addDoc(obj: EntityTypes, callId: string) {
-    await addDoc(this.getCollectionRef(callId), obj).catch(
-      (err) => { console.error(err); }
-    ).then(
-      (docRef) => { console.log(docRef?.id); }
-    );
+  async addDoc(obj: EntityTypes, collId: string) {
+    await addDoc(this.getCollectionRef(collId), obj)
+      .then(docRef => console.log(docRef?.id))
+      .catch(err => console.error(err));
   }
 
   /**
@@ -91,9 +97,10 @@ export class FirestoreService {
 
   /**
    * Creates a dummy object for either a user or a channel based on the provided entity type.
-   * @param {EntityTypes} obj - The original object to create a dummy from.
+   * @param {EntityTypes} obj - The original entity to create a dummy from.
    * @param {string} id - The ID to be assigned to the dummy object.
-   * @returns {EntityTypes} - The newly created dummy object.
+   * @returns {EntityTypes} - The newly created dummy entity.
+   * @throws Will throw an error if the entity type is not recognized.
    */
   setDummyObject(obj: EntityTypes, id: string): EntityTypes {
     if (this.isUserInterface(obj)) return this.getUserDummyObject(obj, id);
@@ -103,18 +110,18 @@ export class FirestoreService {
   }
 
   /**
-   * Checks if an object is of type `UserInterface`.
-   * @param {EntityTypes} obj - The object to check.
-   * @returns {obj is UserInterface} - True if the object is a `UserInterface`.
+   * Checks if the given entity is of type `UserInterface`.
+   * @param {EntityTypes} obj - The entity to check.
+   * @returns {obj is UserInterface} - True if the entity is a `UserInterface`.
    */
   isUserInterface(obj: EntityTypes): obj is UserInterface {
     return 'userID' in obj;
   }
 
   /**
-   * Checks if an object is of type `Channel`.
-   * @param {EntityTypes} obj - The object to check.
-   * @returns {obj is Channel} - True if the object is a `Channel`.
+   * Checks if the given entity is of type `Channel`.
+   * @param {EntityTypes} obj - The entity to check.
+   * @returns {obj is Channel} - True if the entity is a `Channel`.
    */
   isChannel(obj: EntityTypes): obj is Channel {
     return 'createdBy' in obj;
@@ -133,7 +140,7 @@ export class FirestoreService {
       email: obj.email,
       username: obj.username,
       avatar: obj.avatar,
-      userStatus : obj.userStatus,
+      userStatus: obj.userStatus,
       isFocus: obj.isFocus,
     };
   }
@@ -158,11 +165,11 @@ export class FirestoreService {
   /**
    * Retrieves a document from Firestore based on its ID.
    * @param {string} docId - The ID of the document to retrieve.
-   * @returns {Promise<any>} - The document data from Firestore.
+   * @returns {Promise<any>} - The document data retrieved from Firestore.
    */
   async getObjectById(docId: string) {
-    let obj = await getDoc(this.getSingleDocRef(docId));
-    return obj;
+    const docSnapshot = await getDoc(this.getSingleDocRef(docId));
+    return docSnapshot;
   }
 
   /**
