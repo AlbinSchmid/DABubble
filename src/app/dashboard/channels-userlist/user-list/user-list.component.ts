@@ -82,20 +82,20 @@ export class UserListComponent {
       return index * 0.10;
     } else {
       let totalButtons = this.userList.length;
-      return (totalButtons - index - 1) * 0.10;
+      return (totalButtons - index - 1) * 0.1;
     }
   }
 
   arrayTimerDM(): number {
-    return (this.userList.length * 100) + 50;
+    return (this.userList.length * 150) + 50;
   }
 
   getDMMaxHeight(): number {
-    return this.userList.length * 60 + 50;
+    return this.userList.length * 60 + 66;
   }
 
   getDMTransitionDuration(): string {
-    let duration = this.userList.length * 0.60;
+    let duration = this.userList.length * 0.2;
     return `max-height ${duration}s ease-in-out`;
   }
 }
