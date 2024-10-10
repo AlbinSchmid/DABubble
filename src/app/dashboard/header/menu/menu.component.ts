@@ -120,28 +120,4 @@ export class MenuComponent {
   noClickable(e: Event) {
     e.stopPropagation();
   }
-
-  onAvatarSelected(event: Event) {
-    this.imgUpload.onFileSelected(event);
-  }
-
-  async updateAvatar() {
-    try {
-      if (this.imgUpload.selectedFile) {
-        const newAvatarUrl = await this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile);
-  
-        const currentUser = this.authService.currentUserSig(); 
-        if (currentUser) {
-          currentUser.avatar = newAvatarUrl; 
-          await this.imgUpload.updateUserAvatar(newAvatarUrl);
-        } else {
-          throw new Error('No authenticated user found');
-        }
-      } else {
-        throw new Error('No file selected for avatar update');
-      }
-    } catch (error) {
-      console.error('Error updating avatar:', error);
-    }
-  }
 }

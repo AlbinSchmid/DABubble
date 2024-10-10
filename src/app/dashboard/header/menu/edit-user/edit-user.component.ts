@@ -24,7 +24,7 @@ import { deleteObject, ref } from '@angular/fire/storage';
 })
 export class EditUserComponent implements OnInit{
   authService = inject(AuthserviceService)
-  email: string = 'contact@rene-theis.de';
+  email: string = '';
   inputName: string = '';
   inputEmail: string = '';
   errorMessage: string | null = null; 
@@ -134,6 +134,8 @@ export class EditUserComponent implements OnInit{
     });
   }
 
-
+  onAvatarSelected(event: Event) {
+    this.imgUpload.onFileSelected(event);
+  }
 
 }
