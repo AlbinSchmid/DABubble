@@ -14,8 +14,8 @@
                 <span #userName class="user-name">{{ authService.currentUserSig()?.username }}</span>
                 <div class="profile-img-wrapper">
                     <img src="{{authService.currentUserSig()?.avatar}}" alt="avatar">
-                    <div [ngClass]="{'status-online-icon': userStatus == 'on'}"></div>
-                    <div [ngClass]="{'status-offline-icon': userStatus == 'off'}"></div>
+                    <div [ngClass]="{'status-online-icon': userStatus =='on'}"></div>
+                    <div [ngClass]="{'status-offline-icon': userStatus =='off'}"></div>
                     <div [ngClass]="{'status-busy-icon': userStatus == 'busy'}"></div>
                 </div>
                 <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>

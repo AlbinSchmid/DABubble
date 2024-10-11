@@ -18,13 +18,23 @@ export class FirestoreService {
   firestore: Firestore = inject(Firestore);
 
   userList$ = new BehaviorSubject<UserInterface[]>([]);
-  channelList: Channel[] = [];
+  channelList$ = new BehaviorSubject<Channel[]>([]);
   unsubList!: () => void;
+
+  currentlyFocusedChat: EntityTypes;
 
   constructor() { }
 
+
+  setAndGetCurrentlyFocusedChat(obj: EntityTypes) {
+    this.currentlyFocusedChat = obj;
+
+    console.log('currently focus on: ', obj);
+  }
+
   /**
    * Starts a Firestore snapshot listener for the specified collection ID.
+   * Depending on the collection ID ('users' or 'channels'), this method calls the appropriate snapshot handler.
    * @param {string} collId - The collection ID to listen to (e.g., 'users' or 'channels').
    */
   startSnapshot(collId: string) {
@@ -33,7 +43,8 @@ export class FirestoreService {
   }
 
   /**
-   * Sets up a snapshot listener for the 'users' collection and updates `userList$`.
+   * Sets up a snapshot listener for the 'users' collection and updates the `userList$` observable.
+   * Filters out unwanted users, sorts the remaining users by username, and pushes the result to `userList$`.
    * @param {string} collId - The collection ID to listen to (typically 'users').
    */
   startUserSnapshot(collId: string) {
@@ -52,17 +63,21 @@ export class FirestoreService {
   }
 
   /**
-   * Sets up a snapshot listener for the 'channels' collection and updates `channelList`.
+   * Sets up a snapshot listener for the 'channels' collection and updates the `channelList$` observable.
+   * Sorts the channels by their title in alphabetical order and pushes the sorted list to `channelList$`.
    * @param {string} collId - The collection ID to listen to (typically 'channels').
    */
   startChannelSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
-      this.channelList = [];
+      let channelList: Channel[] = [];
       snapshot.forEach(doc => {
         let channelObj = this.setDummyObject(doc.data() as Channel, doc.id) as Channel;
-        this.channelList.push(channelObj);
+        channelList.push(channelObj);
       });
-      console.log(this.channelList);
+
+      // Sort channels alphabetically by title
+      channelList.sort((a, b) => a.title.localeCompare(b.title));
+      this.channelList$.next(channelList);
     });
   }
 
@@ -157,6 +172,7 @@ export class FirestoreService {
       title: obj.title,
       description: obj.description,
       createdBy: obj.createdBy,
+      isFocus: obj.isFocus,
       user: obj.user,
       messages: obj.messages,
     };

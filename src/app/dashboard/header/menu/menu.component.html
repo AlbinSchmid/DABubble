@@ -18,11 +18,13 @@
         </div>
     </div>
     <div *ngIf="!isOpenEditEditor">
-      <img src="{{authService.currentUserSig()?.avatar}}" alt="user_profile_img">
+        <img src="{{authService.currentUserSig()?.avatar}}" alt="user_profile_img">
     </div>
     <div *ngIf="isOpenEditEditor" style="pointer-events: all;">
-        <img [src]="   imgUpload.filePreview ||authService.currentUserSig()?.avatar" (click)="fileInput.click()" alt="user_profile_img">
-        <input type="file" #fileInput accept="image/*" (change)="imgUpload.onFileSelected($event)" style="display: none;">
+        <img [src]="imgUpload.filePreview ||authService.currentUserSig()?.avatar" (click)="fileInput.click()"
+            alt="user_profile_img">
+        <input type="file" #fileInput accept="image/*" (change)="imgUpload.onFileSelected($event)"
+            style="display: none;">
     </div>
     @if(!isOpenEditEditor){
     <div class="profil-info-edit-contain">
@@ -30,7 +32,10 @@
             <div class="user-name-contain">
                 <span class="user-name">{{authService.currentUserSig()?.username}}</span>
             </div>
-            <button (click)="toggleEditUserEditor($event)" [disabled]="authService.currentUserSig()?.email === 'gast@gast.de'" class="edit-user-btn">Bearbeiten</button>
+            <button *ngIf="authService.currentUserSig()?.email !== 'gast@gast.de'"
+                (click)="toggleEditUserEditor($event)" class="edit-user-btn">
+                Bearbeiten
+            </button>
         </div>
     </div>
     <div class="status-contain">
@@ -48,15 +53,15 @@
         </div>
         <div *ngIf="isUnderMenuOpen" class="status-undermenu">
             <div *ngIf="!userIsOnline()">
-                <span (click)="setUserOnline($event)" class="status-online-txt">Online</span>
+              <span (click)="setUserStatus($event, 'on')" class="status-online-txt">Online</span>
             </div>
             <div *ngIf="!userIsBusy()">
-                <span (click)="setUserBusy($event)" class="status-busy-txt">Beschäftigt</span>
+              <span (click)="setUserStatus($event, 'busy')" class="status-busy-txt">Beschäftigt</span>
             </div>
             <div *ngIf="!userIsOffline()">
-                <span (click)="setUserOffline($event)" class="status-offline-txt">Offline</span>
+              <span (click)="setUserStatus($event, 'off')" class="status-offline-txt">Offline</span>
             </div>
-        </div>
+          </div>
         <mat-icon *ngIf="!isUnderMenuOpen" (click)="openUnderMenuStatus($event)" class="change-status-icon"
             fontIcon="navigate_next">
         </mat-icon>

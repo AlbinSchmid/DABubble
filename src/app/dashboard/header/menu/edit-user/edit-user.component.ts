@@ -24,7 +24,7 @@ import { deleteObject, ref } from '@angular/fire/storage';
 })
 export class EditUserComponent implements OnInit{
   authService = inject(AuthserviceService)
-  email: string = 'contact@rene-theis.de';
+  email: string = '';
   inputName: string = '';
   inputEmail: string = '';
   errorMessage: string | null = null; 
@@ -37,9 +37,9 @@ export class EditUserComponent implements OnInit{
     'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar0.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208',
     'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar1.png?alt=media&token=f8a95abe-d370-463b-b692-4f8ac6d4a3fd',
     'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar2.png?alt=media&token=24c3fd24-6c63-4fda-a008-2645c5ea762e',
-    'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar3.png?alt=media&token=7a3e2c9e-4076-4a7b-9dd9-873657b2753d',
-    'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar4.png?alt=media&token=7a3e2c9e-4076-4a7b-9dd9-873657b2753d',
-    'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar5.png?alt=media&token=7a3e2c9e-4076-4a7b-9dd9-873657b2753d',
+    'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar3.png?alt=media&token=1c5f619a-6bf7-4578-a253-8dafff4fa373',
+    'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar4.png?alt=media&token=4bfb26e1-022b-4afb-b832-8bbf8b560729',
+    'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar5.png?alt=media&token=ed61b493-f9b5-434f-9613-bb6dc0609493',
 ]
   
 
@@ -92,21 +92,21 @@ export class EditUserComponent implements OnInit{
     });
   }
   
-  updateAvatar() {
-    const currentUser = this.authService.currentUserSig();
+  async updateAvatar() {
+    const currentUser = this.authService.currentUserSig();  
     const oldAvatarUrl = currentUser?.avatar;
     if (this.imgUpload.selectedFile) {
-      this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile).then((downloadUrl) => {
+      try {
+        const downloadUrl = await this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile);
         this.newAvatar = downloadUrl;
-        return this.imgUpload.updateUserAvatar(this.newAvatar);
-      }).then(() => {
+        await this.imgUpload.updateUserAvatar(downloadUrl);
+        await this.imgUpload.updateAvatarInFirestore(downloadUrl);
         this.handleOldAvatarDeletion(oldAvatarUrl);
-      }).then(() => {
         this.reloadCurrentUser();
-        this.cancelProcess()
-      }).catch(error => {
+        this.cancelProcess();
+      } catch (error) {
         console.error('Error updating avatar:', error);
-      });
+      }
     }
   }
   
@@ -122,6 +122,8 @@ export class EditUserComponent implements OnInit{
       return;
     }
   }
+
+  
   
   reloadCurrentUser() {
     const currentUser = this.authService.currentUserSig();
@@ -132,6 +134,8 @@ export class EditUserComponent implements OnInit{
     });
   }
 
-
+  onAvatarSelected(event: Event) {
+    this.imgUpload.onFileSelected(event);
+  }
 
 }

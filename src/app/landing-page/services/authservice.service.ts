@@ -15,7 +15,7 @@ import {
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
-import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, collection, query, where, getDocs  } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
@@ -224,5 +224,12 @@ export class AuthserviceService {
     await sendEmailVerification(user);
 
     console.log('Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.');
+  }
+
+  async isEmailInUse(email: string): Promise<boolean> {
+    const usersRef = collection(this.firestore, 'users');
+    const emailQuery = query(usersRef, where('email', '==', email));
+    const querySnapshot = await getDocs(emailQuery);
+    return !querySnapshot.empty;
   }
 }

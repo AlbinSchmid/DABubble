@@ -16,9 +16,9 @@
 </div>
 <div class="btns-contain max-height-contain"
     [ngStyle]="{'max-height': isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
-    <button *ngFor="let channel of firestoreService.channelList; let i = index"
+    <button *ngFor="let channel of channelList; let i = index" (click)="focusChannel(channel)"
         [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
-        [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
+        [ngClass]="{'focus-btn': channel.isFocus,'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
         <mat-icon fontIcon="tag"></mat-icon>{{ channel.title }}
     </button>
     <button (click)="addChannel()" class="add-channel-btn"

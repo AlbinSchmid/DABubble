@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
-import { user } from '@angular/fire/auth';
-import { ThreadService } from '../../../shared/services/thread.service';
+import { Channel } from '../../../shared/interfaces/channel';
+
 
 @Component({
   selector: 'app-user-list',
@@ -24,12 +24,15 @@ export class UserListComponent {
   userList: UserInterface[] = [];
   userListSubscription!: Subscription;
 
+  channelList: Channel[] = [];
+  channelListSubscription!: Subscription;
+
 
   isDirectMessagesOpen: boolean = false;
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
 
-  constructor(public threadService: ThreadService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
@@ -37,6 +40,10 @@ export class UserListComponent {
 
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.userList = users;
+    });
+
+    this.channelListSubscription = this.firestoreService.channelList$.subscribe(channels => {
+      this.channelList = channels;
     });
   }
 
@@ -47,9 +54,9 @@ export class UserListComponent {
     }
   }
 
-  // ngAfterViewInit() {
-  //   setTimeout(() => this.toggleDirectMessages(), 1000);
-  // }
+  ngAfterViewInit() {
+    setTimeout(() => this.toggleDirectMessages(), 1000);
+  }
 
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
@@ -84,29 +91,31 @@ export class UserListComponent {
       return index * 0.10;
     } else {
       let totalButtons = this.userList.length;
-      return (totalButtons - index - 1) * 0.10;
+      return (totalButtons - index - 1) * 0.1;
     }
   }
 
   arrayTimerDM(): number {
-    return (this.userList.length * 100) + 50;
+    return (this.userList.length * 150) + 50;
   }
 
   getDMMaxHeight(): number {
-    return this.userList.length * 60 + 50;
+    return (this.userList.length * 100) + 50;
   }
 
   getDMTransitionDuration(): string {
-    let duration = this.userList.length * 0.60;
+    let duration = this.userList.length * 0.2;
     return `max-height ${duration}s ease-in-out`;
   }
 
-  showMessenger(userID: string) {
-    console.log(userID);
-    this.threadService.showMessenger = false;
-    this.threadService.userId = userID;
-    setTimeout(() => {
-      this.threadService.showMessenger = true;
-    }, 10);
+  focusUser(user: UserInterface) {
+    this.resetChannelFocus();
+    this.userList.forEach(u => u.isFocus = false);
+    this.firestoreService.setAndGetCurrentlyFocusedChat(user);
+    user.isFocus = true;
+  }
+
+  resetChannelFocus(): void {
+    this.channelList.forEach(channel => channel.isFocus = false);
   }
 }

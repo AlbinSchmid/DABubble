@@ -3,6 +3,8 @@ import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
 import { Channel } from '../../../shared/interfaces/channel';
+import { Subscription } from 'rxjs';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-channel-list',
@@ -18,6 +20,12 @@ export class ChannelListComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
 
+  channelList: Channel[] = [];
+  channelListSubscription!: Subscription;
+
+  userList: UserInterface[] = [];
+  userListSubscription!: Subscription;
+
 
   isChannelOpen: boolean = false;
   isCloseChannelSection: boolean = false;
@@ -25,9 +33,10 @@ export class ChannelListComponent {
 
 
   dummyChannel: Channel = {
-    title: 'test',
+    title: 'bambus',
     description: 'test',
     createdBy: 'test',
+    isFocus: false,
     user: [],
     messages: []
   }
@@ -36,15 +45,23 @@ export class ChannelListComponent {
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('channels');
+
+    this.channelListSubscription = this.firestoreService.channelList$.subscribe(channel => {
+      this.channelList = channel;
+    });
+
+    this.userListSubscription = this.firestoreService.userList$.subscribe(user => {
+      this.userList = user;
+    });
   }
 
   ngOnDestroy(): void {
     this.firestoreService.stopSnapshot();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.toggleChannels(), 1000);
-  }
+  // ngAfterViewInit() {
+  //   setTimeout(() => this.toggleChannels(), 1000);
+  // }
 
   toggleChannels() {
     if (this.isChannelButtonDisable) return;
@@ -78,13 +95,13 @@ export class ChannelListComponent {
     if (this.isChannelOpen) {
       return index * 0.10;
     } else {
-      let totalButtons = this.firestoreService.channelList.length;
+      let totalButtons = this.channelList.length;
       return (totalButtons - index - 1) * 0.10;
     }
   }
 
   getAnimationDelayAddChannel() {
-    let totalButtons = this.firestoreService.channelList.length;
+    let totalButtons = this.channelList.length;
 
     if (this.isChannelOpen) {
       return totalButtons * 0.10;
@@ -94,15 +111,15 @@ export class ChannelListComponent {
   }
 
   arrayTimerChannels(): number {
-    return (this.firestoreService.channelList.length * 100) + 50;
+    return (this.channelList.length * 100) + 50;
   }
 
   getChannelsMaxHeight(): number {
-    return this.firestoreService.channelList.length * 50 + 50;
+    return this.channelList.length * 50 + 50;
   }
 
   getChannelsTransitionDuration(): string {
-    let duration = this.firestoreService.channelList.length * 0.12;
+    let duration = this.channelList.length * 0.12;
     return `max-height ${duration}s ease-in-out`;
   }
 
@@ -115,5 +132,16 @@ export class ChannelListComponent {
     } catch (error) {
       console.error("Failed to add the channel:", error);
     }
+  }
+
+  focusChannel(channel: Channel) {
+    this.resetUserFocus();
+    this.channelList.forEach(c => c.isFocus = false);
+    this.firestoreService.setAndGetCurrentlyFocusedChat(channel);
+    channel.isFocus = true;
+  }
+
+  resetUserFocus(): void {
+    this.userList.forEach(user => user.isFocus = false);
   }
 }
