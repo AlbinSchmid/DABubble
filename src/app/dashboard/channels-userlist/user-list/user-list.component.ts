@@ -5,6 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { Channel } from '../../../shared/interfaces/channel';
+import { ThreadService } from '../../../shared/services/thread-service/thread.service';
+import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
+import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 
 
 @Component({
@@ -32,7 +35,29 @@ export class UserListComponent {
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
 
-  constructor() { }
+  constructor(private threadService: ThreadService, private firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
+
+
+  showMessenger(user: any) {
+    this.messengerService.showMessenger = false;
+    this.messengerService.chartId = '';
+    this.messengerService.user = user;
+    
+    
+    this.firebaseMessenger.searchChat(user.userID);
+    setTimeout(() => {
+      if (this.messengerService.chartId == '') {
+        this.firebaseMessenger.createChat(user);
+        console.log('hello');
+      }
+      setTimeout(() => {
+        this.messengerService.showMessenger = true;
+      }, 10);
+    }, 200);
+
+    
+  }
+
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');

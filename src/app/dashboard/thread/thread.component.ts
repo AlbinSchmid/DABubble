@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MessengerService } from '../../shared/services/firebase-services/messenger.service';
-import { ThreadService } from '../../shared/services/thread.service';
+import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
+import { ThreadService } from '../../shared/services/thread-service/thread.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from '../../shared/components/message/message.component';
@@ -25,8 +25,8 @@ export class ThreadComponent {
   reduceInteraktionBtn = true;
 
 
-  constructor(public threadService: ThreadService, public firebase: MessengerService) {
-    this.unsubAnswerList = firebase.subAnswersList(threadService.messageId);   
+  constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService) {
+    this.unsubAnswerList = firebaseMessenger.subAnswersList();   
   }
   
 
@@ -40,12 +40,12 @@ export class ThreadComponent {
    * @returns - the number of answered messages
    */
   checkAnswerArrayLength() {
-    if (this.firebase.answers.length > 1) {
-      return `${this.firebase.answers.length} Antworten`;
-    } else if (this.firebase.answers.length == 0) {
+    if (this.firebaseMessenger.answers.length > 1) {
+      return `${this.firebaseMessenger.answers.length} Antworten`;
+    } else if (this.firebaseMessenger.answers.length == 0) {
       return `Keine Antworten`;
     } else {
-      return `${this.firebase.answers.length} Antwort`;
+      return `${this.firebaseMessenger.answers.length} Antwort`;
     }
   }
 }

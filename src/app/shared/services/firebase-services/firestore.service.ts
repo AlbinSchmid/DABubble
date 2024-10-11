@@ -28,8 +28,6 @@ export class FirestoreService {
 
   setAndGetCurrentlyFocusedChat(obj: EntityTypes) {
     this.currentlyFocusedChat = obj;
-
-    console.log('currently focus on: ', obj);
   }
 
   /**

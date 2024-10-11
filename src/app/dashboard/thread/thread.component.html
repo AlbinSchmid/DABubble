@@ -10,7 +10,7 @@
     </header>
     <div id="content">
         <div id="messages-container" #content>
-            @for (message of firebase.answers; track $index) {
+            @for (message of firebaseMessenger.answers; track $index) {
                 <app-message [message]="message" [messageIndex]="$index" [reduceContent]="reduceInteraktionBtn"></app-message>
             }
             <div id="answers-info">
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div id="input-container">
-            <textarea [(ngModel)]="firebase.answerConent" placeholder="Antworten..." #texterea="ngModel" required></textarea>
+            <textarea [(ngModel)]="firebaseMessenger.answerConent" placeholder="Antworten..." #texterea="ngModel" required></textarea>
             <div>
                 <div id="button-container-left">
                     <button></button>
@@ -42,7 +42,7 @@
                     <button></button>
                     <button></button>
                 </div>
-                <button id="send-message-btn"  (click)="firebase.createAnswer(threadService.messageId)" *ngIf="texterea.valid"><img src="/assets/icons/send.png" alt="send-icon"></button>
+                <button id="send-message-btn"  (click)="firebaseMessenger.createAnswer(threadService.messageId)" *ngIf="texterea.valid"><img src="/assets/icons/send.png" alt="send-icon"></button>
             </div>
         </div>
     </div>

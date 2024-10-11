@@ -2,36 +2,30 @@ import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, Firestore, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { doc, query, where, } from 'firebase/firestore';
 import { Message } from '../../interfaces/message';
-import { ThreadService } from '../thread.service';
+import { ThreadService } from '../thread-service/thread.service';
+import { list } from '@angular/fire/storage';
+import { MessengerService } from '../messenger-service/messenger.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MessengerService {
+export class FirebaseMessengerService {
   firestore: Firestore = inject(Firestore)
-  unsubChatList;
   content = '';
   answerConent = '';
   messages: Message[] = [];
   answers: Message[] = [];
 
 
-  constructor(private threadService: ThreadService) {
-    this.unsubChatList = this.subChatsList();
-  }
-
-
-  ngDestroy() {
-    this.unsubChatList
-  }
+  constructor(private threadService: ThreadService, private messengerService: MessengerService ) { }
 
 
   /**
    * 
    * @returns Get the path of the messeges of 1 chat
    */
-  subChatsList(userID: string) {
-    const messegeRef = collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges')
+  subChatsList() {
+    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges`)
     return onSnapshot(messegeRef, (list) => {
       this.messages = [];
       list.forEach(element => {
@@ -47,11 +41,10 @@ export class MessengerService {
    * @param messageId - messageId where we get the answeres
    * @returns get the path of the answere chat
    */
-  subAnswersList(messageId: string) {
-    const messegeRef = collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges/${messageId}/answers`);
+  subAnswersList() {
+    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.threadService.messageId}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
-      this.threadService.test = [];
       list.forEach(element => {
         this.answers.push(this.setMessageObject(element.data(), element.id));
         this.threadService.test.push(this.setMessageObject(element.data(), element.id));
@@ -121,7 +114,7 @@ export class MessengerService {
       date: timeStamp,
       type: 'text',
     }
-    
+
     this.addMessage(message, messageId);
     this.content = '';
   }
@@ -132,7 +125,51 @@ export class MessengerService {
    * @param message - the sent message
    */
   async addMessage(message: any, messageId: string) {
-    await addDoc(collection(this.firestore, `chats/S7ML2AQqM2cz62qNszcY/messeges${this.checkMessageId(messageId)}`), message).catch(
+    await addDoc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges${this.checkMessageId(messageId)}`), message).catch(
+      (err) => {
+        console.error(err);
+      }
+    ).then(
+      (docRef) => {
+        console.log('Document written with ID: ', docRef?.id);
+      }
+    )
+  }
+
+
+  /**
+   * we search with the user ID, if we have already a chat with this user
+   * @param userID - the user ID
+   * @returns - return the element with this user
+   */
+  searchChat(userID: string) {
+    const messegeRef = query(collection(this.firestore, 'chats'), where('user', '==', userID))
+    return onSnapshot(messegeRef, (list) => {
+      list.forEach(element => {
+        this.messengerService.chartId = element.id
+      })
+    })
+  }
+
+
+  /**
+   * We create a user array with his id and add this to the firebase
+   * @param user - the array with all user data
+   */
+  createChat(user: any) {
+    let users = {
+      user: user.userID,
+    }
+    this.addChat(users)
+  }
+
+
+  /**
+   * We add a new chat in firebase
+   * @param users - the users array form the funtion createChat
+   */
+  async addChat(users: any) {
+    await addDoc(collection(this.firestore, `chats`), users).catch(
       (err) => {
         console.error(err);
       }
@@ -195,7 +232,7 @@ export class MessengerService {
    * @returns - returns the correct path
    */
   getSingleDocRef(messageId: string) {
-    return doc(collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges'), messageId)
+    return doc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges`), messageId)
   }
 
 

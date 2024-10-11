@@ -2,12 +2,12 @@
     <header>
         <button (click)="openDialog()">
             <img src="/assets/img/avatar.png" alt="DABubble Logo">
-            <h4>Noah Braun</h4>
+            <h4>{{ messengerService.user.username }}</h4>
         </button>
     </header>
     <div id="content">
         <div id="messages-container" #content>
-            @for (message of firebase.messages; track $index) {
+            @for (message of firebaseMessenger.messages; track $index) {
             <app-message [message]="message" [messageIndex]="$index"></app-message>
             }
             <!-- <div class="message">
@@ -39,14 +39,15 @@
             <div id="info">
                 <div>
                     <img src="/assets/img/avatar.png" alt="Profile">
-                    <h4>Noah Braun</h4>
+                    <h4>{{ messengerService.user.username}}</h4>
                 </div>
-                <p>Diese Unterhaltung findet nur zwischen <a href="">&#64;Noah Braun</a> und dir statt.</p>
+                <p>Diese Unterhaltung findet nur zwischen <a href="">&#64;{{ messengerService.user.username }}</a> und dir
+                    statt.</p>
             </div>
         </div>
         <div id="input-container">
-            <textarea [(ngModel)]="firebase.content" name="textarea"
-                placeholder="Schreibe eine Nachricht an Noah Braun" #texterea="ngModel" required></textarea>
+            <textarea [(ngModel)]="firebaseMessenger.content" name="textarea" placeholder="Schreibe eine Nachricht an Noah Braun"
+                #texterea="ngModel" required></textarea>
             <div>
                 <div id="button-container-left">
                     <button></button>
@@ -54,8 +55,8 @@
                     <button></button>
                     <button></button>
                 </div>
-                <button id="send-message-btn" (click)="firebase.createMessage('')" *ngIf="texterea.valid"><img src="/assets/icons/send.png"
-                        alt="send-icon"></button>
+                <button id="send-message-btn" (click)="firebaseMessenger.createMessage('')" *ngIf="texterea.valid"><img
+                        src="/assets/icons/send.png" alt="send-icon"></button>
             </div>
         </div>
     </div>

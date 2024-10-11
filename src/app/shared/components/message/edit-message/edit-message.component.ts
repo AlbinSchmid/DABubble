@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MessengerService } from '../../../services/firebase-services/messenger.service';
+import { FirebaseMessengerService } from '../../../services/firebase-services/firebase-messenger.service';
 import { Message } from '../../../interfaces/message';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +30,7 @@ export class EditMessageComponent {
   editMessageContent: string;
   
 
-  constructor(private firebase: MessengerService) {
+  constructor(private firebase: FirebaseMessengerService) {
     setTimeout(() => {
       this.editMessageContent = this.message.content;
     });

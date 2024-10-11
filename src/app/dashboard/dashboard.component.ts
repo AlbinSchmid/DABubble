@@ -7,8 +7,9 @@ import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { MessageComponent } from './messenger/message/message.component';
-import { ThreadService } from '../shared/services/thread.service';
+import { ThreadService } from '../shared/services/thread-service/thread.service';
+import { MessengerService } from '../shared/services/messenger-service/messenger.service';
+import { MessageComponent } from '../shared/components/message/message.component';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { ThreadService } from '../shared/services/thread.service';
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -32,7 +33,7 @@ export class DashboardComponent {
   isSideNavOpen: boolean = true;
 
 
-  constructor(public threadService: ThreadService) {
+  constructor(public threadService: ThreadService, public messengerService: MessengerService) {
 
   }
 

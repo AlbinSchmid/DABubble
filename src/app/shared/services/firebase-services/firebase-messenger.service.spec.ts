@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MessengerService } from './messenger.service';
+import { FirebaseMessengerService } from './firebase-messenger.service';
 
 describe('MessengerService', () => {
-  let service: MessengerService;
+  let service: FirebaseMessengerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MessengerService);
+    service = TestBed.inject(FirebaseMessengerService);
   });
 
   it('should be created', () => {

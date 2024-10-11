@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { ThreadService } from '../../services/thread.service';
+import { ThreadService } from '../../services/thread-service/thread.service';
 import { EditMessageComponent } from './edit-message/edit-message.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Message } from '../../interfaces/message';
-import { MessengerService } from '../../../shared/services/firebase-services/messenger.service';
+import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
 
 @Component({
   selector: 'app-message',
@@ -34,28 +34,12 @@ export class MessageComponent {
   hoveredMenu = false;
 
 
-  constructor(public firebase: MessengerService, public threadService: ThreadService) {
-    setTimeout(() => {
-      this.getAnswersArrayLength();      
-    });
-    
-    // firebase.subAnswersList(this.message.id);
-    // setTimeout(() => {
-    //   console.log(firebase.answers);
-    // }, 1000);
-    
-  }
+  constructor(public firebase: FirebaseMessengerService, public threadService: ThreadService) { }
 
 
-  async getAnswersArrayLength() {
-    await this.firebase.subAnswersList(this.message.id);
-    setTimeout(() => {
-      console.log(this.threadService.test);
-      
-    }, 100);
-  }
-
-
+  /**
+   * When we hover the variable get changing
+   */
   showOrHideMenu() {
     if (this.hoveredMenu == false) {
       this.hoveredMenu = true;
@@ -65,6 +49,9 @@ export class MessageComponent {
   }
 
 
+  /**
+   * Open the thread for answer
+   */
   openThead() {
     this.threadService.showThread = false;
     this.threadService.messageId = this.message.id;
@@ -75,6 +62,10 @@ export class MessageComponent {
   }
 
 
+  /**
+   * Close the edit window
+   * @param closeEditMessage - the boolean we got from our child component (edit-message) 
+   */
   closeEdit(closeEditMessage: boolean) {
     this.editMessage = closeEditMessage;
   }
