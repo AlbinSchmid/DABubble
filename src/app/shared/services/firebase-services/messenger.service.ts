@@ -30,7 +30,7 @@ export class MessengerService {
    * 
    * @returns Get the path of the messeges of 1 chat
    */
-  subChatsList() {
+  subChatsList(userID: string) {
     const messegeRef = collection(this.firestore, 'chats/S7ML2AQqM2cz62qNszcY/messeges')
     return onSnapshot(messegeRef, (list) => {
       this.messages = [];

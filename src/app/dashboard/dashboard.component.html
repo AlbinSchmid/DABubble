@@ -7,7 +7,7 @@
             </mat-drawer>
 
             <mat-drawer-content>
-                <app-messenger></app-messenger>
+                <app-messenger *ngIf="threadService.showMessenger"></app-messenger>
                 <app-thread *ngIf="threadService.showThread"></app-thread>
             </mat-drawer-content>
         </mat-drawer-container>

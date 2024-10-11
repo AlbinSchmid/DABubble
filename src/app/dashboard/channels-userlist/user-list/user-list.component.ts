@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { user } from '@angular/fire/auth';
+import { ThreadService } from '../../../shared/services/thread.service';
 
 @Component({
   selector: 'app-user-list',
@@ -27,7 +29,7 @@ export class UserListComponent {
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
 
-  constructor() { }
+  constructor(public threadService: ThreadService) { }
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
@@ -97,5 +99,14 @@ export class UserListComponent {
   getDMTransitionDuration(): string {
     let duration = this.userList.length * 0.60;
     return `max-height ${duration}s ease-in-out`;
+  }
+
+  showMessenger(userID: string) {
+    console.log(userID);
+    this.threadService.showMessenger = false;
+    this.threadService.userId = userID;
+    setTimeout(() => {
+      this.threadService.showMessenger = true;
+    }, 10);
   }
 }

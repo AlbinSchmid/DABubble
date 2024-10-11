@@ -13,9 +13,11 @@ export class ThreadService {
     type: '',
     id: '',
   }
+  test: Message[] = [
+  ]
   showThread = false;
   messageId: string;
-  test: Message[] = [
-
-  ]
+  
+  showMessenger = false;
+  userId: string;
 }

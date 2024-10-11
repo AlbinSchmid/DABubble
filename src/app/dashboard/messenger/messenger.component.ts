@@ -33,13 +33,14 @@ export class MessengerComponent {
   dialog = inject(MatDialog);
   hoveredMessage: number;
   hoveredMenu = false;
+  unsubChatList;
 
   constructor(public firebase: MessengerService, public threadService: ThreadService) {
-    // setTimeout(() => {
-    //   console.log(firebase.messages);
-      
-    // }, 1000);
+    this.unsubChatList = firebase.subChatsList(threadService.userId);   
+  }
 
+  ngOnDestroy() {
+    this.unsubChatList;
   }
 
 
