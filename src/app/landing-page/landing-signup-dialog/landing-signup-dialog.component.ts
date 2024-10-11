@@ -47,20 +47,33 @@ export class LandingSignupDialogComponent implements OnInit {
    
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     const rawForm = this.accountForm.getRawValue();
-  
+
     if (this.accountForm.valid) {
-      this.authService.setTempUserData({
-        userID: '',
-        email: rawForm.email,
-        username: rawForm.username,
-        password: rawForm.password,
-        avatar: '',
-        userStatus: 'on',
-        isFocus: true,
-      });
-      this.router.navigateByUrl('/avatar-picker');  
+      try {
+        const emailInUse = await this.authService.isEmailInUse(rawForm.email);
+
+        if (emailInUse) {
+          this.errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+        } else {
+          // If the email is not in use, proceed with the rest of the flow
+          this.authService.setTempUserData({
+            userID: '',
+            email: rawForm.email,
+            username: rawForm.username,
+            password: rawForm.password,
+            avatar: '',
+            userStatus: 'on',
+            isFocus: true,
+          });
+
+          this.router.navigateByUrl('/avatar-picker');
+        }
+      } catch (error) {
+        this.errorMessage = 'Error checking email. Please try again later.';
+        console.error(error);
+      }
     }
   }
 
