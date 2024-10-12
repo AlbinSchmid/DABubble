@@ -23,12 +23,15 @@ export class MessageComponent {
     content: '',
     isRead: false,
     senderId: 0,
+    senderName: '',
+    senderAvatar: '',
     date: 0,
     type: '',
     id: '',
   };
   @Input() messageIndex: number;
   @Input() reduceContent: boolean;
+  @Input() editAnswerMessage: boolean;
   authService = inject(AuthserviceService);
   hoveredMessageId: number;
   editMessageId: number;
@@ -36,7 +39,8 @@ export class MessageComponent {
   hoveredMenu = false;
 
 
-  constructor(public firebase: FirebaseMessengerService, public threadService: ThreadService) { }
+  constructor(public firebase: FirebaseMessengerService, public threadService: ThreadService) {
+  }
 
 
   /**
@@ -58,6 +62,8 @@ export class MessageComponent {
     this.threadService.showThread = false;
     this.threadService.messageId = this.message.id;
     this.threadService.answeredMessage = this.message;
+    this.threadService.senderName = this.message.senderName;
+    this.threadService.senderAvatar = this.message.senderAvatar;
     setTimeout(() => {
       this.threadService.showThread = true;
     }, 10);

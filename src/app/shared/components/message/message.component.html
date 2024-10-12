@@ -28,5 +28,5 @@
             </div>
         </button>
     </div>
-    <app-edit-message *ngIf="editMessage" [message]="message" (closeEditMessage)="closeEdit($event)"></app-edit-message>
+    <app-edit-message *ngIf="editMessage" [message]="message" (closeEditMessage)="closeEdit($event)" [editAnswerMessage]="editAnswerMessage"></app-edit-message>
 </section>

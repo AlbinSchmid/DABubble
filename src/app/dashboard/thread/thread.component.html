@@ -2,7 +2,7 @@
     <header>
         <div>
             <h4>Thread</h4>
-            <p><mark>&#64;</mark> Noah Braun</p>
+            <p><mark>&#64;</mark>{{ threadService.senderName }}</p>
         </div>
 
         <mat-icon (click)="threadService.showThread = false;">close</mat-icon>
@@ -11,17 +11,17 @@
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebaseMessenger.answers; track $index) {
-                <app-message [message]="message" [messageIndex]="$index" [reduceContent]="reduceInteraktionBtn"></app-message>
+                <app-message [message]="message" [messageIndex]="$index" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage"></app-message>
             }
             <div id="answers-info">
                 <p>{{ checkAnswerArrayLength() }}</p>
                 <div></div>
             </div>
             <div class="message">
-                <img src="/assets/img/avatar.png" alt="Profile">
+                <img src="{{ threadService.senderAvatar }}" alt="Profile">
                 <div id="message-content">
                     <div>
-                        <h6>Noah Braun</h6>
+                        <h6>{{ threadService.senderName }}</h6>
                         <p>
                             {{ threadService.answeredMessage.date| date:'H:mm' }}
                             <span>Uhr</span>

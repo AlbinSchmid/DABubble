@@ -39,6 +39,7 @@ export class UserListComponent {
 
 
   showMessenger(user: any) {
+    this.threadService.showThread = false;
     this.messengerService.user = user;
     this.messengerService.showMessenger = false;
     this.messengerService.chartId = '';
@@ -48,7 +49,6 @@ export class UserListComponent {
     setTimeout(() => {
       if (this.messengerService.chartId == '') {
         this.firebaseMessenger.createChat(user);
-        console.log('hello');
       }
       setTimeout(() => {
         this.messengerService.showMessenger = true;

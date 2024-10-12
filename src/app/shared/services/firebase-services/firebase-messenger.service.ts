@@ -5,12 +5,14 @@ import { Message } from '../../interfaces/message';
 import { ThreadService } from '../thread-service/thread.service';
 import { list } from '@angular/fire/storage';
 import { MessengerService } from '../messenger-service/messenger.service';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseMessengerService {
-  firestore: Firestore = inject(Firestore)
+  firestore: Firestore = inject(Firestore);
+  authService = inject(AuthserviceService);
   content = '';
   answerConent = '';
   messages: Message[] = [];
@@ -45,9 +47,8 @@ export class FirebaseMessengerService {
     const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.threadService.messageId}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
-      list.forEach(element => {
+      list.forEach(element => {        
         this.answers.push(this.setMessageObject(element.data(), element.id));
-        this.threadService.test.push(this.setMessageObject(element.data(), element.id));
       });
       this.answers = this.sortByDate(this.answers);
     })
@@ -64,6 +65,8 @@ export class FirebaseMessengerService {
       content: element.content || '',
       isRead: element.isRead || false,
       senderId: element.senderId || 0,
+      senderName: element.senderName || '',
+      senderAvatar: element.senderAvatar || '',
       date: new Date(element.date) || 0,
       type: element.type || '',
       id: id || '',
@@ -92,7 +95,9 @@ export class FirebaseMessengerService {
     let message = {
       content: this.answerConent,
       isRead: false,
-      senderId: 0,
+      senderId: this.authService.currentUserSig()?.userID,
+      senderName: this.authService.currentUserSig()?.username,
+      senderAvatar: this.authService.currentUserSig()?.avatar,
       date: timeStamp,
       type: 'text',
     }
@@ -110,7 +115,9 @@ export class FirebaseMessengerService {
     let message = {
       content: this.content,
       isRead: false,
-      senderId: 0,
+      senderId: this.authService.currentUserSig()?.userID,
+      senderName: this.authService.currentUserSig()?.username,
+      senderAvatar: this.authService.currentUserSig()?.avatar,
       date: timeStamp,
       type: 'text',
     }
@@ -143,7 +150,7 @@ export class FirebaseMessengerService {
    * @returns - return the element with this user
    */
   searchChat(userID: string) {
-    const messegeRef = query(collection(this.firestore, 'chats'), where('user', '==', userID))
+    const messegeRef = query(collection(this.firestore, 'chats'), where('user1', '==', userID), where('user2', '==', this.authService.currentUserSig()?.userID));
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
         this.messengerService.chartId = element.id
@@ -158,7 +165,8 @@ export class FirebaseMessengerService {
    */
   createChat(user: any) {
     let users = {
-      user: user.userID,
+      user1: user.userID,
+      user2: this.authService.currentUserSig()?.userID,
     }
     this.addChat(users)
   }
@@ -202,6 +210,16 @@ export class FirebaseMessengerService {
    */
   async updateMessage(message: any, messageId: string) {
     let ref = this.getSingleDocRef(messageId);
+    await updateDoc(ref, this.getCleanJson(message)).catch(
+      (err) => {
+        console.error(err);
+      }
+    )
+  }
+
+
+  async updateAnswer(message: any, answerId: string) {
+    let ref = doc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.threadService.messageId}/answers`), answerId);
     await updateDoc(ref, this.getCleanJson(message)).catch(
       (err) => {
         console.error(err);

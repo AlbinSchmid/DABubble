@@ -35,7 +35,6 @@ export class DetailPersonComponent {
   
   
   checkUserStatus() {
-    console.log(this.messengerService.user.userStatus);
     if (this.messengerService.user.userStatus == 'on') {
       return 'Aktiv';
     } else if (this.messengerService.user.userStatus == 'off') {

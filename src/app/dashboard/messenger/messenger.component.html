@@ -1,7 +1,7 @@
 <section>
     <header>
         <button (click)="openDialog()">
-            <img src="/assets/img/avatar.png" alt="DABubble Logo">
+            <img src="{{messengerService.user.avatar}}" alt="DABubble Logo">
             <h4>{{ messengerService.user.username }}</h4>
         </button>
     </header>
@@ -10,35 +10,13 @@
             @for (message of firebaseMessenger.messages; track $index) {
             <app-message [message]="message" [messageIndex]="$index"></app-message>
             }
-            <!-- <div class="message">
-                <img src="/assets/img/avatar.png" alt="Profile">
-                <div id="message-content">
-                    <div>
-                        <h6>Noah Braun</h6>
-                        <p>14:25 Uhr</p>
-                    </div>
-                    <div>
-                        Welche Version ist aktuell von Angular
-                    </div>
-                    <div>
-                        <a href="">2 Anworten</a>
-                        <p>Letzte Antwort 14:56</p>
-                    </div>
-                </div>
-                <div class="interaction">
-                    <button><img src="/assets/icons/check.png" alt=""></button>
-                    <button><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
-                    <button><img src="/assets/icons/add-reaction.png" alt=""></button>
-                    <button><img src="/assets/icons/comment.png" alt=""></button>
-                </div>
-            </div> -->
-            <div class="date-container">
+            <!-- <div class="date-container">
                 <div>Heute</div>
                 <div></div>
-            </div>
+            </div> -->
             <div id="info">
                 <div>
-                    <img src="/assets/img/avatar.png" alt="Profile">
+                    <img src="{{messengerService.user.avatar}}" alt="Profile">
                     <h4>{{ messengerService.user.username}}</h4>
                 </div>
                 <p>Diese Unterhaltung findet nur zwischen <a href="">&#64;{{ messengerService.user.username }}</a> und dir

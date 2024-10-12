@@ -10,6 +10,8 @@ export class ThreadService {
     content: '',
     isRead: false,
     senderId: 0,
+    senderName: '', 
+    senderAvatar: '',
     date: 0,
     type: '',
     id: '',
@@ -18,4 +20,6 @@ export class ThreadService {
   ]
   showThread = false;
   messageId: string;
+  senderName: string = '';
+  senderAvatar: string;
 }

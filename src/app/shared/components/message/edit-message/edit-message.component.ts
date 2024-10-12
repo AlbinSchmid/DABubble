@@ -4,6 +4,7 @@ import { Message } from '../../../interfaces/message';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ThreadService } from '../../../services/thread-service/thread.service';
 
 @Component({
   selector: 'app-edit-message',
@@ -21,16 +22,19 @@ export class EditMessageComponent {
     content: '',
     isRead: false,
     senderId: 0,
+    senderName: '',
+    senderAvatar: '',
     date: 0,
     type: '',
     id: '',
   };
+  @Input() editAnswerMessage: boolean;
   @Output() closeEditMessage = new EventEmitter<boolean>();
   showEdit = false;
   editMessageContent: string;
-  
 
-  constructor(private firebase: FirebaseMessengerService) {
+
+  constructor(private firebase: FirebaseMessengerService, private threadService: ThreadService) {
     setTimeout(() => {
       this.editMessageContent = this.message.content;
     });
@@ -38,13 +42,17 @@ export class EditMessageComponent {
 
 
   closeEdit() {
-   this.closeEditMessage.emit(this.showEdit);
+    this.closeEditMessage.emit(this.showEdit);
   }
 
 
-  updateMessage() {
+  checkWithMessageShouldUptade() {
     this.message.content = this.editMessageContent;
-    this.firebase.updateMessage(this.message, this.message.id)    
+    if (this.editAnswerMessage == true) {
+      this.firebase.updateAnswer(this.message, this.message.id)
+    } else {
+      this.firebase.updateMessage(this.message, this.message.id)
+    }
     this.closeEdit();
   }
 }

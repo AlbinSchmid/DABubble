@@ -40,8 +40,6 @@ export class MessengerComponent {
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
     this.unsubChatList = firebaseMessenger.subChatsList();   
-    console.log(messengerService.user.userStatus);
-    
   }
 
   ngOnDestroy() {

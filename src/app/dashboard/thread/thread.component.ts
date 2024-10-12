@@ -6,6 +6,7 @@ import { ThreadService } from '../../shared/services/thread-service/thread.servi
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from '../../shared/components/message/message.component';
+import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
 
 @Component({
   selector: 'app-thread',
@@ -23,10 +24,11 @@ import { MessageComponent } from '../../shared/components/message/message.compon
 export class ThreadComponent {
   unsubAnswerList;
   reduceInteraktionBtn = true;
+  editAnswerMessage = true;
 
 
-  constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService) {
-    this.unsubAnswerList = firebaseMessenger.subAnswersList();   
+  constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
+    this.unsubAnswerList = firebaseMessenger.subAnswersList();       
   }
   
 
