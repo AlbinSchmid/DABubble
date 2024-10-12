@@ -1,3 +1,5 @@
+@import './../../../../styles.scss';
+
 section {
     display: flex;
     flex-direction: column;
@@ -45,12 +47,10 @@ section {
                 width: 16px;
                 height: 16px;
                 border-radius: 100%;
-                background-color: #92C83E;
             }
 
             p {
                 margin: 0;
-                color: #92C83E;
                 font-size: 20px;
             }
         }

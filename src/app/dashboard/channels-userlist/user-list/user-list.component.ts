@@ -39,9 +39,9 @@ export class UserListComponent {
 
 
   showMessenger(user: any) {
+    this.messengerService.user = user;
     this.messengerService.showMessenger = false;
     this.messengerService.chartId = '';
-    this.messengerService.user = user;
     
     
     this.firebaseMessenger.searchChat(user.userID);
@@ -54,8 +54,6 @@ export class UserListComponent {
         this.messengerService.showMessenger = true;
       }, 10);
     }, 200);
-
-    
   }
 
 

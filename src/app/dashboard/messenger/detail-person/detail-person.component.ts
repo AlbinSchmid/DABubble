@@ -3,6 +3,8 @@ import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from 
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -12,7 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatDialogTitle,
     MatDialogContent,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule,
   ],
   templateUrl: './detail-person.component.html',
   styleUrl: './detail-person.component.scss'
@@ -20,8 +23,26 @@ import { MatButtonModule } from '@angular/material/button';
 export class DetailPersonComponent {
   readonly dialogRef = inject(MatDialogRef<DetailPersonComponent>);
 
+
+  constructor(public messengerService: MessengerService) {
+    
+  }
+  
+  
   closeDialog() {
     this.dialogRef.close();
+  }
+  
+  
+  checkUserStatus() {
+    console.log(this.messengerService.user.userStatus);
+    if (this.messengerService.user.userStatus == 'on') {
+      return 'Aktiv';
+    } else if (this.messengerService.user.userStatus == 'off') {
+      return 'Offline'
+    } else {
+      return 'Beschäftigt'
+    }
   }
 
 }

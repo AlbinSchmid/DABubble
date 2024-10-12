@@ -12,6 +12,7 @@ import { FirebaseMessengerService } from '../../shared/services/firebase-service
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
 import { EditMessageComponent } from '../../shared/components/message/edit-message/edit-message.component';
 import { MessageComponent } from '../../shared/components/message/message.component';
+import { AuthserviceService } from '../../landing-page/services/authservice.service';
  
 @Component({
   selector: 'app-messenger',
@@ -32,12 +33,15 @@ import { MessageComponent } from '../../shared/components/message/message.compon
 })
 export class MessengerComponent {
   dialog = inject(MatDialog);
+  authService = inject(AuthserviceService);
   hoveredMessage: number;
   hoveredMenu = false;
   unsubChatList;
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
     this.unsubChatList = firebaseMessenger.subChatsList();   
+    console.log(messengerService.user.userStatus);
+    
   }
 
   ngOnDestroy() {

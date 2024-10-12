@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { EditMessageComponent } from './edit-message/edit-message.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Message } from '../../interfaces/message';
 import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-message',
@@ -28,6 +29,7 @@ export class MessageComponent {
   };
   @Input() messageIndex: number;
   @Input() reduceContent: boolean;
+  authService = inject(AuthserviceService);
   hoveredMessageId: number;
   editMessageId: number;
   editMessage: boolean;
