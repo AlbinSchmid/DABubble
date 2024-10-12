@@ -32,6 +32,7 @@ export class EditUserComponent implements OnInit{
   avatarChanged: boolean = false;
   imgUpload= inject(UploadImageService)
   newAvatar: string;
+  originalAvatar: string;
 
   standardAvatar = ['https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
     'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar0.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208',
@@ -44,7 +45,6 @@ export class EditUserComponent implements OnInit{
   
 
   @Input() isOpenEditEditor: boolean = false;
-
   @Output() isOpenEditEditorChange = new EventEmitter<boolean>();
   
   ngOnInit() {
@@ -54,6 +54,10 @@ export class EditUserComponent implements OnInit{
         this.newAvatar = newAvatar; 
       }
     });
+    const currentUser = this.authService.currentUserSig();
+    if (currentUser?.avatar) {
+      this.originalAvatar = currentUser.avatar; 
+    }
   }
 
   
@@ -67,9 +71,11 @@ export class EditUserComponent implements OnInit{
     let menuElement = document.querySelector('.profile-menu-contain');
     if (menuElement) {
       menuElement.classList.remove('min-height');
-      this.isOpenEditEditor = false;
-      this.isOpenEditEditorChange.emit(this.isOpenEditEditor = false);
     }
+    this.newAvatar = this.originalAvatar;
+    this.imgUpload.filePreview = null; 
+    this.isOpenEditEditor = false;
+    this.isOpenEditEditorChange.emit(this.isOpenEditEditor = false);
   }
 
   changeEmail() {

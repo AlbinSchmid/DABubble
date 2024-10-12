@@ -77,8 +77,7 @@ export class AuthserviceService {
 
     return from(promise).pipe(
       catchError((error) => {
-        console.error('Login error:', error);
-        return throwError(() => new Error('Die E-Mail-Adresse oder das Passwort ist falsch.'));
+        return throwError(() => new Error('E-Mail-Adresse oder Passwort ist falsch.'));
       })
     );
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { EditUserComponent } from './edit-user/edit-user.component';
@@ -36,6 +36,8 @@ export class MenuComponent {
 
   @Input() avatarUrl:string
   
+
+  @ViewChild(EditUserComponent) editUserComponent!: EditUserComponent;
 
 
   authService = inject(AuthserviceService)
@@ -123,6 +125,12 @@ export class MenuComponent {
         });
     } else {
       console.error('No user found to update status');
+    }
+  }
+
+  onCancelProgress() {
+    if (this.editUserComponent) {
+      this.editUserComponent.cancelProcess(); // Call the method from the child
     }
   }
 }
