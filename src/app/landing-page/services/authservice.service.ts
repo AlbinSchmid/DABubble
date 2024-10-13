@@ -17,7 +17,6 @@ import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
 import { doc, Firestore, getDoc, setDoc, collection, query, where, getDocs  } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -85,22 +84,35 @@ export class AuthserviceService {
   signInWithGoogle(): Observable<void> {
     const provider = new GoogleAuthProvider();
     const promise = signInWithPopup(this.firebaseAuth, provider).then(async (result) => {
-      const defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
       const user = result.user;
-      await updateProfile(user, { photoURL: defaultAvatarURL });
   
       const userRef = doc(this.firestore, `users/${user.uid}`);
+      const userDoc = await getDoc(userRef);
+  
+      let avatarURL: string;
+      const defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
+  
+      if (userDoc.exists()) {
+        const userData = userDoc.data() as UserInterface;
+        avatarURL = userData.avatar || defaultAvatarURL;
+      } else {
+        avatarURL = defaultAvatarURL;
+      }
+  
+      await updateProfile(user, { photoURL: avatarURL });
+  
+      // Save user data to Firestore
       const userData: UserInterface = {
         userID: user.uid,
         email: user.email || '',
         username: user.displayName || '',
         password: '',
-        avatar: defaultAvatarURL, // Use the default avatar URL
+        avatar: avatarURL, 
         userStatus: 'on',
         isFocus: false,
       };
   
-      await setDoc(userRef, userData);
+      await setDoc(userRef, userData, { merge: true }); 
       this.setCurrentUser(userData);
       this.router.navigate(['/dashboard']);
     });
