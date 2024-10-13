@@ -85,46 +85,26 @@ export class AuthserviceService {
   signInWithGoogle(): Observable<void> {
     const provider = new GoogleAuthProvider();
     const promise = signInWithPopup(this.firebaseAuth, provider).then(async (result) => {
+      const defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
       const user = result.user;
-      const photoURL = user.photoURL;
-
-      if (!photoURL) {
-        console.error('No photo URL available from Google.');
-        return;
-      }
-
-      const storage = getStorage();
-      const storageRef = ref(storage, `avatars/${user.uid}.png`);
-
-      const response = await fetch(photoURL);
-      const blob = await response.blob();
-      const reader = new FileReader();
-
-      reader.readAsDataURL(blob);
-      reader.onloadend = async () => {
-        const base64data = reader.result as string;
-        await uploadString(storageRef, base64data, 'data_url');
-
-
-        const downloadURL = await getDownloadURL(storageRef);
-
-        const userRef = doc(this.firestore, `users/${user.uid}`);
-        const userData: UserInterface = {
-          userID: user.uid,
-          email: user.email || '',
-          username: user.displayName || '',
-          password: '',
-          avatar: downloadURL,
-          userStatus: 'on',
-          isFocus:false,
-
-        };
-        await setDoc(userRef, userData);
-        this.setCurrentUser(userData);
-        this.router.navigate(['/dashboard']);
+      await updateProfile(user, { photoURL: defaultAvatarURL });
+  
+      const userRef = doc(this.firestore, `users/${user.uid}`);
+      const userData: UserInterface = {
+        userID: user.uid,
+        email: user.email || '',
+        username: user.displayName || '',
+        password: '',
+        avatar: defaultAvatarURL, // Use the default avatar URL
+        userStatus: 'on',
+        isFocus: false,
       };
+  
+      await setDoc(userRef, userData);
+      this.setCurrentUser(userData);
+      this.router.navigate(['/dashboard']);
     });
-
+  
     return from(promise).pipe(
       catchError((error) => {
         console.error('Google sign-in error:', error);
