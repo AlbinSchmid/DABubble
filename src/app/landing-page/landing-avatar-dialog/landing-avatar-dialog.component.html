@@ -34,7 +34,7 @@
     </div>
 
 
-    <button mat-flat-button [disabled]="!isAvatarSelected()" (click)="onContinue()" class="primary next">Weiter</button>
+    <button mat-flat-button [disabled]="isSubmitting || !isAvatarSelected() || showSuccessMessage" (click)="onContinue()" class="primary next">Weiter</button>
   </div>
 
   

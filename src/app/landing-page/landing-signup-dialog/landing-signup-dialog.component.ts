@@ -23,14 +23,13 @@ import { AuthserviceService } from '../services/authservice.service';
   templateUrl: './landing-signup-dialog.component.html',
   styleUrl: './landing-signup-dialog.component.scss'
 })
-export class LandingSignupDialogComponent implements OnInit {
+export class LandingSignupDialogComponent {
   selectedAvatar: string = '';
   isFocused = {username: false, email: false,password: false,checkbox:false,};
   fb=inject(FormBuilder)
-
-
   authService = inject(AuthserviceService)
-  constructor(private router:Router,) { }
+  errorMessage: string | null = null;
+  constructor(private router:Router,) {}
 
 
   
@@ -41,48 +40,72 @@ export class LandingSignupDialogComponent implements OnInit {
     privacyPolicy: [false, Validators.requiredTrue],
   });
 
-  errorMessage: string | null = null;
+  
 
-  ngOnInit() {
-   
-  }
 
+  /**
+   * Handles the submission of the sign up form.
+   * If the form is valid, it checks if the email is in use.
+   * If the email is in use, it sets an error message.
+   * If the email is not in use, it sets the user data in local storage and navigates to the avatar picker.
+   * If there is an error checking if the email is in use, it sets an error message.
+   * If the form is not valid or rawForm is null, it logs a warning to the console.
+   */
   async onSubmit(): Promise<void> {
     const rawForm = this.accountForm.getRawValue();
-
-    if (this.accountForm.valid) {
+    if (this.accountForm.valid && rawForm && rawForm.email) {
       try {
         const emailInUse = await this.authService.isEmailInUse(rawForm.email);
-
         if (emailInUse) {
           this.errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
         } else {
-          // If the email is not in use, proceed with the rest of the flow
-          this.authService.setTempUserData({
-            userID: '',
-            email: rawForm.email,
-            username: rawForm.username,
-            password: rawForm.password,
-            avatar: '',
-            userStatus: 'on',
-            isFocus: true,
-          });
-
+          this.setTempUserData(rawForm);
           this.router.navigateByUrl('/avatar-picker');
         }
       } catch (error) {
         this.errorMessage = 'Error checking email. Please try again later.';
         console.error(error);
       }
+    } else {
+      console.warn('Form is not valid or rawForm is null.');
     }
   }
 
- 
+  /**
+   * Sets the temporary user data in local storage if the form data is valid.
+   * If the form data is invalid, it logs an error to the console.
+   * @param rawForm The raw form data from the sign up form.
+   */
+  setTempUserData(rawForm: any) {
+    if (rawForm && rawForm.email && rawForm.username && rawForm.password) {
+      this.authService.setTempUserData({
+        userID: '',
+        email: rawForm.email,
+        username: rawForm.username,
+        password: rawForm.password,
+        avatar: '',
+        userStatus: 'on',
+        isFocus: true,
+      });
+    } else {
+      console.error('setTempUserData: invalid form data');
+    }
+  }
 
+  /**
+   * Sets the focus state of the given input field to true.
+   * This is used to highlight the input field when the user focuses on it.
+   * @param inputType The type of the input field, either 'username', 'email', 'password', or 'checkbox'.
+   */
   onInputFocus(inputType: 'username' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = true;
   }
 
+  /**
+   * Sets the focus state of the given input field to false.
+   * This is used to unhighlight the input field when the user unfocuses it.
+   * @param inputType The type of the input field, either 'username', 'email', 'password', or 'checkbox'.
+   */
   onInputBlur(inputType: 'username' | 'email' | 'password' | 'checkbox') {
     this.isFocused[inputType] = false;
   }

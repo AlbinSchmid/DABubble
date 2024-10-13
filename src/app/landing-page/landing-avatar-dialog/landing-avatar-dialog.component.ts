@@ -32,32 +32,31 @@ export class LandingAvatarDialogComponent {
    storage = getStorage();
    imgUpload = inject(UploadImageService) 
    tempUserData = this.authService.getTempUserData();
+   isSubmitting = false;
    constructor(private router: Router) {}
 
+  /**
+   * Checks if an avatar has been selected, either by selecting a default avatar
+   * or by uploading a custom avatar.
+   * @returns {boolean} True if an avatar has been selected, false otherwise.
+   */
    isAvatarSelected(): boolean {
      return this.selectedAvatar !== this.defaultAvatar || !!this.imgUpload.filePreview;
    }
 
+  /**
+   * Registers the user if the avatar has been selected or sends a request to save the avatar and register the user if no avatar has been selected.
+   * @returns {Promise<void>}
+   */
    async onContinue() {
     const tempUserData = this.authService.getTempUserData();
-    
     if (tempUserData) {
       if (this.isAvatarSelected()) {
         try {
-          if (this.imgUpload.selectedFile) {
-            await this.imgUpload.saveAndSetUserAvatar(this.imgUpload.selectedFile, tempUserData);
-          } else {
-            tempUserData.avatar = this.selectedAvatar;
-            await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
-          }
-  
-          this.authService.clearTempUserData();
-          this.showSuccessMessage = true;
-          setTimeout(() => {
-            this.showSuccessMessage = false;
-            this.router.navigate(['/']);
-          }, 2000);
-  
+        this.isSubmitting=true
+        await this.trySending()
+         this.handleSuccess();
+         this.isSubmitting = false;
         } catch (error) {
           console.error('Error during registration:', error);
         }
@@ -67,16 +66,57 @@ export class LandingAvatarDialogComponent {
     }
   }
 
+  /**
+   * Registers the user if a custom avatar has been selected or if a default avatar
+   * has been selected. If a custom avatar has been selected, it will be saved
+   * and then used for registration. If a default avatar has been selected, it will
+   * directly be used for registration.
+   * @returns {Promise<void>}
+   */
+  async trySending(){
+    const tempUserData = this.authService.getTempUserData();
+    if (tempUserData) {
+    if (this.imgUpload.selectedFile) {
+      
+      await this.imgUpload.saveAndSetUserAvatar(this.imgUpload.selectedFile, tempUserData);
+    } else {
+      tempUserData.avatar = this.selectedAvatar;
+      await this.authService.register(tempUserData.email, tempUserData.username, tempUserData.password, tempUserData.avatar).toPromise();
+    }
+  }}
+
+  /**
+   * Handles the success of the registration process.
+   * It clears the temporary user data from the AuthService,
+   * sets the success message to true and navigates back to the root route
+   * after a 2 second delay.
+   */
+  handleSuccess() {
+    this.authService.clearTempUserData();
+    this.showSuccessMessage = true;
+    setTimeout(() => {
+      this.showSuccessMessage = false;
+      this.router.navigate(['/']);
+    }, 2000);
+  }
+
+  /**
+   * Sets the selected avatar to the given avatar URL and clears the
+   * custom avatar that has been uploaded.
+   * @param avatar The URL of the avatar to be selected.
+   */
    onSelectAvatar(avatar: string) {
     this.selectedAvatar = `${avatar}`;
     this.imgUpload.filePreview = null;
     this.imgUpload.selectedFile = null; 
    }
 
-
-
+  /**
+   * Updates the avatar of the user to the given avatar URL.
+   * @param avatarUrl The URL of the avatar to be updated.
+   */
    updateUserAvatar(avatarUrl: string) {
    this.imgUpload.updateUserAvatar(avatarUrl)
-}
+  }
 
 }
