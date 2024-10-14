@@ -43,7 +43,7 @@ export class UserListComponent {
     this.messengerService.user = user;
     this.messengerService.showMessenger = false;
     this.messengerService.chartId = '';
-    
+
     this.firebaseMessenger.searchChat(user.userID);
     setTimeout(() => {
       if (this.messengerService.chartId == '') {
@@ -76,9 +76,9 @@ export class UserListComponent {
     }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => this.toggleDirectMessages(), 1000);
-  }
+  // ngAfterViewInit() {
+  //   setTimeout(() => this.toggleDirectMessages(), 1000);
+  // }
 
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;

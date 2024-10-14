@@ -1,6 +1,6 @@
 <div>
     <div class="tab-header">
-        <div (click)="toggleChannels()" class="arrow-tab-title-contain">
+        <div (click)="this.channelAnimationService.toggleChannels()" class="arrow-tab-title-contain">
             <div>
                 <mat-icon id="channelIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
             </div>
@@ -10,20 +10,20 @@
             </div>
         </div>
         <div>
-            <mat-icon class="add-channel-icon" fontIcon="add"></mat-icon>
+            <mat-icon (click)="openDialog()" class="add-channel-icon" fontIcon="add"></mat-icon>
         </div>
     </div>
 </div>
 <div class="btns-contain max-height-contain"
-    [ngStyle]="{'max-height': isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
+    [ngStyle]="{'max-height': this.channelAnimationService.isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
     <button *ngFor="let channel of channelList; let i = index" (click)="focusChannel(channel)"
         [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
-        [ngClass]="{'focus-btn': channel.isFocus,'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
+        [ngClass]="{'focus-btn': channel.isFocus,'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
         <mat-icon fontIcon="tag"></mat-icon>{{ channel.title }}
     </button>
-    <button (click)="addChannel()" class="add-channel-btn"
+    <button (click)="openDialog()" class="add-channel-btn"
         [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"
-        [ngClass]="{'blob-in': isChannelOpen, 'blob-out': !isChannelOpen}">
+        [ngClass]="{'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
         <mat-icon class="add-channel-icon" fontIcon="maps_ugc"></mat-icon>Channel hinzufügen
     </button>
 </div>
