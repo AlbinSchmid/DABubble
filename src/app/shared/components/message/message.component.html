@@ -1,9 +1,9 @@
-<section class="message-from-you" (mouseenter)="hoveredMessageId = messageIndex"
+<section class="message" [ngClass]="{'message-from-you': this.message.senderId == this.authService.currentUserSig()?.userID}" (mouseenter)="hoveredMessageId = messageIndex"
     (mouseleave)="hoveredMessageId = -1; hoveredMenu = false;">
-    <img src="{{authService.currentUserSig()?.avatar}}" alt="Profile">
+    <img src="{{message.senderAvatar}}" alt="Profile">
     <div id="message-content" *ngIf="!editMessage">
         <div>
-            <h6>{{ authService.currentUserSig()?.username }}</h6>
+            <h6>{{ message.senderName }}</h6>
             <p>{{ message.date | date:'H:mm' }}
                 <span>Uhr</span>
             </p>

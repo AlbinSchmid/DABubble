@@ -6,6 +6,7 @@ import { ThreadService } from '../thread-service/thread.service';
 import { list } from '@angular/fire/storage';
 import { MessengerService } from '../messenger-service/messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class FirebaseMessengerService {
   answerConent = '';
   messages: Message[] = [];
   answers: Message[] = [];
+  tryOtherOption: boolean;
 
 
   constructor(private threadService: ThreadService, private messengerService: MessengerService ) { }
@@ -150,11 +152,19 @@ export class FirebaseMessengerService {
    * @returns - return the element with this user
    */
   searchChat(userID: string) {
-    const messegeRef = query(collection(this.firestore, 'chats'), where('user1', '==', userID), where('user2', '==', this.authService.currentUserSig()?.userID));
+    let messegeRef = query(collection(this.firestore, 'chats'), where('user1', '==', userID), where('user2', '==', this.authService.currentUserSig()?.userID));
+    if (this.tryOtherOption) {
+      messegeRef = query(collection(this.firestore, 'chats'), where('user2', '==', userID), where('user1', '==', this.authService.currentUserSig()?.userID));
+      this.tryOtherOption = false;
+    }
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
         this.messengerService.chartId = element.id
       })
+      if (this.messengerService.chartId == '') {
+        this.tryOtherOption = true;
+        this.searchChat(userID)
+      }
     })
   }
 

@@ -1,7 +1,7 @@
 export interface Message {
     content: string,
     isRead: boolean,
-    senderId: number,
+    senderId: string,
     senderName: string,
     senderAvatar: string,
     date: any,

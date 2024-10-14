@@ -44,7 +44,6 @@ export class UserListComponent {
     this.messengerService.showMessenger = false;
     this.messengerService.chartId = '';
     
-    
     this.firebaseMessenger.searchChat(user.userID);
     setTimeout(() => {
       if (this.messengerService.chartId == '') {
@@ -53,7 +52,7 @@ export class UserListComponent {
       setTimeout(() => {
         this.messengerService.showMessenger = true;
       }, 10);
-    }, 200);
+    }, 500);
   }
 
 

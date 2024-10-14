@@ -22,7 +22,7 @@ export class MessageComponent {
   @Input() message: Message = {
     content: '',
     isRead: false,
-    senderId: 0,
+    senderId: '',
     senderName: '',
     senderAvatar: '',
     date: 0,
@@ -39,8 +39,7 @@ export class MessageComponent {
   hoveredMenu = false;
 
 
-  constructor(public firebase: FirebaseMessengerService, public threadService: ThreadService) {
-  }
+  constructor(public firebase: FirebaseMessengerService, public threadService: ThreadService) { }
 
 
   /**

@@ -9,7 +9,7 @@ export class ThreadService {
   answeredMessage: Message = {
     content: '',
     isRead: false,
-    senderId: 0,
+    senderId:'',
     senderName: '', 
     senderAvatar: '',
     date: 0,
