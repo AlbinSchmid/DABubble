@@ -15,7 +15,7 @@ export class FirebaseMessengerService {
   firestore: Firestore = inject(Firestore);
   authService = inject(AuthserviceService);
   content = '';
-  answerConent = '';
+  answerContent = '';
   messages: Message[] = [];
   answers: Message[] = [];
   tryOtherOption: boolean;
@@ -96,7 +96,7 @@ export class FirebaseMessengerService {
     let date = new Date();
     let timeStamp = date.getTime();
     let message = {
-      content: this.answerConent,
+      content: this.answerContent,
       isRead: false,
       senderId: this.authService.currentUserSig()?.userID,
       senderName: this.authService.currentUserSig()?.username,
@@ -105,7 +105,7 @@ export class FirebaseMessengerService {
       type: 'text',
     }
     this.addMessage(message, messageId);
-    this.answerConent = '';
+    this.answerContent = '';
   }
 
 

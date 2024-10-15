@@ -27,7 +27,6 @@ export class ThreadComponent {
   unsubAnswerList;
   reduceInteraktionBtn = true;
   editAnswerMessage = true;
-  textareaPlaceholde = 'Antworten...';
   messengerOrThread: 'thread';
   
   

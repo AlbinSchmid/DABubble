@@ -3,6 +3,7 @@ import { FirebaseMessengerService } from '../../services/firebase-services/fireb
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ThreadService } from '../../services/thread-service/thread.service';
 
 @Component({
   selector: 'app-textarea',
@@ -16,40 +17,27 @@ import { FormsModule } from '@angular/forms';
 })
 export class TextareaComponent {
   @Output() emojiSelected = new EventEmitter<string>();
-  @Input() textareaPlaceholder: string;
   @Input() messengerOrThread: any;
   normalEmojis: string[] = [
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
-    '😋', '😎', '😍', '😗', '😙', '🙂', '🤗', '🤔', '😐', '😑', 
+    '😋', '😎', '😍', '😗', '😙', '🙂', '🤗', '🤔', '😐', '😑',
     '😶', '🙄', '😏', '😣', '😥', '😮', '🤐', '😯', '😪', '😫',
-    '😴', '😌', '😜', '🤤', '😛', '🤑', '😲', '🙃', '😷', '🤒', 
+    '😴', '😌', '😜', '🤤', '😛', '🤑', '😲', '🙃', '😷', '🤒',
     '🤕', '🤧', '😵', '🤯', '😤', '😭', '😢', '😨'
   ];
   workEmojis: string[] = [
     '💼', '📁', '📅', '🖥️', '📊', '📈', '📉', '📝', '💻', '🖱️',
-    '📋', '📌', '🖇️', '📄', '✏️', '📤', '📥', '📧', '📞', '📡', 
+    '📋', '📌', '🖇️', '📄', '✏️', '📤', '📥', '📧', '📞', '📡',
     '🔒', '🔓', '🗑️', '🧾', '📆', '🏢', '🏛️'
   ];
   activeBoard: string = 'normal';
   selectedEmoji: string | null = null;
   showEmoijs = false;
-  ngModelBinding: any;
 
 
-  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
-    this.messengerOrThread = firebaseMessenger.content
-      console.log(this.messengerOrThread);
-      
-  }
+  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) { }
 
 
-
-  changeNgModelBinding() {
-    this.ngModelBinding = this.firebaseMessenger.content
-    console.log(this.ngModelBinding);
-    
-  }
-  
   /**
    * We select the emoji and put it in the textarea
    * @param emoji - which emoij is choosed
@@ -57,13 +45,13 @@ export class TextareaComponent {
    */
   selectEmoji(emoji: string, inputField: HTMLTextAreaElement): void {
     this.selectedEmoji = emoji;
-    
     const start = inputField.selectionStart ?? 0;
     const end = inputField.selectionEnd ?? 0;
-
-    this.firebaseMessenger.content = this.firebaseMessenger.content.slice(0, start) + emoji + this.firebaseMessenger.content.slice(end);
-    
-    
+    if (this.messengerOrThread == 'messenger') {
+      this.firebaseMessenger.content = this.firebaseMessenger.content.slice(0, start) + emoji + this.firebaseMessenger.content.slice(end);
+    } else {
+      this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent.slice(0, start) + emoji + this.firebaseMessenger.answerContent.slice(end);
+    }
     setTimeout(() => {
       inputField.selectionStart = inputField.selectionEnd = start + emoji.length;
       inputField.focus();

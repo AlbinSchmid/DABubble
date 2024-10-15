@@ -40,13 +40,11 @@ export class MessengerComponent {
   hoveredMenu = false;
   unsubChatList;
   dateCount = 0;
-  textareaPlaceholder: string;
-  messengerOrThread: any;
+  messengerOrThread = 'messenger';
   
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService, public datePipe: DatePipe) {
     this.unsubChatList = firebaseMessenger.subChatsList();   
-    this.textareaPlaceholder = `Schreibe eine Nachricht an ${this.messengerService.user.username}`;
   }
   
 
