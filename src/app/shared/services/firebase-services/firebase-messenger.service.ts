@@ -19,6 +19,7 @@ export class FirebaseMessengerService {
   messages: Message[] = [];
   answers: Message[] = [];
   tryOtherOption: boolean;
+  messageOrThread: string;
 
 
   constructor(private threadService: ThreadService, private messengerService: MessengerService ) { }
