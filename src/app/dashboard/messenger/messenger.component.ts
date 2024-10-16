@@ -45,6 +45,9 @@ export class MessengerComponent {
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService, public datePipe: DatePipe) {
     this.unsubChatList = firebaseMessenger.subChatsList();   
+    console.log(messengerService.showMessenger);
+    console.log(threadService.showThread);
+    
   }
   
 

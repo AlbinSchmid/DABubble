@@ -7,6 +7,8 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
 import { UploadImageService } from '../../../shared/services/upload-image.service';
 import { Firestore } from '@angular/fire/firestore';
 import { collection, doc, updateDoc } from '@firebase/firestore';
+import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
+import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 
 @Component({
   selector: 'app-menu',
@@ -43,6 +45,13 @@ export class MenuComponent {
   authService = inject(AuthserviceService)
   imgUpload = inject(UploadImageService)
   firestore = inject(Firestore)
+  messengerService = inject(MessengerService)
+  threadService = inject(ThreadService)
+
+  closeThreadAndMessenger() {
+    this.messengerService.showMessenger = false;
+    this.threadService.showThread = false;
+  }
 
   toggleProfileMenu(e: Event): void {
     e.stopPropagation();
