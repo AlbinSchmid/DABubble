@@ -39,9 +39,9 @@ export class UserListComponent {
 
 
   showMessenger(user: any) {
+    this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
     this.messengerService.user = user;
-    this.messengerService.showMessenger = false;
     this.messengerService.chartId = '';
 
     this.firebaseMessenger.searchChat(user.userID);

@@ -7,6 +7,7 @@ import { list } from '@angular/fire/storage';
 import { MessengerService } from '../messenger-service/messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { user } from '@angular/fire/auth';
+import { ReactionInterface } from '../../interfaces/reaction-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,13 @@ export class FirebaseMessengerService {
   authService = inject(AuthserviceService);
   content = '';
   answerContent = '';
+  reaktionContent = '';
   messages: Message[] = [];
   answers: Message[] = [];
+  reactions: ReactionInterface[] = [];
   tryOtherOption: boolean;
   messageOrThread: string;
+
 
 
   constructor(private threadService: ThreadService, private messengerService: MessengerService ) { }
@@ -58,6 +62,33 @@ export class FirebaseMessengerService {
   }
 
 
+  subReactionList() {
+      console.log(this.messengerService.messageId);
+      
+      const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.messengerService.messageId}/reactions`);
+      return onSnapshot(messegeRef, (list) => {
+        this.reactions = [];
+        list.forEach(element => {        
+          console.log(messegeRef);
+          
+          this.reactions.push(this.setRectionObject(element.data(), element.id));
+        });
+        console.log(this.reactions);
+        
+      })
+  }
+
+
+  setRectionObject(element: any, id: string) {
+    return {
+      id: id || '',
+      content: element.content || '',
+      senderIDs:  element.senderIDs || '',
+      senderNames: element.senderNames || '',
+    }
+  }
+
+
   /**
    * We check if nothing is undefinend.
    * @param element - is the array in the Firebase where the message are saved
@@ -86,6 +117,21 @@ export class FirebaseMessengerService {
     return messages.sort((b, a) => {
       return a.date.getTime() - b.date.getTime();
     });
+  }
+
+
+  createReaktion(messageId: string) {
+    let reaction = {
+      content: this.reaktionContent,
+      senderIDs: [
+        this.authService.currentUserSig()?.userID,
+      ],
+      senderNames: [
+        this.authService.currentUserSig()?.username,
+      ],
+    }
+
+    this.addReaction(messageId, reaction)
   }
 
 
@@ -136,6 +182,19 @@ export class FirebaseMessengerService {
    */
   async addMessage(message: any, messageId: string) {
     await addDoc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges${this.checkMessageId(messageId)}`), message).catch(
+      (err) => {
+        console.error(err);
+      }
+    ).then(
+      (docRef) => {
+        console.log('Document written with ID: ', docRef?.id);
+      }
+    )
+  }
+
+
+  async addReaction(messageId: string, reaction: any) {  
+    await addDoc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageId}/reactions`), reaction).catch(
       (err) => {
         console.error(err);
       }

@@ -1,0 +1,19 @@
+section {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    div {
+        background-color: white;
+        display: inline;
+        justify-content: center;
+        align-items: center;
+        border-radius: 25px;
+        border: 1px solid #ADB0D9;
+        padding: 2px 4px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

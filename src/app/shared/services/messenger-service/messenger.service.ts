@@ -8,6 +8,7 @@ export class MessengerService {
   showMessenger = false;
   userId: string;
   chartId = '';
+  messageId = '';
   user: UserInterface = {
     userID: '',
     password: '',

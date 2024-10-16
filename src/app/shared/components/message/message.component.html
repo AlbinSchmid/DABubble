@@ -1,6 +1,6 @@
-<section class="message" [ngClass]="{'message-from-you': this.message.senderId == this.authService.currentUserSig()?.userID}" (mouseenter)="hoveredMessageId = messageIndex"
-    (mouseleave)="hoveredMessageId = -1; hoveredMenu = false;">
-    <img src="{{message.senderAvatar}}" alt="Profile">
+<section class="message" [ngClass]="{'message-from-you': this.message.senderId == this.authService.currentUserSig()?.userID, 'z-index': this.showEmojiBoard}" (mouseenter)="hoveredMessageId = messageIndex"
+    (mouseleave)="hoveredMessageId = -1; hoveredMenu = false; closeEmojiBoard()">
+    <img src="{{message.senderAvatar}}" alt="Profile" id="img-avatar">
     <div id="message-content" *ngIf="!editMessage">
         <div>
             <h6>{{ message.senderName }}</h6>
@@ -11,6 +11,7 @@
         <div>
             {{ message.content }}
         </div>
+        <app-emojis-reaktion [messageID]="message.id" ></app-emojis-reaktion>
         <div *ngIf="!reduceContent">
             <a (click)="openThead()">1</a>
             <p>Letzte Antwort 14:56</p>
@@ -19,7 +20,7 @@
     <div class="interaction" *ngIf="hoveredMessageId == messageIndex && !editMessage">
         <button *ngIf="!reduceContent"><img src="/assets/icons/check.png" alt=""></button>
         <button *ngIf="!reduceContent"><img src="/assets/icons/emoij-hands-up.png" alt=""></button>
-        <button><mat-icon>add_reaction</mat-icon></button>
+        <button (click)="openEmojiBoard()"><mat-icon>add_reaction</mat-icon></button>
         <button *ngIf="!reduceContent" (click)="openThead()"><img src="/assets/icons/comment.png" alt=""></button>
         <button id="intercation-more-btn" (click)="showOrHideMenu()">
             <mat-icon>more_vert</mat-icon>
@@ -29,4 +30,5 @@
         </button>
     </div>
     <app-edit-message *ngIf="editMessage" [message]="message" (closeEditMessage)="closeEdit($event)" [editAnswerMessage]="editAnswerMessage"></app-edit-message>
+    <app-emoji-board [binding]="firebaseMessenger.reaktionContent" [showEmojis]="showEmojiBoard" [message]="message" (mouseleave)="openEmojiBoard()" cdkDrag></app-emoji-board>
 </section>
