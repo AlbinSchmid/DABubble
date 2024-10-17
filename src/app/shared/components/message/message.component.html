@@ -12,7 +12,7 @@
             {{ message.content }}
         </div>
         <app-emojis-reaktion *ngIf="messengerService.showReactions" [messageID]="message.id"></app-emojis-reaktion>
-        <div *ngIf="!reduceContent">
+        <div *ngIf="!reduceContent" id="answer-container">
             <a (click)="openThead()">1</a>
             <p>Letzte Antwort 14:56</p>
         </div>

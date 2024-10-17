@@ -1,6 +1,6 @@
 <section>
     @if (!sourceThread) {
-    <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea
+    <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea pattern="^[\s\S]*\S[\s\S]*$"
         placeholder='Schreibe eine Nachricht an {{ messengerService.user.username }}' #texterea="ngModel"
         required></textarea>
     <div id="interaction">
@@ -16,7 +16,7 @@
     <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     } @else {
     <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textarea placeholder='Antworten...'
-        #texterea="ngModel" required></textarea>
+        #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
     <div id="interaction">
         <div id="button-container-left">
             <button></button>

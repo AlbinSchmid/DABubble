@@ -1,11 +1,11 @@
 <section>
-    <textarea [(ngModel)]="messengerService.editMessageContent" name="textareaEdit" id="" #textareaEdit>sadfsadfsd</textarea>
+    <textarea [(ngModel)]="messengerService.editMessageContent" name="textareaEdit" id="" #textareaThread pattern="^[\s\S]*\S[\s\S]*$" required="" #textarea="ngModel">sadfsadfsd</textarea>
     <div>
         <mat-icon (click)="closeOrOpenEmojisBoard()">sentiment_satisfied</mat-icon>
         <div>
             <button mat-stroked-button (click)="closeEdit()">Abbrechen</button>
-            <button mat-flat-button (click)="checkWithMessageShouldUptade()">Speichern</button>
+            <button mat-flat-button (click)="checkWithMessageShouldUptade()" [disabled]="!textarea.valid">Speichern</button>
         </div>
     </div>
-    <app-emoji-board *ngIf="showEmojiBoard" [ngStyle]="{'left.px': sourceThread ? 20 : 160}" (callFunction)="closeOrOpenEmojisBoard()" [binding]="textareaEdit"></app-emoji-board>
+    <app-emoji-board *ngIf="showEmojiBoard" [ngStyle]="{'left.px': sourceThread ? 20 : 160}" (callFunction)="closeOrOpenEmojisBoard()" [binding]="textareaThread"></app-emoji-board>
 </section>
