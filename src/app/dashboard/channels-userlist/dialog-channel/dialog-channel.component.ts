@@ -38,7 +38,7 @@ export class DialogChannelComponent {
 
 
   constructor() {
-    this.showAddMembersDialog = true;
+    // this.showAddMembersDialog = true;
   }
 
   onTitleChanged(newTitle: string) {
