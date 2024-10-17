@@ -38,7 +38,7 @@ export class MessengerComponent {
   authService = inject(AuthserviceService);
   hoveredMessage: number;
   hoveredMenu = false;
-  messengerOrThread = 'messenger';
+  sourceThread = false;
   dateCount = 0;
   unsubChatList;
 

@@ -2,6 +2,7 @@ app-edit-message {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    z-index: 10;
 }
 
 
@@ -12,8 +13,7 @@ app-edit-message {
 
 app-emoji-board {
     position: absolute;
-    bottom: 80px;
-    left: 240px;
+    bottom: -20px;
 }
 
 

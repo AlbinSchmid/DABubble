@@ -18,21 +18,22 @@ import { EmojiBoardComponent } from '../emoji-board/emoji-board.component';
   styleUrl: './textarea.component.scss'
 })
 export class TextareaComponent {
-  @Input() messengerOrThread: any;
-  showEmojis = false;
+  @Input() sourceThread: boolean;
+  showEmojiBoard = false;
 
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) { }
-
-
+  
+  
   /**
    * Open or close the emoji board.
-   */
-  openEmoijs() {
-    if (this.showEmojis == false) {
-      this.showEmojis = true;
+  */
+ openOrCloseEmojiBoard() {
+    console.log(this.showEmojiBoard);
+    if (this.showEmojiBoard == false) {
+      this.showEmojiBoard = true;
     } else {
-      this.showEmojis = false;
+      this.showEmojiBoard = false;
     }
   }
 }

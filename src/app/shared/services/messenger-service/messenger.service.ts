@@ -5,6 +5,7 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
   providedIn: 'root'
 })
 export class MessengerService {
+  editMessageContent: string;
   showMessenger = false;
   userId: string;
   chartId = '';

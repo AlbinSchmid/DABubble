@@ -1,10 +1,11 @@
 <section>
-    <textarea [(ngModel)]="editMessageContent" name="" id="">sadfsadfsd</textarea>
+    <textarea [(ngModel)]="messengerService.editMessageContent" name="textareaEdit" id="" #textareaEdit>sadfsadfsd</textarea>
     <div>
-        <mat-icon>sentiment_satisfied</mat-icon>
+        <mat-icon (click)="closeOrOpenEmojisBoard()">sentiment_satisfied</mat-icon>
         <div>
             <button mat-stroked-button (click)="closeEdit()">Abbrechen</button>
             <button mat-flat-button (click)="checkWithMessageShouldUptade()">Speichern</button>
         </div>
     </div>
+    <app-emoji-board *ngIf="showEmojiBoard" [ngStyle]="{'left.px': sourceThread ? 20 : 160}" (callFunction)="closeOrOpenEmojisBoard()" [binding]="textareaEdit"></app-emoji-board>
 </section>

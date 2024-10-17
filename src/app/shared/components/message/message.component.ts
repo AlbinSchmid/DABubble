@@ -8,7 +8,6 @@ import { FirebaseMessengerService } from '../../services/firebase-services/fireb
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { EmojisReaktionComponent } from '../emojis-reaktion/emojis-reaktion.component';
 import { EmojiBoardComponent } from '../emoji-board/emoji-board.component';
-import { CdkDrag } from '@angular/cdk/drag-drop';
 import { FormsModule } from '@angular/forms';
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 
@@ -21,13 +20,13 @@ import { MessengerService } from '../../services/messenger-service/messenger.ser
     MatIconModule,
     EmojisReaktionComponent,
     EmojiBoardComponent,
-    CdkDrag,
     FormsModule,
   ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
 })
 export class MessageComponent {
+  authService = inject(AuthserviceService);
   @Input() message: Message = {
     content: '',
     isRead: false,
@@ -41,16 +40,13 @@ export class MessageComponent {
   @Input() messageIndex: number;
   @Input() reduceContent: boolean;
   @Input() editAnswerMessage: boolean;
-  authService = inject(AuthserviceService);
+  @Input() sourceThread: boolean;
+  hoveredMenu = false;
+  showEmojiBoard = false;
   hoveredMessageId: number;
   editMessageId: number;
   editMessage: boolean;
-  hoveredMenu = false;
-  showEmojiBoard = false;
   unsubReaktionList: any;
- 
-
-
 
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
@@ -67,7 +63,19 @@ export class MessageComponent {
   }
 
 
+  getBoolean(showEmoijBoard: boolean) {
+    this.showEmojiBoard = showEmoijBoard;
+    this.openOrCloseEmojiBoard();
+  }
 
+
+  openOrCloseEmojiBoard() {
+    if (this.showEmojiBoard == false) {
+      this.showEmojiBoard = true;
+    } else {
+      this.showEmojiBoard = false;
+    }
+  }
 
 
   /**
@@ -96,14 +104,6 @@ export class MessageComponent {
     }, 10);
   }
 
-
-  openEmojiBoard() {
-    if (this.showEmojiBoard == false) {
-      this.showEmojiBoard = true;
-    } else {
-      this.showEmojiBoard = false;
-    }
-  }
 
   closeEmojiBoard() {
     this.showEmojiBoard = false;

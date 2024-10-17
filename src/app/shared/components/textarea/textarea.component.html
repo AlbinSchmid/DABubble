@@ -1,5 +1,5 @@
 <section>
-    @if (messengerOrThread == 'messenger') {
+    @if (!sourceThread) {
     <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea
         placeholder='Schreibe eine Nachricht an {{ messengerService.user.username }}' #texterea="ngModel"
         required></textarea>
@@ -7,13 +7,13 @@
         <div id="button-container-left">
             <button></button>
             <div></div>
-            <button (click)="openEmoijs()"></button>
+            <button (click)="openOrCloseEmojiBoard()"></button>
             <button></button>
         </div>
         <button id="send-message-btn" (click)="firebaseMessenger.createMessage('')" *ngIf="texterea.valid"><img
                 src="/assets/icons/send.png" alt="send-icon"></button>
     </div>
-    <app-emoji-board [binding]="textarea" [showEmojis]="showEmojis"></app-emoji-board>
+    <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     } @else {
     <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textarea placeholder='Antworten...'
         #texterea="ngModel" required></textarea>
@@ -21,12 +21,12 @@
         <div id="button-container-left">
             <button></button>
             <div></div>
-            <button (click)="openEmoijs()"></button>
+            <button (click)="openOrCloseEmojiBoard()"></button>
             <button></button>
         </div>
         <button id="send-message-btn" (click)="firebaseMessenger.createAnswer(threadService.messageId)"
             *ngIf="texterea.valid"><img src="/assets/icons/send.png" alt="send-icon"></button>
     </div>
-    <app-emoji-board [binding]="textarea" [showEmojis]="showEmojis"></app-emoji-board>
+    <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     }
 </section>

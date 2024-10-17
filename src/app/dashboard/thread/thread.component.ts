@@ -27,7 +27,7 @@ export class ThreadComponent {
   unsubAnswerList;
   reduceInteraktionBtn = true;
   editAnswerMessage = true;
-  messengerOrThread: 'thread';
+  sourceThread = true;
   
   
   

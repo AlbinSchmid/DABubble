@@ -15,8 +15,6 @@ import { Message } from '../../interfaces/message';
   styleUrl: './emoji-board.component.scss'
 })
 export class EmojiBoardComponent {
-  @Input() binding: any;
-  @Input() showEmojis: boolean;
   @Input() message: Message = {
     content: '',
     isRead: false,
@@ -27,6 +25,8 @@ export class EmojiBoardComponent {
     type: '',
     id: '',
   }
+  @Input() binding: any;
+  @Output() callFunction = new EventEmitter<any>();
   normalEmojis: string[] = [
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
     '😋', '😎', '😍', '😗', '😙', '🙂', '🤗', '🤔', '😐', '😑',
@@ -43,7 +43,7 @@ export class EmojiBoardComponent {
   selectedEmoji: string | null = null;
 
 
-  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) {     
+  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) {
   }
 
 
@@ -53,11 +53,21 @@ export class EmojiBoardComponent {
    * @param inputField - the textarea that we put the emoji in
    */
   selectEmoji(emoji: string, inputField: HTMLTextAreaElement): void {
-
-    
     this.selectedEmoji = emoji;
     const start = inputField.selectionStart ?? 0;
     const end = inputField.selectionEnd ?? 0;
+    this.controllWhichBinding(start, emoji, end)
+    if (this.binding.name == 'textareaMessenger' || this.binding.name == 'textareaThread') {
+      setTimeout(() => {
+        inputField.selectionStart = inputField.selectionEnd = start + emoji.length;
+        inputField.focus();
+      }, 0);
+    }
+    this.callFunction.emit();
+  }
+
+
+  controllWhichBinding(start: number, emoji: string, end: number) {
     if (this.binding.name == 'textareaMessenger') {
       this.firebaseMessenger.content = this.firebaseMessenger.content.slice(0, start) + emoji + this.firebaseMessenger.content.slice(end);
     } if (this.binding.name == 'textareaThread') {
@@ -66,13 +76,8 @@ export class EmojiBoardComponent {
       this.firebaseMessenger.reaktionContent = '';
       this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
       this.firebaseMessenger.createReaktion(this.message.id);
-    }
-
-    if (this.binding.name == 'textareaMessenger' || this.binding.name == 'textareaThread') {
-      setTimeout(() => {
-        inputField.selectionStart = inputField.selectionEnd = start + emoji.length;
-        inputField.focus();
-      }, 0);
+    } if (this.binding.name == 'textareaEdit') {
+      this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);
     }
   }
 
@@ -83,10 +88,5 @@ export class EmojiBoardComponent {
    */
   switchBoard(board: string): void {
     this.activeBoard = board;
-  }
-
-
-  closeEmojis() {
-    this.showEmojis = false;
   }
 }
