@@ -47,13 +47,26 @@ export class MessageComponent {
   editMessage: boolean;
   hoveredMenu = false;
   showEmojiBoard = false;
-  
+  unsubReaktionList: any;
+ 
+
 
 
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
-
+    setTimeout(() => {
+      messengerService.messageId = this.message.id
+      this.unsubReaktionList = firebaseMessenger.subReactionList();
+      console.log('messageID is', messengerService.messageId);
+    },);
   }
+
+
+  ngOnDestroy() {
+    this.unsubReaktionList;
+  }
+
+
 
 
 

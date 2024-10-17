@@ -9,6 +9,7 @@ export class MessengerService {
   userId: string;
   chartId = '';
   messageId = '';
+  showReactions = false;
   user: UserInterface = {
     userID: '',
     password: '',

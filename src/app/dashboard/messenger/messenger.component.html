@@ -8,7 +8,6 @@
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebaseMessenger.messages; track $index) {
-                {{ test(message.id) }}
             <app-message [message]="message" [messageIndex]="$index"></app-message>
             <!-- <div class="date-container" *ngIf="dateCount == 0">
                 <div>{{ checkDate(message.date) }}</div>

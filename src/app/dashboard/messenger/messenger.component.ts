@@ -46,12 +46,7 @@ export class MessengerComponent {
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService, public datePipe: DatePipe) {
     this.unsubChatList = firebaseMessenger.subChatsList();
   }
-
-
-  test(messageID: string) {
-    this.messengerService.messageId = messageID;
-  }
-
+  
 
   checkDate(messageDate: Date) {
     const formatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'short' });

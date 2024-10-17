@@ -26,7 +26,7 @@ export class FirebaseMessengerService {
 
 
 
-  constructor(private threadService: ThreadService, private messengerService: MessengerService ) { }
+  constructor(private threadService: ThreadService, private messengerService: MessengerService) { }
 
 
   /**
@@ -54,7 +54,7 @@ export class FirebaseMessengerService {
     const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.threadService.messageId}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
-      list.forEach(element => {        
+      list.forEach(element => {
         this.answers.push(this.setMessageObject(element.data(), element.id));
       });
       this.answers = this.sortByDate(this.answers);
@@ -63,19 +63,17 @@ export class FirebaseMessengerService {
 
 
   subReactionList() {
-      console.log(this.messengerService.messageId);
-      
-      const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.messengerService.messageId}/reactions`);
-      return onSnapshot(messegeRef, (list) => {
-        this.reactions = [];
-        list.forEach(element => {        
-          console.log(messegeRef);
-          
-          this.reactions.push(this.setRectionObject(element.data(), element.id));
-        });
-        console.log(this.reactions);
-        
-      })
+    this.messengerService.showReactions = false;
+    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.messengerService.messageId}/reactions`);
+    return onSnapshot(messegeRef, (list) => {
+      this.reactions = [];
+      list.forEach(element => {
+        this.reactions.push(this.setRectionObject(element.data(), element.id));
+        this.messengerService.showReactions = true;
+
+      });
+      console.log('Array is', this.reactions);
+    })
   }
 
 
@@ -83,7 +81,7 @@ export class FirebaseMessengerService {
     return {
       id: id || '',
       content: element.content || '',
-      senderIDs:  element.senderIDs || '',
+      senderIDs: element.senderIDs || '',
       senderNames: element.senderNames || '',
     }
   }
@@ -193,7 +191,7 @@ export class FirebaseMessengerService {
   }
 
 
-  async addReaction(messageId: string, reaction: any) {  
+  async addReaction(messageId: string, reaction: any) {
     await addDoc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageId}/reactions`), reaction).catch(
       (err) => {
         console.error(err);
