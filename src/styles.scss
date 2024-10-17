@@ -29,13 +29,16 @@ html {
 }
 
 button {
-    // overflow: hidden !important;
-    // font-size: 18px !important;
-    // font-weight: 700 !important;
-    // line-height: 24.55px !important;
-    transition: background-color 140ms ease, color 140ms ease !important;
-    // min-width: 116px !important;
-    // min-height: 49px !important;
+
+    &.default {
+        overflow: hidden !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        line-height: 24.55px !important;
+        transition: background-color 140ms ease, color 140ms ease !important;
+        min-width: 116px !important;
+        min-height: 49px !important;
+    }
 
     &.primary {
         color: white !important;
