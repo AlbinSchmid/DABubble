@@ -1,0 +1,57 @@
+@use './../title-description/title-description.component';
+
+.dialog-add-member {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    pointer-events: auto;
+    overflow-x: scroll;
+    scrollbar-width: none;
+
+    mat-radio-button {
+        pointer-events: auto;
+    }
+
+    span {
+        cursor: pointer;
+        pointer-events: auto;
+    }
+
+    .radio-default-txt {
+        font-size: 18px !important;
+        font-weight: 400 !important;
+        color: black !important;
+        line-height: 24.55px !important;
+    }
+
+    .radio-value-txt {
+        color: #535AF1;
+    }
+}
+
+video {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
+    height: 100px;
+    transform: translateY(110%) translateX(-100px) rotate(0);
+    transition: transform 0.5s ease-in-out;
+}
+
+.scroll-up {
+    transform: translateY(110%) translateX(-100px) rotate(180deg);
+}
+
+.scrollable {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    height: 124px;
+    z-index: 1;
+}

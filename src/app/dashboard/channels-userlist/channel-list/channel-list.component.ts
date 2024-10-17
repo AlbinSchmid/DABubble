@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogChannelComponent } from '../dialog-channel/dialog-channel.component';
-import { AnimationServiceService } from './animation.service.service';
+import { AnimationChannelService } from './animation.service.service';
 
 @Component({
   selector: 'app-channel-list',
@@ -31,10 +31,13 @@ export class ChannelListComponent {
   userListSubscription!: Subscription;
 
   dialog = inject(MatDialog);
-  channelAnimationService: AnimationServiceService = inject(AnimationServiceService);
+  channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
 
 
-  constructor() { }
+  constructor() {
+    this.channelAnimationService.isChannelOpen = false;
+    this.openDialog();
+  }
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('channels');

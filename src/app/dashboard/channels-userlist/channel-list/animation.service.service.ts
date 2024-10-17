@@ -4,7 +4,7 @@ import { Channel } from '../../../shared/interfaces/channel';
 @Injectable({
   providedIn: 'root'
 })
-export class AnimationServiceService {
+export class AnimationChannelService {
 
 
   channelList: Channel[] = [];

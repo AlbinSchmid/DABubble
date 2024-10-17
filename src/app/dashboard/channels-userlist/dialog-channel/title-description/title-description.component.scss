@@ -1,69 +1,9 @@
-.dialog-contain {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border-radius: 30px;
-    padding: 40px;
-    background-color: #FFFFFF;
-    transition: height 0.4s ease-in-out, width 0.4s ease-in-out;
-    width: 872px;
-    height: 539px;
-    gap: 20px;
-}
-
-app-title-description,
-app-add-members {
+.dialog-title-description {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
-}
-
-app-title-description {
     gap: 20px;
-}
-
-.add-member-height-fore-one {
-    opacity: 0;
-    width: 710px;
-    height: 345px;
-    animation: showElement 0.2s ease-in-out forwards 0.3s;
-}
-
-.add-member-height-fore-two {
-    opacity: 0;
-    width: 710px;
-    height: 383px;
-    animation: showElement 0.2s ease-in-out forwards 0.3s;
-}
-
-.add-member-height-fore-more {
-    opacity: 0;
-    width: 710px;
-    height: 430px;
-    animation: showElement 0.2s ease-in-out forwards 0.3s;
-}
-
-.add-member-height-fore-empty {
-    opacity: 0;
-    width: 710px;
-    height: 303px;
-    animation: showElement 0.2s ease-in-out forwards 0.3s;
-}
-
-@keyframes showElement {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-.title-description-height {
-    width: 872px;
-    height: 539px;
 }
 
 header {
@@ -177,7 +117,6 @@ textarea {
 
 mat-dialog-actions {
     padding: 0 !important;
-    height: auto;
 }
 
 button {

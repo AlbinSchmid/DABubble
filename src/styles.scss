@@ -210,6 +210,198 @@ mat-card {
     height: 100% !important;
 }
 
+.mat-mdc-radio-button.mat-mdc-radio-checked .mat-ripple-element,
+.mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__background::before,
+.mat-mdc-radio-button .mdc-radio__background::before {
+    background-color: transparent !important;
+}
+
+.mat-mdc-radio-button .mat-internal-form-field {
+    pointer-events: none !important;
+}
+
+.mat-mdc-radio-button .mdc-radio__native-control {
+    pointer-events: auto !important;
+}
+
+.mat-mdc-radio-button .mdc-radio {
+    pointer-events: none !important;
+}
+
+@keyframes slideInFromTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+        pointer-events: none;
+    }
+
+    70% {
+        opacity: 1;
+        pointer-events: none;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
+
+@keyframes slideOutToTop {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: none;
+    }
+
+    60% {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-62px);
+        pointer-events: none;
+    }
+}
+
+.slideInFromTop {
+    animation: slideInFromTop 0.4s ease-in-out forwards;
+}
+
+.slideOutToTop {
+    animation: slideOutToTop 0.4s ease-in-out forwards;
+}
+
+.add-specific-member-contain {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    min-width: 100%;
+    max-width: max-content;
+    padding: 0 10px;
+    height: 52px;
+    font-size: 24px;
+    color: black;
+    border: 1px solid #ADB0D9;
+    border-radius: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    direction: ltr;
+
+    mat-chip-grid {
+        pointer-events: none !important;
+    }
+
+    .chip-contain {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 20px;
+        background-color: #ECEEFE !important;
+        padding: 3px 15px;
+        pointer-events: none !important;
+        font-size: 18px;
+
+        .mat-chip {
+            pointer-events: none;
+        }
+
+        &:hover {
+            background-color: #ECEEFE !important;
+        }
+
+        .icon-wrapper {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        mat-icon {
+            width: max-content !important;
+            height: max-content !important;
+            font-size: 16px !important;
+            margin: 0;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        img {
+            object-fit: cover;
+            height: 32px;
+            width: 32px;
+        }
+
+        span {
+            pointer-events: none !important;
+        }
+    }
+
+    .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
+        padding: 0 !important;
+    }
+
+    .mat-mdc-standard-chip .mdc-evolution-chip__cell--primary,
+    .mat-mdc-standard-chip .mdc-evolution-chip__action--primary,
+    .mat-mdc-standard-chip .mat-mdc-chip-action-label {
+        display: flex !important;
+        justify-content: space-between !important;
+        // width: 200px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .mat-mdc-standard-chip .mdc-evolution-chip__action--primary {
+        display: flex !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    input {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        padding-left: 2px !important;
+        height: auto !important;
+        height: 100% !important;
+    }
+
+    &:hover {
+        border-color: rgba($color: #444DF2, $alpha: 0.7);
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    .mdc-evolution-chip-set__chips {
+        flex-flow: nowrap;
+        overflow-x: scroll;
+        width: 100%;
+        max-width: max-content;
+        scrollbar-width: none;
+    }
+
+    .mat-mdc-chip-set .mdc-evolution-chip-set__chips {
+        width: 100%;
+        max-width: max-content;
+        min-width: 0;
+        box-sizing: border-box;
+        margin: 0;
+        gap: 8px;
+        pointer-events: none;
+    }
+
+    .mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before {
+        content: none;
+    }
+}
+
 
 @font-face {
     font-family: "Symbola";
