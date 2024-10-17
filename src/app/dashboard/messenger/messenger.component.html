@@ -3,11 +3,12 @@
         <button (click)="openDialog()">
             <img src="{{messengerService.user.avatar}}" alt="DABubble Logo">
             <h4>{{ messengerService.user.username }}</h4>
-        </button>
+        </button >
     </header>
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebaseMessenger.messages; track $index) {
+                {{ test(message.id) }}
             <app-message [message]="message" [messageIndex]="$index"></app-message>
             <!-- <div class="date-container" *ngIf="dateCount == 0">
                 <div>{{ checkDate(message.date) }}</div>
@@ -19,37 +20,12 @@
                     <img src="{{messengerService.user.avatar}}" alt="Profile">
                     <h4>{{ messengerService.user.username}}</h4>
                 </div>
-                <p>Diese Unterhaltung findet nur zwischen <a href="">&#64;{{ messengerService.user.username }}</a> und
+                <p>Diese Unterhaltung findet nur zwischen <a href="">&#64;{{ messengerService.user.username }}</a>
+                    und
                     dir
                     statt.</p>
             </div>
         </div>
-        <div id="input-container">
-            <textarea [(ngModel)]="firebaseMessenger.content" name="textarea" #textarea
-                placeholder='Schreibe eine Nachricht an {{ messengerService.user.username }}' #texterea="ngModel"
-                required></textarea>
-            <div id="interaction">
-                <div id="button-container-left">
-                    <button></button>
-                    <div></div>
-                    <button (click)="openEmoijs()"></button>
-                    <button></button>
-                </div>
-                <button id="send-message-btn" (click)="firebaseMessenger.createMessage('')" *ngIf="texterea.valid"><img
-                        src="/assets/icons/send.png" alt="send-icon"></button>
-            </div>
-            <div class="emoji-board" *ngIf="showEmoijs">
-                <div class="emoji-tabs">
-                    <button (click)="switchBoard('normal')" [class.active]="activeBoard === 'normal'">😮</button>
-                    <button (click)="switchBoard('work')" [class.active]="activeBoard === 'work'">📌</button>
-                </div>
-                <div class="emoji-container">
-                    <div class="emoji" *ngFor="let emoji of (activeBoard === 'normal' ? normalEmojis : workEmojis)"
-                        (click)="selectEmoji(emoji, textarea); openEmoijs()">
-                        {{ emoji }}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <app-textarea [messengerOrThread]="messengerOrThread"></app-textarea>
     </div>
 </section>

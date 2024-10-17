@@ -6,6 +6,11 @@ import { CommonModule } from '@angular/common';
 import { Message } from '../../interfaces/message';
 import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
+import { EmojisReaktionComponent } from '../emojis-reaktion/emojis-reaktion.component';
+import { EmojiBoardComponent } from '../emoji-board/emoji-board.component';
+import { CdkDrag } from '@angular/cdk/drag-drop';
+import { FormsModule } from '@angular/forms';
+import { MessengerService } from '../../services/messenger-service/messenger.service';
 
 @Component({
   selector: 'app-message',
@@ -14,6 +19,10 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
     EditMessageComponent,
     CommonModule,
     MatIconModule,
+    EmojisReaktionComponent,
+    EmojiBoardComponent,
+    CdkDrag,
+    FormsModule,
   ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
@@ -37,9 +46,15 @@ export class MessageComponent {
   editMessageId: number;
   editMessage: boolean;
   hoveredMenu = false;
+  showEmojiBoard = false;
+  
 
 
-  constructor(public firebase: FirebaseMessengerService, public threadService: ThreadService) { }
+
+  constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
+
+  }
+
 
 
   /**
@@ -66,6 +81,19 @@ export class MessageComponent {
     setTimeout(() => {
       this.threadService.showThread = true;
     }, 10);
+  }
+
+
+  openEmojiBoard() {
+    if (this.showEmojiBoard == false) {
+      this.showEmojiBoard = true;
+    } else {
+      this.showEmojiBoard = false;
+    }
+  }
+
+  closeEmojiBoard() {
+    this.showEmojiBoard = false;
   }
 
 

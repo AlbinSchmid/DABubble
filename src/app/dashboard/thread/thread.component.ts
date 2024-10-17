@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageComponent } from '../../shared/components/message/message.component';
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
+import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
 
 @Component({
   selector: 'app-thread',
@@ -17,6 +18,7 @@ import { MessengerService } from '../../shared/services/messenger-service/messen
     MatCardModule,
     MatIconModule,
     MessageComponent,
+    TextareaComponent,
   ],
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss'
@@ -25,10 +27,12 @@ export class ThreadComponent {
   unsubAnswerList;
   reduceInteraktionBtn = true;
   editAnswerMessage = true;
-
-
+  messengerOrThread: 'thread';
+  
+  
+  
   constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
-    this.unsubAnswerList = firebaseMessenger.subAnswersList();       
+    this.unsubAnswerList = firebaseMessenger.subAnswersList();   
   }
   
 

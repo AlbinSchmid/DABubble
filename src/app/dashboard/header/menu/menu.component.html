@@ -3,7 +3,7 @@
     <button (click)="toggleProfileMenu($event)" class="profile-btn">Profil</button>
     <a [routerLink]="['/dashboard/imprint']"><button>Impressum</button></a>
     <a [routerLink]="['/dashboard/privacy-policy']"><button>Datenschutz</button></a>
-    <button class="log-out-btn" (click)="authService.logout()">Log out</button>
+    <button class="log-out-btn" (click)="closeThreadAndMessenger()" (click)="authService.logout()">Log out</button>
 </div>
 } @else {
 <div (click)="noClickable($event)" class="profile-menu-contain open ">

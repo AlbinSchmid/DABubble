@@ -66,6 +66,8 @@ section {
         flex-direction: column;
         overflow: hidden !important;
         padding-bottom: 20px;
+        min-height: 60vh;
+        justify-content: flex-end;
 
         #messages-container {
             display: flex;
