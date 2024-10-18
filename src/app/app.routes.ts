@@ -8,7 +8,6 @@ import { LandingAvatarDialogComponent } from './landing-page/landing-avatar-dial
 import { LandingResetSendEmailComponent } from './landing-page/landing-reset-send-email/landing-reset-send-email.component';
 import { LandingNewPasswordComponent } from './landing-page/landing-new-password/landing-new-password.component';
 import { MessengerComponent } from './dashboard/messenger/messenger.component';
-import { LandingTestUserDialogComponent } from './landing-page/landing-test-user-dialog/landing-test-user-dialog.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -22,5 +21,4 @@ export const routes: Routes = [
   { path: 'passwort-zurücksetzen', component: LandingResetSendEmailComponent },
   { path: 'neues-passwort', component: LandingNewPasswordComponent },
   { path: 'messenger', component: MessengerComponent },
-  { path: 'landing-testing', component: LandingTestUserDialogComponent },
 ];

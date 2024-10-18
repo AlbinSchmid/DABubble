@@ -24,7 +24,6 @@ import { deleteObject, ref } from '@angular/fire/storage';
 })
 export class EditUserComponent implements OnInit{
   authService = inject(AuthserviceService)
-  email: string = '';
   inputName: string = '';
   inputEmail: string = '';
   errorMessage: string | null = null; 
@@ -33,6 +32,7 @@ export class EditUserComponent implements OnInit{
   imgUpload= inject(UploadImageService)
   newAvatar: string;
   originalAvatar: string;
+  inputPassword: string = '';
 
   standardAvatar = ['https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
     'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar0.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208',
@@ -48,6 +48,7 @@ export class EditUserComponent implements OnInit{
   @Output() isOpenEditEditorChange = new EventEmitter<boolean>();
   
   ngOnInit() {
+    this.setInitialValues();
     this.imgUpload.avatarChanged.subscribe((newAvatar) => {
       if (newAvatar) {
         this.avatarChanged = true;
@@ -61,11 +62,53 @@ export class EditUserComponent implements OnInit{
   }
 
   
+  
+  setInitialValues() {
+    this.inputName =  '';
+    this.inputEmail =  '';
+    this.inputPassword = ''; 
+  }
+  
 
   isEmailValid(): boolean {
     let emailPattern = /^[^<>@]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(this.email);
+    if (!emailPattern.test(this.inputEmail)) {
+      this.errorMessage = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+      this.setInitialValues()
+      return false;
+    } else {
+      this.errorMessage = null; 
+      return true;
+    }
   }
+
+isNameValid(): boolean {
+  let namePattern = /^[a-zA-Z]{1,}\s[a-zA-Z]{1,}$/;
+  if (!namePattern.test(this.inputName)) {
+    this.errorMessage = 'Bitte geben Sie Ihren Vornamen und Nachnamen ein.';
+    this.setInitialValues();
+    return false;
+  } else {
+    this.errorMessage = null; 
+    return true;
+  }
+}
+
+isPasswordValid(): boolean {
+  let passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!passwordPattern.test(this.inputPassword)) {
+    this.errorMessage = 'Das Passwort stimmt nicht mit Ihren Anmeldedaten überein';
+    this.setInitialValues();
+    return false;   
+  } else if( this.inputEmail == this.authService.currentUserSig()?.email) {
+    this.errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+    this.setInitialValues();
+    return false;
+  }else{
+    this.errorMessage = null;
+    return true;
+  }
+}
 
   cancelProcess() {
     let menuElement = document.querySelector('.profile-menu-contain');
@@ -76,27 +119,101 @@ export class EditUserComponent implements OnInit{
     this.imgUpload.filePreview = null; 
     this.isOpenEditEditor = false;
     this.isOpenEditEditorChange.emit(this.isOpenEditEditor = false);
+    this.reloadCurrentUser();
   }
 
   changeEmail() {
-    if (this.inputEmail?.length > 0) {
-      this.updateEmail();
+    const currentUser = this.authService.currentUserSig();
+    if (this.inputEmail) {
+      if (!this.isEmailValid() || !this.isPasswordValid() || this.inputEmail == this.authService.currentUserSig()?.email) {
+        return; 
+      } else {
+        this.updateEmail()
+          .then(() => {
+            console.log('Email updated successfully.');
+          })
+          .catch((error) => {
+            this.errorMessage = this.handleAuthError(error);
+            console.error('Error updating email: from updateEmail user component', error);
+          });
+      }
+    }
+    
+    if (this.inputName && this.inputName !== currentUser?.username) {
+      if (!this.isNameValid()) {
+        return; 
+      } else {
+        this.updateName();
+        this.setInitialValues();
+      }
     }
   
     if (this.avatarChanged && this.imgUpload.selectedFile) {
       this.updateAvatar();
     }
+  
   }
   
-  updateEmail() {
-    this.authService.changeEmail(this.inputEmail).then(() => {
-      this.successMessage = 'Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.';
-      this.errorMessage = null;
-    }).catch((error) => {
-      this.errorMessage = error.message;
-      this.successMessage = null;
-    });
+  async updateEmail(): Promise<void> {
+    if (!this.isEmailValid() || !this.isPasswordValid()) {
+      throw new Error('Validation failed for email or password.'); 
+    }
+    await this.authService.updateEmail(this.inputEmail, this.inputPassword);
   }
+
+
+  handleAuthError(error: any) {
+    let errorMessage = 'Ein unbekannter Fehler ist aufgetreten.';
+  
+    if (error.code) {
+      console.log('Fehlercode:', error.code);
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage = 'Die eingegebene E-Mail-Adresse ist ungültig.';
+          break;
+        case 'auth/email-already-in-use':
+          errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+          break;
+        case 'auth/user-not-found':
+          errorMessage = 'Es konnte kein Benutzer mit diesen Anmeldedaten gefunden werden.';
+          break;
+        case 'auth/wrong-password':
+          errorMessage = 'Das Passwort ist falsch. Bitte erneut eingeben.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'Das Passwort ist zu schwach. Bitte wählen Sie ein stärkeres Passwort.';
+          break;
+        case 'auth/requires-recent-login':
+          errorMessage = 'Für diese Aktion müssen Sie sich erneut anmelden.';
+          break;
+        case 'auth/network-request-failed':
+          errorMessage = 'Netzwerkfehler. Bitte überprüfen Sie Ihre Internetverbindung.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.';
+          break;
+        default:
+          errorMessage = 'Ein Fehler ist aufgetreten: ' + error.message;
+          break;
+      }
+    }
+  
+    return errorMessage; 
+  }
+
+  updateName() {
+    if (this.inputName?.length > 0) {
+      try {
+        this.authService.updateName(this.inputName);
+        this.reloadCurrentUser();
+        this.cancelProcess();
+      } catch (error) {
+        console.error('Error updating name:', error);
+      }
+    }
+  }
+
+ 
   
   async updateAvatar() {
     const currentUser = this.authService.currentUserSig();  

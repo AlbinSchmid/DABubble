@@ -77,7 +77,9 @@ export class LandingLoginDialogComponent {
   onSubmit(): void {
     const rawForm = this.loginForm.getRawValue();
     this.authService.login(rawForm.email, rawForm.password).subscribe({
-      next: () => { this.router.navigateByUrl('/dashboard');},
+      next: () => { 
+        console.log(this.authService.currentUserSig()?.email);
+        this.router.navigateByUrl('/dashboard');},
       error: (err) => { this.errorMessage = err.message; }
     });
   }

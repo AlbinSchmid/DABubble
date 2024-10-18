@@ -12,6 +12,10 @@ import {
   confirmPasswordReset,
   updateEmail,
   sendEmailVerification,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  verifyBeforeUpdateEmail,
+  updateCurrentUser,
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
@@ -27,29 +31,39 @@ export class AuthserviceService {
   currentUserSig = signal<UserInterface | null | undefined>(undefined);
   firestore = inject(Firestore);
   router = inject(Router);
+  errorMessage: string = '';
 
   register(email: string, username: string, password: string, avatar: string): Observable<void> {
     const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
       .then((response) => {
-        const uid = response.user.uid;
-        return updateProfile(response.user, {
+        const user = response.user;
+        const uid = user.uid;
+        return updateProfile(user, {
           displayName: username,
           photoURL: avatar,
-        }).then(() => {
+        })
+        .then(() => {
           const userRef = doc(this.firestore, `users/${uid}`);
           const userData: UserInterface = {
             userID: uid,
-            email: response.user.email ?? '',
+            email: user.email ?? '',
             username: username,
-            password: '',
+            password: '',  
             avatar: avatar,
             userStatus: 'on',
             isFocus: false,
           };
           return setDoc(userRef, userData);
+        })
+        .then(() => {
+          return sendEmailVerification(user);
         });
+      })
+      .catch((error) => {
+        console.error('Error during registration:', error);
+        throw error; 
       });
-
+  
     return from(promise);
   }
 
@@ -62,12 +76,11 @@ export class AuthserviceService {
 
   login(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
-      // Fetch user data from Firestore after logging in
       const userRef = doc(this.firestore, `users/${response.user.uid}`);
       const userDoc = await getDoc(userRef);
 
       if (userDoc.exists()) {
-        const userData: UserInterface = userDoc.data() as UserInterface; // Cast to UserInterface
+        const userData: UserInterface = userDoc.data() as UserInterface; 
         this.setCurrentUser(userData);
       } else {
         console.error('No such document!');
@@ -101,7 +114,6 @@ export class AuthserviceService {
   
       await updateProfile(user, { photoURL: avatarURL });
   
-      // Save user data to Firestore
       const userData: UserInterface = {
         userID: user.uid,
         email: user.email || '',
@@ -195,26 +207,69 @@ export class AuthserviceService {
     );
   }
 
-  async changeEmail(newEmail: string): Promise<void> {
-    const user = this.firebaseAuth.currentUser;
-
-    if (!user) {
-      return Promise.reject(new Error('Kein Benutzer ist derzeit angemeldet.'));
+  async updateEmail(newEmail: string, password: string): Promise<void> {
+    const currentUser = this.firebaseAuth.currentUser;
+  
+    if (!currentUser) {
+      throw new Error('No user logged in');
     }
-
-    const isGoogleUser = user.providerData.some(provider => provider.providerId === 'google.com');
-
-    if (isGoogleUser) {
-      return Promise.reject(new Error('E-Mail kann bei Google-Anmeldungen nicht geändert werden. Bitte erstelle ein neues Konto.'));
+  
+    try {
+      if (currentUser.email) {
+        await reauthenticateWithCredential(
+          currentUser,
+          EmailAuthProvider.credential(currentUser.email, password)
+        );
+      }
+      await updateEmail(currentUser, newEmail);
+      await this.updateCurrentUserDetails(currentUser, newEmail);
+      await sendEmailVerification(currentUser);
+    } catch (error: any) {
+      throw error;
     }
+  }
 
-    // Setze die neue E-Mail
-    await updateEmail(user, newEmail);
 
-    // Sende die Verifizierungs-E-Mail
-    await sendEmailVerification(user);
+  
 
-    console.log('Eine Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine E-Mails.');
+  async updateCurrentUserDetails(user: any, newEmail?: string, newName?: string): Promise<void> {
+    let userstatus = this.currentUserSig()?.userStatus;
+    const updatedUser: UserInterface = {
+      userID: user.uid,
+      password: '',
+      email: newEmail || user.email,
+      username: newName || user.displayName,  
+      avatar: user.photoURL,
+      isFocus: false,
+      userStatus: userstatus || 'on',
+    };
+  
+    const userRef = doc(this.firestore, `users/${user.uid}`);
+  
+   
+    await setDoc(userRef, updatedUser); 
+  
+   
+    this.currentUserSig.set(updatedUser);
+  }
+
+  async updateName(newName: string): Promise<void> {
+    const currentUser = this.firebaseAuth.currentUser;
+    if (!currentUser) {
+      throw new Error('No user logged in');
+    }
+  
+    try {
+      await updateProfile(currentUser, {
+        displayName: newName,
+      });
+      await this.updateCurrentUserDetails(currentUser, undefined, newName); 
+  
+      console.log('Name successfully updated');
+    } catch (error) {
+      console.error('Failed to update name', error);
+      throw error;
+    }
   }
 
   async isEmailInUse(email: string): Promise<boolean> {
