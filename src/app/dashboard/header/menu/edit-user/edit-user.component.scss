@@ -8,7 +8,8 @@ button {
 }
 
 mat-icon {
-    font-size: 30px;
+    font-size: 28px !important;
+    border-radius: 0px !important;
 }
 
 span {
@@ -89,3 +90,27 @@ input {
     color: red;
     bottom: -20px;
   }
+
+
+.response{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    animation: slideInFromLeft 0.5s ease-in-out;
+    font-size: 18px;
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-99%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

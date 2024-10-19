@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { LogoComponent } from "../../../landing-page/landing-shared/logo/logo.component";
 
 
 @Component({
@@ -10,8 +11,9 @@ import { RouterLink } from '@angular/router';
   imports: [
     MatCardModule,
     MatIconModule,
-    RouterLink
-  ],
+    RouterLink,
+    LogoComponent
+],
   templateUrl: './imprint.component.html',
   styleUrl: './imprint.component.scss'
 })

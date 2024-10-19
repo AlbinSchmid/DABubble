@@ -137,9 +137,18 @@ export class AuthserviceService {
     );
   }
 
+  userLoggedWithGoogle(): boolean {
+    const currentUser = this.firebaseAuth.currentUser;
+    if (currentUser) {
+      return currentUser.providerData.some(provider => provider.providerId === 'google.com');
+    } else {
+      return false;
+    }
+  }
+
   logout(): Observable<void> {
     const promise = signOut(this.firebaseAuth);
-    this.router.navigate(['/']);
+    this.router.navigate(['']);
     return from(promise);
   }
 

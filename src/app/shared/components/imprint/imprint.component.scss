@@ -8,6 +8,16 @@ section {
     align-items: center;
 }
 
+app-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    ::ng-deep .logo h2 {
+        display: none !important;
+    }
+}
+
 mat-card {
     display: flex;
     padding: 48px 56px 48px 56px;

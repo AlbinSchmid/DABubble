@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { ChannelsUserlistComponent } from './channels-userlist/channels-userlist.component';
 import { MessengerComponent } from './messenger/messenger.component';
@@ -10,7 +10,10 @@ import { CommonModule } from '@angular/common';
 import { ThreadService } from '../shared/services/thread-service/thread.service';
 import { MessengerService } from '../shared/services/messenger-service/messenger.service';
 import { MessageComponent } from '../shared/components/message/message.component';
-
+import { OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationStart } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthserviceService } from '../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,16 +31,56 @@ import { MessageComponent } from '../shared/components/message/message.component
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('drawer') drawer!: MatDrawer;
   isSideNavOpen: boolean = true;
-
-
+  private routerSubscription: Subscription;
+  authService = inject(AuthserviceService)
+  router: Router = inject(Router)
+  isLoggingOut = false;
   constructor(public threadService: ThreadService, public messengerService: MessengerService) {
 
   }
 
+  /**
+   * Listen to router events and logout when navigating away from /dashboard
+   */
 
+  ngOnInit(): void {
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart && !this.isLoggingOut) {
+        if (!event.url.includes('/dashboard')) {
+          this.isLoggingOut = true; // Set the flag to prevent further execution
+          this.logout();
+        }
+      }
+    });
+  }
+  
+  /**
+   * Unsubscribe from router events when the component is destroyed
+   */
+    ngOnDestroy(): void {
+      if (this.routerSubscription) {
+        this.routerSubscription.unsubscribe();
+      }
+    }
+
+/**
+ * Logout the user by calling the authService logout method.
+ */
+    logout(){
+      this.authService.logout();
+      this.isLoggingOut = false;
+    }
+
+
+  /**
+   * Toggle the side navigation drawer open or closed.
+   * 
+   * When the drawer is opened or closed, the isSideNavOpen flag is updated
+   * after a short delay to ensure the animation has finished.
+   */
   toggleSideNav(): void {
     this.drawer.toggle();
     setTimeout(() => this.isSideNavOpen = !this.isSideNavOpen, 100);

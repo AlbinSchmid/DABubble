@@ -6,15 +6,17 @@
                 <mat-icon fontIcon="account_circle"></mat-icon>
                 <span>Vollständiger Name</span>
             </div>
-            <input #nameInput="ngModel" type="text" maxlength="23" matInput placeholder="{{ authService.currentUserSig()?.username }}"
+            <input #nameInput="ngModel" type="text" autocomplete="off" maxlength="23" matInput placeholder="{{ authService.currentUserSig()?.username }}"
                 [(ngModel)]="inputName">
         </div>
+
+        @if( !authService.userLoggedWithGoogle()) {
         <div class="single-input-contain">
             <div class="input-header">
                 <mat-icon fontIcon="email"></mat-icon>
                 <span>Email Adresse</span>
             </div>
-            <input #emailInput="ngModel" type="text" maxlength="39" matInput placeholder="{{ authService.currentUserSig()?.email }}"
+            <input #emailInput="ngModel" type="text" autocomplete="off" maxlength="39" matInput placeholder="{{ authService.currentUserSig()?.email }}"
                 [(ngModel)]="inputEmail">
         </div>
         <div class="single-input-contain">
@@ -22,9 +24,10 @@
                 <mat-icon fontIcon="lock"></mat-icon>
                 <span>Passwort</span>
             </div>
-            <input #passwordInput="ngModel" type="password" maxlength="39" matInput placeholder="Anmelde Passwort eingeben"
+            <input #passwordInput="ngModel" type="password" autocomplete="off" maxlength="39" matInput placeholder="Anmelde Passwort eingeben"
                 [(ngModel)]="inputPassword">
         </div>
+    }
         <div *ngIf="errorMessage" class="error-container">
             {{ errorMessage }}
         </div>
@@ -33,8 +36,11 @@
     <div class="btn-contain">
         <button mat-button class="secondary" (click)="cancelProcess()">Abbrechen</button>
         <button mat-button class="primary" 
-            [disabled]="( inputEmail.length < 1) && (inputName.length < 1) && !avatarChanged" 
+            [disabled]="( inputEmail.length < 1) && (inputName.length < 1) && !avatarChanged || sending" 
             (click)="changeEmail()">Speichern</button>
     </div>
+    @if(successMessage != null) {
+        <button class="response primary">{{successMessage}}</button>
+    }
 </div>
 }

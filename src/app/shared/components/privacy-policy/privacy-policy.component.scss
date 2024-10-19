@@ -3,6 +3,16 @@ main {
     height: 100vh;
 }
 
+app-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    ::ng-deep .logo h2 {
+        display: none !important;
+    }
+}
+
 section {
     display: flex;
     justify-content: center;

@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { UploadImageService } from '../../../../shared/services/upload-image.service';
-import { doc, setDoc } from '@angular/fire/firestore';
 import { deleteObject, ref } from '@angular/fire/storage';
 
 @Component({
@@ -33,6 +32,7 @@ export class EditUserComponent implements OnInit{
   newAvatar: string;
   originalAvatar: string;
   inputPassword: string = '';
+  sending: boolean = false;
 
   standardAvatar = ['https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
     'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar0.png?alt=media&token=69cc34c3-6640-4677-822e-ea9e2a9e2208',
@@ -128,9 +128,13 @@ isPasswordValid(): boolean {
       if (!this.isEmailValid() || !this.isPasswordValid() || this.inputEmail == this.authService.currentUserSig()?.email) {
         return; 
       } else {
+        this.sending = true;
         this.updateEmail()
+        
           .then(() => {
-            console.log('Email updated successfully.');
+            this.successMessage = 'E-Mail-Adresse erfolgreich aktualisiert.';
+            this.timeoutCLose()
+            
           })
           .catch((error) => {
             this.errorMessage = this.handleAuthError(error);
@@ -144,14 +148,24 @@ isPasswordValid(): boolean {
         return; 
       } else {
         this.updateName();
-        this.setInitialValues();
+        this.successMessage = 'Name erfolgreich aktualisiert.';
+        this.timeoutCLose()
       }
     }
   
     if (this.avatarChanged && this.imgUpload.selectedFile) {
+      this.sending = true;
       this.updateAvatar();
+      this.successMessage = 'Avatar erfolgreich aktualisiert.';
+      this.timeoutCLose()
     }
-  
+  }
+
+  timeoutCLose(){
+    setTimeout(() => {
+      this.cancelProcess();
+      this.sending = false;
+    }, 2000);
   }
   
   async updateEmail(): Promise<void> {
@@ -205,8 +219,6 @@ isPasswordValid(): boolean {
     if (this.inputName?.length > 0) {
       try {
         this.authService.updateName(this.inputName);
-        this.reloadCurrentUser();
-        this.cancelProcess();
       } catch (error) {
         console.error('Error updating name:', error);
       }
@@ -260,5 +272,4 @@ isPasswordValid(): boolean {
   onAvatarSelected(event: Event) {
     this.imgUpload.onFileSelected(event);
   }
-
 }
