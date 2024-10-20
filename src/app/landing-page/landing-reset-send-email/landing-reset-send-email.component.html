@@ -21,9 +21,13 @@
           <span *ngIf="resetForm.get('email')?.hasError('required')">Geben Sie ein <strong>E-Mail</strong> ein</span>
         </div>
       </div>
-      <button type="submit" mat-flat-button class="primary button" [disabled]="resetForm.invalid" >Weiter</button>
+      <button type="submit" mat-flat-button class="primary button" [disabled]="resetForm.invalid && errorMessage" >Weiter</button>
     </form>
+    @if(errorMessage){
+      <p style="font-size: 20px; color: #ED1E79;">{{ errorMessage }}</p>
+    }
   </div>
+
   @if(showSuccessMessage){
     <button class="response primary button"> <mat-icon>send</mat-icon> E-Mail gesendet</button>
   }

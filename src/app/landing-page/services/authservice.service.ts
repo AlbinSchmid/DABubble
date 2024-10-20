@@ -170,7 +170,6 @@ export class AuthserviceService {
     const promise = sendPasswordResetEmail(this.firebaseAuth, email);
     return from(promise).pipe(
       catchError((error) => {
-        console.error('Error sending password reset email:', error);
         return throwError(() => error);
       })
     );

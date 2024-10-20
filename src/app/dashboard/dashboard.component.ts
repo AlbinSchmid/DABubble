@@ -31,7 +31,7 @@ import { AuthserviceService } from '../landing-page/services/authservice.service
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent  {
   @ViewChild('drawer') drawer!: MatDrawer;
   isSideNavOpen: boolean = true;
   private routerSubscription: Subscription;
@@ -46,33 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
    * Listen to router events and logout when navigating away from /dashboard
    */
 
-  ngOnInit(): void {
-    this.routerSubscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart && !this.isLoggingOut) {
-        if (!event.url.includes('/dashboard')) {
-          this.isLoggingOut = true; // Set the flag to prevent further execution
-          this.logout();
-        }
-      }
-    });
-  }
   
-  /**
-   * Unsubscribe from router events when the component is destroyed
-   */
-    ngOnDestroy(): void {
-      if (this.routerSubscription) {
-        this.routerSubscription.unsubscribe();
-      }
-    }
-
-/**
- * Logout the user by calling the authService logout method.
- */
-    logout(){
-      this.authService.logout();
-      this.isLoggingOut = false;
-    }
 
 
   /**

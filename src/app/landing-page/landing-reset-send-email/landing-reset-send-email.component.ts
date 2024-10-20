@@ -72,13 +72,30 @@ export class LandingResetSendEmailComponent {
   }
 
 
-  /**
-   * Called when an error occurs during the password reset process.
-   * Sets the error message property to the error message and sets the success message property to false.
-   * @param error The error object that is thrown by the AuthService.
-   */
-  showError(error:any){
-    this.errorMessage = error.message;
+ 
+/**
+ * Handles errors returned from the AuthService when resetting the password.
+ * Sets the error message based on the error code received.
+ * Resets the showSuccessMessage to false.
+ */
+  showError(error: any) {
+    switch (error.code) {
+      case 'auth/invalid-email':
+        this.errorMessage = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+        break;
+      case 'auth/user-not-found':
+        this.errorMessage = 'Kein Konto mit dieser E-Mail-Adresse gefunden.';
+        break;
+      case 'auth/too-many-requests':
+        this.errorMessage = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.';
+        break;
+      case 'auth/missing-email':
+        this.errorMessage = 'Eine E-Mail-Adresse ist erforderlich.';
+        break;
+      default:
+        this.errorMessage = 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
+    }
+  
     this.showSuccessMessage = false;
   }
 

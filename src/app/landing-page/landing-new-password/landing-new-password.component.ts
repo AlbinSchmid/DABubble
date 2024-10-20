@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LogoComponent } from '../landing-shared/logo/logo.component';
 import { LinksComponent } from '../landing-shared/links/links.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './landing-new-password.component.html',
   styleUrls: ['./landing-new-password.component.scss']
 })
-export class LandingNewPasswordComponent {
+export class LandingNewPasswordComponent implements OnInit {
   passwordForm: FormGroup;
   passwordsDoNotMatch: boolean = false;
   showSuccessMessage = false;
@@ -56,6 +56,23 @@ export class LandingNewPasswordComponent {
     this.route.queryParams.subscribe(params => {
       this.oobCode = params['oobCode'] || null; 
       console.log('Received oobCode:', this.oobCode);
+    });
+  }
+
+  /**
+   * Initializes the component.
+   * It is used to navigate to the correct page based on the 'action' query parameter.
+   * If the 'action' query parameter is 'resetPassword', it navigates to the 'neues-passwort' page.
+   * Otherwise, it navigates to the root page.
+   */
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const action = params['action'];
+      if (action === 'resetPassword') {
+        this.router.navigate(['neues-passwort']);
+      } else{
+        this.router.navigate(['/']);
+      }
     });
   }
 
