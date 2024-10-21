@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Message } from '../../interfaces/message';
+import { MessageInterface } from '../../interfaces/message-interface';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThreadService {
-  answeredMessage: Message = {
+  answeredMessage: MessageInterface = {
     content: '',
     isRead: false,
     senderId:'',
@@ -15,8 +15,14 @@ export class ThreadService {
     date: 0,
     type: '',
     id: '',
+    reactions: {
+      content: '',
+      senderIDs: '',
+      senderNames: '',
+      messageID: '',
+    }
   }
-  test: Message[] = [
+  test: MessageInterface[] = [
   ]
   showThread = false;
   messageId: string;

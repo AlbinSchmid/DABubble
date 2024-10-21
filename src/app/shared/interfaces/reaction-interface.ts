@@ -1,7 +1,7 @@
 export interface ReactionInterface {
-    id: string,
     content: string,
-    senderIDs: string,
-    senderNames: string,
-
+    senderIDs: string[],
+    senderNames: string[],
+    messageID: string,
+    reactionID: string,
 }

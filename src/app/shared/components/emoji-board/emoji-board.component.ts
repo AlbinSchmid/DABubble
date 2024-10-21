@@ -3,7 +3,7 @@ import { FirebaseMessengerService } from '../../services/firebase-services/fireb
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { CommonModule } from '@angular/common';
-import { Message } from '../../interfaces/message';
+import { MessageInterface } from '../../interfaces/message-interface';
 
 @Component({
   selector: 'app-emoji-board',
@@ -15,7 +15,7 @@ import { Message } from '../../interfaces/message';
   styleUrl: './emoji-board.component.scss'
 })
 export class EmojiBoardComponent {
-  @Input() message: Message = {
+  @Input() message: MessageInterface = {
     content: '',
     isRead: false,
     senderId: '',
@@ -24,6 +24,12 @@ export class EmojiBoardComponent {
     date: 0,
     type: '',
     id: '',
+    reactions: {
+      content: '',
+      senderIDs: '',
+      senderNames: '',
+      messageID: '',
+    }
   }
   @Input() binding: any;
   @Output() callFunction = new EventEmitter<any>();
@@ -75,6 +81,7 @@ export class EmojiBoardComponent {
     } if (this.binding == this.firebaseMessenger.reaktionContent) {
       this.firebaseMessenger.reaktionContent = '';
       this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
+      this.firebaseMessenger.reactions = [];
       this.firebaseMessenger.createReaktion(this.message.id);
     } if (this.binding.name == 'textareaEdit') {
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);

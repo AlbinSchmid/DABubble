@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild, viewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +6,6 @@ import { DetailPersonComponent } from './detail-person/detail-person.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
-import { timestamp } from 'rxjs';
 import { ThreadService } from '../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
@@ -33,7 +32,7 @@ import { TextareaComponent } from '../../shared/components/textarea/textarea.com
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'
 })
-export class MessengerComponent {
+export class MessengerComponent implements AfterViewInit {
   dialog = inject(MatDialog);
   authService = inject(AuthserviceService);
   hoveredMessage: number;
@@ -41,24 +40,53 @@ export class MessengerComponent {
   sourceThread = false;
   dateCount = 0;
   unsubChatList;
+  dateContent: string;
+  dateTodayString: string;
+  reversedMessge: any;
+  @ViewChild('content') scrollContainer: ElementRef;
+  lastDisplayedDate: string = localStorage.getItem('lastDisplayedDate') || '';
 
-
+ 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService, public datePipe: DatePipe) {
     this.unsubChatList = firebaseMessenger.subChatsList();
   }
+
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
+  }
   
 
-  checkDate(messageDate: Date) {
-    const formatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'short' });
-    let dateToday = new Date();
-    const dateTodayString = formatter.format(dateToday);
-    const dateMessageString = formatter.format(messageDate);
+  scrollTo() {
+    setTimeout(() => {
+      this.scrollToBottom();
+    },10);
+    
+  }
 
-    if (dateTodayString == dateMessageString) {
-      return 'Heute';
-    } else {
-      return this.datePipe.transform(messageDate, 'EEEE, MMMM d');
-    }
+
+  scrollToBottom() {
+    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+  }
+
+
+  checkDate(messageDate: Date) {    
+    setTimeout(() => {
+      const formatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'short' });
+      this.dateTodayString = formatter.format(new Date());
+      const dateMessageString = formatter.format(messageDate);
+      if (this.dateTodayString !== this.lastDisplayedDate) {
+        this.lastDisplayedDate = this.dateTodayString;
+        localStorage.setItem('lastDisplayedDate', this.dateTodayString);
+        return 'HJKH';
+      } else {
+        return;
+        // this.datePipe.transform(messageDate, 'EEEE, MMMM d')
+      }
+      
+    },1000);
   }
 
 

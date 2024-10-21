@@ -3,18 +3,11 @@
         <button (click)="openDialog()">
             <img src="{{messengerService.user.avatar}}" alt="DABubble Logo">
             <h4>{{ messengerService.user.username }}</h4>
-        </button >
+        </button>
     </header>
     <div id="content">
         <div id="messages-container" #content>
-            @for (message of firebaseMessenger.messages; track $index) {
-            <app-message [message]="message" [messageIndex]="$index"></app-message>
-            <!-- <div class="date-container" *ngIf="dateCount == 0">
-                <div>{{ checkDate(message.date) }}</div>
-                <div></div>
-            </div> -->
-            }
-            <div id="info">
+            <div id="info" [ngStyle]="{'padding-top.px': firebaseMessenger.messages.length > 0 ? 0 : 100}">
                 <div>
                     <img src="{{messengerService.user.avatar}}" alt="Profile">
                     <h4>{{ messengerService.user.username}}</h4>
@@ -24,7 +17,15 @@
                     dir
                     statt.</p>
             </div>
+            @for (message of firebaseMessenger.messages; track $index) {
+                <app-message [message]="message" [message]="message" [messageIndex]="$index"></app-message>
+                <!-- <div class="date-container" *ngIf="dateTodayString !== lastDisplayedDate">
+                    <div>{{ checkDate(message.date) }}</div>
+                    <div></div>
+                </div> -->
+            }
+            
         </div>
-        <app-textarea [sourceThread]="sourceThread"></app-textarea>
+        <app-textarea [sourceThread]="sourceThread" (scrollDown)="scrollTo()"></app-textarea>
     </div>
 </section>

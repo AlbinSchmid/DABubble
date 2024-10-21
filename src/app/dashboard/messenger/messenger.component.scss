@@ -73,11 +73,11 @@ section {
 
         #messages-container {
             display: flex;
-            flex-direction: column-reverse;
+            flex-direction: column;
             padding: 20px 0;
             overflow-y: auto;
             overflow-x: hidden;
-            min-height: 60vh;
+            min-height: 0;
 
             &::-webkit-scrollbar {
                 width: 5px;
@@ -90,13 +90,14 @@ section {
 
 
             #info {
-                padding: 0 30px 10px 30px;
+                padding: 100px 30px 10px 30px;
 
                 div {
                     display: flex;
                     align-items: flex-end;
 
                     img {
+                        object-fit: cover;
                         width: 100px;
                         height: 100px;
                         border-radius: 100%;

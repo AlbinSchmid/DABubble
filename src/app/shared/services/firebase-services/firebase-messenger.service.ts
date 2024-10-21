@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, Firestore, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { doc, query, where, } from 'firebase/firestore';
-import { Message } from '../../interfaces/message';
+import { MessageInterface } from '../../interfaces/message-interface';
 import { ThreadService } from '../thread-service/thread.service';
 import { list } from '@angular/fire/storage';
 import { MessengerService } from '../messenger-service/messenger.service';
@@ -18,8 +18,8 @@ export class FirebaseMessengerService {
   content = '';
   answerContent = '';
   reaktionContent = '';
-  messages: Message[] = [];
-  answers: Message[] = [];
+  messages: MessageInterface[] = [];
+  answers: MessageInterface[] = [];
   reactions: ReactionInterface[] = [];
   tryOtherOption: boolean;
   messageOrThread: string;
@@ -58,32 +58,9 @@ export class FirebaseMessengerService {
         this.answers.push(this.setMessageObject(element.data(), element.id));
       });
       this.answers = this.sortByDate(this.answers);
+      console.log(this.answers);
+
     })
-  }
-
-
-  subReactionList() {
-    this.messengerService.showReactions = false;
-    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.messengerService.messageId}/reactions`);
-    return onSnapshot(messegeRef, (list) => {
-      this.reactions = [];
-      list.forEach(element => {
-        this.reactions.push(this.setRectionObject(element.data(), element.id));
-        this.messengerService.showReactions = true;
-
-      });
-      console.log('Array is', this.reactions);
-    })
-  }
-
-
-  setRectionObject(element: any, id: string) {
-    return {
-      id: id || '',
-      content: element.content || '',
-      senderIDs: element.senderIDs || '',
-      senderNames: element.senderNames || '',
-    }
   }
 
 
@@ -102,6 +79,14 @@ export class FirebaseMessengerService {
       date: new Date(element.date) || 0,
       type: element.type || '',
       id: id || '',
+      reactions: {
+        id: '',
+        content: '',
+        senderIDs: '',
+        senderNames: '',
+        messageID: '',
+      },
+
     }
   }
 
@@ -111,8 +96,8 @@ export class FirebaseMessengerService {
    * @param messages - the array
    * @returns - return the sorted array
    */
-  sortByDate(messages: Message[]): Message[] {
-    return messages.sort((b, a) => {
+  sortByDate(messages: MessageInterface[]): MessageInterface[] {
+    return messages.sort((a, b) => {
       return a.date.getTime() - b.date.getTime();
     });
   }
@@ -293,6 +278,25 @@ export class FirebaseMessengerService {
         console.error(err);
       }
     )
+  }
+
+
+
+  async updateReaktion(reaction: any, messageID: string ,reactionID: string ) {
+    let ref = doc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions`), reactionID);
+    await updateDoc(ref, this.getCleanReaction(reaction)).catch(
+      (err) => {
+        console.error(err);
+      }
+    )
+  }
+
+
+  getCleanReaction(reaction: any) {
+    return {
+      senderIDs: reaction.senderIDs,
+      senderNames: reaction.senderNames,
+    }
   }
 
 

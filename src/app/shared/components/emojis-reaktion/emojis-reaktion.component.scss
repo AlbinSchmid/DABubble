@@ -1,9 +1,6 @@
 section {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-
-    div {
+    button {
+        position: relative;
         background-color: white;
         display: inline;
         justify-content: center;
@@ -15,5 +12,48 @@ section {
         &:hover {
             cursor: pointer;
         }
+
+        &:hover div{
+            opacity: 1;
+            display: flex;
+        }
+
+        div {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            min-width: 158px;
+            min-height: 112px;
+            background-color: #444DF2;
+            border-radius: 25px 25px 25px 0;
+            position: absolute;
+            color: white;
+            top: -128px;
+            left: 15px;
+            transition: 125ms all;
+            padding: 12px 10px;
+
+
+            h6 {
+                font-size: 18px;
+                font-weight: 700;
+            }
+
+            p {
+                font-size: 16px;
+                font-weight: 400;
+            }
+
+            span {
+                font-size: 20px;
+            }
+        }
     }
+}
+
+.usedAlready {
+    border-color: #444DF2 !important;
+    background-color: rgba(#444DF2, 0.05) !important;
 }

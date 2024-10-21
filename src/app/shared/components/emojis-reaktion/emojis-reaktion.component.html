@@ -1,9 +1,11 @@
 <section>
-    @for (reaction of firebaseMessenger.reactions; track $index) {
-        
+    <button (click)="addSameReaktion()" [ngClass]="{'usedAlready': userUsedThisReactionAlready}">
         <div>
-            {{ reaction.content }}
-            1
+            <span>{{ reaction.content }}</span>
+            <h6>{{ reaction.senderNames }} </h6>
+            <p>hat Reagiert</p>
         </div>
-    }
+        {{ reaction.content }}
+        {{ reaction.senderNames.length }}
+    </button>
 </section>

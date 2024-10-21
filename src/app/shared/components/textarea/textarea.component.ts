@@ -19,7 +19,9 @@ import { EmojiBoardComponent } from '../emoji-board/emoji-board.component';
 })
 export class TextareaComponent {
   @Input() sourceThread: boolean;
+  @Output() scrollDown = new EventEmitter<any>();
   showEmojiBoard = false;
+  selectedFile: File;
 
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) { }
@@ -35,5 +37,16 @@ export class TextareaComponent {
     } else {
       this.showEmojiBoard = false;
     }
+  }
+
+
+  uploadFile() {
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+  }
+
+
+  scrollDivDown() {
+    this.scrollDown.emit();
   }
 }

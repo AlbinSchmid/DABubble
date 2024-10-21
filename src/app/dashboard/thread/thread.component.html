@@ -11,7 +11,7 @@
     <div id="content">
         <div id="messages-container" #content>
             @for (message of firebaseMessenger.answers; track $index) {
-                <app-message [message]="message" [messageIndex]="$index" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage" [sourceThread]="sourceThread"></app-message>
+                <app-message [messageIndex]="$index" [message]="message" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage" [sourceThread]="sourceThread"></app-message>
             }
             <div id="answers-info">
                 <p>{{ checkAnswerArrayLength() }}</p>

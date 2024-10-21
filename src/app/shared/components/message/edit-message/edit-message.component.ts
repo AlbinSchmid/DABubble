@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FirebaseMessengerService } from '../../../services/firebase-services/firebase-messenger.service';
-import { Message } from '../../../interfaces/message';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +7,7 @@ import { ThreadService } from '../../../services/thread-service/thread.service';
 import { EmojiBoardComponent } from '../../emoji-board/emoji-board.component';
 import { CommonModule } from '@angular/common';
 import { MessengerService } from '../../../services/messenger-service/messenger.service';
+import { MessageInterface } from '../../../interfaces/message-interface';
 
 @Component({
   selector: 'app-edit-message',
@@ -23,7 +23,7 @@ import { MessengerService } from '../../../services/messenger-service/messenger.
   styleUrl: './edit-message.component.scss'
 })
 export class EditMessageComponent {
-  @Input() message: Message = {
+  @Input() message: MessageInterface = {
     content: '',
     isRead: false,
     senderId: '',
@@ -32,6 +32,12 @@ export class EditMessageComponent {
     date: 0,
     type: '',
     id: '',
+    reactions: {
+      content: '',
+      senderIDs: '',
+      senderNames: '',
+      messageID: '',
+    }
   };
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;

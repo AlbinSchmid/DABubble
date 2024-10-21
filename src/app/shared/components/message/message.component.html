@@ -11,7 +11,12 @@
         <div>
             {{ message.content }}
         </div>
-        <app-emojis-reaktion *ngIf="messengerService.showReactions" [messageID]="message.id"></app-emojis-reaktion>
+        <div id="reaktions-container">
+            <mat-icon *ngIf="reactions.length !== 0" (click)="openOrCloseEmojiBoard()">add_reaction</mat-icon>
+            @for (reaction of reactions; track $index) {
+                <app-emojis-reaktion *ngIf="reaction.messageID == message.id" [reaction]="reaction" [index]="messageIndex"></app-emojis-reaktion>
+            }
+        </div>
         <div *ngIf="!reduceContent" id="answer-container">
             <a (click)="openThead()">1</a>
             <p>Letzte Antwort 14:56</p>

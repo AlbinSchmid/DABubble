@@ -5,18 +5,19 @@
         required></textarea>
     <div id="interaction">
         <div id="button-container-left">
-            <button></button>
+            <input type="file" name="" id="">
             <div></div>
             <button (click)="openOrCloseEmojiBoard()"></button>
             <button></button>
         </div>
-        <button id="send-message-btn" (click)="firebaseMessenger.createMessage('')" *ngIf="texterea.valid"><img
+        <button id="send-message-btn" (click)="firebaseMessenger.createMessage(''); scrollDivDown()" *ngIf="texterea.valid"><img
                 src="/assets/icons/send.png" alt="send-icon"></button>
     </div>
     <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     } @else {
     <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textarea placeholder='Antworten...'
         #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
+
     <div id="interaction">
         <div id="button-container-left">
             <button></button>

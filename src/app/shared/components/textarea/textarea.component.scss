@@ -55,6 +55,23 @@ section {
                 background-color: #ADB0D9;
             }
 
+            input {
+                border-radius: 100%;
+                padding: 20px;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                background-image: url(./../../../../../public/assets/icons/add-white.png);
+                background-position: center;
+                background-size: 24px;
+                background-repeat: no-repeat;
+
+                &:hover {
+                    background-color: #ECEEFE;
+                    background-image: url(./../../../../../public/assets/icons/add-blue.png);
+                }
+            }
+
             button {
                 border-radius: 100%;
                 padding: 20px;
@@ -63,17 +80,6 @@ section {
 
                 &:hover {
                     background-color: #ECEEFE;
-                }
-
-                &:nth-child(1) {
-                    background-image: url(./../../../../../public/assets/icons/add-white.png);
-                    background-position: center;
-                    background-size: 24px;
-                    background-repeat: no-repeat;
-
-                    &:hover {
-                        background-image: url(./../../../../../public/assets/icons/add-blue.png);
-                    }
                 }
 
                 &:nth-child(3) {

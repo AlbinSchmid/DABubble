@@ -1,5 +1,6 @@
 import { UserInterface } from "../../landing-page/interfaces/userinterface";
-import { Message } from "./message";
+import { MessageInterface } from "./message-interface";
+
 
 export interface Channel {
     channelID?: string,
@@ -8,5 +9,5 @@ export interface Channel {
     createdBy: string,
     isFocus: boolean,
     user: UserInterface[],
-    messages: Message[],
+    messages: MessageInterface[],
 }
