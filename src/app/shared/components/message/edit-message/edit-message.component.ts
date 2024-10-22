@@ -105,4 +105,15 @@ export class EditMessageComponent implements OnInit{
     }
     this.closeEdit();
   }
+
+  deleteImage(url: string) {
+
+    const index = this.messageItems.indexOf(url);
+    if (index > -1) {
+      this.messageItems.splice(index, 1); 
+    }
+    const imageTags = this.messageItems.map(imgUrl => `<img src="${imgUrl}" alt="Image" style="max-width: 200px;"/>`).join('');
+    this.message.content = `${this.messageText} ${imageTags}`.trim(); 
+    console.log('Updated Message Content:', this.message.content);
+  }
 }
