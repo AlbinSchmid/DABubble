@@ -30,19 +30,20 @@ section {
             border-radius: 25px 25px 25px 0;
             position: absolute;
             color: white;
-            top: -128px;
+            top: -123px;
             left: 15px;
             transition: 125ms all;
-            padding: 12px 10px;
+            padding: 12px 0px;
 
 
             h6 {
-                font-size: 18px;
+                min-width: 175px;
+                font-size: 16px;
                 font-weight: 700;
             }
 
             p {
-                font-size: 16px;
+                font-size: 14px;
                 font-weight: 400;
             }
 

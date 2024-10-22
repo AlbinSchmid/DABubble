@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { CommonModule } from '@angular/common';
 import { MessageInterface } from '../../interfaces/message-interface';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-emoji-board',
@@ -15,6 +16,7 @@ import { MessageInterface } from '../../interfaces/message-interface';
   styleUrl: './emoji-board.component.scss'
 })
 export class EmojiBoardComponent {
+  authService = inject(AuthserviceService);
   @Input() message: MessageInterface = {
     content: '',
     isRead: false,
@@ -47,6 +49,7 @@ export class EmojiBoardComponent {
   ];
   activeBoard: string = 'normal';
   selectedEmoji: string | null = null;
+  reactionContent: string;
 
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) {
@@ -79,9 +82,12 @@ export class EmojiBoardComponent {
     } if (this.binding.name == 'textareaThread') {
       this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent.slice(0, start) + emoji + this.firebaseMessenger.answerContent.slice(end);
     } if (this.binding == this.firebaseMessenger.reaktionContent) {
+      this.firebaseMessenger.findReaction = false;
+      this.firebaseMessenger.reactions = []; 
       this.firebaseMessenger.reaktionContent = '';
       this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
-      this.firebaseMessenger.reactions = [];
+      // this.firebaseMessenger.searchReaction(this.message.id, this.firebaseMessenger.reaktionContent);
+      
       this.firebaseMessenger.createReaktion(this.message.id);
     } if (this.binding.name == 'textareaEdit') {
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);

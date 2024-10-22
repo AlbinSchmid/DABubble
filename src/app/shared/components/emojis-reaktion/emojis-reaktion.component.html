@@ -1,9 +1,9 @@
 <section>
-    <button (click)="addSameReaktion()" [ngClass]="{'usedAlready': userUsedThisReactionAlready}">
+    <button (click)="alreadyExisitingReaktion()" [ngClass]="{'usedAlready': userUsedThisReactionAlready}">
         <div>
             <span>{{ reaction.content }}</span>
-            <h6>{{ reaction.senderNames }} </h6>
-            <p>hat Reagiert</p>
+            <h6>{{ controllNamesArrayLength() }}</h6>
+            <p>{{ controllText() }}</p>
         </div>
         {{ reaction.content }}
         {{ reaction.senderNames.length }}

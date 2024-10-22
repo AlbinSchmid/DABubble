@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, Firestore, onSnapshot, updateDoc } from '@angular/fire/firestore';
-import { doc, query, where, } from 'firebase/firestore';
+import { deleteDoc, doc, query, where, } from 'firebase/firestore';
 import { MessageInterface } from '../../interfaces/message-interface';
 import { ThreadService } from '../thread-service/thread.service';
 import { list } from '@angular/fire/storage';
@@ -23,10 +23,37 @@ export class FirebaseMessengerService {
   reactions: ReactionInterface[] = [];
   tryOtherOption: boolean;
   messageOrThread: string;
+  findReaction = false;
 
 
 
-  constructor(private threadService: ThreadService, private messengerService: MessengerService) { }
+  constructor(private threadService: ThreadService, private messengerService: MessengerService) { } 
+
+
+  searchReaction(messageID: string, reactionContent: string) {
+    let messegeRef = query(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions/`), where('content', '==', reactionContent));
+    return onSnapshot(messegeRef, (list) => {
+      list.forEach(element => {
+        this.findReaction = true;
+      })
+    })
+  }
+
+
+
+  searchReactionSenderIDs(messageID: string, reactionContent: string, userID: string) {
+    let messegeRef = query(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions/`), where('senderIDs', '==', userID), where('content', '==', reactionContent));
+    return onSnapshot(messegeRef, (list) => {
+      list.forEach(element => {
+        console.log('Hello');
+      })
+    })
+  }
+
+
+  async deleteReaction(messageID: string, reaktionID: string) {
+    await deleteDoc(doc(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions/${reaktionID}`))
+  }
 
 
   /**
