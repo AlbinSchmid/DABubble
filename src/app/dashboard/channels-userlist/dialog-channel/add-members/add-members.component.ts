@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { AnimationChannelService } from '../../channel-list/animation.service.service';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { UserInterface } from '../../../../landing-page/interfaces/userinterface';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-add-members',
@@ -23,7 +24,8 @@ import { UserInterface } from '../../../../landing-page/interfaces/userinterface
     MatIconModule,
     MatRadioModule,
     MatChipsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatCardModule
   ],
   templateUrl: './add-members.component.html',
   styleUrl: './add-members.component.scss'
@@ -32,6 +34,8 @@ export class AddMembersComponent {
 
   @Output() inputSelectedChange = new EventEmitter<boolean>();
   @Output() inputValueChange = new EventEmitter<boolean>();
+  @Output() membersChange = new EventEmitter<UserInterface[]>();
+
 
   firestoreService: FirestoreService = inject(FirestoreService);
   channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
@@ -43,15 +47,19 @@ export class AddMembersComponent {
   userListSubscription!: Subscription;
   userList: UserInterface[] = [];
 
+  filteredUsers: UserInterface[] = [];
 
-  scrolledToEnd: boolean;
+  members = signal<UserInterface[]>([]);
+
+  scrolledToEnd: boolean = false;
   selectInput: boolean = false;
-  inputValueEmpty: boolean;
   endAnimation: boolean = true;
+  userNotFound: boolean = false;
+
+  highlightedIndex: number = -1;
 
   pickChannelValue: string;
 
-  fruits = signal<any>([{ name: 'Alex Maximilian' }, { name: 'Ronny Bayer' }, { name: 'Melina Hochee' }]);
 
   constructor() { }
 
@@ -65,9 +73,6 @@ export class AddMembersComponent {
   }
 
   ngOnInit(): void {
-    this.firestoreService.startSnapshot('channels');
-    this.firestoreService.startSnapshot('users');
-
     this.channelListSubscription = this.firestoreService.channelList$.subscribe(channel => {
       this.channelList = channel;
     });
@@ -75,10 +80,6 @@ export class AddMembersComponent {
     this.userListSubscription = this.firestoreService.userList$.subscribe(user => {
       this.userList = user;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.firestoreService.stopSnapshot();
   }
 
   onWheel(event: WheelEvent) {
@@ -100,16 +101,25 @@ export class AddMembersComponent {
     }
   }
 
+  scrollToSelectedUser(): void {
+    let matCardContent = document.querySelector('mat-card-content') as HTMLElement;
+    let selectedButton = matCardContent.querySelectorAll('button')[this.highlightedIndex] as HTMLElement;
+
+    if (selectedButton) {
+      selectedButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    }
+  }
+
   scrollToRightAfterAnimation() {
     let element = document.querySelector('.add-specific-member-contain') as HTMLElement;
+    this.members.set([]);
+    this.membersChange.emit(this.members());
     if (element) {
       setTimeout(() => {
         element.scrollTo({
           left: element.scrollWidth,
           behavior: 'smooth'
         });
-        console.log(this.userList);
-
       }, 500);
     }
   }
@@ -119,7 +129,7 @@ export class AddMembersComponent {
       this.endAnimation = false;
       this.selectInput = false;
       this.inputSelectedChange.emit(this.selectInput);
-      setTimeout(() => this.endAnimation = true, 400);
+      setTimeout(() => this.endAnimation = true, 200);
     } else {
       return;
     }
@@ -133,7 +143,19 @@ export class AddMembersComponent {
 
   isFocus(selectedTitle: string) {
     this.channelList.forEach(channel => {
-      if (channel.title === selectedTitle) console.log(channel);
+      if (channel.title === selectedTitle) {
+        this.members.set([]);
+        this.membersChange.emit(this.members());
+        if (this.selectInput) {
+          setTimeout(() => {
+            this.members.update(members => [...members, ...channel.user]);
+            this.membersChange.emit(this.members());
+          }, 200);
+        } else {
+          this.members.update(members => [...members, ...channel.user]);
+          this.membersChange.emit(this.members());
+        }
+      }
     });
   }
 
@@ -156,8 +178,6 @@ export class AddMembersComponent {
     } else if (channels == 1) {
       return 'set-min-height-channel-list';
     } else {
-      this.selectInput = true;
-      this.inputSelectedChange.emit(this.selectInput);
       return '';
     }
   }
@@ -166,56 +186,62 @@ export class AddMembersComponent {
     return this.channelList.length > 3;
   }
 
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+    }
+    if (this.filteredUsers.length > 0) {
+      if (event.key === 'ArrowDown') {
+        this.highlightedIndex = (this.highlightedIndex + 1) % this.filteredUsers.length;
+        this.scrollToSelectedUser();
+      } else if (event.key === 'ArrowUp') {
+        this.highlightedIndex = (this.highlightedIndex - 1 + this.filteredUsers.length) % this.filteredUsers.length;
+        this.scrollToSelectedUser();
+      } else if (event.key === 'Enter' && this.highlightedIndex >= 0) {
+        this.add(this.filteredUsers[this.highlightedIndex]);
+      }
+    }
+  }
+
   searchUserByName(event: Event): void {
     let inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim().toLowerCase();
 
-    console.log('Aktueller Wert:', value);
-
-    this.userList.forEach(user => {
-      let fullName = user.username.split(' ');
-      let firstName = fullName[0].toLowerCase();
-      let lastName = fullName[1]?.toLowerCase();
-
-      if (value == firstName || value == lastName) {
-        console.log(`Gefundener Benutzer: ${user.username}`);
-      }
-    });
+    if (value) {
+      this.filteredUsers = this.userList.filter(user => {
+        let fullName = user.username.toLowerCase();
+        return fullName.includes(value);
+      });
+      this.highlightedIndex = -1;
+      this.userNotFound = this.filteredUsers.length === 0;
+    } else {
+      this.filteredUsers = [];
+      this.userNotFound = false;
+      this.highlightedIndex = -1;
+    }
   }
 
-  add(event: MatChipInputEvent): void {
-    let value = (event.value || '').trim();
-    if (value) {
-      this.fruits.update(fruits => [...fruits, { name: value }]);
+  add(user: UserInterface): void {
+    if (user) {
+      this.members.update(members => [...members, user]);
+      this.membersChange.emit(this.members());
+      let inputElement = document.querySelector('#userinput') as HTMLInputElement;
+      if (inputElement) {
+        inputElement.value = '';
+        this.filteredUsers = [];
+      }
     }
     this.scrollToRight();
-    event.chipInput!.clear();
   }
 
-  remove(fruit: any): void {
-    this.fruits.update(fruits => {
-      let index = fruits.indexOf(fruit);
-      if (index < 0) {
-        return fruits;
+  remove(member: UserInterface): void {
+    this.members.update(members => {
+      let index = members.indexOf(member);
+      if (index >= 0) {
+        members.splice(index, 1);
       }
-
-      fruits.splice(index, 1);
-      return [...fruits];
+      this.membersChange.emit(this.members());
+      return [...members];
     });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

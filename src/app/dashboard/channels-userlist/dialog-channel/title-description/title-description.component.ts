@@ -22,13 +22,18 @@ export class TitleDescriptionComponent {
   @Output() titleChanged = new EventEmitter<string>();
 
   description: string;
+  @Output() descriptionChanged = new EventEmitter<string>();
 
   constructor() {
     this.title = '';
     this.description = '';
   }
 
-  onTitleInputChange() {
+  onTitleChange() {
+    this.titleChanged.emit(this.title);
+  }
+
+  onDescriptionChange() {
     this.titleChanged.emit(this.title);
   }
 }

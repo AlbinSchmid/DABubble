@@ -7,7 +7,7 @@
     <div class="channel-name-input-wrapper">
         <mat-icon fontIcon="tag"></mat-icon>
         <input #titleInput="ngModel" [(ngModel)]="title" maxlength="23"
-            [ngClass]="{'input-with-txt': titleInput.value?.length > 0}" (input)="onTitleInputChange()"
+            [ngClass]="{'input-with-txt': titleInput.value?.length > 0}" (input)="onTitleChange()"
             class="channel-name-input" placeholder="z.B. Kooperationsprojekte">
     </div>
 </div>
@@ -15,7 +15,7 @@
     <div>
         <span>Beschreibung <span style="color: #686868; font-weight: 400;">(optional)</span></span>
     </div>
-    <textarea #textarea="ngModel" [(ngModel)]="description" class="textarea-with-txt"
+    <textarea #textarea="ngModel" [(ngModel)]="description" maxlength="200" class="textarea-with-txt"
         [ngClass]="{'textarea-with-txt': textarea.value?.length > 0}" placeholder="Dein Text hier">
     </textarea>
 </div>

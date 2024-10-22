@@ -405,6 +405,10 @@ mat-card {
     }
 }
 
+.mat-mdc-dialog-surface {
+    overflow: visible !important;
+}
+
 
 @font-face {
     font-family: "Symbola";

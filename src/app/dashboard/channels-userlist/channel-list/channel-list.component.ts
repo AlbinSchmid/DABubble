@@ -36,7 +36,6 @@ export class ChannelListComponent {
 
   constructor() {
     this.channelAnimationService.isChannelOpen = false;
-    this.openDialog();
   }
 
   ngOnInit(): void {

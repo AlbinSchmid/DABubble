@@ -19,7 +19,8 @@
     <button *ngFor="let channel of channelList; let i = index" (click)="focusChannel(channel)"
         [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
         [ngClass]="{'focus-btn': channel.isFocus,'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
-        <mat-icon fontIcon="tag"></mat-icon>{{ channel.title }}
+        <mat-icon fontIcon="tag"></mat-icon>
+        <span>{{ channel.title }}</span>
     </button>
     <button (click)="openDialog()" class="add-channel-btn"
         [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"

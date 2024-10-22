@@ -5,19 +5,20 @@
         <mat-icon mat-dialog-close fontIcon="close"></mat-icon>
     </header>
     <mat-dialog-content>
-        <app-title-description *ngIf="!showAddMembersDialog" (titleChanged)="onTitleChanged($event)">
+        <app-title-description *ngIf="!showAddMembersDialog" (titleChanged)="onTitleChanged($event)"
+            (descriptionChanged)="onDescriptionChanged($event)">
         </app-title-description>
         <app-add-members *ngIf="showAddMembersDialog" #addMembersContent
-            (inputSelectedChange)="onSelectInputChanged($event)"
-            (inputValueChange)="inputValueChange($event)"></app-add-members>
+            (inputSelectedChange)="onSelectInputChanged($event)" (inputValueChange)="inputValueChange($event)"
+            (membersChange)="updateMembers($event)"></app-add-members>
     </mat-dialog-content>
     <mat-dialog-actions>
         <button *ngIf="!showAddMembersDialog" [disabled]="!title.length" class="primary default" mat-button
             (click)="showAddMembers()">
             weiter
         </button>
-        <button *ngIf="showAddMembersDialog" [disabled]="selectInput && inputValueEmpty" (click)="close()"
-            class="primary default" mat-button>
+        <button *ngIf="showAddMembersDialog" (click)="addChannel()"
+            [disabled]="selectInput && members.length === 0 || members.length == 0" class="primary default" mat-button>
             Erstellen
         </button>
     </mat-dialog-actions>

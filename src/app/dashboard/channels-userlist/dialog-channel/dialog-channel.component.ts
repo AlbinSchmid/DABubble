@@ -7,6 +7,7 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
 import { AnimationChannelService } from '../channel-list/animation.service.service';
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
 import { MatIconModule } from '@angular/material/icon';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-dialog-channel',
@@ -28,21 +29,27 @@ export class DialogChannelComponent {
   channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
   dialogRef: MatDialogRef<DialogChannelComponent> = inject(MatDialogRef);
 
-  showAddMembersDialog: boolean;
-
-  title: string = '';
-  description: string;
-  selectInput: boolean;
+  showAddMembersDialog: boolean = false;
+  selectInput: boolean = false;
   inputValueEmpty: boolean = true;
 
+  title: string = '';
+  description: string = '';
+  members: UserInterface[] = [];
 
 
-  constructor() {
-    // this.showAddMembersDialog = true;
+  constructor() { }
+
+  updateMembers(newMembers: UserInterface[]): void {
+    this.members = newMembers;
   }
 
   onTitleChanged(newTitle: string) {
     this.title = newTitle;
+  }
+
+  onDescriptionChanged(newDescription: string) {
+    this.description = newDescription;
   }
 
   onSelectInputChanged(newSelect: boolean) {
@@ -72,11 +79,6 @@ export class DialogChannelComponent {
     this.showAddMembersDialog = true;
   }
 
-
-
-
-
-
   close() {
     this.dialogRef.close();
   }
@@ -87,17 +89,18 @@ export class DialogChannelComponent {
       description: this.description,
       createdBy: this.authService.currentUserSig()!.username,
       isFocus: false,
-      user: [],
+      user: this.members,
       messages: []
     }
   }
 
   async addChannel() {
     try {
+      this.dialogRef.close();
       if (this.channelAnimationService.isChannelOpen) this.channelAnimationService.toggleChannels();
       await new Promise(resolve => setTimeout(resolve, this.channelAnimationService.arrayTimerChannels() + 200));
       await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
-      this.dialogRef.close();
+
       this.channelAnimationService.toggleChannels();
     } catch (error) {
       console.error("Failed to add the channel:", error);

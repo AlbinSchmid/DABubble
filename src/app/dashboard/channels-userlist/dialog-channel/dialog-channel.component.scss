@@ -1,5 +1,5 @@
 .dialog-contain {
-    position: relative;
+    position: relative !important;
     display: flex;
     flex-direction: column;
     border-radius: 30px;
@@ -9,6 +9,7 @@
     width: 872px;
     height: 539px;
     gap: 20px;
+    overflow: visible;
 }
 
 app-title-description,
