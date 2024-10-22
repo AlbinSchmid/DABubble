@@ -94,7 +94,8 @@ export class TextareaComponent {
     this.selectedFiles = [];
   }
   
-
-
+  deletePreviewFile(file: any) {
+    this.selectedFiles = this.selectedFiles.filter(f => f !== file);
+  }
 
 }
