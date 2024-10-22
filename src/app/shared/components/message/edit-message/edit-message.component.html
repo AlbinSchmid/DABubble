@@ -1,5 +1,9 @@
 <section>
-    <textarea [(ngModel)]="messengerService.editMessageContent" name="textareaEdit" id="" #textareaThread pattern="^[\s\S]*\S[\s\S]*$" required="" #textarea="ngModel">sadfsadfsd</textarea>
+    <div *ngFor="let items of messageItems">
+        <img src="{{items}}" alt="image">
+    </div>
+   
+    <textarea [(ngModel)]="messageText" name="textareaEdit" id="" #textareaThread pattern="^[\s\S]*\S[\s\S]*$" required="" #textarea="ngModel">sadfsadfsd</textarea>
     <div>
         <mat-icon (click)="closeOrOpenEmojisBoard()">sentiment_satisfied</mat-icon>
         <div>

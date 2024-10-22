@@ -12,6 +12,7 @@ import { MessengerService } from '../../services/messenger-service/messenger.ser
 import { MessageInterface } from '../../interfaces/message-interface';
 import { collection, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
+import { MessageParserService } from '../../services/message-parser.service';
 
 @Component({
   selector: 'app-message',
@@ -57,11 +58,13 @@ export class MessageComponent {
   editMessageId: number;
   editMessage: boolean;
   unsubReactionList: any;
-
+  mesageparser = inject(MessageParserService);
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
 
   }
-
+  getParsedMessage(message: string) {
+    return this.mesageparser.parseMessage(this.message.content);
+  }
 
   ngOnInit() {
     this.unsubReactionList = this.subReactionList()

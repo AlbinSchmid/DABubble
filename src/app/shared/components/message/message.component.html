@@ -8,8 +8,8 @@
                 <span>Uhr</span>
             </p>
         </div>
-        <div>
-            {{ message.content }}
+        <div [innerHTML]="getParsedMessage(message.content)">
+            
         </div>
         <div id="reaktions-container">
             <mat-icon *ngIf="reactions.length !== 0" (click)="openOrCloseEmojiBoard()">add_reaction</mat-icon>
