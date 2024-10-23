@@ -22,7 +22,7 @@
             <div [ngClass]="{'status-offline-icon': user.userStatus == 'off'}"></div>
             <div [ngClass]="{'status-busy-icon': user.userStatus == 'busy'}"></div>
         </div>
-        <span>{{ user.username }}</span>
+        <span class="username-txt">{{ user.username }}</span>
         <span *ngIf="authService.currentUserSig()!.username === user.username" style="margin-left: -5px;">(Du)</span>
     </button>
 </div>
