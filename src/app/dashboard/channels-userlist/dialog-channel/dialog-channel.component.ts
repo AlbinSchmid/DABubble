@@ -7,7 +7,7 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
 import { AnimationChannelService } from '../channel-list/animation.service.service';
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
 import { MatIconModule } from '@angular/material/icon';
-import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { ChannelDataService } from './channel-data.service';
 
 @Component({
   selector: 'app-dialog-channel',
@@ -26,6 +26,7 @@ export class DialogChannelComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
   authService: AuthserviceService = inject(AuthserviceService);
+  channelDataService: ChannelDataService = inject(ChannelDataService);
   channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
   dialogRef: MatDialogRef<DialogChannelComponent> = inject(MatDialogRef);
 
@@ -33,23 +34,10 @@ export class DialogChannelComponent {
   selectInput: boolean = false;
   inputValueEmpty: boolean = true;
 
-  title: string = '';
-  description: string = '';
-  members: UserInterface[] = [];
 
-
-  constructor() { }
-
-  updateMembers(newMembers: UserInterface[]): void {
-    this.members = newMembers;
-  }
-
-  onTitleChanged(newTitle: string) {
-    this.title = newTitle;
-  }
-
-  onDescriptionChanged(newDescription: string) {
-    this.description = newDescription;
+  constructor() {
+    this.channelDataService.titleSource = '';
+    this.channelDataService.descriptionSource = '';
   }
 
   onSelectInputChanged(newSelect: boolean) {
@@ -85,11 +73,11 @@ export class DialogChannelComponent {
 
   setChannelOnject() {
     return {
-      title: this.title,
-      description: this.description,
+      title: this.channelDataService.titleSource,
+      description: this.channelDataService.descriptionSource,
       createdBy: this.authService.currentUserSig()!.username,
       isFocus: false,
-      user: this.members,
+      user: this.channelDataService.membersSource(),
       messages: []
     }
   }

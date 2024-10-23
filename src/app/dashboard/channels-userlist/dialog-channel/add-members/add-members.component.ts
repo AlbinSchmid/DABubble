@@ -1,18 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 import { FirestoreService } from '../../../../shared/services/firebase-services/firestore.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Channel } from '../../../../shared/interfaces/channel';
 import { Subscription } from 'rxjs';
-import { AnimationChannelService } from '../../channel-list/animation.service.service';
-import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { UserInterface } from '../../../../landing-page/interfaces/userinterface';
 import { MatCardModule } from '@angular/material/card';
+import { ChannelDataService } from '../channel-data.service';
 
 @Component({
   selector: 'app-add-members',
@@ -34,12 +33,10 @@ export class AddMembersComponent {
 
   @Output() inputSelectedChange = new EventEmitter<boolean>();
   @Output() inputValueChange = new EventEmitter<boolean>();
-  @Output() membersChange = new EventEmitter<UserInterface[]>();
 
 
   firestoreService: FirestoreService = inject(FirestoreService);
-  channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
-  authService: AuthserviceService = inject(AuthserviceService);
+  channelDataService: ChannelDataService = inject(ChannelDataService);
 
   channelListSubscription!: Subscription;
   channelList: Channel[] = [];
@@ -48,8 +45,6 @@ export class AddMembersComponent {
   userList: UserInterface[] = [];
 
   filteredUsers: UserInterface[] = [];
-
-  members = signal<UserInterface[]>([]);
 
   scrolledToEnd: boolean = false;
   selectInput: boolean = false;
@@ -112,8 +107,7 @@ export class AddMembersComponent {
 
   scrollToRightAfterAnimation() {
     let element = document.querySelector('.add-specific-member-contain') as HTMLElement;
-    this.members.set([]);
-    this.membersChange.emit(this.members());
+    this.channelDataService.membersSource.set([]);
     if (element) {
       setTimeout(() => {
         element.scrollTo({
@@ -144,16 +138,13 @@ export class AddMembersComponent {
   isFocus(selectedTitle: string) {
     this.channelList.forEach(channel => {
       if (channel.title === selectedTitle) {
-        this.members.set([]);
-        this.membersChange.emit(this.members());
+        this.channelDataService.membersSource.set([]);
         if (this.selectInput) {
           setTimeout(() => {
-            this.members.update(members => [...members, ...channel.user]);
-            this.membersChange.emit(this.members());
+            this.channelDataService.membersSource.update(members => [...members, ...channel.user]);
           }, 200);
         } else {
-          this.members.update(members => [...members, ...channel.user]);
-          this.membersChange.emit(this.members());
+          this.channelDataService.membersSource.update(members => [...members, ...channel.user]);
         }
       }
     });
@@ -223,8 +214,7 @@ export class AddMembersComponent {
 
   add(user: UserInterface): void {
     if (user) {
-      this.members.update(members => [...members, user]);
-      this.membersChange.emit(this.members());
+      this.channelDataService.membersSource.update(members => [...members, user]);
       let inputElement = document.querySelector('#userinput') as HTMLInputElement;
       if (inputElement) {
         inputElement.value = '';
@@ -235,12 +225,11 @@ export class AddMembersComponent {
   }
 
   remove(member: UserInterface): void {
-    this.members.update(members => {
+    this.channelDataService.membersSource.update(members => {
       let index = members.indexOf(member);
       if (index >= 0) {
         members.splice(index, 1);
       }
-      this.membersChange.emit(this.members());
       return [...members];
     });
   }
