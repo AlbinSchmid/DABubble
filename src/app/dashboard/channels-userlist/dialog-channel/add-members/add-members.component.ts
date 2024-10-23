@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,7 +49,6 @@ export class AddMembersComponent {
   scrolledToEnd: boolean = false;
   selectInput: boolean = false;
   endAnimation: boolean = true;
-  userNotFound: boolean = false;
 
   highlightedIndex: number = -1;
 
@@ -204,10 +203,8 @@ export class AddMembersComponent {
         return fullName.includes(value);
       });
       this.highlightedIndex = -1;
-      this.userNotFound = this.filteredUsers.length === 0;
     } else {
       this.filteredUsers = [];
-      this.userNotFound = false;
       this.highlightedIndex = -1;
     }
   }
