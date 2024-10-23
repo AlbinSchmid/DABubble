@@ -43,7 +43,7 @@ export class EmojiBoardComponent {
   }
   @Input() binding: any;
   @Output() callFunction = new EventEmitter<any>();
-  
+
   normalEmojis: string[] = [
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
     '😋', '😎', '😍', '😗', '😙', '🙂', '🤗', '🤔', '😐', '😑',
@@ -114,7 +114,9 @@ export class EmojiBoardComponent {
       this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent.slice(0, start) + emoji + this.firebaseMessenger.answerContent.slice(end);
     } if (this.binding == this.firebaseMessenger.reaktionContent) {
       this.addEmojiToReaction(start, emoji, end);
-    } if (this.binding.name == 'textareaEdit') {
+    } if (this.binding.name == 'textareaEdit') {      
+      console.log(this.messengerService.editMessageContent);
+      
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);
     }
   }

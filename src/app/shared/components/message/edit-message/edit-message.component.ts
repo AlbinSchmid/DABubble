@@ -40,7 +40,6 @@ export class EditMessageComponent implements OnInit{
       messageID: '',
     }
   };
-  
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
   @Output() closeEditMessage = new EventEmitter<boolean>();
@@ -107,7 +106,6 @@ export class EditMessageComponent implements OnInit{
   }
 
   deleteImage(url: string) {
-
     const index = this.messageItems.indexOf(url);
     if (index > -1) {
       this.messageItems.splice(index, 1); 
