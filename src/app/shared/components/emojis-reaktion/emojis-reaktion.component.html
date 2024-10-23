@@ -1,5 +1,5 @@
 <section>
-    <button (click)="alreadyExisitingReaktion()" [ngClass]="{'usedAlready': userUsedThisReactionAlready}">
+    <button (click)="alreadyExisitingReaktion()" [ngStyle]="{'border-color': getBorderColor(), 'background-color': getBackgroundColor()}">
         <div>
             <span>{{ reaction.content }}</span>
             <h6>{{ controllNamesArrayLength() }}</h6>

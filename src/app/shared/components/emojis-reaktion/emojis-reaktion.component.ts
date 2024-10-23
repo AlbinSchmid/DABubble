@@ -15,7 +15,7 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
   templateUrl: './emojis-reaktion.component.html',
   styleUrl: './emojis-reaktion.component.scss'
 })
-export class EmojisReaktionComponent implements OnInit{
+export class EmojisReaktionComponent{
   authService = inject(AuthserviceService);
   firebaseMessenger = inject(FirebaseMessengerService);
   messengerService = inject(MessengerService);
@@ -30,18 +30,24 @@ export class EmojisReaktionComponent implements OnInit{
   userUsedThisReactionAlready: boolean;
   foundID: boolean;
 
-
-  ngOnInit() {
+  
+  getBorderColor() {
     this.foundID = this.reaction.senderIDs.includes(this.authService.currentUserSig()?.userID ?? '');
-    console.log(this.authService.currentUserSig()?.userID);
-    
-    setTimeout(() => {
-      if (this.foundID) {
-        this.userUsedThisReactionAlready = true;
-      } else {
-        this.userUsedThisReactionAlready = false;
-      }
-    }, 100);
+    if (this.foundID) {
+      return '#444DF2';
+    } else {
+      return
+    }
+  }
+
+
+  getBackgroundColor() {
+    this.foundID = this.reaction.senderIDs.includes(this.authService.currentUserSig()?.userID ?? '');
+    if (this.foundID) {
+      return 'rgba(68, 77, 242, 0.1)';
+    } else {
+      return
+    }
   }
 
 
@@ -57,7 +63,7 @@ export class EmojisReaktionComponent implements OnInit{
   addUserToReaction() {
     this.reaction.senderIDs.push(this.authService.currentUserSig()?.userID || '');
     this.reaction.senderNames.push(this.authService.currentUserSig()?.username || '');
-    this.firebaseMessenger.updateReaktion(this.reaction, this.reaction.messageID, this.reaction.reactionID);
+    this.firebaseMessenger.updateReaction(this.reaction, this.reaction.messageID, this.reaction.reactionID);
   }
 
 
@@ -67,12 +73,13 @@ export class EmojisReaktionComponent implements OnInit{
     if (this.reaction.senderIDs.length == 0) {
       this.firebaseMessenger.deleteReaction(this.reaction.messageID, this.reaction.reactionID);
     } else {
-      this.firebaseMessenger.updateReaktion(this.reaction, this.reaction.messageID, this.reaction.reactionID);
+      this.firebaseMessenger.updateReaction(this.reaction, this.reaction.messageID, this.reaction.reactionID);
     }
   }
 
 
   controllText() {
+    this.foundID = this.reaction.senderIDs.includes(this.authService.currentUserSig()?.userID ?? '');
     if (this.foundID) {
       if (this.reaction.senderNames.length > 1) {
         return 'haben reagiert';
@@ -90,6 +97,7 @@ export class EmojisReaktionComponent implements OnInit{
 
 
   controllNamesArrayLength() {
+    this.foundID = this.reaction.senderIDs.includes(this.authService.currentUserSig()?.userID ?? '');
     if (this.foundID) {
       if (this.reaction.senderNames.length > 1) {
         if (this.reaction.senderNames.length > 2) {

@@ -5,6 +5,9 @@ import { ThreadService } from '../../services/thread-service/thread.service';
 import { CommonModule } from '@angular/common';
 import { MessageInterface } from '../../interfaces/message-interface';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
+import { collection, doc, Firestore, onSnapshot } from '@angular/fire/firestore';
+import { ReactionInterface } from '../../interfaces/reaction-interface';
+import { query, where, } from 'firebase/firestore';
 
 @Component({
   selector: 'app-emoji-board',
@@ -17,6 +20,11 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
 })
 export class EmojiBoardComponent {
   authService = inject(AuthserviceService);
+  firestore = inject(Firestore);
+  firebaseMessenger = inject(FirebaseMessengerService);
+  messengerService = inject(MessengerService);
+  threadService = inject(ThreadService);
+
   @Input() message: MessageInterface = {
     content: '',
     isRead: false,
@@ -35,6 +43,7 @@ export class EmojiBoardComponent {
   }
   @Input() binding: any;
   @Output() callFunction = new EventEmitter<any>();
+  
   normalEmojis: string[] = [
     '😀', '😁', '😂', '🤣', '😃', '😄', '😅', '😆', '😉', '😊',
     '😋', '😎', '😍', '😗', '😙', '🙂', '🤗', '🤔', '😐', '😑',
@@ -50,9 +59,31 @@ export class EmojiBoardComponent {
   activeBoard: string = 'normal';
   selectedEmoji: string | null = null;
   reactionContent: string;
+  reaction: ReactionInterface[] = [];
+  findReactionWithContent = false;
 
 
-  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) {
+  setRectionObject(element: any, id: string) {
+    return {
+      reactionID: id || '',
+      content: element.content || '',
+      senderIDs: element.senderIDs || '',
+      senderNames: element.senderNames || '',
+      messageID: this.message.id || '',
+    }
+  }
+
+
+  searchReaction(messageID: string, reactionContent: string, userID: string) {
+    let messegeRef = query(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
+    return onSnapshot(messegeRef, (list) => {
+      list.forEach(element => {
+        console.log(userID);
+        this.findReactionWithContent = true;
+        this.reaction = [];
+        this.reaction.push(this.setRectionObject(element.data(), element.id));
+      })
+    })
   }
 
 
@@ -82,15 +113,34 @@ export class EmojiBoardComponent {
     } if (this.binding.name == 'textareaThread') {
       this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent.slice(0, start) + emoji + this.firebaseMessenger.answerContent.slice(end);
     } if (this.binding == this.firebaseMessenger.reaktionContent) {
-      this.firebaseMessenger.findReaction = false;
-      this.firebaseMessenger.reactions = []; 
-      this.firebaseMessenger.reaktionContent = '';
-      this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
-      // this.firebaseMessenger.searchReaction(this.message.id, this.firebaseMessenger.reaktionContent);
-      
-      this.firebaseMessenger.createReaktion(this.message.id);
+      this.addEmojiToReaction(start, emoji, end);
     } if (this.binding.name == 'textareaEdit') {
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);
+    }
+  }
+
+
+  addEmojiToReaction(start: number, emoji: string, end: number) {
+    this.findReactionWithContent = false;
+    this.firebaseMessenger.reactions = [];
+    this.firebaseMessenger.reaktionContent = '';
+    this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
+    this.searchReaction(this.message.id, this.firebaseMessenger.reaktionContent, this.authService.currentUserSig()?.userID ?? '');
+    setTimeout(() => {
+      this.checkIfEmojiIsAlreadyExist();
+    }, 50);
+  }
+
+
+  checkIfEmojiIsAlreadyExist() {
+    if (this.findReactionWithContent) {
+      if (!this.reaction[0].senderIDs.includes(this.authService.currentUserSig()?.userID ?? '')) {
+        this.reaction[0].senderIDs.push(this.authService.currentUserSig()?.userID || '');
+        this.reaction[0].senderNames.push(this.authService.currentUserSig()?.username || '');
+        this.firebaseMessenger.updateReaction(this.reaction[0], this.reaction[0].messageID, this.reaction[0].reactionID);
+      }
+    } else {
+      this.firebaseMessenger.createReaktion(this.message.id);
     }
   }
 
