@@ -69,7 +69,7 @@ export class TextareaComponent {
   }
 
   async uploadFiles() {
-    let originalContent = this.firebaseMessenger.content
+    let originalContent = this.firebaseMessenger.content;
     console.log('Starting uploadFiles function');
     const folderName = `uploads/${this.messengerService.user.userID}/`;
     console.log(`Generated folder name: ${folderName}`);
@@ -84,15 +84,23 @@ export class TextareaComponent {
             console.log(`Upload success for file: ${file.name}`);
             const url = await getDownloadURL(snapshot.ref);
             console.log('File URL: ', url);
-            originalContent += `\n\n<img src="${url}" alt="${file.name}" style="max-width: 200px;"/>`;
+
+            // Check the file type based on the file extension
+            const fileExtension = file.name.split('.').pop()?.toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                originalContent += `\n\n<a href="${url}" target="_blank"><img src="${url}" alt="${file.name}" width="48px" height="48px"/> </a>`;
+            } else {
+                originalContent += `\n\n<a href="${url}" target="_blank"><img width="48px" height="48px" src="assets/icons/pdf.webp" alt="${file.name}"></a>`;
+            }
+            
             this.firebaseMessenger.content = originalContent;
         } catch (error) {
             console.error('Upload error for file: ', file.name, error);
         }
     }
-    this.firebaseMessenger.createMessage('')
+    this.firebaseMessenger.createMessage('');
     this.selectedFiles = [];
-  }
+}
   
   deletePreviewFile(file: any) {
     this.selectedFiles = this.selectedFiles.filter(f => f !== file);

@@ -26,8 +26,7 @@
         </div>
         
         <div *ngIf="file.type === 'application/pdf'">
-          <p>{{file.name}}</p>
-          <a [href]="file.data" target="_blank">PDF öffnen</a>
+          <a [href]="file.data" target="_blank"><img style="width: 48px; height: 48px;" src="assets/icons/pdf.webp" alt=""></a>
         </div>
         </div>
     </div>
