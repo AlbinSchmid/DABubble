@@ -25,22 +25,40 @@ import { AuthserviceService } from '../services/authservice.service';
 })
 export class LandingSignupDialogComponent {
   selectedAvatar: string = '';
-  isFocused = {username: false, email: false,password: false,checkbox:false,};
-  fb=inject(FormBuilder)
+  isFocused = { username: false, email: false, password: false, checkbox: false, };
+  fb = inject(FormBuilder)
   authService = inject(AuthserviceService)
   errorMessage: string | null = null;
-  constructor(private router:Router,) {}
+  constructor(private router: Router,) { }
 
 
-  
+
   accountForm = this.fb.nonNullable.group({
-    username: ['', [Validators.required, Validators.pattern(/^(?=.{1,23}$)([a-zA-Z]{1,23}\s[a-zA-Z]{1,23})$/)]],
-    email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)]],
+    username: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.{1,23}$)([a-zA-ZÀ-ÖØ-öø-ÿ]{1,23}\s[a-zA-ZÀ-ÖØ-öø-ÿ]{1,23})$/)
+      ]
+    ],
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ]
+    ],
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
+      ]
+    ],
     privacyPolicy: [false, Validators.requiredTrue],
   });
 
-  
+
 
 
   /**
