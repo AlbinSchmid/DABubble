@@ -63,7 +63,6 @@ export class MessengerComponent implements AfterViewInit {
     setTimeout(() => {
       this.scrollToBottom();
     },10);
-    
   }
 
 

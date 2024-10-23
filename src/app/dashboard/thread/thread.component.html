@@ -10,13 +10,6 @@
     </header>
     <div id="content">
         <div id="messages-container" #content>
-            @for (message of firebaseMessenger.answers; track $index) {
-                <app-message [messageIndex]="$index" [message]="message" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage" [sourceThread]="sourceThread"></app-message>
-            }
-            <div id="answers-info">
-                <p>{{ checkAnswerArrayLength() }}</p>
-                <div></div>
-            </div>
             <div class="message">
                 <img src="{{ threadService.senderAvatar }}" alt="Profile">
                 <div id="message-content">
@@ -32,6 +25,14 @@
                     </div>
                 </div>
             </div>
+            <div id="answers-info">
+                <p>{{ checkAnswerArrayLength() }}</p>
+                <div></div>
+            </div>
+            @for (message of firebaseMessenger.answers; track $index) {
+                <app-message [messageIndex]="$index" [message]="message" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage" [sourceThread]="sourceThread"></app-message>
+            }
+            
         </div>
         <app-textarea [sourceThread]="sourceThread" ></app-textarea>
     </div>

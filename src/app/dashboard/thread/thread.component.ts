@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
@@ -28,11 +28,31 @@ export class ThreadComponent {
   reduceInteraktionBtn = true;
   editAnswerMessage = true;
   sourceThread = true;
+  @ViewChild('content') scrollContainer: ElementRef;
   
   
   
   constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
     this.unsubAnswerList = firebaseMessenger.subAnswersList();   
+  }
+
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
+  }
+  
+
+  scrollTo() {
+    setTimeout(() => {
+      this.scrollToBottom();
+    },10);
+  }
+
+
+  scrollToBottom() {
+    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
   }
   
 

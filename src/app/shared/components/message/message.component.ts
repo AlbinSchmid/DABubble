@@ -30,6 +30,10 @@ import { MessageParserService } from '../../services/message-parser.service';
 })
 export class MessageComponent {
   authService = inject(AuthserviceService);
+  mesageparser = inject(MessageParserService);
+  firebaseMessenger = inject(FirebaseMessengerService);
+  threadService = inject(ThreadService);
+  messengerService = inject(MessengerService);
   firestore: Firestore = inject(Firestore);
   @Input() message: MessageInterface = {
     content: '',
@@ -47,27 +51,49 @@ export class MessageComponent {
       messageID: '',
     }
   };
-  reactions: ReactionInterface[] = [];
   @Input() messageIndex: number;
   @Input() reduceContent: boolean;
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
+  reactions: ReactionInterface[] = [];
+  answers: MessageInterface[] = [];
   hoveredMenu = false;
   showEmojiBoard = false;
   hoveredMessageId: number;
   editMessageId: number;
   editMessage: boolean;
   unsubReactionList: any;
-  mesageparser = inject(MessageParserService);
-  constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService) {
+  unsubAnswersList: any;
 
-  }
+
   getParsedMessage(message: string) {
     return this.mesageparser.parseMessage(this.message.content);
   }
 
+
+  giveAnswerLengthBack() {
+    if (this.answers.length == 0) {
+      return `Antworten`;
+    } else if (this.answers.length == 1) {
+      return `${this.answers.length} Antwort`;
+    } else {
+      return `${this.answers.length} Antworten`;
+    }
+  }
+
+
+  giveLastAnswerDateBack() {
+    if (this.answers.length == 0) {
+      return;
+    } else {
+      return `${this.answers[this.answers.length - 1].date}`;
+    }
+  }
+
+
   ngOnInit() {
-    this.unsubReactionList = this.subReactionList()
+    this.unsubReactionList = this.subReactionList();
+    this.unsubAnswersList = this.subAnswersList();
   }
 
 
@@ -90,6 +116,20 @@ export class MessageComponent {
       senderNames: element.senderNames || '',
       messageID: this.message.id || '',
     }
+  }
+
+
+  subAnswersList() {
+    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.message.id}/answers`)
+    return onSnapshot(messegeRef, (list) => {
+      this.answers = [];
+      list.forEach(element => {
+        this.answers.push(this.firebaseMessenger.setMessageObject(element.data(), element.id));
+      });
+      this.firebaseMessenger.sortByDate(this.answers);
+      console.log(this.answers[3]);
+      
+    })
   }
 
 

@@ -18,9 +18,9 @@
             }
         </div>
         <div *ngIf="!reduceContent" id="answer-container">
-            <a (click)="openThead()">1</a>
-            <p>Letzte Antwort 14:56</p>
-        </div>
+            <a (click)="openThead()">{{ giveAnswerLengthBack() }}</a>
+            <p> <span *ngIf="answers.length > 0">Letzte Antwort um</span> {{ giveLastAnswerDateBack() | date: 'H:mm' }}</p>
+        </div> 
     </div>
     <div class="interaction" *ngIf="hoveredMessageId == messageIndex && !editMessage">
         <button *ngIf="!reduceContent"><img src="/assets/icons/check.png" alt=""></button>
