@@ -46,8 +46,8 @@ export class EditMessageComponent implements OnInit{
   showEdit = false;
   showEmojiBoard = false;
   messageParser = inject(MessageParserService);
-  messageText='';
-  messageItems:string[]=[];
+  messageText= '';
+  messageItems:string[] = [];
 
 
   constructor(private firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {
@@ -57,27 +57,57 @@ export class EditMessageComponent implements OnInit{
     });
   }
 
-  ngOnInit() {
-    this.extractImagesAndText(this.message.content);
-    console.log('Extracted Images:', this.messageItems);
-    console.log('Remaining Text:', this.messageText);
+
+  getMessageText() {
+    const parsedMessage = this.messageParser.parseMessage(this.message.content);
+    this.extractLinksAndText(parsedMessage);
+    console.log('Text Message:', this.messageText);
+    console.log('Message Items (Full HTML Tags):', this.messageItems);
+  }
+
+  extractLinksAndText(text: string) {
+    const anchorTagRegex = /<a\s+[^>]+>(.*?)<\/a>/g;
+    let match;
+    let lastIndex = 0;
+    while ((match = anchorTagRegex.exec(text)) !== null) {
+      console.log("Matched Anchor Tag: ", match[0]);
+      this.messageText += text.substring(lastIndex, match.index);
+  
+      const currentTag = match[0];
+      const imageTagRegex = /<img\s+[^>]*src="([^"]+)"[^>]*>/g;
+      const imageTagMatch = imageTagRegex.exec(currentTag);
+  
+      if (imageTagMatch) {
+        const imageUrl = imageTagMatch[1];
+        console.log("Found Image URL: ", imageUrl);
+        const fileExtension = (imageUrl.split('.').pop() || '').toLowerCase();
+        if (!['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+          console.log("Pushing Non-Image Anchor Tag to messageItems: ", currentTag);
+          this.messageItems.push(currentTag);  
+        }
+      } else {
+        console.log("Pushing Normal Anchor Tag to messageItems: ", currentTag);
+        this.messageItems.push(currentTag);  
+      }
+      lastIndex = anchorTagRegex.lastIndex;
+    }
+    this.messageText += text.substring(lastIndex).trim();
+    console.log('Final messageText: ', this.messageText);
+    console.log('Final messageItems: ', this.messageItems);
   }
 
 
-  extractImagesAndText(messageContent: string): void {
-    const imgRegex = /<img[^>]+src="([^">]+)"[^>]*>/g;
-    let match;
-    this.messageItems = [];
-    this.messageText = messageContent;
-    while ((match = imgRegex.exec(messageContent)) !== null) {
-        const url = match[1];  
-        this.messageItems.push(url);  
-    }
-    this.messageText = this.messageText.replace(imgRegex, '').trim();
-    this.messageText = this.messageText.replace(/<[^>]*>/g, '').trim(); 
-    console.log('Extracted Images:', this.messageItems);
+
+  
+ 
+
+  ngOnInit() {
     console.log('Remaining Text:', this.messageText);
-}
+    this.getMessageText();
+  }
+
+
+ 
 
   closeOrOpenEmojisBoard() {
     if (!this.showEmojiBoard) {
@@ -94,24 +124,29 @@ export class EditMessageComponent implements OnInit{
 
 
   checkWithMessageShouldUptade() {
-    const imageTags = this.messageItems.map(url => `<img src="${url}" alt="Image" style="max-width: 200px;"/>`).join('');
+
+    const imageTags = this.messageItems.map(item => item).join(' '); 
     this.message.content = `${this.messageText} ${imageTags}`.trim(); 
 
+    console.log('Final message content before update:', this.message.content);
     if (this.editAnswerMessage) {
-        this.firebase.updateAnswer(this.message, this.message.id);
+        this.firebase.updateAnswer(this.message, this.message.id)
+            .then(() => console.log('Message answer updated successfully'))
+            .catch(err => console.error('Error updating message answer:', err));
     } else {
-        this.firebase.updateMessage(this.message, this.message.id);
+        this.firebase.updateMessage(this.message, this.message.id)
+            .then(() => console.log('Message updated successfully'))
+            .catch(err => console.error('Error updating message:', err));
     }
     this.closeEdit();
-  }
+}
 
-  deleteImage(url: string) {
-    const index = this.messageItems.indexOf(url);
-    if (index > -1) {
-      this.messageItems.splice(index, 1); 
-    }
-    const imageTags = this.messageItems.map(imgUrl => `<img src="${imgUrl}" alt="Image" style="max-width: 200px;"/>`).join('');
-    this.message.content = `${this.messageText} ${imageTags}`.trim(); 
-    console.log('Updated Message Content:', this.message.content);
+deleteImage(item: string) {
+
+  const index = this.messageItems.indexOf(item);
+  if (index > -1) {
+    this.messageItems.splice(index, 1);
   }
+  console.log('Updated messageItems:', this.messageItems);
+}
 }

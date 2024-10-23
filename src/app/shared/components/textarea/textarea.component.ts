@@ -9,7 +9,8 @@ import { MatIcon } from '@angular/material/icon';
 import { provideStorage, getStorage, Storage } from '@angular/fire/storage';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
-
+import { MatDialog } from '@angular/material/dialog';
+import { FileViewDialogComponent } from '../file-view-dialog/file-view-dialog.component';
 @Component({
   selector: 'app-textarea',
   standalone: true,
@@ -32,7 +33,8 @@ export class TextareaComponent {
   storage: Storage;
   authService = inject(AuthserviceService);
   date= new Date();
-  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService) {
+  
+  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService, private dialog:MatDialog) {
     this.storage = inject(Storage);
   }
   
@@ -61,7 +63,15 @@ export class TextareaComponent {
   selectedFileToView: any;
 
   viewFile(file: any) {
-    this.selectedFileToView = file;
+    const dialogRef = this.dialog.open(FileViewDialogComponent, {
+      width: '80%',
+      height: '80%',
+      data: { file: file } 
+    });
+
+    dialogRef.afterClosed().subscribe(result => { 
+      this.selectedFileToView = null;
+    });
   }
 
   closeModal() {
