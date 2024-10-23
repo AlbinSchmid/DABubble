@@ -8,6 +8,7 @@ import { Channel } from '../../../shared/interfaces/channel';
 import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 
 @Component({
@@ -23,6 +24,7 @@ import { MessengerService } from '../../../shared/services/messenger-service/mes
 export class UserListComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
+  authService: AuthserviceService = inject(AuthserviceService);
 
   userList: UserInterface[] = [];
   userListSubscription!: Subscription;
@@ -55,7 +57,6 @@ export class UserListComponent {
     }, 500);
   }
 
-
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
     this.firestoreService.startSnapshot('channels');
@@ -75,10 +76,6 @@ export class UserListComponent {
       this.userListSubscription.unsubscribe();
     }
   }
-
-  // ngAfterViewInit() {
-  //   setTimeout(() => this.toggleDirectMessages(), 1000);
-  // }
 
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;

@@ -3,6 +3,7 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../interfaces/channel';
 import { BehaviorSubject } from 'rxjs';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 type EntityTypes = UserInterface | Channel;
 
@@ -16,6 +17,7 @@ type EntityTypes = UserInterface | Channel;
 export class FirestoreService {
 
   firestore: Firestore = inject(Firestore);
+  authService: AuthserviceService = inject(AuthserviceService);
 
   userList$ = new BehaviorSubject<UserInterface[]>([]);
   channelList$ = new BehaviorSubject<Channel[]>([]);
@@ -41,24 +43,35 @@ export class FirestoreService {
   }
 
   /**
-   * Sets up a snapshot listener for the 'users' collection and updates the `userList$` observable.
-   * Filters out unwanted users, sorts the remaining users by username, and pushes the result to `userList$`.
+   * Sets up a Firestore snapshot listener for the 'users' collection and updates the `userList$` observable.
+   * It filters out unwanted users (e.g., 'Neuer Gast'), sorts the remaining users by username,
+   * and ensures that the current user is always at the top of the list.
    * @param {string} collId - The collection ID to listen to (typically 'users').
    */
   startUserSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
       let userList: UserInterface[] = [];
+
       snapshot.forEach(doc => {
         let userObj = this.setDummyObject(doc.data() as UserInterface, doc.id) as UserInterface;
         userList.push(userObj);
       });
 
-      // Filter out unwanted users and sort by username
+      let currentUser = this.authService.currentUserSig()!.username;
       userList = userList.filter(user => user.username !== 'Neuer Gast');
       userList.sort((a, b) => a.username.localeCompare(b.username));
+
+      let currentUserIndex = userList.findIndex(user => user.username === currentUser);
+      if (currentUserIndex > -1) {
+        let [currentUserObj] = userList.splice(currentUserIndex, 1);
+        userList.unshift(currentUserObj);
+      }
+
       this.userList$.next(userList);
     });
   }
+
+
 
   /**
    * Sets up a snapshot listener for the 'channels' collection and updates the `channelList$` observable.
