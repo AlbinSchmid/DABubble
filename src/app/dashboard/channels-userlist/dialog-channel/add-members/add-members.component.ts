@@ -196,11 +196,12 @@ export class AddMembersComponent {
   searchUserByName(event: Event): void {
     let inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim().toLowerCase();
+    let existingMembers = this.channelDataService.membersSource().map(member => member.userID);
 
     if (value) {
       this.filteredUsers = this.userList.filter(user => {
         let fullName = user.username.toLowerCase();
-        return fullName.includes(value);
+        return fullName.includes(value) && !existingMembers.includes(user.userID);
       });
       this.highlightedIndex = -1;
     } else {
