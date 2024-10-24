@@ -9,17 +9,12 @@
         </div>
     }
     </div>
-
-
-
-    
-   
     <textarea [(ngModel)]="messageText" name="textareaEdit" id="" #textareaThread pattern="^[\s\S]*\S[\s\S]*$" required="" #textarea="ngModel"></textarea>
     <div>
         <mat-icon (click)="closeOrOpenEmojisBoard()">sentiment_satisfied</mat-icon>
         <div>
             <button mat-stroked-button (click)="closeEdit()">Abbrechen</button>
-            <button mat-flat-button (click)="checkWithMessageShouldUptade()" [disabled]="!textarea.valid">Speichern</button>
+            <button mat-flat-button (click)="checkWithMessageShouldUptade()" [disabled]="!textarea.valid && messageItems.length < 1">Speichern</button>
         </div>
     </div>
     <app-emoji-board *ngIf="showEmojiBoard" [ngStyle]="{'left.px': sourceThread ? 20 : 160}" (callFunction)="closeOrOpenEmojisBoard()" [binding]="textareaThread"></app-emoji-board>

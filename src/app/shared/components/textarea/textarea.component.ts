@@ -33,6 +33,7 @@ export class TextareaComponent {
   storage: Storage;
   authService = inject(AuthserviceService);
   date= new Date();
+  messenger:string = 'messenger';
   
   constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService, private dialog:MatDialog) {
     this.storage = inject(Storage);
@@ -74,11 +75,8 @@ export class TextareaComponent {
     });
   }
 
-  closeModal() {
-    this.selectedFileToView = null;
-  }
 
-  async uploadFiles() {
+  async uploadFiles(messenger :any) {
     let originalContent = this.firebaseMessenger.content;
     console.log('Starting uploadFiles function');
     const folderName = `uploads/${this.messengerService.user.userID}/`;
@@ -108,7 +106,13 @@ export class TextareaComponent {
             console.error('Upload error for file: ', file.name, error);
         }
     }
+    if (messenger === 'messenger') {
     this.firebaseMessenger.createMessage('');
+    }else{
+      this.firebaseMessenger.answerContent = originalContent;
+      this.firebaseMessenger.createAnswer(this.threadService.messageId);
+      
+    }
     this.selectedFiles = [];
 }
   
