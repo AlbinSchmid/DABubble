@@ -44,8 +44,12 @@ export class UserListComponent {
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
     this.messengerService.user = user;
-    this.messengerService.chartId = '';
-
+    this.messengerService.openChannel = false;
+    this.messengerService.openChart = true;
+    this.messengerService.channel = {
+      channelID: '',
+      title: '',
+    };
     this.firebaseMessenger.searchChat(user.userID);
     setTimeout(() => {
       if (this.messengerService.chartId == '') {

@@ -8,6 +8,9 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogChannelComponent } from '../dialog-channel/dialog-channel.component';
 import { AnimationChannelService } from './animation.service.service';
+import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
+import { ThreadService } from '../../../shared/services/thread-service/thread.service';
+import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
 
 @Component({
   selector: 'app-channel-list',
@@ -23,6 +26,9 @@ import { AnimationChannelService } from './animation.service.service';
 export class ChannelListComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
+  firebaseMessenger = inject(FirebaseMessengerService);
+  messengerService = inject(MessengerService);
+  threadService = inject(ThreadService);
 
   channelList: Channel[] = [];
   channelListSubscription!: Subscription;
@@ -37,6 +43,21 @@ export class ChannelListComponent {
   constructor() {
     this.channelAnimationService.isChannelOpen = false;
   }
+
+
+  showChannel(channel: any) {
+    this.messengerService.showMessenger = false;
+    this.threadService.showThread = false;
+    this.messengerService.channel = channel;
+    console.log(this.messengerService.channel); 
+    this.messengerService.openChannel = true;
+    this.messengerService.openChart = false;
+    setTimeout(() => {
+      this.messengerService.showMessenger = true;
+      
+    }, 100);
+  }
+
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('channels');

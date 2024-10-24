@@ -16,7 +16,7 @@
 </div>
 <div class="btns-contain max-height-contain"
     [ngStyle]="{'max-height': this.channelAnimationService.isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
-    <button *ngFor="let channel of channelList; let i = index" (click)="focusChannel(channel)"
+    <button *ngFor="let channel of channelList; let i = index" (click)="focusChannel(channel); showChannel(channel)"
         [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
         [ngClass]="{'focus-btn': channel.isFocus,'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
         <mat-icon fontIcon="tag"></mat-icon>

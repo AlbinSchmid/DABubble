@@ -75,7 +75,7 @@ export class EmojiBoardComponent {
 
 
   searchReaction(messageID: string, reactionContent: string, userID: string) {
-    let messegeRef = query(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
+    let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
         console.log(userID);
@@ -83,7 +83,7 @@ export class EmojiBoardComponent {
         this.reaction = [];
         this.reaction.push(this.setRectionObject(element.data(), element.id));
       })
-    })
+    });
   }
 
 
@@ -116,7 +116,6 @@ export class EmojiBoardComponent {
       this.addEmojiToReaction(start, emoji, end);
     } if (this.binding.name == 'textareaEdit') {      
       console.log(this.messengerService.editMessageContent);
-      
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);
     }
   }

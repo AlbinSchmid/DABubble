@@ -37,7 +37,13 @@ export class MessengerService {
     userStatus: '',
     isFocus: false,
   }
+  channel = {
+    channelID: '',
+    title: '',
+  };
 
+  openChannel = false;
+  openChart = false;
   constructor() {
   }
 }

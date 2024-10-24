@@ -98,7 +98,7 @@ export class MessageComponent {
 
 
   subReactionList() {
-    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.message.id}/reactions`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.id}/reactions`)
     return onSnapshot(messegeRef, (list) => {
       this.reactions = [];
       list.forEach(element => {
@@ -120,15 +120,13 @@ export class MessageComponent {
 
 
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.message.id}/answers`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.id}/answers`)
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
         this.answers.push(this.firebaseMessenger.setMessageObject(element.data(), element.id));
       });
       this.firebaseMessenger.sortByDate(this.answers);
-      console.log(this.answers[3]);
-      
     })
   }
 

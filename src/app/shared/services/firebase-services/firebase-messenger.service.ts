@@ -25,12 +25,12 @@ export class FirebaseMessengerService {
   messageOrThread: string;
 
 
-  constructor(private threadService: ThreadService, private messengerService: MessengerService) { } 
+  constructor(private threadService: ThreadService, private messengerService: MessengerService) { }
 
 
   async deleteReaction(messageID: string, reaktionID: string) {
     await deleteDoc(doc(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions/${reaktionID}`))
-    
+
   }
 
 
@@ -39,7 +39,7 @@ export class FirebaseMessengerService {
    * @returns Get the path of the messeges of 1 chat
    */
   subChatsList() {
-    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges`)
+    const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges`)
     return onSnapshot(messegeRef, (list) => {
       this.messages = [];
       list.forEach(element => {
@@ -56,15 +56,13 @@ export class FirebaseMessengerService {
    * @returns get the path of the answere chat
    */
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.threadService.messageId}/answers`);
+    const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${this.threadService.messageId}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
         this.answers.push(this.setMessageObject(element.data(), element.id));
       });
       this.answers = this.sortByDate(this.answers);
-      console.log(this.answers);
-
     })
   }
 
@@ -91,7 +89,6 @@ export class FirebaseMessengerService {
         senderNames: '',
         messageID: '',
       },
-
     }
   }
 
@@ -169,7 +166,7 @@ export class FirebaseMessengerService {
    * @param message - the sent message
    */
   async addMessage(message: any, messageId: string) {
-    await addDoc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges${this.checkMessageId(messageId)}`), message).catch(
+    await addDoc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges${this.checkMessageId(messageId)}`), message).catch(
       (err) => {
         console.error(err);
       }
@@ -181,8 +178,25 @@ export class FirebaseMessengerService {
   }
 
 
+  chatOrChannel(src: string) {
+    if (src == 'chatOrChannel') {
+      if (this.messengerService.openChart) {
+        return 'chats';
+      } else {
+        return 'channels';
+      }
+    } else {
+      if (this.messengerService.openChart) {
+        return `${this.messengerService.chartId}`;
+      } else {
+        return `${this.messengerService.channel.channelID}`;
+      }
+    }
+  }
+
+
   async addReaction(messageId: string, reaction: any) {
-    await addDoc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageId}/reactions`), reaction).catch(
+    await addDoc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${messageId}/reactions`), reaction).catch(
       (err) => {
         console.error(err);
       }
@@ -277,7 +291,7 @@ export class FirebaseMessengerService {
 
 
   async updateAnswer(message: any, answerId: string) {
-    let ref = doc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${this.threadService.messageId}/answers`), answerId);
+    let ref = doc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${this.threadService.messageId}/answers`), answerId);
     await updateDoc(ref, this.getCleanJson(message)).catch(
       (err) => {
         console.error(err);
@@ -287,8 +301,8 @@ export class FirebaseMessengerService {
 
 
 
-  async updateReaction(reaction: any, messageID: string ,reactionID: string ) {
-    let ref = doc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions`), reactionID);
+  async updateReaction(reaction: any, messageID: string, reactionID: string) {
+    let ref = doc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${messageID}/reactions`), reactionID);
     await updateDoc(ref, this.getCleanReaction(reaction)).catch(
       (err) => {
         console.error(err);
@@ -327,7 +341,7 @@ export class FirebaseMessengerService {
    * @returns - returns the correct path
    */
   getSingleDocRef(messageId: string) {
-    return doc(collection(this.firestore, `chats/${this.messengerService.chartId}/messeges`), messageId)
+    return doc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges`), messageId)
   }
 
 

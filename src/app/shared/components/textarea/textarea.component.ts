@@ -37,6 +37,17 @@ export class TextareaComponent {
   constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService, private dialog:MatDialog) {
     this.storage = inject(Storage);
   }
+
+
+  chatOrChannelTxt() {
+    if (this.messengerService.openChart) {
+      return `Schreibe eine Nachricht an ${this.messengerService.user.username}`
+    } else {
+      return `Nachricht an #${this.messengerService.channel.title}`
+    }
+    
+  }
+
   
   /**
    * Open or close the emoji board.
