@@ -67,6 +67,9 @@ export class MessageComponent {
 
 
   getParsedMessage(message: string) {
+    if (this.editAnswerMessage) {
+      return message;
+    }
     return this.mesageparser.parseMessage(this.message.content);
   }
 
