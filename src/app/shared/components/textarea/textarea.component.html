@@ -14,8 +14,8 @@
             <button (click)="openOrCloseEmojiBoard()"></button>
             <button *ngIf="messengerService.openChannel"></button>
         </div>
-        <button id="send-message-btn" (click)="uploadFiles(); scrollDivDown()" *ngIf="texterea.valid"><img
-                src="/assets/icons/send.png" alt="send-icon"></button>
+        <button id="send-message-btn" (click)="uploadFiles(messenger);scrollDivDown()" *ngIf="texterea.valid || selectedFiles.length > 0"><img
+                src="/assets/icons/send.png"  alt="send-icon"></button>
     </div>
     <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea"
         (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
@@ -41,15 +41,19 @@
 
     <div id="interaction">
         <div id="button-container-left">
-            <button></button>
+            <p>
+                <mat-icon (click)="fileInput.click()">add</mat-icon>
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*,application/pdf" multiple style="display: none;">
+            </p>
+    
+            <div></div>
             <div></div>
             <button (click)="openOrCloseEmojiBoard()"></button>
             <button *ngIf="messengerService.openChannel"></button>
         </div>
         <button id="send-message-btn" (click)="firebaseMessenger.createAnswer(threadService.messageId) "
-            *ngIf="texterea.valid"><img src="/assets/icons/send.png" alt="send-icon"></button>
+            *ngIf="texterea.valid"><img src="/assets/icons/send.png"  alt="send-icon"></button>
     </div>
-    <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea"
-        (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
+    <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     }
 </section>

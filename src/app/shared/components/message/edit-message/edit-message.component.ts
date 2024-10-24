@@ -51,10 +51,6 @@ export class EditMessageComponent implements OnInit{
 
 
   constructor(private firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {
-    setTimeout(() => {
-      
-      
-    });
   }
 
 

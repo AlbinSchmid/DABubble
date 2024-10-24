@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MessageComponent } from '../../shared/components/message/message.component';
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
+import { MessageParserService } from '../../shared/services/message-parser.service';
 
 @Component({
   selector: 'app-thread',
@@ -29,7 +30,7 @@ export class ThreadComponent {
   editAnswerMessage = true;
   sourceThread = true;
   @ViewChild('content') scrollContainer: ElementRef;
-  
+  parser= inject(MessageParserService);
   
   
   constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
