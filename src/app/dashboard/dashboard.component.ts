@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { AuthserviceService } from '../landing-page/services/authservice.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserInterface } from '../landing-page/interfaces/userinterface';
+import { Subject, takeUntil, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,24 +40,58 @@ export class DashboardComponent {
   messengerService: MessengerService = inject(MessengerService);
   router: Router = inject(Router);
 
+  userFound$ = new Subject<void>();
+
   isUserLoaded = false;
   isLoggingOut = false;
   isSideNavOpen: boolean = true;
 
   constructor() { }
 
+  /**
+   * OnInit lifecycle hook. Starts observing the user stream from the AuthService
+   * with a timeout of 5 seconds, navigating to the home page if the user is not found.
+   */
   ngOnInit(): void {
-    this.authService.user$.subscribe((user: UserInterface | null) => {
-      if (user) {
-        this.isUserLoaded = true;
-      } else {
-        this.isUserLoaded = false;
-      }
-    });
+    this.authService.user$
+      .pipe(
+        timeout(5000),
+        takeUntil(this.userFound$)
+      )
+      .subscribe(
+        (user: UserInterface | null) => {
+          if (user) {
+            this.isUserLoaded = true;
+            this.userFound$.next();
+            this.userFound$.complete();
+          } else {
+            this.isUserLoaded = false;
+          }
+        },
+        (err: any) => {
+          if (err.name === 'TimeoutError') {
+            this.router.navigate(['']);
+            alert('Zeitüberschreitung, versuchen Sie es bitte erneut!');
+          } else {
+            this.router.navigate(['']);
+            alert('Ein unerwarteter Fehler ist aufgetreten:' + err.message);
+          }
+        }
+      );
   }
 
+  /**
+   * Toggles the side navigation drawer and updates its open/close state.
+   */
   toggleSideNav(): void {
     this.drawer.toggle();
     setTimeout(() => this.isSideNavOpen = !this.isSideNavOpen, 100);
+  }
+
+  /**
+   * OnDestroy lifecycle hook. Completes the userFound subject to clean up resources.
+   */
+  ngOnDestroy(): void {
+    this.userFound$.complete();
   }
 }
