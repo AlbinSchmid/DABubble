@@ -9,11 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { ThreadService } from '../shared/services/thread-service/thread.service';
 import { MessengerService } from '../shared/services/messenger-service/messenger.service';
-import { MessageComponent } from '../shared/components/message/message.component';
-import { OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 import { AuthserviceService } from '../landing-page/services/authservice.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { UserInterface } from '../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,34 +26,35 @@ import { AuthserviceService } from '../landing-page/services/authservice.service
     MatButtonModule,
     MatIconModule,
     CommonModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent  {
+export class DashboardComponent {
   @ViewChild('drawer') drawer!: MatDrawer;
-  isSideNavOpen: boolean = true;
-  private routerSubscription: Subscription;
-  authService = inject(AuthserviceService)
-  router: Router = inject(Router)
-  isLoggingOut = false;
-  constructor(public threadService: ThreadService, public messengerService: MessengerService) {
 
+  authService: AuthserviceService = inject(AuthserviceService);
+  threadService: ThreadService = inject(ThreadService);
+  messengerService: MessengerService = inject(MessengerService);
+  router: Router = inject(Router);
+
+  isUserLoaded = false;
+  isLoggingOut = false;
+  isSideNavOpen: boolean = true;
+
+  constructor() { }
+
+  ngOnInit(): void {
+    this.authService.user$.subscribe((user: UserInterface | null) => {
+      if (user) {
+        this.isUserLoaded = true;
+      } else {
+        this.isUserLoaded = false;
+      }
+    });
   }
 
-  /**
-   * Listen to router events and logout when navigating away from /dashboard
-   */
-
-  
-
-
-  /**
-   * Toggle the side navigation drawer open or closed.
-   * 
-   * When the drawer is opened or closed, the isSideNavOpen flag is updated
-   * after a short delay to ensure the animation has finished.
-   */
   toggleSideNav(): void {
     this.drawer.toggle();
     setTimeout(() => this.isSideNavOpen = !this.isSideNavOpen, 100);

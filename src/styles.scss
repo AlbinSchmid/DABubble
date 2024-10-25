@@ -416,6 +416,11 @@ mat-card {
         url("/fonts/Symbola-Emoji.ttf") format("ttf");
 }
 
+.loading-spinner circle {
+    stroke: #444DF2 !important;
+    stroke-width: 7 !important;
+}
+
 /* nunito-200 - latin */
 @font-face {
     font-display: swap;

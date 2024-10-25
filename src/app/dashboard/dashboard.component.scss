@@ -111,3 +111,11 @@ span {
 .open-txt {
     height: 330px;
 }
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #ECEEFE;
+}

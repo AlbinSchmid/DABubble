@@ -1,24 +1,32 @@
-<main>
-    <app-header></app-header>
-    <section>
-        <mat-drawer-container>
-            <mat-drawer #drawer mode="side" [opened]="isSideNavOpen">
-                <app-channels-userlist></app-channels-userlist>
-            </mat-drawer>
+<ng-container *ngIf="isUserLoaded; else loading">
+    <main>
+        <app-header></app-header>
+        <section>
+            <mat-drawer-container>
+                <mat-drawer #drawer mode="side" [opened]="isSideNavOpen">
+                    <app-channels-userlist></app-channels-userlist>
+                </mat-drawer>
 
-            <mat-drawer-content>
-                <app-messenger *ngIf="messengerService.showMessenger"></app-messenger>
-                <app-thread *ngIf="threadService.showThread"></app-thread>
-            </mat-drawer-content>
-        </mat-drawer-container>
-    </section>
-    <button class="toggle-btn" (click)="toggleSideNav()"
-        [ngClass]="{ 'close-btn': isSideNavOpen, 'open-btn': !isSideNavOpen }">
-        <div class="txt-icon-contain">
-            <span>
-                {{ isSideNavOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen' }}
-            </span>
-            <mat-icon fontIcon="open_in_browser"></mat-icon>
-        </div>
-    </button>
-</main>
+                <mat-drawer-content>
+                    <app-messenger *ngIf="messengerService.showMessenger"></app-messenger>
+                    <app-thread *ngIf="threadService.showThread"></app-thread>
+                </mat-drawer-content>
+            </mat-drawer-container>
+        </section>
+        <button class="toggle-btn" (click)="toggleSideNav()"
+            [ngClass]="{ 'close-btn': isSideNavOpen, 'open-btn': !isSideNavOpen }">
+            <div class="txt-icon-contain">
+                <span>
+                    {{ isSideNavOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen' }}
+                </span>
+                <mat-icon fontIcon="open_in_browser"></mat-icon>
+            </div>
+        </button>
+    </main>
+</ng-container>
+
+<ng-template #loading>
+    <div class="loading-container">
+        <mat-spinner class="loading-spinner"></mat-spinner>
+    </div>
+</ng-template>
