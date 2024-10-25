@@ -20,7 +20,7 @@
                             <span>Uhr</span>
                         </p>
                     </div>
-                    <div>
+                    <div [innerHTML]="getParsedMessage(threadService.answeredMessage.content)">
                         {{ threadService.answeredMessage.content }}
                     </div>
                 </div>

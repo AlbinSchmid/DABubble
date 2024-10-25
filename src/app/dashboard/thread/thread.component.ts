@@ -58,9 +58,17 @@ export class ThreadComponent {
   
 
   ngOnDestroy() {
+    this.parser.parseMessage(this.firebaseMessenger.content);
     this.unsubAnswerList;
   }
 
+
+  getParsedMessage(message: string) {
+    if (this.editAnswerMessage) {
+      return message;
+    }
+    return this.parser.parseMessage(this.firebaseMessenger.answerContent);
+  }
 
   /**
    * controlls how many answered message are under the main message

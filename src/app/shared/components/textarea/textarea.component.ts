@@ -87,8 +87,12 @@ export class TextareaComponent {
   }
 
 
-  async uploadFiles(messenger :any) {
-    let originalContent = this.firebaseMessenger.content;
+  async uploadFiles(messenger: any) {
+    // Determine initial content based on the type of messenger
+    let originalContent = messenger === 'messenger'
+        ? this.firebaseMessenger.content
+        : this.firebaseMessenger.answerContent;
+
     console.log('Starting uploadFiles function');
     const folderName = `uploads/${this.messengerService.user.userID}/`;
     console.log(`Generated folder name: ${folderName}`);
@@ -98,32 +102,35 @@ export class TextareaComponent {
         console.log(`Uploading file: ${file.name} to path: ${filePath}`);
         const fileRef = ref(this.storage, filePath);
         const rawFile = file.rawFile;
+        
         try {
             const snapshot = await uploadBytes(fileRef, rawFile);
             console.log(`Upload success for file: ${file.name}`);
             const url = await getDownloadURL(snapshot.ref);
             console.log('File URL: ', url);
 
-            // Check the file type based on the file extension
+            // Append file link with different formatting based on file type
             const fileExtension = file.name.split('.').pop()?.toLowerCase();
             if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
                 originalContent += `\n\n<a href="${url}" target="_blank"><img src="${url}" alt="${file.name}" width="48px" height="48px"/> </a>`;
             } else {
                 originalContent += `\n\n<a href="${url}" target="_blank"><img width="48px" height="48px" src="assets/icons/pdf.webp" alt="${file.name}"></a>`;
-            }
-            
-            this.firebaseMessenger.content = originalContent;
+            }  
         } catch (error) {
             console.error('Upload error for file: ', file.name, error);
         }
     }
+
+    // Update the appropriate content field and send the message
     if (messenger === 'messenger') {
-    this.firebaseMessenger.createMessage('');
-    }else{
-      this.firebaseMessenger.answerContent = originalContent;
-      this.firebaseMessenger.createAnswer(this.threadService.messageId);
-      
+        this.firebaseMessenger.content = originalContent;
+        this.firebaseMessenger.createMessage('');
+    } else {
+        this.firebaseMessenger.answerContent = originalContent;
+        this.firebaseMessenger.createAnswer(this.threadService.messageId);
+        console.log("Answer content updated:", this.firebaseMessenger.answerContent);
     }
+
     this.selectedFiles = [];
 }
   
