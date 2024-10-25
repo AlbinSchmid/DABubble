@@ -11,7 +11,9 @@
             </p>
 
             <div></div>
+            
             <button (click)="openOrCloseEmojiBoard()"></button>
+            <button *ngIf="messengerService.openChannel"></button>
             <button *ngIf="messengerService.openChannel"></button>
         </div>
         <button id="send-message-btn" (click)="uploadFiles(messenger);scrollDivDown()" *ngIf="texterea.valid || selectedFiles.length > 0"><img
@@ -21,7 +23,7 @@
         (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     <div style="display: flex; gap: 15px; padding-top: 10px;">
         <div *ngFor="let file of selectedFiles">
-            <div style="display: flex; align-items: flex-start; position: relative;">
+            <div style="display: flex; align-items: flex-start; position: relative; cursor: pointer; flex-wrap: wrap;">
                 <img style="width: 48px; height: 48px;" *ngIf="file.type.startsWith('image')" [src]="file.data"
                     (click)="viewFile(file)" class="preview-img" />
                 <span (click)="deletePreviewFile(file)"
@@ -47,8 +49,9 @@
             </p>
     
             <div></div>
-            <div></div>
+            
             <button (click)="openOrCloseEmojiBoard()"></button>
+            <button *ngIf="messengerService.openChannel"></button>
             <button *ngIf="messengerService.openChannel"></button>
         </div>
         <button id="send-message-btn" (click)="uploadFiles('thread')"
@@ -57,7 +60,7 @@
     <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     <div style="display: flex; gap: 15px; padding-top: 10px;">
         <div *ngFor="let file of selectedFiles">
-            <div style="display: flex; align-items: flex-start; position: relative;">
+            <div style="display: flex; align-items: flex-start; position: relative;  cursor: pointer; flex-wrap: wrap;">
                 <img style="width: 48px; height: 48px;" *ngIf="file.type.startsWith('image')" [src]="file.data"
                     (click)="viewFile(file)" class="preview-img" />
                 <span (click)="deletePreviewFile(file)"
