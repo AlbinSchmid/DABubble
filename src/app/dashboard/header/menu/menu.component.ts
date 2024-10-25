@@ -53,6 +53,8 @@ export class MenuComponent {
     this.threadService.showThread = false;
   }
 
+   
+
   toggleProfileMenu(e: Event): void {
     e.stopPropagation();
 
@@ -122,7 +124,6 @@ export class MenuComponent {
 
   updateUserStatus() {
     const currentUser = this.authService.currentUserSig(); 
-    
     if (currentUser) {
       const userDocRef = doc(this.firestore, `users/${currentUser.userID}`);
       updateDoc(userDocRef, { userStatus: this.userStatus })

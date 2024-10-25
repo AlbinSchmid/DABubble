@@ -147,10 +147,26 @@ export class AuthserviceService {
   }
 
   logout(): Observable<void> {
-    const promise = signOut(this.firebaseAuth);
-    this.router.navigate(['']);
-    return from(promise);
-  }
+    const user = this.firebaseAuth.currentUser;
+    if (!user) return from(Promise.reject('No user is currently logged in.'));
+
+    const userRef = doc(this.firestore, `users/${user.uid}`);
+
+    // Update user status to 'offline' before logging out
+    const updateStatusPromise = setDoc(userRef, { userStatus: 'off' }, { merge: true })
+        .then(() => {
+            return signOut(this.firebaseAuth); // Log out after updating status
+        })
+        .then(() => {
+            this.router.navigate(['']); // Navigate after successful logout
+        })
+        .catch(error => {
+            console.error('Error logging out:', error);
+            throw error; // Optional: throw error if needed for error handling in components
+        });
+
+    return from(updateStatusPromise);
+}
 
   private tempUserData: UserInterface | null = null;
 
