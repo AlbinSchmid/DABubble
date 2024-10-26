@@ -78,7 +78,6 @@ export class EditUserComponent implements OnInit {
     this.inputPassword = '';
   }
 
-
   /**
    * Validates the current input email format.
    * If the email is invalid, sets an error message and resets input fields.
@@ -156,7 +155,6 @@ export class EditUserComponent implements OnInit {
     this.reloadCurrentUser();
   }
 
-
   /**
    * Sends the updated user data to the server.
    * If the email address has been changed, sends the new email address.
@@ -204,7 +202,6 @@ export class EditUserComponent implements OnInit {
       this.timeoutCLose()
   }
 
-
   /**
    * Updates the current user's email address and sends a verification email to the new
    * address. If the input email is invalid or the same as the current user's email, or
@@ -229,7 +226,6 @@ export class EditUserComponent implements OnInit {
         });
     }
   }
-
 
   /**
    * Closes the edit user dialog and resets the sending flag after a 2 second delay.
@@ -308,8 +304,6 @@ export class EditUserComponent implements OnInit {
     }
   }
 
-
-
   /**
    * Updates the user's avatar in the Firestore and Firebase Authentication services.
    * Additionally, uploads the new avatar to Firebase Storage and updates the user's
@@ -356,8 +350,6 @@ export class EditUserComponent implements OnInit {
       return;
     }
   }
-
-
 
   /**
    * Reloads the current user from Firebase Authentication and updates the
