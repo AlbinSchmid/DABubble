@@ -21,6 +21,13 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
 
   constructor(private sessionService: SessionService) { }
 
+  /**
+   * Sets the showAnimation and showLogo variables based on whether the user is
+   * visiting the site for the first time. If it is their first visit, the
+   * showAnimation variable is set to true and the showLogo variable is set to
+   * false. If it is not their first visit, the showAnimation variable is set to
+   * false and the showLogo variable is set to true.
+   */
   ngOnInit(): void {
     if (this.sessionService.isFirstVisit()) {
       this.showAnimation = true; 
@@ -30,6 +37,12 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * If the user is visiting the site for the first time, this function
+   * waits 4 seconds and then sets the showAnimation variable to false and
+   * the showLogo variable to true. This causes the animation to stop
+   * playing and the logo to appear.
+   */
   ngAfterViewInit() {
     if (this.showAnimation) {
       setTimeout(() => {

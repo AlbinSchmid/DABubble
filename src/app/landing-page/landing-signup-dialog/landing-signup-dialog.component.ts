@@ -29,37 +29,21 @@ export class LandingSignupDialogComponent {
   fb = inject(FormBuilder)
   authService = inject(AuthserviceService)
   errorMessage: string | null = null;
-  constructor(private router: Router,) { }
 
 
-
+  
   accountForm = this.fb.nonNullable.group({
     username: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern(/^(?=.{1,23}$)([a-zA-ZÀ-ÖØ-öø-ÿ]{1,23}\s[a-zA-ZÀ-ÖØ-öø-ÿ]{1,23})$/)
-      ]
-    ],
+      '',[ Validators.required, Validators.pattern(/^(?=.{1,23}$)([a-zA-ZÀ-ÖØ-öø-ÿ]{1,23}\s[a-zA-ZÀ-ÖØ-öø-ÿ]{1,23})$/)]],
     email: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-      ]
-    ],
+      '',[ Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
     password: [
-      '',
-      [
-        Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)
-      ]
-    ],
+      '',[ Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)]],
     privacyPolicy: [false, Validators.requiredTrue],
   });
 
 
-
+  constructor(private router: Router,) { }
 
   /**
    * Handles the submission of the sign up form.

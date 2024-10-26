@@ -54,7 +54,6 @@ export class LandingResetSendEmailComponent {
     this.isFocused[inputType] = false;
   }
 
-
   /**
    * Called when the form is submitted.
    * If the form is valid, it calls the resetPassword method of the AuthService with the email address.
@@ -71,8 +70,6 @@ export class LandingResetSendEmailComponent {
     }
   }
 
-
- 
 /**
  * Handles errors returned from the AuthService when resetting the password.
  * Sets the error message based on the error code received.
@@ -81,21 +78,16 @@ export class LandingResetSendEmailComponent {
   showError(error: any) {
     switch (error.code) {
       case 'auth/invalid-email':
-        this.errorMessage = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
-        break;
+        this.errorMessage = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'; break;
       case 'auth/user-not-found':
-        this.errorMessage = 'Kein Konto mit dieser E-Mail-Adresse gefunden.';
-        break;
+        this.errorMessage = 'Kein Konto mit dieser E-Mail-Adresse gefunden.'; break;
       case 'auth/too-many-requests':
-        this.errorMessage = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.';
-        break;
+        this.errorMessage = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.'; break;
       case 'auth/missing-email':
-        this.errorMessage = 'Eine E-Mail-Adresse ist erforderlich.';
-        break;
+        this.errorMessage = 'Eine E-Mail-Adresse ist erforderlich.'; break;
       default:
         this.errorMessage = 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.';
     }
-  
     this.showSuccessMessage = false;
   }
 

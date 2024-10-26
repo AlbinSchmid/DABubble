@@ -55,7 +55,6 @@ export class LandingNewPasswordComponent implements OnInit {
     });
     this.route.queryParams.subscribe(params => {
       this.oobCode = params['oobCode'] || null; 
-      console.log('Received oobCode:', this.oobCode);
     });
   }
 
