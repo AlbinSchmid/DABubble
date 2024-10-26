@@ -16,12 +16,18 @@ export class FileViewDialogComponent {
   
   constructor( public dialogRef: MatDialogRef<FileViewDialogComponent>, private sanitizer: DomSanitizer) {}
 
+  /**
+   * Closes the dialog.
+   */
   closeDialog() {
     this.dialogRef.close();
-    console.log(this.data);
-    
   }
 
+  /**
+   * A getter that bypasses the security trust of the sanitizer and returns a ResourceURL that can be used
+   * to display a PDF file in an iframe. This is necessary because the PDF file is stored in the Cloud Storage
+   * and the URL is not trusted by the sanitizer.
+   */
   get safePdfUrl() {
     return this.sanitizer.bypassSecurityTrustResourceUrl(this.data.file.data);
   }
