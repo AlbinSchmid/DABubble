@@ -322,7 +322,6 @@ export class EditUserComponent implements OnInit {
         this.newAvatar = downloadUrl;
         await this.imgUpload.updateUserAvatar(downloadUrl);
         await this.imgUpload.updateAvatarInFirestore(downloadUrl);
-        this.handleOldAvatarDeletion(oldAvatarUrl);
         this.reloadCurrentUser();
         this.cancelProcess();
       } catch (error) {
@@ -331,25 +330,6 @@ export class EditUserComponent implements OnInit {
     }
   }
 
-  /**
-   * Deletes the old avatar from Firebase Storage after a successful upload of a new
-   * avatar. If the old avatar is one of the standard avatars, it is not deleted.
-   * @param oldAvatarUrl The URL of the old avatar to be deleted, or undefined if no
-   * old avatar is to be deleted.
-   * @returns {void}
-   */
-  handleOldAvatarDeletion(oldAvatarUrl: string | undefined) {
-    if (oldAvatarUrl && !this.standardAvatar.includes(oldAvatarUrl)) {
-      const storageRef = ref(this.imgUpload.storage, oldAvatarUrl);
-      deleteObject(storageRef).then(() => {
-        console.warn('Old avatar deleted successfully');
-      }).catch((error) => {
-        console.error('Error deleting old avatar:', error);
-      });
-    } else {
-      return;
-    }
-  }
 
   /**
    * Reloads the current user from Firebase Authentication and updates the
