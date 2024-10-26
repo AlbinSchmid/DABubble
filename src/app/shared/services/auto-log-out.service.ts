@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { Router } from '@angular/router';
 
@@ -9,18 +9,24 @@ const CHECK_INTERVAL = 1000;
 @Injectable({
   providedIn: 'root',
 })
-export class AutoLogoutService {
+export class AutoLogoutService implements OnDestroy {
   private lastAction: number;
-
+  private visibilityChangeHandler: (event: Event) => void;
   constructor(
     private auth: AuthserviceService,
     private router: Router,
     private ngZone: NgZone
   ) {
+    this.visibilityChangeHandler = this.handleVisibilityChange.bind(this);
     this.reset(); 
     this.initListener();
     this.initInterval();
   }
+
+  ngOnDestroy() {
+    document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
+  }
+
 
   initListener() {
     this.ngZone.runOutsideAngular(() => {
@@ -51,10 +57,16 @@ export class AutoLogoutService {
     const isTimeout = diff < 0;
     this.ngZone.run(() => {
       if (isTimeout) {
-        console.log(`Sie wurden automatisch nach ${MINUTES_UNITL_AUTO_LOGOUT} Minuten Inaktivität ausgeloggt.`);
         this.auth.logout();
         this.router.navigate(['login']);
       }
     });
+  }
+
+  private handleVisibilityChange(event: Event) {
+    if (document.hidden && this.auth.currentUserSig()) {
+      this.auth.logout(); // Call your logout logic here
+      this.router.navigate(['']);
+    }
   }
 }
