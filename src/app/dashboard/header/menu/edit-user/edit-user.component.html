@@ -37,7 +37,7 @@
         <button mat-button class="secondary" (click)="cancelProcess()">Abbrechen</button>
         <button mat-button class="primary" 
             [disabled]="( inputEmail.length < 1) && (inputName.length < 1) && !avatarChanged || sending" 
-            (click)="changeEmail()">Speichern</button>
+            (click)="sendData()">Speichern</button>
     </div>
     @if(successMessage != null) {
         <button class="response primary">{{successMessage}}</button>
