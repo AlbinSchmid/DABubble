@@ -64,9 +64,8 @@ export class AutoLogoutService implements OnDestroy {
   }
 
   private handleVisibilityChange(event: Event) {
-    if (document.hidden && this.auth.currentUserSig()) {
-      this.auth.logout(); // Call your logout logic here
-      this.router.navigate(['']);
+    if (document.hidden) {
+      this.auth.logout();
     }
   }
 }
