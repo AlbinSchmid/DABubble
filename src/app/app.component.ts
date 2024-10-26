@@ -1,6 +1,6 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthserviceService } from './landing-page/services/authservice.service';
+import { AutoLogoutService } from './shared/services/auto-log-out.service';
 
 
 @Component({
@@ -15,7 +15,9 @@ import { AuthserviceService } from './landing-page/services/authservice.service'
 export class AppComponent {
   title = 'DaBubble';
 
-  constructor(private authService: AuthserviceService) {}
+  constructor(
+    private autoLogout: AutoLogoutService
+  ) { }
 
   onDragStart(event: DragEvent) {
     event.preventDefault();
