@@ -55,29 +55,45 @@ export class DashboardComponent {
   ngOnInit(): void {
     this.authService.user$
       .pipe(
-        timeout(5000),
-        takeUntil(this.userFound$)
+        timeout(5000), takeUntil(this.userFound$)
       )
       .subscribe(
         (user: UserInterface | null) => {
           if (user) {
-            this.isUserLoaded = true;
-            this.userFound$.next();
-            this.userFound$.complete();
+            this.setUserFound();
           } else {
             this.isUserLoaded = false;
           }
         },
-        (err: any) => {
-          if (err.name === 'TimeoutError') {
-            this.router.navigate(['']);
-            alert('Zeitüberschreitung, versuchen Sie es bitte erneut!');
-          } else {
-            this.router.navigate(['']);
-            alert('Ein unerwarteter Fehler ist aufgetreten:' + err.message);
-          }
-        }
+        (err: any) => { this.handleError(err); }
       );
+  }
+
+  /**
+   * Sets the userLoaded flag to true and completes the userFound$ observable
+   * to indicate that the user stream has been loaded and observed.
+   */
+  setUserFound() {
+    this.isUserLoaded = true;
+    this.userFound$.next();
+    this.userFound$.complete();
+  }
+
+  /**
+   * Handles errors that occur during the authentication and user loading process.
+   * If the error is a timeout error, it navigates to the home page and shows an alert
+   * prompting the user to try again. If the error is any other type, it navigates to
+   * the home page and shows an alert with the error message.
+   * @param {any} err The error object to be handled.
+   */
+  handleError(err: any) {
+    if (err.name === 'TimeoutError') {
+      this.router.navigate(['']);
+      alert('Zeitüberschreitung, versuchen Sie es bitte erneut!');
+    } else {
+      this.router.navigate(['']);
+      alert('Ein unerwarteter Fehler ist aufgetreten:' + err.message);
+    }
   }
 
   /**
