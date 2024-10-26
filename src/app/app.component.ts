@@ -20,8 +20,4 @@ export class AppComponent {
   onDragStart(event: DragEvent) {
     event.preventDefault();
   }
-  @HostListener('window:beforeunload', ['$event'])
-  unloadHandler(event: Event) {
-    this.authService.logout(); // Call your logout function here
-  }
 }
