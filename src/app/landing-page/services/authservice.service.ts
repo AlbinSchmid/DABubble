@@ -1,12 +1,12 @@
 import { Injectable, inject, signal } from '@angular/core';
 import {
-  Auth,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail,
-  signOut,updateProfile,user,GoogleAuthProvider,signInWithPopup,confirmPasswordReset,updateEmail,
-  sendEmailVerification,EmailAuthProvider,reauthenticateWithCredential,
+  Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
+  signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
+  sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
-import { doc, Firestore, getDoc, setDoc, collection, query, where, getDocs  } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,70 +23,141 @@ export class AuthserviceService {
   guestPassword = 'abcdABCD1234!"§$';
   private tempUserData: UserInterface | null = null;
   private readonly defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
-  
+
   /**
    * Registers a new user using the provided email, username, password, and avatar.
    * Creates a new user in the Firestore 'users' collection and sets the user's display name and avatar.
    * Finally, sends an email verification email to the user.
    */
+
+
+  // register(email: string, username: string, password: string, avatar: string): Observable<void> {
+  //   const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
+  //     .then((response) => {
+  //       const user = response.user;
+  //       const uid = user.uid;
+  //       return updateProfile(user, { displayName: username,photoURL: avatar,})
+  //       .then(() => {const userRef = doc(this.firestore, `users/${uid}`); const userData: UserInterface = this.setRegisterUserData(uid , username, avatar)
+  //         return setDoc(userRef, userData);
+  //       })
+  //       .then(() => { return sendEmailVerification(user);});
+  //     })
+  //     .catch((error) => { throw error; });
+  //   return from(promise);
+  // }
+
   register(email: string, username: string, password: string, avatar: string): Observable<void> {
     const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
       .then((response) => {
         const user = response.user;
         const uid = user.uid;
-        return updateProfile(user, { displayName: username,photoURL: avatar,})
-        .then(() => {const userRef = doc(this.firestore, `users/${uid}`); const userData: UserInterface = this.setRegisterUserData(uid , username, avatar)
-          return setDoc(userRef, userData);
-        })
-        .then(() => { return sendEmailVerification(user);});
+        return updateProfile(user, { displayName: username, photoURL: avatar })
+          .then(() => {
+            const userRef = doc(this.firestore, `users/${uid}`);
+            const userData: UserInterface = this.setRegisterUserData(uid, username, avatar, email);
+            return setDoc(userRef, userData);
+          })
+          .then(() => sendEmailVerification(user));
       })
       .catch((error) => { throw error; });
     return from(promise);
   }
 
-/**
- * Constructs a user data object for registration with the specified user ID, username, and avatar.
- * The returned object includes default values for email, password, userStatus, and isFocus fields.
- */
-  private setRegisterUserData(uid :string, username:string, avatar:string){
+  /**
+   * Constructs a user data object for registration with the specified user ID, username, and avatar.
+   * The returned object includes default values for email, password, userStatus, and isFocus fields.
+   */
+
+
+  // private setRegisterUserData(uid :string, username:string, avatar:string){
+  //   return {
+  //     userID: uid,
+  //     email: user.email ?? '',
+  //     username: username,
+  //     password: '',  
+  //     avatar: avatar,
+  //     userStatus: 'on',
+  //     isFocus: false,
+  //   };
+  // }
+
+  private setRegisterUserData(uid: string, username: string, avatar: string, email: string): UserInterface {
     return {
       userID: uid,
-      email: user.email ?? '',
+      email: email,
       username: username,
-      password: '',  
+      password: '',
       avatar: avatar,
       userStatus: 'on',
       isFocus: false,
     };
   }
 
-/**
- * Sets the current user in the application state.
- * Updates the `currentUserSig` signal with the provided user data, which can be a `UserInterface` object or null.
- */
+  /**
+   * Sets the current user in the application state.
+   * Updates the `currentUserSig` signal with the provided user data, which can be a `UserInterface` object or null.
+   */
   setCurrentUser(userData: UserInterface | null): void {
+
+
+    // here log out the fail data without correctly informatiosn
+    // console.log('the userDate is:', userData);
+
     this.currentUserSig.set(userData);
   }
 
-/**
- * Authenticates a user with the provided email and password.
- * On successful login, retrieves the user document from Firestore, updates the user's status to 'on',
- * sets the user data in the application state, and handles potential errors.
- */
+  /**
+   * Authenticates a user with the provided email and password.
+   * On successful login, retrieves the user document from Firestore, updates the user's status to 'on',
+   * sets the user data in the application state, and handles potential errors.
+   */
+
+
+  // login(email: string, password: string): Observable<void> {
+  //   const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
+  //     const userRef = doc(this.firestore, `users/${response.user.uid}`);
+  //     const userDoc = await getDoc(userRef);
+  //     if (userDoc.exists()) {
+  //       const userData: UserInterface = userDoc.data() as UserInterface; 
+  //       setDoc(userRef, { userStatus: 'on' }, { merge: true })
+  //       this.setCurrentUser(userData);
+  //     } else {
+  //       console.error('No such document!');
+  //     }
+  //   });
+  //   return from(promise).pipe(
+  //     catchError((error) => { return throwError(() => new Error('E-Mail-Adresse oder Passwort ist falsch.'));})
+  //   );
+  // }
+
   login(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
       const userRef = doc(this.firestore, `users/${response.user.uid}`);
       const userDoc = await getDoc(userRef);
       if (userDoc.exists()) {
-        const userData: UserInterface = userDoc.data() as UserInterface; 
-        setDoc(userRef, { userStatus: 'on' }, { merge: true })
+        const userData: UserInterface = userDoc.data() as UserInterface;
+        await setDoc(userRef, { userStatus: 'on' }, { merge: true });
         this.setCurrentUser(userData);
       } else {
-        console.error('No such document!');
+
+        // if user not exsist, create a suser with all datas ! ! ! ! ! 
+
+        const user = response.user;
+        const userData: UserInterface = {
+          userID: user.uid,
+          email: user.email || '',
+          username: user.displayName || '',
+          password: '',
+          avatar: user.photoURL || this.defaultAvatarURL,
+          userStatus: 'on',
+          isFocus: false,
+        };
+        await setDoc(userRef, userData);
+        this.setCurrentUser(userData);
       }
     });
     return from(promise).pipe(
-      catchError((error) => { return throwError(() => new Error('E-Mail-Adresse oder Passwort ist falsch.'));})
+      catchError((error) => { return throwError(() => new Error('E-Mail-Adresse oder Passwort ist falsch.')); })
     );
   }
 
@@ -102,12 +173,12 @@ export class AuthserviceService {
       this.handleSignInResult()
     );
   }
-  
-/**
- * Returns an operator function that processes the result of a sign-in attempt.
- * Subscribes to the source observable and handles the sign-in result by invoking
- * the `handleSignInSuccess` method on success, or propagates the error on failure.
- */
+
+  /**
+   * Returns an operator function that processes the result of a sign-in attempt.
+   * Subscribes to the source observable and handles the sign-in result by invoking
+   * the `handleSignInSuccess` method on success, or propagates the error on failure.
+   */
   private handleSignInResult() {
     return (source: Observable<any>): Observable<void> => {
       return new Observable<void>((subscriber) => {
@@ -118,13 +189,13 @@ export class AuthserviceService {
       });
     };
   }
-/**
- * Handles the success of a sign-in operation.
- * Retrieves the user's avatar URL, updates the user's profile, and constructs user data.
- * Saves the user data to the Firestore, sets the current user in the application state,
- * navigates to the dashboard, and completes the subscriber on success.
- * If any operation fails, it propagates the error to the subscriber.
- */
+  /**
+   * Handles the success of a sign-in operation.
+   * Retrieves the user's avatar URL, updates the user's profile, and constructs user data.
+   * Saves the user data to the Firestore, sets the current user in the application state,
+   * navigates to the dashboard, and completes the subscriber on success.
+   * If any operation fails, it propagates the error to the subscriber.
+   */
 
   private async handleSignInSuccess(result: any, subscriber: any) {
     try {
@@ -162,12 +233,12 @@ export class AuthserviceService {
       email: user.email || '',
       username: user.displayName || '',
       password: '',
-      avatar: avatarURL, 
+      avatar: avatarURL,
       userStatus: 'on',
       isFocus: false,
     };
   }
-  
+
   /**
    * Saves the user data to Firestore.
    * Merges the user data with existing document, if it exists.
@@ -193,10 +264,10 @@ export class AuthserviceService {
     return throwError(() => new Error('Google login failed.'));
   }
 
-/**
- * Checks if the currently authenticated user has logged in using a Google account.
- * Returns true if the current user's authentication provider includes Google, otherwise returns false.
- */
+  /**
+   * Checks if the currently authenticated user has logged in using a Google account.
+   * Returns true if the current user's authentication provider includes Google, otherwise returns false.
+   */
   userLoggedWithGoogle(): boolean {
     const currentUser = this.firebaseAuth.currentUser;
     if (currentUser) {
@@ -218,9 +289,9 @@ export class AuthserviceService {
     if (!user) return from(Promise.reject('No user is currently logged in.'));
     const userRef = doc(this.firestore, `users/${user.uid}`);
     const updateStatusPromise = setDoc(userRef, { userStatus: 'off' }, { merge: true })
-        .then(() => { return signOut(this.firebaseAuth);})
-        .then(() => { this.router.navigate(['']); })
-        .catch(error => { console.error('Error logging out:', error);throw error; });
+      .then(() => { return signOut(this.firebaseAuth); })
+      .then(() => { this.router.navigate(['']); })
+      .catch(error => { console.error('Error logging out:', error); throw error; });
     return from(updateStatusPromise);
   }
 
@@ -241,11 +312,11 @@ export class AuthserviceService {
     return this.tempUserData;
   }
 
-/**
- * Clears the temporary user data from local storage.
- * This method sets the temporary user data to null, effectively removing any previously stored data used
- * during the sign-up process.
- */
+  /**
+   * Clears the temporary user data from local storage.
+   * This method sets the temporary user data to null, effectively removing any previously stored data used
+   * during the sign-up process.
+   */
   clearTempUserData() {
     this.tempUserData = null;
   }
@@ -272,7 +343,7 @@ export class AuthserviceService {
   confirmPasswordReset(oobCode: string, newPassword: string): Observable<void> {
     const promise = confirmPasswordReset(this.firebaseAuth, oobCode, newPassword);
     return from(promise).pipe(
-      map(() => {}),
+      map(() => { }),
       catchError((error) => {
         console.error('Error confirming password reset:', error);
         return throwError(() => error);
@@ -280,28 +351,63 @@ export class AuthserviceService {
     );
   }
 
-/**
- * Logs in a user with guest credentials.
- * Attempts to sign in using predefined guest email and password.
- * On successful login, sets the user's status to 'on' in Firestore,
- * retrieves the user document, and navigates the guest to the dashboard.
- * If the user document does not exist, logs an error message.
- * Returns an observable that emits an error if the login process fails.
- */
+  /**
+   * Logs in a user with guest credentials.
+   * Attempts to sign in using predefined guest email and password.
+   * On successful login, sets the user's status to 'on' in Firestore,
+   * retrieves the user document, and navigates the guest to the dashboard.
+   * If the user document does not exist, logs an error message.
+   * Returns an observable that emits an error if the login process fails.
+   */
+
+  // guestLogin(): Observable<void> {
+  //   const promise = signInWithEmailAndPassword(this.firebaseAuth, this.guestEmail, this.guestPassword)
+  //     .then(async (response) => {
+  //       const userRef = doc(this.firestore, `users/${response.user.uid}`);
+  //       setDoc(userRef, { userStatus: 'on' }, { merge: true })
+  //       const userDoc = await getDoc(userRef);
+  //       if (userDoc.exists()) {
+  //         this.navigateTheGuest(userDoc)
+  //       } else {
+  //         console.error('Keine solche Documente gefunden');
+  //       }
+  //     });
+  //   return from(promise).pipe(
+  //     catchError((error) => { return throwError(() => new Error('Gast login fehlgeschlagen.')); })
+  //   );
+  // }
+
   guestLogin(): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, this.guestEmail, this.guestPassword)
       .then(async (response) => {
         const userRef = doc(this.firestore, `users/${response.user.uid}`);
-        setDoc(userRef, { userStatus: 'on' }, { merge: true })
         const userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
-          this.navigateTheGuest(userDoc)
+          await setDoc(userRef, { userStatus: 'on' }, { merge: true });
+          const userData: UserInterface = userDoc.data() as UserInterface;
+          this.setCurrentUser(userData);
+          this.router.navigate(['/dashboard']);
         } else {
-          console.error('Keine solche Documente gefunden');
+
+          // if guest not exist create a guest with all datas ! ! !
+
+          const user = response.user;
+          const userData: UserInterface = {
+            userID: user.uid,
+            email: user.email || '',
+            username: 'Gast',
+            password: '',
+            avatar: this.defaultAvatarURL,
+            userStatus: 'on',
+            isFocus: false,
+          };
+          await setDoc(userRef, userData);
+          this.setCurrentUser(userData);
+          this.router.navigate(['/dashboard']);
         }
       });
     return from(promise).pipe(
-      catchError((error) => {return throwError(() => new Error('Gast login fehlgeschlagen.'));})
+      catchError((error) => { return throwError(() => new Error('Gast-Login fehlgeschlagen.')); })
     );
   }
 
@@ -315,11 +421,11 @@ export class AuthserviceService {
     this.router.navigate(['/dashboard']);
   }
 
-/**
- * Updates the current user's email address after re-authenticating with the provided password.
- * Sends an email verification to the new email address upon successful update.
- * Throws an error if no user is logged in or if any operation fails.
- */
+  /**
+   * Updates the current user's email address after re-authenticating with the provided password.
+   * Sends an email verification to the new email address upon successful update.
+   * Throws an error if no user is logged in or if any operation fails.
+   */
   async updateEmail(newEmail: string, password: string): Promise<void> {
     const currentUser = this.firebaseAuth.currentUser;
     if (!currentUser) {
@@ -337,25 +443,25 @@ export class AuthserviceService {
     }
   }
 
-/**
- * Updates the current user's details in Firestore and the application state.
- * If provided, updates the user's email and/or username with the new values.
- * Constructs an updated user object and saves it to Firestore.
- * Updates the `currentUserSig` signal with the updated user data.
- */
+  /**
+   * Updates the current user's details in Firestore and the application state.
+   * If provided, updates the user's email and/or username with the new values.
+   * Constructs an updated user object and saves it to Firestore.
+   * Updates the `currentUserSig` signal with the updated user data.
+   */
   async updateCurrentUserDetails(user: any, newEmail?: string, newName?: string): Promise<void> {
     let userstatus = this.currentUserSig()?.userStatus;
     const updatedUser: UserInterface = {
       userID: user.uid,
       password: '',
       email: newEmail || user.email,
-      username: newName || user.displayName,  
+      username: newName || user.displayName,
       avatar: user.photoURL,
       isFocus: false,
       userStatus: userstatus || 'on',
     };
     const userRef = doc(this.firestore, `users/${user.uid}`);
-    await setDoc(userRef, updatedUser); 
+    await setDoc(userRef, updatedUser);
     this.currentUserSig.set(updatedUser);
   }
 
@@ -369,8 +475,8 @@ export class AuthserviceService {
       throw new Error('No user logged in');
     }
     try {
-      await updateProfile(currentUser, { displayName: newName,});
-      await this.updateCurrentUserDetails(currentUser, undefined, newName); 
+      await updateProfile(currentUser, { displayName: newName, });
+      await this.updateCurrentUserDetails(currentUser, undefined, newName);
     } catch (error) {
       console.error('Failed to update name', error);
       throw error;
