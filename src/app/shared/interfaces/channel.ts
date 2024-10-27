@@ -1,4 +1,3 @@
-import { UserInterface } from "../../landing-page/interfaces/userinterface";
 import { MessageInterface } from "./message-interface";
 
 
@@ -8,6 +7,6 @@ export interface Channel {
     description: string,
     createdBy: string,
     isFocus: boolean,
-    user: UserInterface[],
+    userIDs: string[],
     messages: MessageInterface[],
 }

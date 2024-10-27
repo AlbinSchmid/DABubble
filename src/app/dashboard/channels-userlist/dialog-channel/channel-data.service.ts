@@ -8,7 +8,7 @@ export class ChannelDataService {
 
   titleSource: string = '';
   descriptionSource: string = '';
-  membersSource = signal<UserInterface[]>([]);
+  membersSource = signal<any[]>([]);
 
   constructor() { }
 }

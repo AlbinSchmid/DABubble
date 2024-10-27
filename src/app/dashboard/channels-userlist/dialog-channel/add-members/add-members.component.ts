@@ -140,10 +140,10 @@ export class AddMembersComponent {
         this.channelDataService.membersSource.set([]);
         if (this.selectInput) {
           setTimeout(() => {
-            this.channelDataService.membersSource.update(members => [...members, ...channel.user]);
+            this.channelDataService.membersSource.update(members => [...members, ...channel.userIDs]);
           }, 200);
         } else {
-          this.channelDataService.membersSource.update(members => [...members, ...channel.user]);
+          this.channelDataService.membersSource.update(members => [...members, ...channel.userIDs]);
         }
       }
     });

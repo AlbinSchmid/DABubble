@@ -187,7 +187,7 @@ export class FirestoreService {
       description: obj.description,
       createdBy: obj.createdBy,
       isFocus: obj.isFocus,
-      user: obj.user,
+      userIDs: obj.userIDs,
       messages: obj.messages,
     };
   }

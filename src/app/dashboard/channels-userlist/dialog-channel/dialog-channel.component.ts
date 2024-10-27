@@ -77,8 +77,18 @@ export class DialogChannelComponent {
       description: this.channelDataService.descriptionSource,
       createdBy: this.authService.currentUserSig()!.username,
       isFocus: false,
-      user: this.channelDataService.membersSource(),
+      userIDs: this.getUserIDs(),
       messages: []
+    }
+  }
+
+  getUserIDs(): string[] {
+    let members = this.channelDataService.membersSource();
+
+    if (members[0].username) {
+      return members.map(user => user.userID);
+    } else {
+      return members;
     }
   }
 
