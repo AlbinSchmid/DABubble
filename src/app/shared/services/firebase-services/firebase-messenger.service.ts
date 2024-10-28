@@ -192,6 +192,7 @@ export class FirebaseMessengerService {
         return `${this.messengerService.channel.channelID}`;
       }
     }
+    
   }
 
 

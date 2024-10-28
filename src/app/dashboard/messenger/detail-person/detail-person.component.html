@@ -2,7 +2,6 @@
     <header>
         <h2>Profil</h2>
         <mat-icon (click)="closeDialog()">close</mat-icon>
-
     </header>
     <img src="{{messengerService.user.avatar}}" alt="">
     <div id="name-container">
@@ -20,6 +19,4 @@
             <a href="mailto:{{ messengerService.user.email }}">{{ messengerService.user.email }}</a>
         </div>
     </div>
-
-    <button mat-flat-button id="message-btn"><mat-icon fontIcon="mode_comment"></mat-icon>Nachricht</button>
 </section>

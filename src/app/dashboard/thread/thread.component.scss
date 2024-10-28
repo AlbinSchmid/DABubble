@@ -85,7 +85,7 @@ section {
             }
 
             #answers-info {
-                
+
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -123,6 +123,9 @@ section {
                 }
 
                 img {
+                    object-fit: cover;
+                    min-width: 70px;
+                    min-height: 70px;
                     width: 70px;
                     height: 70px;
                     border-radius: 100%;
@@ -159,6 +162,8 @@ section {
                             padding: 15px;
                             border-radius: 0 30px 30px 30px;
                             align-self: flex-start;
+                            word-break: break-all;
+                            flex: 0 1 auto;
 
                             p {
                                 font-size: 18px;

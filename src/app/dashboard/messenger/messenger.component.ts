@@ -121,13 +121,19 @@ export class MessengerComponent implements AfterViewInit {
   checkDate(messageDate: Date) {
     const formattedTodayDate = formatDate(new Date(), 'd. MMMM', 'de');
     const formattedMessageDate = formatDate(messageDate, 'd. MMMM', 'de',);
-    // console.log(formattedMessageDate);
-    // console.log(formattedTodayDate);
+    console.log(formattedMessageDate);
+    
     if (formattedTodayDate == formattedMessageDate) {
       this.messagesDates.push(formattedMessageDate);
-      this.test = true;
-      return 'Heute';
-
+      
+      // if(this.messagesDates.includes(formattedMessageDate)) {
+      //   console.log(this.test);
+      //   console.log(this.messagesDates);
+      //   console.log('Date Message', formattedMessageDate);
+      //   return 'Heute';
+      // } else {
+      //   return '';
+      // }
     } else {
       return;
     }

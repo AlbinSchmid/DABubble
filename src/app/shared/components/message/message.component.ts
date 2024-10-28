@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { EditMessageComponent } from './edit-message/edit-message.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,7 +28,7 @@ import { MessageParserService } from '../../services/message-parser.service';
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
 })
-export class MessageComponent {
+export class MessageComponent implements OnInit{
   authService = inject(AuthserviceService);
   mesageparser = inject(MessageParserService);
   firebaseMessenger = inject(FirebaseMessengerService);
@@ -66,6 +66,7 @@ export class MessageComponent {
   unsubAnswersList: any;
 
 
+
   getParsedMessage(message: string) {
     if (this.editAnswerMessage) {
       return message;
@@ -95,6 +96,7 @@ export class MessageComponent {
 
 
   ngOnInit() {
+    console.log(this.message.date);
     this.unsubReactionList = this.subReactionList();
     this.unsubAnswersList = this.subAnswersList();
   }

@@ -7,7 +7,7 @@ section {
     background-color: white;
     width: 600px;
     padding: 30px;
-    gap: 40px;
+    gap: 20px;
     border-radius: 25px;
 
 
@@ -30,6 +30,7 @@ section {
         width: 200px;
         height: 200px;
         border-radius: 100%;
+        object-fit: cover;
     }
 
     #name-container {
@@ -39,6 +40,9 @@ section {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 0;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         div {
@@ -65,13 +69,14 @@ section {
         gap: 8px;
 
         mat-icon {
-            margin-top: 6px;
+            margin-top: 13px;
             cursor: auto;
             background-color: transparent;
             color: black;
             font-size: 30px !important;
             width: 40px !important;
             justify-content: normal !important;
+            padding: 6px;
         }
 
         div {
@@ -100,6 +105,7 @@ section {
         mat-icon {
             background-color: transparent;
             color: white;
+            padding: 12px;
         }
     }
 }

@@ -48,6 +48,7 @@ export class ChannelListComponent {
   showChannel(channel: any) {
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
+    this.messengerService.chartId = '';
     this.messengerService.channel = channel;
     console.log(this.messengerService.channel); 
     this.messengerService.openChannel = true;
