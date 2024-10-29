@@ -65,38 +65,44 @@ export class MessageComponent implements OnInit {
   unsubReactionList: any;
   unsubAnswersList: any;
   showDate: boolean;
-  formattedTodayDate: string;
-  formattedMessageDate: string;
+
+
 
 
   ngOnInit() {
-    this.formattedTodayDate = formatDate(new Date(), 'd. MMMM', 'de');
-    this.formattedMessageDate = formatDate(this.message.date, 'd. MMMM', 'de',);
-    this.checkDate();
+    this.checkDateIfAlreadyIncludeInArray();
     this.unsubReactionList = this.subReactionList();
     this.unsubAnswersList = this.subAnswersList();
   }
 
 
-  giveDateBack() {
+  giveDateBack(date: string, place: string) {
     const today = new Date();
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
-    let formattedTodayYesterdayInDay = formatDate(yesterday, 'd', 'de');
-    let formattedMessageDateInDay = formatDate(this.message.date, 'd', 'de',);
-    if (this.formattedMessageDate == this.formattedTodayDate) {
-      return 'Heute'
-    } else if (formattedTodayYesterdayInDay == formattedMessageDateInDay) {
-      return 'Gestern';
+    const yesterdayDateTillYear = formatDate(yesterday, 'd. MMMM yyyy', 'de');
+    const todayDateTillYear = formatDate(new Date(), 'd. MMMM yyyy', 'de');
+    const messageDateTillYear = formatDate(date, 'd. MMMM yyyy', 'de',);
+    const messageDateTillMonth = formatDate(date, 'd. MMMM', 'de');
+    return this.ceckWhichTxt(place, yesterdayDateTillYear, todayDateTillYear, messageDateTillYear, messageDateTillMonth);
+  }
+
+
+  ceckWhichTxt(place: string, yesterdayDateTillYear: string, todayDateTillYear: string, messageDateTillYear: string, messageDateTillMonth: string) {
+    if (messageDateTillYear == todayDateTillYear) {
+      return place === 'answerText' ? 'heute' : 'Heute';
+    } else if (yesterdayDateTillYear == messageDateTillYear) {
+      return place === 'answerText' ? 'gestern' : 'Gestern';
     } else {
-      return this.formattedMessageDate;
+      return place === 'answerText' ? `am ${messageDateTillMonth}` : messageDateTillMonth;
     }
   }
 
 
-  checkDate() {
-    if (!this.messengerService.messageDates.includes(this.formattedMessageDate)) {
-      this.messengerService.messageDates.push(this.formattedMessageDate);
+  checkDateIfAlreadyIncludeInArray() {
+    const messageDateTillYear = formatDate(this.message.date, 'd. MMMM yyyy', 'de',);
+    if (!this.messengerService.messageDates.includes(messageDateTillYear)) {
+      this.messengerService.messageDates.push(messageDateTillYear);
       this.showDate = true;
     } else {
       this.showDate = false;
@@ -130,7 +136,6 @@ export class MessageComponent implements OnInit {
       return `${this.answers[this.answers.length - 1].date}`;
     }
   }
-
 
 
   subReactionList() {

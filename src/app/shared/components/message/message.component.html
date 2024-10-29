@@ -1,8 +1,8 @@
 <div class="date-container" *ngIf="showDate">
-    <div>{{ giveDateBack() }}</div>
+    <div>{{ giveDateBack(message.date, 'dateInfo') }}</div>
     <div></div>
 </div>
-<section class="message" [ngClass]="{'message-from-you': this.message.senderId == this.authService.currentUserSig()?.userID, 'z-index': this.showEmojiBoard}" (mouseenter)="hoveredMessageId = messageIndex"
+<section class="message" [ngClass]="{'message-from-you': message.senderId == authService.currentUserSig()?.userID, 'z-index': showEmojiBoard}" (mouseenter)="hoveredMessageId = messageIndex"
     (mouseleave)="hoveredMessageId = -1; hoveredMenu = false; closeEmojiBoard()">
     <img src="{{message.senderAvatar}}" alt="Profile" id="img-avatar">
     <div id="message-content" *ngIf="!editMessage">
@@ -23,7 +23,7 @@
         </div>
         <div *ngIf="!reduceContent" id="answer-container">
             <a (click)="openThead()">{{ giveAnswerLengthBack() }}</a>
-            <p> <span *ngIf="answers.length > 0">Letzte Antwort um</span> {{ giveLastAnswerDateBack() | date: 'H:mm' }}</p>
+            <p><span *ngIf="answers.length > 0">Letzte Antwort {{ giveDateBack(answers[this.answers.length - 1].date, 'answerText') }} um</span> {{ giveLastAnswerDateBack() | date: 'H:mm' }}</p>
         </div> 
     </div>
     <div class="interaction" *ngIf="hoveredMessageId == messageIndex && !editMessage">
