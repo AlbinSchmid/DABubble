@@ -44,7 +44,7 @@ export class MessengerComponent implements AfterViewInit {
   hoveredMenu = false;
   sourceThread = false;
   dateCount = 0;
-  unsubChatList;
+  unsubChatList: any;
   dateContent: string;
   dateTodayString: string;
   reversedMessge: any;
@@ -55,7 +55,10 @@ export class MessengerComponent implements AfterViewInit {
 
 
   constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService, public datePipe: DatePipe) {
+    this.messengerService.messageDates = [];
+    firebaseMessenger.messages = [];
     this.unsubChatList = firebaseMessenger.subChatsList();
+    
   }
 
 
@@ -122,10 +125,10 @@ export class MessengerComponent implements AfterViewInit {
     const formattedTodayDate = formatDate(new Date(), 'd. MMMM', 'de');
     const formattedMessageDate = formatDate(messageDate, 'd. MMMM', 'de',);
     console.log(formattedMessageDate);
-    
+
     if (formattedTodayDate == formattedMessageDate) {
       this.messagesDates.push(formattedMessageDate);
-      
+
       // if(this.messagesDates.includes(formattedMessageDate)) {
       //   console.log(this.test);
       //   console.log(this.messagesDates);

@@ -44,22 +44,14 @@ export class UserListComponent {
     this.messengerService.chartId = '';
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
-    this.messengerService.user = user;
     this.messengerService.openChannel = false;
     this.messengerService.openChart = true;
+    this.messengerService.user = user;
     this.messengerService.channel = {
       channelID: '',
       title: '',
     };
-    this.firebaseMessenger.searchChat(user.userID);
-    setTimeout(() => {
-      if (this.messengerService.chartId == '') {
-        this.firebaseMessenger.createChat(user);
-      }
-      setTimeout(() => {
-        this.messengerService.showMessenger = true;
-      }, 10);
-    }, 500);
+    this.firebaseMessenger.searchChat(user);
   }
 
   ngOnInit(): void {

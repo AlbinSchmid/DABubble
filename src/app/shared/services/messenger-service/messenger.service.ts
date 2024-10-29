@@ -41,9 +41,7 @@ export class MessengerService {
     channelID: '',
     title: '',
   };
-
   openChannel = false;
   openChart = false;
-  constructor() {
-  }
+  messageDates: string[] = [];
 }

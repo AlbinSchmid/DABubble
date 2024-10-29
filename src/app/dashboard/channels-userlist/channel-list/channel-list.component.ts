@@ -50,7 +50,6 @@ export class ChannelListComponent {
     this.threadService.showThread = false;
     this.messengerService.chartId = '';
     this.messengerService.channel = channel;
-    console.log(this.messengerService.channel); 
     this.messengerService.openChannel = true;
     this.messengerService.openChart = false;
     setTimeout(() => {

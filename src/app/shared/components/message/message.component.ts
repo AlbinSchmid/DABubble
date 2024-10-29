@@ -1,8 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { EditMessageComponent } from './edit-message/edit-message.component';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { EmojisReaktionComponent } from '../emojis-reaktion/emojis-reaktion.component';
@@ -28,7 +28,7 @@ import { MessageParserService } from '../../services/message-parser.service';
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
 })
-export class MessageComponent implements OnInit{
+export class MessageComponent implements OnInit {
   authService = inject(AuthserviceService);
   mesageparser = inject(MessageParserService);
   firebaseMessenger = inject(FirebaseMessengerService);
@@ -64,7 +64,44 @@ export class MessageComponent implements OnInit{
   editMessage: boolean;
   unsubReactionList: any;
   unsubAnswersList: any;
+  showDate: boolean;
+  formattedTodayDate: string;
+  formattedMessageDate: string;
 
+
+  ngOnInit() {
+    this.formattedTodayDate = formatDate(new Date(), 'd. MMMM', 'de');
+    this.formattedMessageDate = formatDate(this.message.date, 'd. MMMM', 'de',);
+    this.checkDate();
+    this.unsubReactionList = this.subReactionList();
+    this.unsubAnswersList = this.subAnswersList();
+  }
+
+
+  giveDateBack() {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    let formattedTodayYesterdayInDay = formatDate(yesterday, 'd', 'de');
+    let formattedMessageDateInDay = formatDate(this.message.date, 'd', 'de',);
+    if (this.formattedMessageDate == this.formattedTodayDate) {
+      return 'Heute'
+    } else if (formattedTodayYesterdayInDay == formattedMessageDateInDay) {
+      return 'Gestern';
+    } else {
+      return this.formattedMessageDate;
+    }
+  }
+
+
+  checkDate() {
+    if (!this.messengerService.messageDates.includes(this.formattedMessageDate)) {
+      this.messengerService.messageDates.push(this.formattedMessageDate);
+      this.showDate = true;
+    } else {
+      this.showDate = false;
+    }
+  }
 
 
   getParsedMessage(message: string) {
@@ -94,12 +131,6 @@ export class MessageComponent implements OnInit{
     }
   }
 
-
-  ngOnInit() {
-    console.log(this.message.date);
-    this.unsubReactionList = this.subReactionList();
-    this.unsubAnswersList = this.subAnswersList();
-  }
 
 
   subReactionList() {

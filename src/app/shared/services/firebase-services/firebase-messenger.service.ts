@@ -45,7 +45,7 @@ export class FirebaseMessengerService {
       list.forEach(element => {
         this.messages.push(this.setMessageObject(element.data(), element.id))
       });
-      this.messages = this.sortByDate(this.messages);
+      this.messages = this.sortByDate(this.messages);      
     })
   }
 
@@ -192,7 +192,7 @@ export class FirebaseMessengerService {
         return `${this.messengerService.channel.channelID}`;
       }
     }
-    
+
   }
 
 
@@ -214,11 +214,13 @@ export class FirebaseMessengerService {
    * @param userID - the user ID
    * @returns - return the element with this user
    */
-  searchChat(userID: string) {
-    let messegeRef = query(collection(this.firestore, 'chats'), where('user1', '==', userID), where('user2', '==', this.authService.currentUserSig()?.userID));
+  searchChat(user: any) {
+    let alreadyTriedOtherOptins = false;
+    let messegeRef = query(collection(this.firestore, 'chats'), where('user1', '==', user.userID), where('user2', '==', this.authService.currentUserSig()?.userID));
     if (this.tryOtherOption) {
-      messegeRef = query(collection(this.firestore, 'chats'), where('user2', '==', userID), where('user1', '==', this.authService.currentUserSig()?.userID));
+      messegeRef = query(collection(this.firestore, 'chats'), where('user2', '==', user.userID), where('user1', '==', this.authService.currentUserSig()?.userID));
       this.tryOtherOption = false;
+      alreadyTriedOtherOptins = true;
     }
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
@@ -226,7 +228,12 @@ export class FirebaseMessengerService {
       })
       if (this.messengerService.chartId == '') {
         this.tryOtherOption = true;
-        this.searchChat(userID)
+        this.searchChat(user);
+        if (alreadyTriedOtherOptins) {
+          this.createChat(user);
+        }
+      } else {
+        this.messengerService.showMessenger = true;
       }
     })
   }

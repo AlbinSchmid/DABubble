@@ -122,32 +122,6 @@ section {
                     font-size: 20px;
                 }
             }
-
-            .date-container {
-                position: relative;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 30px;
-                margin: 20px 0;
-
-                div {
-
-                    &:nth-child(1) {
-                        position: absolute;
-                        padding: 5px 15px;
-                        border-radius: 30px;
-                        border: 1px solid #ADB0D9;
-                        background-color: white;
-                    }
-
-                    &:nth-child(2) {
-                        width: 100%;
-                        border: 1px solid rgba(#ADB0D9, 0.5);
-                    }
-                }
-            }
         }
     }
 }

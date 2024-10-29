@@ -1,3 +1,7 @@
+<div class="date-container" *ngIf="showDate">
+    <div>{{ giveDateBack() }}</div>
+    <div></div>
+</div>
 <section class="message" [ngClass]="{'message-from-you': this.message.senderId == this.authService.currentUserSig()?.userID, 'z-index': this.showEmojiBoard}" (mouseenter)="hoveredMessageId = messageIndex"
     (mouseleave)="hoveredMessageId = -1; hoveredMenu = false; closeEmojiBoard()">
     <img src="{{message.senderAvatar}}" alt="Profile" id="img-avatar">
