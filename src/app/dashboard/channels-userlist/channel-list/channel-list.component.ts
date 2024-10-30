@@ -54,7 +54,6 @@ export class ChannelListComponent {
     this.messengerService.openChart = false;
     setTimeout(() => {
       this.messengerService.showMessenger = true;
-      
     }, 100);
   }
 

@@ -14,13 +14,14 @@
                     <h3 *ngIf="messengerService.openChannel">#{{ messengerService.channel.title }}</h3>
                     <h4 *ngIf="messengerService.openChart">{{ messengerService.user.username}}</h4>
                 </div>
-                <p *ngIf="messengerService.openChannel">Das ist der Anfang des Channels <a href="">&#64;{{ messengerService.channel.title }}</a></p>
+                <p *ngIf="messengerService.openChannel">Das ist der Anfang des Channels <a href="">&#64;{{
+                        messengerService.channel.title }}</a></p>
                 <p *ngIf="messengerService.openChart">
                     Diese Unterhaltung findet nur zwischen <a href="">&#64;{{ messengerService.user.username }}</a> und
                     dir statt.</p>
             </div>
             @for (message of firebaseMessenger.messages; track $index) {
-                <app-message [message]="message" [message]="message" [messageIndex]="$index"></app-message>
+            <app-message [message]="message" [message]="message" [messageIndex]="$index"></app-message>
             }
         </div>
         <app-textarea [sourceThread]="sourceThread" (scrollDown)="scrollTo()"></app-textarea>

@@ -11,6 +11,13 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FileViewDialogComponent } from '../file-view-dialog/file-view-dialog.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { FirestoreService } from '../../services/firebase-services/firestore.service';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { collection, doc, onSnapshot } from '@firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { user } from '@angular/fire/auth';
+
 @Component({
   selector: 'app-textarea',
   standalone: true,
@@ -19,12 +26,15 @@ import { FileViewDialogComponent } from '../file-view-dialog/file-view-dialog.co
     FormsModule,
     EmojiBoardComponent,
     MatIcon,
+    MatMenuModule,
   ],
   templateUrl: './textarea.component.html',
   styleUrls: ['./textarea.component.scss'],
   providers: []
 })
 export class TextareaComponent {
+  firestoreService: FirestoreService = inject(FirestoreService);
+  firestore: Firestore = inject(Firestore);
   @Input() sourceThread: boolean;
   @Output() scrollDown = new EventEmitter<any>();
   showEmojiBoard = false;
@@ -34,7 +44,78 @@ export class TextareaComponent {
   date = new Date();
   messenger: string = 'messenger';
   selectedFileToView: any;
+  mentionPersonView = false;
+  mentionUsers: string[] = [];
+  userListSubscription: any;
+  unsubChannelList: any;
+  usersListAll: UserInterface[] = [];
+  usersInChannel = [];
+  usersToMention: any[] = [];
+
+
+
   constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService, private dialog: MatDialog, private storage: Storage) {
+  }
+
+
+  chooseMentionUser() {
+    this.openOrCloseMentionPersonView();
+  }
+
+
+  ngOnInit() {
+    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
+      this.usersListAll = users;
+    });
+    this.unsubChannelList = this.subChannelList();
+  }
+
+
+  subChannelList() {
+    const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
+    return onSnapshot(messegeRef, (list) => {
+      if (list.exists()) {
+        this.usersInChannel = list.data()['userIDs'];
+        for (let i = 0; i < this.usersInChannel.length; i++) {
+          const userInChannelID = this.usersInChannel[i];
+          const user = this.usersListAll.filter(user => user.userID === userInChannelID);
+          this.usersToMention.push(this.getCleanJson(user));
+        }
+      } else {
+        console.error("doc is empty or doesn't exist");
+      }
+    })
+  }
+
+
+  getCleanJson(user: UserInterface[]) {
+    let userJson = {
+      avatar: user[0]['avatar'],
+      userID: user[0]['userID'],
+      userName: user[0]['username'],
+    }
+    return userJson;
+  }
+
+
+  ngOnDestroy() {
+    this.unsubChannelList;
+  }
+
+
+  openOrCloseMentionPersonView() {
+    if (this.mentionPersonView) {
+      this.mentionPersonView = false;
+    } else {
+      this.mentionPersonView = true;
+    }
+  }
+
+
+
+  mentionPerson() {
+    this.mentionUsers.push('Albin Schmid');
+
   }
 
 

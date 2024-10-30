@@ -1,23 +1,35 @@
 <section>
-    @if (!sourceThread) {
-    <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea pattern="^[\s\S]*\S[\s\S]*$"
-        placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
-    <div id="interaction">
-        <div id="button-container-left">
-            <p>
-                <mat-icon (click)="fileInput.click()">add</mat-icon>
-                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
-                    multiple style="display: none;">
-            </p>
-
-            <div></div>
-            
-            <button (click)="openOrCloseEmojiBoard()"></button>
-            <button *ngIf="messengerService.openChannel"></button>
-            <button *ngIf="messengerService.openChannel"></button>
+    <div id="mention-person" [ngStyle]="{'display': mentionPersonView ? 'block' : 'none'}">
+        <h6>Mitglieder:</h6>
+        <div id="trendline"></div>
+        <div id="user-list" (click)="chooseMentionUser()">
+            @for (user of usersToMention; track $index) {
+                <div (click)="mentionPerson()">
+                    <img src="{{ user.avatar }}" alt="">
+                    <p>{{ user.userName }}</p>
+                </div>
+            }
         </div>
-        <button id="send-message-btn" (click)="uploadFiles(messenger);scrollDivDown()" *ngIf="texterea.valid || selectedFiles.length > 0"><img
-                src="/assets/icons/send.png"  alt="send-icon"></button>
+    </div>
+    @if (!sourceThread) {
+    <div id="interaction-div">
+        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea
+            pattern="^[\s\S]*\S[\s\S]*$" placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
+        <div id="interaction">
+            <div id="button-container-left">
+                <p>
+                    <mat-icon (click)="fileInput.click()">add</mat-icon>
+                    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
+                        multiple style="display: none;">
+                </p>
+                <div></div>
+                <button (click)="openOrCloseEmojiBoard()"></button>
+                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView()"></button>
+            </div>
+            <button id="send-message-btn" (click)="uploadFiles(messenger);scrollDivDown()"
+                *ngIf="texterea.valid || selectedFiles.length > 0"><img src="/assets/icons/send.png"
+                    alt="send-icon"></button>
+        </div>
     </div>
     <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea"
         (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
@@ -45,19 +57,21 @@
         <div id="button-container-left">
             <p>
                 <mat-icon (click)="fileInput.click()">add</mat-icon>
-                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*,application/pdf" multiple style="display: none;">
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
+                    multiple style="display: none;">
             </p>
-    
+
             <div></div>
-            
+
             <button (click)="openOrCloseEmojiBoard()"></button>
             <button *ngIf="messengerService.openChannel"></button>
             <button *ngIf="messengerService.openChannel"></button>
         </div>
-        <button id="send-message-btn" (click)="uploadFiles('thread')"
-            *ngIf="texterea.valid"><img src="/assets/icons/send.png"  alt="send-icon"></button>
+        <button id="send-message-btn" (click)="uploadFiles('thread')" *ngIf="texterea.valid"><img
+                src="/assets/icons/send.png" alt="send-icon"></button>
     </div>
-    <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea" (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
+    <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea"
+        (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
     <div style="display: flex; gap: 15px; padding-top: 10px;">
         <div *ngFor="let file of selectedFiles">
             <div style="display: flex; align-items: flex-start; position: relative;  cursor: pointer; flex-wrap: wrap;">

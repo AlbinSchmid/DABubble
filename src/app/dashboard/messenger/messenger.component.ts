@@ -16,6 +16,7 @@ import { TextareaComponent } from '../../shared/components/textarea/textarea.com
 import { Pipe, PipeTransform } from '@angular/core';
 import localeDe from '@angular/common/locales/de';
 import { Message } from '../../models/message.class';
+import { MatMenuModule } from '@angular/material/menu';
 registerLocaleData(localeDe);
 
 @Component({
