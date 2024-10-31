@@ -1,7 +1,6 @@
-@import "./../../../styles.scss";
+@use "./../../../styles";
 
 a {
-    text-decoration: none;
     color: #535AF1;
 
     &:hover {
@@ -18,7 +17,12 @@ button {
     border: none;
     background-color: transparent;
     cursor: pointer;
-    transition: 125ms ease-in-out !important;
+}
+
+h4 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0;
 }
 
 section {
@@ -41,7 +45,7 @@ section {
         padding: 0 40px;
         z-index: 20;
 
-        button {
+        .user-name-contain {
             border-radius: 30px;
             gap: 15px;
             padding: 4px 8px;
@@ -54,12 +58,6 @@ section {
                 width: 50px;
                 height: 50px;
                 border-radius: 100%;
-            }
-
-            h4 {
-                font-size: 24px;
-                font-weight: 800;
-                margin: 0;
             }
         }
     }
@@ -124,4 +122,56 @@ section {
             }
         }
     }
+}
+
+.channel-title-contain {
+    position: relative;
+    border-radius: 30px;
+    gap: 15px;
+    padding: 4px 8px;
+    font-size: 32px !important;
+
+    &:hover {
+        background-color: #ECEEFE;
+        color: #444DF2;
+    }
+
+    &.active {
+        background-color: #ECEEFE;
+        color: #444DF2;
+    }
+
+    .tag-icon {
+        font-weight: 400;
+        transform: skew(-10deg, -5deg) rotate(5deg);
+        display: inline-block;
+        animation: none;
+    }
+
+    h4 {
+        font-weight: 700;
+    }
+
+    &:hover {
+        background-color: #ECEEFE !important;
+        cursor: pointer !important;
+
+        mat-icon {
+            color: #444DF2 !important;
+        }
+    }
+
+    mat-icon {
+        transition: all 20ms ease-in-out !important;
+
+        &:active {
+            font-weight: 100 !important;
+        }
+    }
+}
+
+app-edit-channel {
+    position: absolute;
+    top: -110px;
+    left: 0;
 }

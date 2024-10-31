@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,10 +13,9 @@ import { EditMessageComponent } from '../../shared/components/message/edit-messa
 import { MessageComponent } from '../../shared/components/message/message.component';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
-import { Pipe, PipeTransform } from '@angular/core';
 import localeDe from '@angular/common/locales/de';
-import { Message } from '../../models/message.class';
-import { MatMenuModule } from '@angular/material/menu';
+import { EditChannelComponent } from './edit-channel/edit-channel.component';
+import { OverlayModule } from '@angular/cdk/overlay';
 registerLocaleData(localeDe);
 
 @Component({
@@ -33,23 +32,34 @@ registerLocaleData(localeDe);
     EditMessageComponent,
     MessageComponent,
     TextareaComponent,
+    EditChannelComponent,
+    OverlayModule
   ],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'
 })
 export class MessengerComponent implements AfterViewInit {
+  @ViewChild('content') scrollContainer: ElementRef;
+
   dialog = inject(MatDialog);
   authService = inject(AuthserviceService);
+
   messagesDates: string[] = [];
-  hoveredMessage: number;
-  hoveredMenu = false;
-  sourceThread = false;
-  dateCount = 0;
-  unsubChatList: any;
+
   dateContent: string;
   dateTodayString: string;
+
+  hoveredMessage: number;
+  dateCount: number = 0;
+
+  hoveredMenu: boolean = false;
+  sourceThread: boolean = false;
+  isEditChannelOpen: boolean = false;
+  editChannelIsOpen: boolean = false;
+
+  unsubChatList: any;
+
   reversedMessge: any;
-  @ViewChild('content') scrollContainer: ElementRef;
   // lastDisplayedDate: string = localStorage.getItem('lastDisplayedDate') || '';
   test: boolean;
 
@@ -59,7 +69,7 @@ export class MessengerComponent implements AfterViewInit {
     this.messengerService.messageDates = [];
     firebaseMessenger.messages = [];
     this.unsubChatList = firebaseMessenger.subChatsList();
-    
+
   }
 
 
@@ -190,5 +200,13 @@ export class MessengerComponent implements AfterViewInit {
     this.dialog.open(DetailPersonComponent, {
       panelClass: 'my-custom-dialog'
     });
+  }
+
+  toggleEditChannel() {
+    this.editChannelIsOpen = !this.editChannelIsOpen;
+  }
+
+  closeEditChannel() {
+    this.editChannelIsOpen = false;
   }
 }

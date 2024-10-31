@@ -1,0 +1,9 @@
+@use '../../../../styles';
+
+mat-card {
+    position: relative;
+    z-index: 9999 !important;
+    width: 872px;
+    height: 616px;
+    border-top-left-radius: 0 !important;
+}

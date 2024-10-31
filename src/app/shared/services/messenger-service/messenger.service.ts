@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { MessageInterface } from '../../interfaces/message-interface';
+import { Channel } from '../../interfaces/channel';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +38,14 @@ export class MessengerService {
     userStatus: '',
     isFocus: false,
   }
-  channel = {
+  channel: Channel = {
     channelID: '',
     title: '',
+    description: '',
+    createdBy: '',
+    isFocus: false,
+    userIDs: [],
+    messages: [],
   };
   openChannel = false;
   openChart = false;

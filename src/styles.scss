@@ -231,44 +231,6 @@ mat-card {
     pointer-events: none !important;
 }
 
-@keyframes slideInFromTop {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
-        pointer-events: none;
-    }
-
-    70% {
-        opacity: 1;
-        pointer-events: none;
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-}
-
-@keyframes slideOutToTop {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: none;
-    }
-
-    60% {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(-62px);
-        pointer-events: none;
-    }
-}
-
 .slideInFromTop {
     animation: slideInFromTop 0.4s ease-in-out forwards;
 }
@@ -409,16 +371,86 @@ mat-card {
     overflow: visible !important;
 }
 
+.loading-spinner circle {
+    stroke: #444DF2 !important;
+    stroke-width: 7 !important;
+}
+
+.overlay-backdrop {
+    animation: fadeIn 200ms forwards;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing.overlay-backdrop {
+    animation: fadeIn 200ms ease forwards;
+}
+
+.cdk-overlay-backdrop.overlay-backdrop {
+    animation: fadeOut 200ms ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideInFromTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+        pointer-events: none;
+    }
+
+    70% {
+        opacity: 1;
+        pointer-events: none;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
+
+@keyframes slideOutToTop {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: none;
+    }
+
+    60% {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-62px);
+        pointer-events: none;
+    }
+}
 
 @font-face {
     font-family: "Symbola";
     src: url("/fonts/Symbola-Emoji.woff") format("woff"),
         url("/fonts/Symbola-Emoji.ttf") format("ttf");
-}
-
-.loading-spinner circle {
-    stroke: #444DF2 !important;
-    stroke-width: 7 !important;
 }
 
 /* nunito-200 - latin */

@@ -1,10 +1,22 @@
 <section>
     <header>
-        <button (click)="openDialog()">
-            <img src="{{messengerService.user.avatar}}" alt="DABubble Logo" *ngIf="messengerService.openChart">
-            <h4 *ngIf="messengerService.openChart">{{ messengerService.user.username }}</h4>
-            <h4 *ngIf="messengerService.openChannel">{{ messengerService.channel.title }}</h4>
+        <button *ngIf="messengerService.openChart" (click)="openDialog()" class="user-name-contain">
+            <img src="{{ messengerService.user.avatar }}" alt="DABubble Logo" *ngIf="messengerService.openChart">
+            <h4>{{ messengerService.user.username }}</h4>
         </button>
+        <div class="edit-channel-contain" *ngIf="messengerService.openChannel">
+            <button (click)="toggleEditChannel()" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+                class="channel-title-contain" [class.active]="editChannelIsOpen">
+                <mat-icon class="tag-icon" fontIcon="tag"></mat-icon>
+                <h4>{{ messengerService.channel.title }}</h4>
+                <mat-icon fontIcon="expand_more"></mat-icon>
+            </button>
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
+                [cdkConnectedOverlayOpen]="editChannelIsOpen" [cdkConnectedOverlayHasBackdrop]="true"
+                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="closeEditChannel()">
+                <app-edit-channel></app-edit-channel>
+            </ng-template>
+        </div>
     </header>
     <div id="content">
         <div id="messages-container" #content>

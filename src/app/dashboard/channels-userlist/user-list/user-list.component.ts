@@ -47,10 +47,7 @@ export class UserListComponent {
     this.messengerService.openChannel = false;
     this.messengerService.openChart = true;
     this.messengerService.user = user;
-    this.messengerService.channel = {
-      channelID: '',
-      title: '',
-    };
+    this.messengerService.channel;
     this.firebaseMessenger.searchChat(user);
   }
 
