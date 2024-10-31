@@ -33,37 +33,36 @@ import { user } from '@angular/fire/auth';
   providers: []
 })
 export class TextareaComponent {
+  authService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
   firestore: Firestore = inject(Firestore);
+  firebaseMessenger: FirebaseMessengerService = inject(FirebaseMessengerService)
+  messengerService: MessengerService = inject(MessengerService)
+  threadService: ThreadService = inject(ThreadService)
+
   @Input() sourceThread: boolean;
   @Output() scrollDown = new EventEmitter<any>();
   showEmojiBoard = false;
   selectedFile: File;
   selectedFiles: any[] = [];
-  authService = inject(AuthserviceService);
   date = new Date();
   messenger: string = 'messenger';
   selectedFileToView: any;
   mentionPersonView = false;
-  mentionUsers: string[] = [];
   userListSubscription: any;
   unsubChannelList: any;
   usersListAll: UserInterface[] = [];
-  usersInChannel = [];
   usersToMention: any[] = [];
+  alreadyMentionUsers: any[] = [];
 
 
 
-  constructor(public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService, public threadService: ThreadService, private dialog: MatDialog, private storage: Storage) {
-  }
-
-
-  chooseMentionUser() {
-    this.openOrCloseMentionPersonView();
+  constructor(private dialog: MatDialog, private storage: Storage) {
   }
 
 
   ngOnInit() {
+    this.alreadyMentionUsers = [];
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
     });
@@ -75,12 +74,15 @@ export class TextareaComponent {
     const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
     return onSnapshot(messegeRef, (list) => {
       if (list.exists()) {
-        this.usersInChannel = list.data()['userIDs'];
-        for (let i = 0; i < this.usersInChannel.length; i++) {
-          const userInChannelID = this.usersInChannel[i];
-          const user = this.usersListAll.filter(user => user.userID === userInChannelID);
+        this.usersToMention = [];
+        const usersIDs = list.data()['userIDs'];
+        for (let i = 0; i < usersIDs.length; i++) {
+          const userID = usersIDs[i];
+          const user = this.usersListAll.filter(user => user.userID === userID);
           this.usersToMention.push(this.getCleanJson(user));
+          this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
         }
+        this.sortByName(this.usersToMention);
       } else {
         console.error("doc is empty or doesn't exist");
       }
@@ -112,10 +114,26 @@ export class TextareaComponent {
   }
 
 
+  sortByName(array: any[]) {
+    array.sort((a, b) => {
+      const nameA = a?.userName || '';
+      const nameB = b?.userName || '';
+      return nameA.localeCompare(nameB);
+    });
+  }
 
-  mentionPerson() {
-    this.mentionUsers.push('Albin Schmid');
 
+  deleteMentionUser(userJson: any) {
+    this.alreadyMentionUsers = this.alreadyMentionUsers.filter(user => user.userID !== userJson.userID);
+    this.usersToMention.push(userJson);
+    this.sortByName(this.usersToMention);
+  }
+
+
+  mentionUser(userJson: any) {
+    this.usersToMention = this.usersToMention.filter(user => user.userID !== userJson.userID);
+    this.alreadyMentionUsers.push(userJson);
+    this.openOrCloseMentionPersonView();
   }
 
 
@@ -132,6 +150,7 @@ export class TextareaComponent {
     }
   }
 
+
   /**
    * Open or close the emoji board.
   */
@@ -139,12 +158,14 @@ export class TextareaComponent {
     this.showEmojiBoard = !this.showEmojiBoard;
   }
 
+
   /**
    * Scroll the div down by emitting an event.
    */
   scrollDivDown() {
     this.scrollDown.emit();
   }
+
 
   /**
    * Handles the selection of files from an input event.
@@ -164,6 +185,7 @@ export class TextareaComponent {
     }
   }
 
+
   /**
    * Opens a dialog with a preview of the given file.
    * 
@@ -179,6 +201,7 @@ export class TextareaComponent {
       this.selectedFileToView = null;
     });
   }
+
 
   /**
    * Asynchronously uploads all selected files to Firebase Storage, updates the message content 
@@ -200,7 +223,9 @@ export class TextareaComponent {
     }
     this.updateContent(messenger, originalContent);
     this.selectedFiles = [];
+    this.ngOnInit();
   }
+
 
   /**
    * Retrieves the initial content based on the type of messenger.
@@ -211,6 +236,7 @@ export class TextareaComponent {
   private getInitialContent(messenger: any): string {
     return messenger === 'messenger' ? this.firebaseMessenger.content : this.firebaseMessenger.answerContent;
   }
+
 
   /**
    * Uploads a file to Firebase Storage and returns the download URL.
@@ -226,6 +252,7 @@ export class TextareaComponent {
     return await getDownloadURL(snapshot.ref);
   }
 
+
   /**
    * Appends an image or file link to the given content based on the file type.
    */
@@ -234,6 +261,7 @@ export class TextareaComponent {
     const imgTag = this.getImageTag(url, file.name, fileExtension);
     return `${originalContent}\n\n${imgTag}`;
   }
+
 
   /**
    * Generates an HTML image tag or link for a file based on its extension.
@@ -245,6 +273,7 @@ export class TextareaComponent {
       return `<a href="${url}" target="_blank"><img width="48px" height="48px" src="assets/icons/pdf.webp" alt="${fileName}"></a>`;
     }
   }
+
 
   /**
    * Updates the content of the messenger or thread based on the provided messenger type.
@@ -261,6 +290,7 @@ export class TextareaComponent {
       this.firebaseMessenger.createAnswer(this.threadService.messageId);
     }
   }
+
 
   /**
    * Removes a file from the selected files array and UI.
