@@ -9,21 +9,15 @@ export class ThreadService {
   answeredMessage: MessageInterface = {
     content: '',
     isRead: false,
-    senderId:'',
+    senderID:'',
     senderName: '', 
     senderAvatar: '',
     date: 0,
-    type: '',
-    id: '',
-    reactions: {
-      content: '',
-      senderIDs: '',
-      senderNames: '',
-      messageID: '',
-    }
+    messageID: '',
   }
   test: MessageInterface[] = [
   ]
+  showThreadSideNav: boolean = false;
   showThread = false;
   messageId: string;
   senderName: string = '';

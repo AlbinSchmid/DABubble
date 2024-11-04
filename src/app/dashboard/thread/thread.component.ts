@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
@@ -34,7 +34,18 @@ export class ThreadComponent {
   
   
   constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
-    this.unsubAnswerList = firebaseMessenger.subAnswersList();   
+    
+    
+    if (threadService.showThread) {
+      this.unsubAnswerList = firebaseMessenger.subAnswersList();   
+      
+    }
+  }
+  
+  
+  ngOnInit() {
+    console.log('HELLo');
+
   }
 
 

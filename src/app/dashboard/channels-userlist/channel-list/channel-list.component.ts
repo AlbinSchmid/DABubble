@@ -46,6 +46,7 @@ export class ChannelListComponent {
 
 
   showChannel(channel: any) {
+    this.threadService.showThreadSideNav = false;
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
     this.messengerService.chartId = '';

@@ -13,7 +13,7 @@
     </div>
     @if (!sourceThread) {
     <div class="interaction-div">
-        <div class="mention-all-user-div">
+        <div class="mention-all-user-div" *ngIf="alreadyMentionUsers.length > 0">
             @for (user of alreadyMentionUsers; track $index) {
                 <div>
                     &#64;{{user.userName}}

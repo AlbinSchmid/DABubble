@@ -27,18 +27,11 @@ export class EditMessageComponent implements OnInit {
   @Input() message: MessageInterface = {
     content: '',
     isRead: false,
-    senderId: '',
+    senderID: '',
     senderName: '',
     senderAvatar: '',
     date: 0,
-    type: '',
-    id: '',
-    reactions: {
-      content: '',
-      senderIDs: '',
-      senderNames: '',
-      messageID: '',
-    }
+    messageID: '',
   };
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
@@ -156,10 +149,10 @@ export class EditMessageComponent implements OnInit {
     const imageTags = this.messageItems.map(item => item).join(' ');
     this.message.content = `${this.messageText} ${imageTags}`.trim();
     if (this.editAnswerMessage) {
-      this.firebase.updateAnswer(this.message, this.message.id)
+      this.firebase.updateAnswer(this.message, this.message.messageID)
         .catch(err => console.error('Error updating message answer:', err));
     } else {
-      this.firebase.updateMessage(this.message, this.message.id)
+      this.firebase.updateMessage(this.message, this.message.messageID)
         .catch(err => console.error('Error updating message:', err));
     }
     this.closeEdit();

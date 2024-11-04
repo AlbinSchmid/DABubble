@@ -41,6 +41,7 @@ export class UserListComponent {
 
 
   showMessenger(user: any) {
+    this.threadService.showThreadSideNav = false;
     this.messengerService.chartId = '';
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;

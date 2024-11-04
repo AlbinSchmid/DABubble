@@ -35,28 +35,25 @@ export class MessageComponent implements OnInit {
   threadService = inject(ThreadService);
   messengerService = inject(MessengerService);
   firestore: Firestore = inject(Firestore);
+
   @Input() message: MessageInterface = {
     content: '',
-    isRead: false,
-    senderId: '',
+    senderID: '',
     senderName: '',
     senderAvatar: '',
+    isRead: false,
     date: 0,
-    type: '',
-    id: '',
-    reactions: {
-      content: '',
-      senderIDs: '',
-      senderNames: '',
-      messageID: '',
-    }
+    messageID: '',
   };
   @Input() messageIndex: number;
   @Input() reduceContent: boolean;
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
+
   reactions: ReactionInterface[] = [];
   answers: MessageInterface[] = [];
+  mentioned: any[] = [];
+
   hoveredMenu = false;
   showEmojiBoard = false;
   hoveredMessageId: number;
@@ -64,15 +61,17 @@ export class MessageComponent implements OnInit {
   editMessage: boolean;
   unsubReactionList: any;
   unsubAnswersList: any;
+  unsubMentionsList: any;
   showDate: boolean;
-
-
 
 
   ngOnInit() {
     this.checkDateIfAlreadyIncludeInArray();
     this.unsubReactionList = this.subReactionList();
     this.unsubAnswersList = this.subAnswersList();
+    if (this.messengerService.channel.channelID !== '') {
+      this.unsubMentionsList = this.subMentionsList();
+    }
   }
 
 
@@ -139,7 +138,7 @@ export class MessageComponent implements OnInit {
 
 
   subReactionList() {
-    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.id}/reactions`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.messageID}/reactions`)
     return onSnapshot(messegeRef, (list) => {
       this.reactions = [];
       list.forEach(element => {
@@ -149,19 +148,40 @@ export class MessageComponent implements OnInit {
   }
 
 
+  subMentionsList() {
+    const messegeRef = collection(this.firestore, `channels/${this.messengerService.channel.channelID}/messeges/${this.message.messageID}/mentioned`)
+    return onSnapshot(messegeRef, (list) => {
+      this.mentioned = [];
+      list.forEach(element => {
+        this.mentioned.push(this.setMentionedObject(element.data(), element.id));
+      });
+    })
+  }
+
+
+  setMentionedObject(element: any, id: string) {
+    return {
+      mentionedID: id || '',
+      avatar: element.avatar || '',
+      userID: element.userID || '',
+      userName: element.userName || '',
+    }
+  }
+
+
   setRectionObject(element: any, id: string) {
     return {
       reactionID: id || '',
       content: element.content || '',
       senderIDs: element.senderIDs || '',
       senderNames: element.senderNames || '',
-      messageID: this.message.id || '',
+      messageID: this.message.messageID || '',
     }
   }
 
 
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.id}/answers`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.messageID}/answers`)
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
@@ -208,15 +228,16 @@ export class MessageComponent implements OnInit {
    * Open the thread for answer
    */
   openThead() {
+    this.threadService.showThreadSideNav = true;
     this.threadService.showThread = false;
-    this.threadService.messageId = this.message.id;
+    this.threadService.messageId = this.message.messageID;
     this.threadService.answeredMessage = this.message;
     this.threadService.senderName = this.message.senderName;
     this.threadService.senderAvatar = this.message.senderAvatar;
 
     setTimeout(() => {
       this.threadService.showThread = true;
-    }, 10);
+    }, 100);
   }
 
 

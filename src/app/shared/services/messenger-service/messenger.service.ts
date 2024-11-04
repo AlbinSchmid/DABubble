@@ -10,18 +10,11 @@ export class MessengerService {
   message: MessageInterface = {
     content: '',
     isRead: false,
-    senderId: '',
+    senderID: '',
     senderName: '',
     senderAvatar: '',
     date: 0,
-    type: '',
-    id: '',
-    reactions: {
-      content: '',
-      senderIDs: '',
-      senderNames: '',
-      messageID: '',
-    }
+    messageID: '',
   };
   editMessageContent: string;
   showMessenger = false;

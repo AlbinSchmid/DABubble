@@ -17,6 +17,7 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { collection, doc, onSnapshot } from '@firebase/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import { user } from '@angular/fire/auth';
+import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 
 @Component({
   selector: 'app-textarea',
@@ -42,19 +43,20 @@ export class TextareaComponent {
 
   @Input() sourceThread: boolean;
   @Output() scrollDown = new EventEmitter<any>();
-  showEmojiBoard = false;
-  selectedFile: File;
+
+  usersListAll: UserInterface[] = [];
+  usersToMention: MentionUserInterface[] = [];
+  alreadyMentionUsers: MentionUserInterface[] = [];
   selectedFiles: any[] = [];
-  date = new Date();
-  messenger: string = 'messenger';
+
+  selectedFile: File;
   selectedFileToView: any;
-  mentionPersonView = false;
   userListSubscription: any;
   unsubChannelList: any;
-  usersListAll: UserInterface[] = [];
-  usersToMention: any[] = [];
-  alreadyMentionUsers: any[] = [];
-
+  date = new Date();
+  messenger = 'messenger';
+  mentionPersonView = false;
+  showEmojiBoard = false;
 
 
   constructor(private dialog: MatDialog, private storage: Storage) {
@@ -70,6 +72,11 @@ export class TextareaComponent {
   }
 
 
+  ngOnDestroy() {
+    this.unsubChannelList;
+  }
+
+
   subChannelList() {
     const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
     return onSnapshot(messegeRef, (list) => {
@@ -82,7 +89,7 @@ export class TextareaComponent {
           this.usersToMention.push(this.getCleanJson(user));
           this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
         }
-        this.sortByName(this.usersToMention);
+        this.sortByName(this.usersToMention);        
       } else {
         console.error("doc is empty or doesn't exist");
       }
@@ -97,11 +104,6 @@ export class TextareaComponent {
       userName: user[0]['username'],
     }
     return userJson;
-  }
-
-
-  ngOnDestroy() {
-    this.unsubChannelList;
   }
 
 
@@ -133,6 +135,8 @@ export class TextareaComponent {
   mentionUser(userJson: any) {
     this.usersToMention = this.usersToMention.filter(user => user.userID !== userJson.userID);
     this.alreadyMentionUsers.push(userJson);
+    console.log(this.alreadyMentionUsers);
+    
     this.openOrCloseMentionPersonView();
   }
 
@@ -284,7 +288,7 @@ export class TextareaComponent {
   private updateContent(messenger: any, originalContent: string) {
     if (messenger === 'messenger') {
       this.firebaseMessenger.content = originalContent;
-      this.firebaseMessenger.createMessage('');
+      this.firebaseMessenger.createMessage('', this.alreadyMentionUsers);
     } else {
       this.firebaseMessenger.answerContent = originalContent;
       this.firebaseMessenger.createAnswer(this.threadService.messageId);

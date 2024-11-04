@@ -28,18 +28,11 @@ export class EmojiBoardComponent {
   @Input() message: MessageInterface = {
     content: '',
     isRead: false,
-    senderId: '',
+    senderID: '',
     senderName: '',
     senderAvatar: '',
     date: 0,
-    type: '',
-    id: '',
-    reactions: {
-      content: '',
-      senderIDs: '',
-      senderNames: '',
-      messageID: '',
-    }
+    messageID: '',
   }
   @Input() binding: any;
   @Output() callFunction = new EventEmitter<any>();
@@ -69,7 +62,7 @@ export class EmojiBoardComponent {
       content: element.content || '',
       senderIDs: element.senderIDs || '',
       senderNames: element.senderNames || '',
-      messageID: this.message.id || '',
+      messageID: this.message.messageID || '',
     }
   }
 
@@ -126,7 +119,7 @@ export class EmojiBoardComponent {
     this.firebaseMessenger.reactions = [];
     this.firebaseMessenger.reaktionContent = '';
     this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
-    this.searchReaction(this.message.id, this.firebaseMessenger.reaktionContent, this.authService.currentUserSig()?.userID ?? '');
+    this.searchReaction(this.message.messageID, this.firebaseMessenger.reaktionContent, this.authService.currentUserSig()?.userID ?? '');
     setTimeout(() => {
       this.checkIfEmojiIsAlreadyExist();
     }, 50);
@@ -141,7 +134,7 @@ export class EmojiBoardComponent {
         this.firebaseMessenger.updateReaction(this.reaction[0], this.reaction[0].messageID, this.reaction[0].reactionID);
       }
     } else {
-      this.firebaseMessenger.createReaktion(this.message.id);
+      this.firebaseMessenger.createReaktion(this.message.messageID);
     }
   }
 

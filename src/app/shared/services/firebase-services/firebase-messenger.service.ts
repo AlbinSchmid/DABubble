@@ -76,19 +76,11 @@ export class FirebaseMessengerService {
     return {
       content: element.content || '',
       isRead: element.isRead || false,
-      senderId: element.senderId || 0,
+      senderID: element.senderId || 0,
       senderName: element.senderName || '',
       senderAvatar: element.senderAvatar || '',
       date: new Date(element.date) || 0,
-      type: element.type || '',
-      id: id || '',
-      reactions: {
-        id: '',
-        content: '',
-        senderIDs: '',
-        senderNames: '',
-        messageID: '',
-      },
+      messageID: id || '',
     }
   }
 
@@ -135,7 +127,7 @@ export class FirebaseMessengerService {
       date: timeStamp,
       type: 'text',
     }
-    this.addMessage(message, messageId);
+    this.addMessage(message, messageId, '');
     this.answerContent = '';
   }
 
@@ -143,7 +135,9 @@ export class FirebaseMessengerService {
   /**
    * Get the time when message is created and filled the array. 
    */
-  createMessage(messageId: string) {
+  createMessage(messageId: string, mentionedUsers: any) {
+    console.log(mentionedUsers);
+    
     let date = new Date();
     let timeStamp = date.getTime();
     let message = {
@@ -156,7 +150,7 @@ export class FirebaseMessengerService {
       type: 'text',
     }
 
-    this.addMessage(message, messageId);
+    this.addMessage(message, messageId, mentionedUsers);
     this.content = '';
   }
 
@@ -165,13 +159,19 @@ export class FirebaseMessengerService {
    * We save the message in our firebase.
    * @param message - the sent message
    */
-  async addMessage(message: any, messageId: string) {
+  async addMessage(message: any, messageId: string, mentionedUsers: any) {
     await addDoc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges${this.checkMessageId(messageId)}`), message).catch(
       (err) => {
         console.error(err);
       }
     ).then(
       (docRef) => {
+        for (let i = 0; i < mentionedUsers.length; i++) {
+          const mentionedUser = mentionedUsers[i];
+          if (docRef?.id) {
+            this.addMentionUser(docRef?.id, mentionedUser);
+          }
+        }
         console.log('Document written with ID: ', docRef?.id);
       }
     )
@@ -193,6 +193,19 @@ export class FirebaseMessengerService {
       }
     }
 
+  }
+
+
+  async addMentionUser(messageId: string, mentionedUser: any) {
+    await addDoc(collection(this.firestore, `channels/${this.messengerService.channel.channelID}/messeges/${messageId}/mentioned`), mentionedUser).catch(
+      (err) => {
+        console.error(err);
+      }
+    ).then(
+      (docRef) => {
+        console.log('Document written with ID: ', docRef?.id);
+      }
+    )
   }
 
 

@@ -43,33 +43,40 @@ export class MessengerComponent implements AfterViewInit {
 
   dialog = inject(MatDialog);
   authService = inject(AuthserviceService);
+  firebaseMessenger = inject(FirebaseMessengerService);
+  threadService = inject(ThreadService);
+  messengerService = inject(MessengerService);
 
   messagesDates: string[] = [];
-
+  
+  unsubChatList: any;
+  reversedMessge: any;
   dateContent: string;
   dateTodayString: string;
-
   hoveredMessage: number;
-  dateCount: number = 0;
-
-  hoveredMenu: boolean = false;
-  sourceThread: boolean = false;
-  isEditChannelOpen: boolean = false;
-  editChannelIsOpen: boolean = false;
-
-  unsubChatList: any;
-
-  reversedMessge: any;
-  // lastDisplayedDate: string = localStorage.getItem('lastDisplayedDate') || '';
-  test: boolean;
+  hoveredMenu = false;
+  sourceThread = false;
+  isEditChannelOpen = false;
+  editChannelIsOpen = false;
+  dateCount = 0;
 
 
-
-  constructor(public firebaseMessenger: FirebaseMessengerService, public threadService: ThreadService, public messengerService: MessengerService, public datePipe: DatePipe) {
+  constructor(public datePipe: DatePipe) {
     this.messengerService.messageDates = [];
-    firebaseMessenger.messages = [];
-    this.unsubChatList = firebaseMessenger.subChatsList();
+    this.firebaseMessenger.messages = [];
+    this.unsubChatList = this.firebaseMessenger.subChatsList();
+  }
 
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
+  }
+
+
+  ngOnDestroy() {
+    this.unsubChatList;
   }
 
 
@@ -82,43 +89,11 @@ export class MessengerComponent implements AfterViewInit {
   }
 
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
-  }
-
-
   scrollTo() {
     setTimeout(() => {
       this.scrollToBottom();
     }, 10);
   }
-
-
-
-  // transform(messages: any[], dateFormat: string = 'd. MMMM yyyy'): any[] {
-  //   if (!messages || messages.length === 0) {
-  //     return [];
-  //   }
-
-  //   const groupedMessages = [];
-  //   let currentDate = null;
-
-  //   for (const message of messages) {
-  //     const messageDate = new Date(message.timestamp); // Annahme: Deine Nachrichten haben ein timestamp-Feld
-  //     const formattedDate = formatDate(messageDate, dateFormat, 'de'); // 'de' für deutsche Lokalisierung
-
-  //     if (formattedDate !== currentDate) {
-  //       groupedMessages.push({ date: formattedDate, messages: [] });
-  //       currentDate = formattedDate;
-  //     }
-
-  //     groupedMessages[groupedMessages.length - 1].messages.push(message);
-  //   }
-
-  //   return groupedMessages;
-  // }
 
 
   scrollToBottom() {
@@ -129,55 +104,6 @@ export class MessengerComponent implements AfterViewInit {
   check(messageDate: Date): string {
     const formattedMessageDate = formatDate(messageDate, 'd. MMMM', 'de',);
     return formattedMessageDate;
-  }
-
-
-  checkDate(messageDate: Date) {
-    const formattedTodayDate = formatDate(new Date(), 'd. MMMM', 'de');
-    const formattedMessageDate = formatDate(messageDate, 'd. MMMM', 'de',);
-    console.log(formattedMessageDate);
-
-    if (formattedTodayDate == formattedMessageDate) {
-      this.messagesDates.push(formattedMessageDate);
-
-      // if(this.messagesDates.includes(formattedMessageDate)) {
-      //   console.log(this.test);
-      //   console.log(this.messagesDates);
-      //   console.log('Date Message', formattedMessageDate);
-      //   return 'Heute';
-      // } else {
-      //   return '';
-      // }
-    } else {
-      return;
-    }
-
-
-
-
-
-
-
-
-    // setTimeout(() => {
-    //   const formatter = new Intl.DateTimeFormat('de-DE', { dateStyle: 'short' });
-    //   this.dateTodayString = formatter.format(new Date());
-    //   const dateMessageString = formatter.format(messageDate);
-    //   if (this.dateTodayString !== this.lastDisplayedDate) {
-    //     this.lastDisplayedDate = this.dateTodayString;
-    //     localStorage.setItem('lastDisplayedDate', this.dateTodayString);
-    //     return 'HJKH';
-    //   } else {
-    //     return;
-    //     // this.datePipe.transform(messageDate, 'EEEE, MMMM d')
-    //   }
-
-    // },1000);
-  }
-
-
-  ngOnDestroy() {
-    this.unsubChatList;
   }
 
 
@@ -202,9 +128,11 @@ export class MessengerComponent implements AfterViewInit {
     });
   }
 
+
   toggleEditChannel() {
     this.editChannelIsOpen = !this.editChannelIsOpen;
   }
+
 
   closeEditChannel() {
     this.editChannelIsOpen = false;

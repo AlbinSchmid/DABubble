@@ -1,11 +1,11 @@
-<section>
+<mat-card>
     <header>
         <div>
             <h4>Thread</h4>
             <p><mark>&#64;</mark>{{ threadService.senderName }}</p>
         </div>
 
-        <mat-icon (click)="threadService.showThread = false;">close</mat-icon>
+        <mat-icon (click)="threadService.showThreadSideNav = false;">close</mat-icon>
 
     </header>
     <div id="content">
@@ -36,4 +36,4 @@
         </div>
         <app-textarea [sourceThread]="sourceThread" ></app-textarea>
     </div>
-</section>
+</mat-card>

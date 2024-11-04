@@ -34,6 +34,7 @@ import { Subject, takeUntil, timeout } from 'rxjs';
 })
 export class DashboardComponent {
   @ViewChild('drawer') drawer!: MatDrawer;
+  @ViewChild('drawerThread') drawerThread!: MatDrawer;
 
   authService: AuthserviceService = inject(AuthserviceService);
   threadService: ThreadService = inject(ThreadService);
