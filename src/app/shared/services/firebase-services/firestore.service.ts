@@ -193,23 +193,27 @@ export class FirestoreService {
   }
 
   /**
-   * Retrieves a document from Firestore based on its ID.
+   * Retrieves a document from Firestore based on its collection ID and document ID.
+   * @param {string} collId - The ID of the collection containing the document.
    * @param {string} docId - The ID of the document to retrieve.
-   * @returns {Promise<any>} - The document data retrieved from Firestore.
+   * @returns {Promise<DocumentSnapshot<any>>} - A promise resolving to the document snapshot retrieved from Firestore.
    */
-  async getObjectById(docId: string) {
-    const docSnapshot = await getDoc(this.getSingleDocRef(docId));
-    return docSnapshot;
+  async getObjectById(collId: string, docId: string) {
+    let docSnapshot = await getDoc(this.getSingleDocRef(collId, docId));
+    return docSnapshot.data();
   }
 
   /**
-   * Updates an existing Firestore document with the provided data.
+   * Updates an existing Firestore document within a specified collection with the provided data.
+   * @param {string} collId - The ID of the collection containing the document to update.
    * @param {string} docId - The ID of the document to update.
    * @param {Object} updatedDoc - The new data to update the document with.
+   * @returns {Promise<void>} - A promise that resolves once the document is updated.
    */
-  async updateDoc(docId: string, updatedDoc: {}) {
-    await updateDoc(this.getSingleDocRef(docId), updatedDoc);
+  async updateDoc(collId: string, docId: string, updatedDoc: {}) {
+    await updateDoc(this.getSingleDocRef(collId, docId), updatedDoc);
   }
+
 
   /**
    * Returns a reference to a Firestore collection based on its ID.
@@ -221,11 +225,12 @@ export class FirestoreService {
   }
 
   /**
-   * Returns a reference to a specific document within the 'users' collection.
-   * @param {string} userId - The ID of the user document.
+   * Returns a reference to a specific document within a specified collection.
+   * @param {string} collId - The name of the collection in Firestore.
+   * @param {string} docId - The ID of the document within the specified collection.
    * @returns {DocumentReference} - The Firestore document reference.
    */
-  getSingleDocRef(userId: string) {
-    return doc(collection(this.firestore, 'users'), userId);
+  getSingleDocRef(collId: string, docId: string) {
+    return doc(collection(this.firestore, collId), docId);
   }
 }

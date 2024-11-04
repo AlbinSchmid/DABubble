@@ -389,6 +389,13 @@ mat-card {
     animation: fadeOut 200ms ease forwards;
 }
 
+.tag-icon {
+    font-weight: 400;
+    transform: skew(-10deg, -5deg) rotate(5deg);
+    display: inline-block;
+    animation: none;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

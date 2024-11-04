@@ -14,7 +14,7 @@
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
                 [cdkConnectedOverlayOpen]="editChannelIsOpen" [cdkConnectedOverlayHasBackdrop]="true"
                 [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="closeEditChannel()">
-                <app-edit-channel></app-edit-channel>
+                <app-edit-channel (closeOverlay)="closeEditChannel()"></app-edit-channel>
             </ng-template>
         </div>
     </header>

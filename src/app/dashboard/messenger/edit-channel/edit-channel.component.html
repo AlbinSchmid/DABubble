@@ -1,7 +1,58 @@
 <mat-card>
-    <mat-card-content>
-        <p>Titel: {{ messengerService.channel.title }}</p>
-        <p>Beschreibung: {{ messengerService.channel.description }}</p>
-        <p>Erstellt von: {{ messengerService.channel.createdBy }}</p>
-    </mat-card-content>
+    <div class="content-contain">
+        <header>
+            <div class="title-contain">
+                <mat-icon fontIcon="tag" class="tag-icon"></mat-icon>
+                <h2>{{ titleTxt }}</h2>
+            </div>
+            <mat-icon fontIcon="close" class="close" (click)="onCloseClick()"></mat-icon>
+        </header>
+        <div [ngClass]="{ 'contain-without-input': !editTitle, 'contain-with-input': editTitle }">
+            <div [ngClass]="{ 'headline-contain-without-input': !editTitle, 'headline-contain-with-input': editTitle }">
+                <span>Channel-Name</span>
+                <button (click)="editChannelTitle()" class="edit-user-btn">
+                    {{ editTitle ? 'Speichern' : 'Bearbeiten' }}
+                </button>
+            </div>
+            <div *ngIf="!editTitle" class="content-title-contain">
+                <mat-icon fontIcon="tag" class="tag-icon"></mat-icon>
+                <span>{{ titleTxt }}</span>
+            </div>
+            <div *ngIf="editTitle" class="content-title-input-contain">
+                <mat-icon fontIcon="tag" class="tag-icon"></mat-icon>
+                <input (keydown.enter)="editChannelTitle()" #channelTitleInput maxlength="23" type="text" matInput
+                    autocomplete="off" placeholder="{{ titleTxt }}">
+            </div>
+        </div>
+        <div [ngClass]="{ 'contain-without-border': !editDescription, 'contain-with-border': editDescription }">
+            <div class="above-the-fold-contain">
+                <div
+                    [ngClass]="{ 'headline-contain-without-textarea': !editDescription, 'headline-contain-with-textarea': editDescription }">
+                    <span>Beschreibung</span>
+                    <button (click)="editChannelDescription()" class="edit-user-btn">
+                        {{ editDescription ? 'Speichern' : 'Bearbeiten' }}
+                    </button>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea (click)="$event.stopPropagation()" (keydown.enter)="editChannelDescription()"
+                        cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" spellcheck="false" #channelDescriptionTextarea
+                        maxlength="200" placeholder="Dein Text hier" autocomplete="off" [(ngModel)]="descriptionTxt"
+                        [ngClass]="{'txtAreaEditMode': editDescription, 'defaultTxtAreaMode': !editDescription}"></textarea>
+                </div>
+            </div>
+            <div class="below-the-fold-contain">
+                <div class="seperator-wrapper">
+                    <div class="seperator"></div>
+                </div>
+                <div class="content-creater-contain"
+                    [ngClass]="{'padding-creater-in-edit': editDescription, 'padding-creater-out-edit': !editDescription}">
+                    <span>Erstellt von</span>
+                    <span>{{ messengerService.channel.createdBy }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-wrapper">
+        <button (click)="leaveTheChannel()" class="primary default btn">Channel verlassen</button>
+    </div>
 </mat-card>
