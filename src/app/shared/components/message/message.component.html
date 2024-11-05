@@ -12,7 +12,10 @@
                 <span>Uhr</span>
             </p>
         </div>
-        <div [innerHTML]="getParsedMessage(message.content)"></div>
+        <div>
+        
+            <div [innerHTML]="getParsedMessage(message.content)"></div>
+        </div>
         <div id="reaktions-container">
             <mat-icon *ngIf="reactions.length !== 0" (click)="openOrCloseEmojiBoard()">add_reaction</mat-icon>
             @for (reaction of reactions; track $index) {

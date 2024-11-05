@@ -100,7 +100,6 @@ export class EmojiBoardComponent {
     } if (this.binding == this.firebaseMessenger.reaktionContent) {
       this.addEmojiToReaction(start, emoji, end);
     } if (this.binding.name == 'textareaEdit') {      
-      console.log(this.messengerService.editMessageContent);
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);
     }
   }
@@ -109,6 +108,7 @@ export class EmojiBoardComponent {
   addEmojiToReaction(start: number, emoji: string, end: number) {
     this.findReactionWithContent = false;
     this.firebaseMessenger.reactions = [];
+    console.log(this.firebaseMessenger.reaktionContent);
     this.firebaseMessenger.reaktionContent = '';
     this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
     this.searchReaction(this.message.messageID, this.firebaseMessenger.reaktionContent, this.authService.currentUserSig()?.userID ?? '');

@@ -358,9 +358,8 @@ export class FirebaseMessengerService {
     return {
       content: message.content,
       isRead: message.isRead,
-      senderId: message.senderId,
+      senderId: message.senderID,
       date: message.date.getTime(),
-      type: message.type,
     }
   }
 

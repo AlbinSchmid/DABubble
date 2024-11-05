@@ -35,7 +35,7 @@ export class EditMessageComponent implements OnInit {
   messageItems: string[] = [];
 
 
-  constructor(private firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {
+  constructor(public firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {  
   }
 
 /**
@@ -80,6 +80,7 @@ export class EditMessageComponent implements OnInit {
       lastIndex = anchorTagRegex.lastIndex; 
     }
     this.messageText = messageText + text.substring(lastIndex).trim(); 
+    this.messengerService.editMessageContent = this.messageText;
   }
 
   /**
@@ -139,7 +140,7 @@ export class EditMessageComponent implements OnInit {
    */
   checkWithMessageShouldUptade() {
     const imageTags = this.messageItems.map(item => item).join(' ');
-    this.message.content = `${this.messageText} ${imageTags}`.trim();
+    this.message.content = `${this.messengerService.editMessageContent} ${imageTags}`.trim();
     if (this.editAnswerMessage) {
       this.firebase.updateAnswer(this.message, this.message.messageID)
         .catch(err => console.error('Error updating message answer:', err));
