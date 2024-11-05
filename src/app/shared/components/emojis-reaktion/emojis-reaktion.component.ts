@@ -2,7 +2,6 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 import { CommonModule } from '@angular/common';
-import { MessageInterface } from '../../interfaces/message-interface';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 

@@ -64,14 +64,19 @@ export class MessengerComponent implements AfterViewInit {
   constructor(public datePipe: DatePipe) {
     this.messengerService.messageDates = [];
     this.firebaseMessenger.messages = [];
-    this.unsubChatList = this.firebaseMessenger.subChatsList();
+    this.firebaseMessenger.subChatsList(() => {  
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.scrollContainer);
+      });
+    });  
   }
 
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
+    // setTimeout(() => {
+    //   this.messengerService.scrollToBottom(this.scrollContainer);
+      
+    // }, 500);
   }
 
 
@@ -86,18 +91,6 @@ export class MessengerComponent implements AfterViewInit {
     } else {
       return `# ${this.messengerService.channel.title}`
     }
-  }
-
-
-  scrollTo() {
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 10);
-  }
-
-
-  scrollToBottom() {
-    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
   }
 
 

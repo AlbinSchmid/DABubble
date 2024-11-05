@@ -3,11 +3,11 @@ import { FirebaseMessengerService } from '../../services/firebase-services/fireb
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { CommonModule } from '@angular/common';
-import { MessageInterface } from '../../interfaces/message-interface';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { collection, doc, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { query, where, } from 'firebase/firestore';
+import { Message } from '../../../models/message.class';
 
 @Component({
   selector: 'app-emoji-board',
@@ -25,15 +25,7 @@ export class EmojiBoardComponent {
   messengerService = inject(MessengerService);
   threadService = inject(ThreadService);
 
-  @Input() message: MessageInterface = {
-    content: '',
-    isRead: false,
-    senderID: '',
-    senderName: '',
-    senderAvatar: '',
-    date: 0,
-    messageID: '',
-  }
+  @Input() message = new Message;
   @Input() binding: any;
   @Output() callFunction = new EventEmitter<any>();
 

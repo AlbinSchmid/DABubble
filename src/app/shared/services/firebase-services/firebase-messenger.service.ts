@@ -15,12 +15,15 @@ import { ReactionInterface } from '../../interfaces/reaction-interface';
 export class FirebaseMessengerService {
   firestore: Firestore = inject(Firestore);
   authService = inject(AuthserviceService);
+
   content = '';
   answerContent = '';
   reaktionContent = '';
+
   messages: MessageInterface[] = [];
   answers: MessageInterface[] = [];
   reactions: ReactionInterface[] = [];
+
   tryOtherOption: boolean;
   messageOrThread: string;
 
@@ -38,15 +41,18 @@ export class FirebaseMessengerService {
    * 
    * @returns Get the path of the messeges of 1 chat
    */
-  subChatsList() {
-    const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges`)
-    return onSnapshot(messegeRef, (list) => {
-      this.messages = [];
-      list.forEach(element => {
-        this.messages.push(this.setMessageObject(element.data(), element.id))
-      });
-      this.messages = this.sortByDate(this.messages);      
-    })
+  subChatsList(callback: any) {
+      const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges`)
+      return onSnapshot(messegeRef, (list) => {
+        this.messages = [];
+        list.forEach(element => {
+          this.messages.push(this.setMessageObject(element.data(), element.id))
+        });
+        this.messages = this.sortByDate(this.messages);
+        if (callback) {  
+          callback(this.messages);  
+        }  
+      })
   }
 
 
@@ -56,13 +62,16 @@ export class FirebaseMessengerService {
    * @returns get the path of the answere chat
    */
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${this.threadService.messageId}/answers`);
+    const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${this.threadService.messageToReplyTo.messageID}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
         this.answers.push(this.setMessageObject(element.data(), element.id));
       });
       this.answers = this.sortByDate(this.answers);
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.threadService.scrollContainer)
+      });
     })
   }
 
@@ -137,7 +146,7 @@ export class FirebaseMessengerService {
    */
   createMessage(messageId: string, mentionedUsers: any) {
     console.log(mentionedUsers);
-    
+
     let date = new Date();
     let timeStamp = date.getTime();
     let message = {

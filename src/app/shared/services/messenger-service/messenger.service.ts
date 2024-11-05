@@ -1,21 +1,13 @@
 import { Injectable } from '@angular/core';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
-import { MessageInterface } from '../../interfaces/message-interface';
 import { Channel } from '../../interfaces/channel';
+import { Message } from '../../../models/message.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessengerService {
-  message: MessageInterface = {
-    content: '',
-    isRead: false,
-    senderID: '',
-    senderName: '',
-    senderAvatar: '',
-    date: 0,
-    messageID: '',
-  };
+  message = new Message;
   editMessageContent: string;
   showMessenger = false;
   userId: string;
@@ -43,4 +35,8 @@ export class MessengerService {
   openChannel = false;
   openChart = false;
   messageDates: string[] = [];
+
+  scrollToBottom(container: any) {
+    container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
+  }
 }

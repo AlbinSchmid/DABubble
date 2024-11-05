@@ -42,7 +42,6 @@ export class TextareaComponent {
   threadService: ThreadService = inject(ThreadService)
 
   @Input() sourceThread: boolean;
-  @Output() scrollDown = new EventEmitter<any>();
 
   usersListAll: UserInterface[] = [];
   usersToMention: MentionUserInterface[] = [];
@@ -53,6 +52,7 @@ export class TextareaComponent {
   selectedFileToView: any;
   userListSubscription: any;
   unsubChannelList: any;
+  unsubAnswerList: any;
   date = new Date();
   messenger = 'messenger';
   mentionPersonView = false;
@@ -160,14 +160,6 @@ export class TextareaComponent {
   */
   openOrCloseEmojiBoard() {
     this.showEmojiBoard = !this.showEmojiBoard;
-  }
-
-
-  /**
-   * Scroll the div down by emitting an event.
-   */
-  scrollDivDown() {
-    this.scrollDown.emit();
   }
 
 
@@ -291,7 +283,7 @@ export class TextareaComponent {
       this.firebaseMessenger.createMessage('', this.alreadyMentionUsers);
     } else {
       this.firebaseMessenger.answerContent = originalContent;
-      this.firebaseMessenger.createAnswer(this.threadService.messageId);
+      this.firebaseMessenger.createAnswer(this.threadService.messageToReplyTo.messageID);
     }
   }
 

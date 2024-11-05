@@ -11,17 +11,17 @@
     <div id="content">
         <div id="messages-container" #content>
             <div class="message">
-                <img src="{{ threadService.senderAvatar }}" alt="Profile">
+                <img src="{{ threadService.messageToReplyTo.senderAvatar }}" alt="Profile">
                 <div id="message-content">
                     <div>
-                        <h6>{{ threadService.senderName }}</h6>
+                        <h6>{{ threadService.messageToReplyTo.senderName }}</h6>
                         <p>
-                            {{ threadService.answeredMessage.date| date:'H:mm' }}
+                            {{ threadService.messageToReplyTo.date| date:'H:mm' }}
                             <span>Uhr</span>
                         </p>
                     </div>
-                    <div [innerHTML]="getParsedMessage(threadService.answeredMessage.content)">
-                        {{ threadService.answeredMessage.content }}
+                    <div [innerHTML]="getParsedMessage(threadService.messageToReplyTo.content)">
+                        {{ threadService.messageToReplyTo.content }}
                     </div>
                 </div>
             </div>

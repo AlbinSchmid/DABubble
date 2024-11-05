@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
@@ -24,53 +24,25 @@ import { MessageParserService } from '../../shared/services/message-parser.servi
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss'
 })
-export class ThreadComponent {
-  unsubAnswerList;
+export class ThreadComponent implements AfterViewInit{
   reduceInteraktionBtn = true;
   editAnswerMessage = true;
   sourceThread = true;
   @ViewChild('content') scrollContainer: ElementRef;
-  parser= inject(MessageParserService);
-  
-  
+  parser = inject(MessageParserService);
+
+
   constructor(public threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) {
-    
-    
-    if (threadService.showThread) {
-      this.unsubAnswerList = firebaseMessenger.subAnswersList();   
-      
-    }
   }
   
   
-  ngOnInit() {
-    console.log('HELLo');
-
-  }
-
-
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
-  }
-  
-
-  scrollTo() {
-    setTimeout(() => {
-      this.scrollToBottom();
-    },10);
+      this.threadService.scrollContainer = this.scrollContainer;
   }
 
-
-  scrollToBottom() {
-    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-  }
-  
 
   ngOnDestroy() {
     this.parser.parseMessage(this.firebaseMessenger.content);
-    this.unsubAnswerList;
   }
 
 

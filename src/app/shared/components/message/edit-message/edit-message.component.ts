@@ -7,8 +7,8 @@ import { ThreadService } from '../../../services/thread-service/thread.service';
 import { EmojiBoardComponent } from '../../emoji-board/emoji-board.component';
 import { CommonModule } from '@angular/common';
 import { MessengerService } from '../../../services/messenger-service/messenger.service';
-import { MessageInterface } from '../../../interfaces/message-interface';
 import { MessageParserService } from '../../../services/message-parser.service';
+import { Message } from '../../../../models/message.class';
 
 @Component({
   selector: 'app-edit-message',
@@ -24,15 +24,7 @@ import { MessageParserService } from '../../../services/message-parser.service';
   styleUrl: './edit-message.component.scss'
 })
 export class EditMessageComponent implements OnInit {
-  @Input() message: MessageInterface = {
-    content: '',
-    isRead: false,
-    senderID: '',
-    senderName: '',
-    senderAvatar: '',
-    date: 0,
-    messageID: '',
-  };
+  @Input() message = new Message;
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
   @Output() closeEditMessage = new EventEmitter<boolean>();

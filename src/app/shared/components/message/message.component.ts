@@ -13,6 +13,7 @@ import { MessageInterface } from '../../interfaces/message-interface';
 import { collection, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { MessageParserService } from '../../services/message-parser.service';
+import { Message } from '../../../models/message.class';
 
 @Component({
   selector: 'app-message',
@@ -36,15 +37,7 @@ export class MessageComponent implements OnInit {
   messengerService = inject(MessengerService);
   firestore: Firestore = inject(Firestore);
 
-  @Input() message: MessageInterface = {
-    content: '',
-    senderID: '',
-    senderName: '',
-    senderAvatar: '',
-    isRead: false,
-    date: 0,
-    messageID: '',
-  };
+  @Input() message = new Message;
   @Input() messageIndex: number;
   @Input() reduceContent: boolean;
   @Input() editAnswerMessage: boolean;
@@ -63,9 +56,10 @@ export class MessageComponent implements OnInit {
   unsubAnswersList: any;
   unsubMentionsList: any;
   showDate: boolean;
+  unsubAnswerList: any;
 
 
-  ngOnInit() {
+  ngOnInit() {    
     this.checkDateIfAlreadyIncludeInArray();
     this.unsubReactionList = this.subReactionList();
     this.unsubAnswersList = this.subAnswersList();
@@ -229,15 +223,9 @@ export class MessageComponent implements OnInit {
    */
   openThead() {
     this.threadService.showThreadSideNav = true;
-    this.threadService.showThread = false;
-    this.threadService.messageId = this.message.messageID;
-    this.threadService.answeredMessage = this.message;
-    this.threadService.senderName = this.message.senderName;
-    this.threadService.senderAvatar = this.message.senderAvatar;
-
-    setTimeout(() => {
-      this.threadService.showThread = true;
-    }, 100);
+    this.threadService.messageToReplyTo = this.message;
+    console.log(this.threadService.scrollContainer);
+    this.unsubAnswerList = this.firebaseMessenger.subAnswersList();
   }
 
 
