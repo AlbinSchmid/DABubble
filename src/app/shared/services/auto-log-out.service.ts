@@ -58,7 +58,7 @@ export class AutoLogoutService implements OnDestroy {
     this.ngZone.run(() => {
       if (isTimeout) {
         this.auth.logout();
-        this.router.navigate(['login']);
+        this.router.navigate(['/']);
       }
     });
   }
