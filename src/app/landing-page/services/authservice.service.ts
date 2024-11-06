@@ -3,6 +3,7 @@ import {
   Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
   signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,
+  User,
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
@@ -29,23 +30,6 @@ export class AuthserviceService {
    * Creates a new user in the Firestore 'users' collection and sets the user's display name and avatar.
    * Finally, sends an email verification email to the user.
    */
-
-
-  // register(email: string, username: string, password: string, avatar: string): Observable<void> {
-  //   const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
-  //     .then((response) => {
-  //       const user = response.user;
-  //       const uid = user.uid;
-  //       return updateProfile(user, { displayName: username,photoURL: avatar,})
-  //       .then(() => {const userRef = doc(this.firestore, `users/${uid}`); const userData: UserInterface = this.setRegisterUserData(uid , username, avatar)
-  //         return setDoc(userRef, userData);
-  //       })
-  //       .then(() => { return sendEmailVerification(user);});
-  //     })
-  //     .catch((error) => { throw error; });
-  //   return from(promise);
-  // }
-
   register(email: string, username: string, password: string, avatar: string): Observable<void> {
     const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password)
       .then((response) => {
@@ -67,20 +51,6 @@ export class AuthserviceService {
    * Constructs a user data object for registration with the specified user ID, username, and avatar.
    * The returned object includes default values for email, password, userStatus, and isFocus fields.
    */
-
-
-  // private setRegisterUserData(uid :string, username:string, avatar:string){
-  //   return {
-  //     userID: uid,
-  //     email: user.email ?? '',
-  //     username: username,
-  //     password: '',  
-  //     avatar: avatar,
-  //     userStatus: 'on',
-  //     isFocus: false,
-  //   };
-  // }
-
   private setRegisterUserData(uid: string, username: string, avatar: string, email: string): UserInterface {
     return {
       userID: uid,
@@ -88,7 +58,7 @@ export class AuthserviceService {
       username: username,
       password: '',
       avatar: avatar,
-      userStatus: 'on',
+      userStatus: 'off',
       isFocus: false,
     };
   }
@@ -98,11 +68,6 @@ export class AuthserviceService {
    * Updates the `currentUserSig` signal with the provided user data, which can be a `UserInterface` object or null.
    */
   setCurrentUser(userData: UserInterface | null): void {
-
-
-    // here log out the fail data without correctly informatiosn
-    // console.log('the userDate is:', userData);
-
     this.currentUserSig.set(userData);
   }
 
@@ -111,25 +76,6 @@ export class AuthserviceService {
    * On successful login, retrieves the user document from Firestore, updates the user's status to 'on',
    * sets the user data in the application state, and handles potential errors.
    */
-
-
-  // login(email: string, password: string): Observable<void> {
-  //   const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
-  //     const userRef = doc(this.firestore, `users/${response.user.uid}`);
-  //     const userDoc = await getDoc(userRef);
-  //     if (userDoc.exists()) {
-  //       const userData: UserInterface = userDoc.data() as UserInterface; 
-  //       setDoc(userRef, { userStatus: 'on' }, { merge: true })
-  //       this.setCurrentUser(userData);
-  //     } else {
-  //       console.error('No such document!');
-  //     }
-  //   });
-  //   return from(promise).pipe(
-  //     catchError((error) => { return throwError(() => new Error('E-Mail-Adresse oder Passwort ist falsch.'));})
-  //   );
-  // }
-
   login(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
       const userRef = doc(this.firestore, `users/${response.user.uid}`);
@@ -139,19 +85,8 @@ export class AuthserviceService {
         await setDoc(userRef, { userStatus: 'on' }, { merge: true });
         this.setCurrentUser(userData);
       } else {
-
-        // if user not exsist, create a suser with all datas ! ! ! ! ! 
-
         const user = response.user;
-        const userData: UserInterface = {
-          userID: user.uid,
-          email: user.email || '',
-          username: user.displayName || '',
-          password: '',
-          avatar: user.photoURL || this.defaultAvatarURL,
-          userStatus: 'on',
-          isFocus: false,
-        };
+        const userData: UserInterface = this.loginSetUserData(user)
         await setDoc(userRef, userData);
         this.setCurrentUser(userData);
       }
@@ -159,6 +94,22 @@ export class AuthserviceService {
     return from(promise).pipe(
       catchError((error) => { return throwError(() => new Error('E-Mail-Adresse oder Passwort ist falsch.')); })
     );
+  }
+
+  /**
+   * Constructs a user data object from the provided user and avatar URL.
+   * The returned object includes default values for email, password, userStatus, and isFocus fields.
+   */
+  loginSetUserData(user:User){
+    return {
+      userID: user.uid,
+      email: user.email || '',
+      username: user.displayName || '',
+      password: '',
+      avatar: user.photoURL || this.defaultAvatarURL,
+      userStatus: 'on',
+      isFocus: false,
+    };
   }
 
   /**
@@ -189,6 +140,7 @@ export class AuthserviceService {
       });
     };
   }
+
   /**
    * Handles the success of a sign-in operation.
    * Retrieves the user's avatar URL, updates the user's profile, and constructs user data.
@@ -196,7 +148,6 @@ export class AuthserviceService {
    * navigates to the dashboard, and completes the subscriber on success.
    * If any operation fails, it propagates the error to the subscriber.
    */
-
   private async handleSignInSuccess(result: any, subscriber: any) {
     try {
       const user = result.user;
@@ -359,57 +310,18 @@ export class AuthserviceService {
    * If the user document does not exist, logs an error message.
    * Returns an observable that emits an error if the login process fails.
    */
-
-  // guestLogin(): Observable<void> {
-  //   const promise = signInWithEmailAndPassword(this.firebaseAuth, this.guestEmail, this.guestPassword)
-  //     .then(async (response) => {
-  //       const userRef = doc(this.firestore, `users/${response.user.uid}`);
-  //       setDoc(userRef, { userStatus: 'on' }, { merge: true })
-  //       const userDoc = await getDoc(userRef);
-  //       if (userDoc.exists()) {
-  //         this.navigateTheGuest(userDoc)
-  //       } else {
-  //         console.error('Keine solche Documente gefunden');
-  //       }
-  //     });
-  //   return from(promise).pipe(
-  //     catchError((error) => { return throwError(() => new Error('Gast login fehlgeschlagen.')); })
-  //   );
-  // }
-
-  guestLogin(): Observable<void> {
-    const promise = signInWithEmailAndPassword(this.firebaseAuth, this.guestEmail, this.guestPassword)
-      .then(async (response) => {
-        const userRef = doc(this.firestore, `users/${response.user.uid}`);
-        const userDoc = await getDoc(userRef);
-        if (userDoc.exists()) {
-          await setDoc(userRef, { userStatus: 'on' }, { merge: true });
-          const userData: UserInterface = userDoc.data() as UserInterface;
-          this.setCurrentUser(userData);
-          this.router.navigate(['/dashboard']);
-        } else {
-
-          // if guest not exist create a guest with all datas ! ! !
-
-          const user = response.user;
-          const userData: UserInterface = {
-            userID: user.uid,
-            email: user.email || '',
-            username: 'Gast',
-            password: '',
-            avatar: this.defaultAvatarURL,
-            userStatus: 'on',
-            isFocus: false,
-          };
-          await setDoc(userRef, userData);
-          this.setCurrentUser(userData);
-          this.router.navigate(['/dashboard']);
-        }
-      });
-    return from(promise).pipe(
-      catchError((error) => { return throwError(() => new Error('Gast-Login fehlgeschlagen.')); })
-    );
+  guestLogin() {
+     signInWithEmailAndPassword(this.firebaseAuth, this.guestEmail, this.guestPassword)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        const userRef = doc(this.firestore, `users/${user.uid}`);
+        setDoc(userRef, { userStatus: 'on' }, { merge: true })
+          .then(() => {
+            this.router.navigate(['/dashboard']);
+          })
+        })
   }
+  
 
   /**
    * Navigates the guest user to the dashboard after successful login.

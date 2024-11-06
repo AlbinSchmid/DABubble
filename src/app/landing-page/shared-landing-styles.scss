@@ -131,10 +131,10 @@ form{
   bottom: 30%;
   right: 0;
   width: fit-content;
-  animation: fadeIn 2s ease 0s infinite alternate ;
+  animation: fadein 2s ease 0s infinite alternate ;
 }
 
-@keyframes fadeIn {
+@keyframes fadein {
   0% {
     transform: translateX(20%);
     opacity: 0;
