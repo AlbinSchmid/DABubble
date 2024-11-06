@@ -32,8 +32,17 @@ export class FirebaseMessengerService {
 
 
   async deleteReaction(messageID: string, reaktionID: string) {
-    await deleteDoc(doc(this.firestore, `chats/${this.messengerService.chartId}/messeges/${messageID}/reactions/${reaktionID}`))
-
+    const chatOrChannelPath = this.chatOrChannel('chatOrChannel');
+    const chatIdOrChannelId = this.messengerService.chartId || this.messengerService.channel?.channelID; 
+    if (!chatIdOrChannelId) {
+      return;
+    }
+    const path = `${chatOrChannelPath}/${chatIdOrChannelId}/messeges/${messageID}/reactions/${reaktionID}`;
+    try {
+      await deleteDoc(doc(this.firestore, path));
+    } catch (error) {
+      console.error('Error deleting reaction:', error);
+    }
   }
 
 

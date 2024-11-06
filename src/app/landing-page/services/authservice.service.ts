@@ -317,6 +317,16 @@ export class AuthserviceService {
         const userRef = doc(this.firestore, `users/${user.uid}`);
         setDoc(userRef, { userStatus: 'on' }, { merge: true })
           .then(() => {
+            const GuestUSer = {
+              userID: user.uid,
+              password: this.guestPassword,
+              email: this.guestEmail,
+              username: user.displayName || 'Neuer Gast',
+              avatar: user.photoURL || this.defaultAvatarURL,
+              userStatus: 'on',
+              isFocus: false,
+            };
+            this.currentUserSig.set(GuestUSer);
             this.router.navigate(['/dashboard']);
           })
         })
