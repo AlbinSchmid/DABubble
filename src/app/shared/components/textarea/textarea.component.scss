@@ -22,9 +22,9 @@ button {
     background-color: white;
     border-radius: 30px;
     padding: 10px 20px 60px 20px;
-    right: 40px;
+    right: 60px;
     z-index: 0;
-    left: 40px;
+    left: 60px;
     animation: bottom-top-slide 200ms ease-in-out forwards;
 
     h6 {
@@ -89,7 +89,7 @@ button {
 section {
     .interaction-div {
         position: relative;
-        margin: 0 40px;
+        margin: 0 40px 20px;
         display: flex;
         flex-direction: column;
         z-index: 1;

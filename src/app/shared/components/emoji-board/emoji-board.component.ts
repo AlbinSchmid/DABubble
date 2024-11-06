@@ -60,7 +60,7 @@ export class EmojiBoardComponent {
 
 
   searchReaction(messageID: string, reactionContent: string, userID: string) {
-    let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
+    let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatOrChannel()}/messeges/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
         console.log(userID);

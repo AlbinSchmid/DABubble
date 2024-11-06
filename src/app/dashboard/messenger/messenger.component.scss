@@ -66,13 +66,12 @@ section {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        padding-bottom: 20px;
         justify-content: flex-end;
 
         #messages-container {
             display: flex;
             flex-direction: column;
-            padding: 20px 0;
+            padding: 20px 0 0 0;
             overflow-y: auto;
             overflow-x: hidden;
             min-height: 0;

@@ -35,6 +35,7 @@ export class MessengerService {
   openChannel = false;
   openChart = false;
   messageDates: string[] = [];
+  scrollContainer: any;
 
   scrollToBottom(container: any) {
     container.nativeElement.scrollTop = container.nativeElement.scrollHeight;

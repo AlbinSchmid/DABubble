@@ -41,18 +41,18 @@ export class FirebaseMessengerService {
    * 
    * @returns Get the path of the messeges of 1 chat
    */
-  subChatsList(callback: any) {
-      const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges`)
-      return onSnapshot(messegeRef, (list) => {
-        this.messages = [];
-        list.forEach(element => {
-          this.messages.push(this.setMessageObject(element.data(), element.id))
-        });
-        this.messages = this.sortByDate(this.messages);
-        if (callback) {  
-          callback(this.messages);  
-        }  
-      })
+  subChatsList() {
+    const messegeRef = collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges`)
+    return onSnapshot(messegeRef, (list) => {
+      this.messages = [];
+      list.forEach(element => {
+        this.messages.push(this.setMessageObject(element.data(), element.id))
+      });
+      this.messages = this.sortByDate(this.messages);
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+      });
+    })
   }
 
 
@@ -62,7 +62,7 @@ export class FirebaseMessengerService {
    * @returns get the path of the answere chat
    */
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${this.threadService.messageToReplyTo.messageID}/answers`);
+    const messegeRef = collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges/${this.threadService.messageToReplyTo.messageID}/answers`);
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
@@ -85,7 +85,7 @@ export class FirebaseMessengerService {
     return {
       content: element.content || '',
       isRead: element.isRead || false,
-      senderID: element.senderId || 0,
+      senderID: element.senderID || 0,
       senderName: element.senderName || '',
       senderAvatar: element.senderAvatar || '',
       date: new Date(element.date) || 0,
@@ -124,42 +124,36 @@ export class FirebaseMessengerService {
   /**
    * Get the time when message is created and filled the array. 
    */
-  createAnswer(messageId: string) {
-    let date = new Date();
-    let timeStamp = date.getTime();
-    let message = {
-      content: this.answerContent,
-      isRead: false,
-      senderId: this.authService.currentUserSig()?.userID,
-      senderName: this.authService.currentUserSig()?.username,
-      senderAvatar: this.authService.currentUserSig()?.avatar,
-      date: timeStamp,
-      type: 'text',
-    }
-    this.addMessage(message, messageId, '');
-    this.answerContent = '';
-  }
+  // createAnswer(messageID: string, collectionOfMessage: string) {
+  //   let date = new Date();
+  //   let timeStamp = date.getTime();
+  //   let message = {
+  //     content: this.answerContent,
+  //     senderID: this.authService.currentUserSig()?.userID,
+  //     senderName: this.authService.currentUserSig()?.username,
+  //     senderAvatar: this.authService.currentUserSig()?.avatar,
+  //     date: timeStamp,
+  //   }
+  //   this.addMessage(messageID, collectionOfMessage, message, false);
+  //   this.answerContent = '';
+  // }
 
 
   /**
    * Get the time when message is created and filled the array. 
    */
-  createMessage(messageId: string, mentionedUsers: any) {
-    console.log(mentionedUsers);
-
+  createMessage(messageID: string | boolean, collectionOfMessage: string, mentionedUsers: any) {
     let date = new Date();
     let timeStamp = date.getTime();
     let message = {
       content: this.content,
-      isRead: false,
-      senderId: this.authService.currentUserSig()?.userID,
+      senderID: this.authService.currentUserSig()?.userID,
       senderName: this.authService.currentUserSig()?.username,
       senderAvatar: this.authService.currentUserSig()?.avatar,
       date: timeStamp,
-      type: 'text',
     }
 
-    this.addMessage(message, messageId, mentionedUsers);
+    this.addMessage(messageID, collectionOfMessage, message, mentionedUsers);
     this.content = '';
   }
 
@@ -168,8 +162,8 @@ export class FirebaseMessengerService {
    * We save the message in our firebase.
    * @param message - the sent message
    */
-  async addMessage(message: any, messageId: string, mentionedUsers: any) {
-    await addDoc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges${this.checkMessageId(messageId)}`), message).catch(
+  async addMessage(messageID: string | boolean, collectionOfMessage: string, array: any, mentionedUsers: any) {
+    await addDoc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges${this.checkCollectionOfMessage(messageID)}`), array).catch(
       (err) => {
         console.error(err);
       }
@@ -187,24 +181,6 @@ export class FirebaseMessengerService {
   }
 
 
-  chatOrChannel(src: string) {
-    if (src == 'chatOrChannel') {
-      if (this.messengerService.openChart) {
-        return 'chats';
-      } else {
-        return 'channels';
-      }
-    } else {
-      if (this.messengerService.openChart) {
-        return `${this.messengerService.chartId}`;
-      } else {
-        return `${this.messengerService.channel.channelID}`;
-      }
-    }
-
-  }
-
-
   async addMentionUser(messageId: string, mentionedUser: any) {
     await addDoc(collection(this.firestore, `channels/${this.messengerService.channel.channelID}/messeges/${messageId}/mentioned`), mentionedUser).catch(
       (err) => {
@@ -219,7 +195,7 @@ export class FirebaseMessengerService {
 
 
   async addReaction(messageId: string, reaction: any) {
-    await addDoc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${messageId}/reactions`), reaction).catch(
+    await addDoc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges/${messageId}/reactions`), reaction).catch(
       (err) => {
         console.error(err);
       }
@@ -291,18 +267,6 @@ export class FirebaseMessengerService {
   }
 
 
-  /**
-   * we check where the message should be saved in the firebase
-   * @param messageId - id from the message
-   * @returns - return the path where should be saved in the firebase
-   */
-  checkMessageId(messageId: string) {
-    if (messageId == '') {
-      return '';
-    } else {
-      return `/${messageId}/answers`;
-    }
-  }
 
 
   /**
@@ -321,7 +285,7 @@ export class FirebaseMessengerService {
 
 
   async updateAnswer(message: any, answerId: string) {
-    let ref = doc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${this.threadService.messageId}/answers`), answerId);
+    let ref = doc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges/${this.threadService.messageId}/answers`), answerId);
     await updateDoc(ref, this.getCleanJson(message)).catch(
       (err) => {
         console.error(err);
@@ -332,7 +296,7 @@ export class FirebaseMessengerService {
 
 
   async updateReaction(reaction: any, messageID: string, reactionID: string) {
-    let ref = doc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges/${messageID}/reactions`), reactionID);
+    let ref = doc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges/${messageID}/reactions`), reactionID);
     await updateDoc(ref, this.getCleanReaction(reaction)).catch(
       (err) => {
         console.error(err);
@@ -364,13 +328,46 @@ export class FirebaseMessengerService {
   }
 
 
+  checkCollectionChatOrChannel() {
+    if (this.messengerService.openChart) {
+      return 'chats';
+    } else {
+      return 'channels';
+    }
+  }
+
+
+  checkDocChatOrChannel() {
+    if (this.messengerService.openChart) {
+      return `${this.messengerService.chartId}`;
+    } else {
+      return `${this.messengerService.channel.channelID}`;
+    }
+  }
+
+
+  
+  /**
+   * we check where the message should be saved in the firebase
+   * @param messageId - id from the message
+   * @returns - return the path where should be saved in the firebase
+   */
+  checkCollectionOfMessage(messageId: string | boolean) {
+    if (messageId == false) {
+      return '';
+    } else {
+      return `/${messageId}/answers`;
+    }
+  }
+
+
   /**
    * Get single path in firebase
    * @param messageId - the messageId in this path of chat
    * @returns - returns the correct path
    */
   getSingleDocRef(messageId: string) {
-    return doc(collection(this.firestore, `${this.chatOrChannel('chatOrChannel')}/${this.chatOrChannel('')}/messeges`), messageId)
+    return doc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatOrChannel()}/messeges`), messageId)
   }
 
 

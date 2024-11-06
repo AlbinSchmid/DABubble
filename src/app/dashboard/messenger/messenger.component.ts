@@ -62,21 +62,20 @@ export class MessengerComponent implements AfterViewInit {
 
 
   constructor(public datePipe: DatePipe) {
+  }
+  
+  
+  ngOnInit() {
+    console.log(this.messengerService.scrollContainer);
+    
     this.messengerService.messageDates = [];
     this.firebaseMessenger.messages = [];
-    this.firebaseMessenger.subChatsList(() => {  
-      setTimeout(() => {
-        this.messengerService.scrollToBottom(this.scrollContainer);
-      });
-    });  
+    this.firebaseMessenger.subChatsList();  
   }
-
-
+  
+  
   ngAfterViewInit() {
-    // setTimeout(() => {
-    //   this.messengerService.scrollToBottom(this.scrollContainer);
-      
-    // }, 500);
+    this.messengerService.scrollContainer = this.scrollContainer; 
   }
 
 

@@ -18,6 +18,7 @@ import { collection, doc, onSnapshot } from '@firebase/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import { user } from '@angular/fire/auth';
 import { MentionUserInterface } from '../../interfaces/mention-user-interface';
+import { Message } from '../../../models/message.class';
 
 @Component({
   selector: 'app-textarea',
@@ -280,10 +281,10 @@ export class TextareaComponent {
   private updateContent(messenger: any, originalContent: string) {
     if (messenger === 'messenger') {
       this.firebaseMessenger.content = originalContent;
-      this.firebaseMessenger.createMessage('', this.alreadyMentionUsers);
+      this.firebaseMessenger.createMessage(false, 'noCollection' ,this.alreadyMentionUsers);
     } else {
       this.firebaseMessenger.answerContent = originalContent;
-      this.firebaseMessenger.createAnswer(this.threadService.messageToReplyTo.messageID);
+      this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);
     }
   }
 

@@ -24,6 +24,7 @@ import { Message } from '../../../../models/message.class';
   styleUrl: './edit-message.component.scss'
 })
 export class EditMessageComponent implements OnInit {
+  @Input() mentionedUsers: any[] = [];
   @Input() message = new Message;
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
@@ -36,6 +37,15 @@ export class EditMessageComponent implements OnInit {
 
 
   constructor(public firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {  
+  }
+
+
+  deleteMentionUser(userJson: any) {
+    console.log(this.mentionedUsers);
+    
+    // this.alreadyMentionUsers = this.alreadyMentionUsers.filter(user => user.userID !== userJson.userID);
+    // this.usersToMention.push(userJson);
+    // this.sortByName(this.usersToMention);
   }
 
 /**

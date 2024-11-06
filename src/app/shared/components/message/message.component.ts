@@ -45,7 +45,7 @@ export class MessageComponent implements OnInit {
 
   reactions: ReactionInterface[] = [];
   answers: MessageInterface[] = [];
-  mentioned: any[] = [];
+  mentionedUsers: any[] = [];
 
   hoveredMenu = false;
   showEmojiBoard = false;
@@ -60,12 +60,12 @@ export class MessageComponent implements OnInit {
 
 
   ngOnInit() {    
-    this.checkDateIfAlreadyIncludeInArray();
-    this.unsubReactionList = this.subReactionList();
-    this.unsubAnswersList = this.subAnswersList();
     if (this.messengerService.channel.channelID !== '') {
       this.unsubMentionsList = this.subMentionsList();
     }
+    this.checkDateIfAlreadyIncludeInArray();
+    this.unsubReactionList = this.subReactionList();
+    this.unsubAnswersList = this.subAnswersList();
   }
 
 
@@ -132,7 +132,7 @@ export class MessageComponent implements OnInit {
 
 
   subReactionList() {
-    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.messageID}/reactions`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatOrChannel()}/messeges/${this.message.messageID}/reactions`)
     return onSnapshot(messegeRef, (list) => {
       this.reactions = [];
       list.forEach(element => {
@@ -145,9 +145,12 @@ export class MessageComponent implements OnInit {
   subMentionsList() {
     const messegeRef = collection(this.firestore, `channels/${this.messengerService.channel.channelID}/messeges/${this.message.messageID}/mentioned`)
     return onSnapshot(messegeRef, (list) => {
-      this.mentioned = [];
+      this.mentionedUsers = [];
       list.forEach(element => {
-        this.mentioned.push(this.setMentionedObject(element.data(), element.id));
+        this.mentionedUsers.push(this.setMentionedObject(element.data(), element.id));
+      });
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
       });
     })
   }
@@ -175,7 +178,7 @@ export class MessageComponent implements OnInit {
 
 
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.chatOrChannel('chatOrChannel')}/${this.firebaseMessenger.chatOrChannel('')}/messeges/${this.message.messageID}/answers`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatOrChannel()}/messeges/${this.message.messageID}/answers`)
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
