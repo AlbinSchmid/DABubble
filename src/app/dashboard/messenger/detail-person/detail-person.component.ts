@@ -12,8 +12,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     MatIconModule,
-    MatDialogTitle,
-    MatDialogContent,
     MatButtonModule,
     CommonModule,
   ],

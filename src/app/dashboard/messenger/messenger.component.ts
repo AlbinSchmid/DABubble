@@ -9,7 +9,6 @@ import { CommonModule, DatePipe, formatDate, registerLocaleData } from '@angular
 import { ThreadService } from '../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
-import { EditMessageComponent } from '../../shared/components/message/edit-message/edit-message.component';
 import { MessageComponent } from '../../shared/components/message/message.component';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
@@ -27,13 +26,11 @@ registerLocaleData(localeDe);
     MatDividerModule,
     MatButtonModule,
     MatIconModule,
-    DetailPersonComponent,
     MatDialogModule,
-    EditMessageComponent,
     MessageComponent,
     TextareaComponent,
     EditChannelComponent,
-    OverlayModule
+    OverlayModule,
   ],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'
