@@ -4,7 +4,7 @@ import {
   signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,
   User,
-  signInAnonymously,
+  signInAnonymously, onAuthStateChanged
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
@@ -26,6 +26,26 @@ export class AuthserviceService {
   private tempUserData: UserInterface | null = null;
   private readonly defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
 
+  constructor() {
+    onAuthStateChanged(this.firebaseAuth, (user) => {
+      if (user) { this.handleUserLogin(user);} else {this.setCurrentUser(null);}});
+  }
+
+  
+  /**
+   * Persist the user on page reload
+   */
+  async handleUserLogin(user: User): Promise<void> {
+    const userRef = doc(this.firestore, `users/${user.uid}`);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      const userData: UserInterface = userDoc.data() as UserInterface;
+      this.setCurrentUser(userData);
+    } else {
+      const userData: UserInterface = this.loginSetUserData(user)
+      this.setCurrentUser(userData);
+    }
+  }
   /**
    * Registers a new user using the provided email, username, password, and avatar.
    * Creates a new user in the Firestore 'users' collection and sets the user's display name and avatar.
@@ -304,47 +324,6 @@ export class AuthserviceService {
   }
 
   /**
-   * Logs in a user with guest credentials.
-   * Attempts to sign in using predefined guest email and password.
-   * On successful login, sets the user's status to 'on' in Firestore,
-   * retrieves the user document, and navigates the guest to the dashboard.
-   * If the user document does not exist, logs an error message.
-   * Returns an observable that emits an error if the login process fails.
-   */
-  guestLogin() {
-     signInWithEmailAndPassword(this.firebaseAuth, this.guestEmail, this.guestPassword)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        const userRef = doc(this.firestore, `users/${user.uid}`);
-        setDoc(userRef, { userStatus: 'on' }, { merge: true })
-          .then(() => {
-            const GuestUSer = {
-              userID: user.uid,
-              password: this.guestPassword,
-              email: this.guestEmail,
-              username: user.displayName || 'Neuer Gast',
-              avatar: user.photoURL || this.defaultAvatarURL,
-              userStatus: 'on',
-              isFocus: false,
-            };
-            this.currentUserSig.set(GuestUSer);
-            this.router.navigate(['/dashboard']);
-          })
-        })
-  }
-  
-
-  /**
-   * Navigates the guest user to the dashboard after successful login.
-   * Extracts the user data from the user document and sets it as the current user.
-   */
-  private navigateTheGuest(userDoc: any) {
-    const userData: UserInterface = userDoc.data() as UserInterface;
-    this.setCurrentUser(userData);
-    this.router.navigate(['/dashboard']);
-  }
-
-  /**
    * Updates the current user's email address after re-authenticating with the provided password.
    * Sends an email verification to the new email address upon successful update.
    * Throws an error if no user is logged in or if any operation fails.
@@ -416,29 +395,46 @@ export class AuthserviceService {
     return !querySnapshot.empty;
   }
 
+/**
+ * Performs an anonymous login using Firebase Authentication.
+ * On successful login, creates an anonymous user document in Firestore,
+ * sets the user data in the application state, and navigates to the dashboard.
+ * If the user document creation fails, logs an error.
+ */
   anonymousLogin() {
     signInAnonymously(this.firebaseAuth)
       .then((userCredential) => {
         let user = userCredential.user;
         let userRef = doc(this.firestore, `users/${user.uid}`);
-        let anonymUser = {
-          userID: user.uid,
-          password: '',
-          email: 'guest@guest.de',
-          username: 'Neuer Gast',
-          avatar: this.defaultAvatarURL,
-          userStatus: 'on',
-          isFocus: false,
-        }; setDoc(userRef, anonymUser)
+        let anonymUser = this.setAnynymousData(user) ; 
+        setDoc(userRef, anonymUser)
             .then(() => {
             this.currentUserSig.set(anonymUser);
             this.router.navigate(['/dashboard']);
           })
-        
       })
   }
 
+  /**
+   * Creates a new anonymous user object from the given User object.
+   * The returned object includes default values for email, password, userStatus, and isFocus fields.
+   */
+  setAnynymousData(user:User){
+      return {
+        userID: user.uid,
+        password: '',
+        email: 'guest@guest.de',
+        username: 'Neuer Gast',
+        avatar: this.defaultAvatarURL,
+        userStatus: 'on',
+        isFocus: false,
+      }
+  }
 
+  /**
+   * Checks if the currently authenticated user is an anonymous user.
+   * Returns true if the current user is anonymous, otherwise returns false.
+   */
   isAnonymous() {
     if(this.firebaseAuth.currentUser?.isAnonymous){
       return true
