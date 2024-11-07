@@ -32,8 +32,8 @@ export class FirebaseMessengerService {
 
 
   async deleteReaction(messageID: string, reaktionID: string) {
-    const chatOrChannelPath = this.chatOrChannel('chatOrChannel');
-    const chatIdOrChannelId = this.messengerService.chartId || this.messengerService.channel?.channelID; 
+    const chatOrChannelPath = this.checkCollectionChatOrChannel();
+    const chatIdOrChannelId = this.messengerService.chartId || this.messengerService.channel?.channelID;
     if (!chatIdOrChannelId) {
       return;
     }
@@ -355,7 +355,7 @@ export class FirebaseMessengerService {
   }
 
 
-  
+
   /**
    * we check where the message should be saved in the firebase
    * @param messageId - id from the message
