@@ -8,7 +8,7 @@
                 </mat-drawer>
 
                 <mat-drawer-content>
-                    <app-messenger></app-messenger>
+                    <app-messenger *ngIf="messengerService.showMessenger"></app-messenger>
                 </mat-drawer-content>
 
                 <mat-drawer id="sidenav-left" #drawerThread mode="side" [opened]="threadService.showThreadSideNav"

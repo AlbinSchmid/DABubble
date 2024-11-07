@@ -9,7 +9,7 @@ import { Message } from '../../../models/message.class';
 export class MessengerService {
   message = new Message;
   editMessageContent: string;
-  showMessenger = false;
+  showMessenger = true;
   userId: string;
   chartId = '';
   messageId = '';
