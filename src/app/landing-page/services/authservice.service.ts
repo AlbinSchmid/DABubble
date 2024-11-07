@@ -423,7 +423,7 @@ export class AuthserviceService {
       return {
         userID: user.uid,
         password: '',
-        email: 'guest@guest.de',
+        email: 'gast@gast.de',
         username: 'Neuer Gast',
         avatar: this.defaultAvatarURL,
         userStatus: 'on',

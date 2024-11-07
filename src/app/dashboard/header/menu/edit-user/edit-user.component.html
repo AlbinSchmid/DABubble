@@ -10,7 +10,7 @@
                 [(ngModel)]="inputName">
         </div>
 
-        @if( !authService.userLoggedWithGoogle()) {
+        @if( !authService.userLoggedWithGoogle() && !authService.isAnonymous()) {
         <div class="single-input-contain">
             <div class="input-header">
                 <mat-icon fontIcon="email"></mat-icon>
