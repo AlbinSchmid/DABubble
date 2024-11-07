@@ -29,16 +29,12 @@ export class FirebaseMessengerService {
 
 
   async deleteReaction(messageID: string, reaktionID: string) {
-<<<<<<< HEAD
-    const path = `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages/${messageID}/reactions/${reaktionID}`;
-=======
     const chatOrChannelPath = this.checkCollectionChatOrChannel();
     const chatIdOrChannelId = this.messengerService.chartId || this.messengerService.channel?.channelID;
     if (!chatIdOrChannelId) {
       return;
     }
     const path = `${chatOrChannelPath}/${chatIdOrChannelId}/messeges/${messageID}/reactions/${reaktionID}`;
->>>>>>> a91ed9b7f56424c5cb9f1bfe52a9b356477b8005
     try {
       await deleteDoc(doc(this.firestore, path));
     } catch (error) {
@@ -338,13 +334,13 @@ export class FirebaseMessengerService {
    * Otherwise, return an empty string.
    * @returns {string} - the document ID
    */
-  checkDocChatIDOrChannelID(): string {
+checkDocChatIDOrChannelID(): string {
     if (this.messengerService.openChart) {
       return `${this.messengerService.chartId}`;
     } else if (this.messengerService.openChannel) {
       return `${this.messengerService.channel.channelID}`;
-<<<<<<< HEAD
-=======
+    } else {
+      return '';
     }
   }
 
@@ -355,10 +351,9 @@ export class FirebaseMessengerService {
    * @param messageId - id from the message
    * @returns - return the path where should be saved in the firebase
    */
-  checkCollectionOfMessage(messageId: string | boolean) {
+  checkDocCollectionOfMessage(messageId: string | boolean) {
     if (messageId == false) {
       return '';
->>>>>>> a91ed9b7f56424c5cb9f1bfe52a9b356477b8005
     } else {
       return '';
     }
