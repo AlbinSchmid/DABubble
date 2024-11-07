@@ -32,7 +32,7 @@ export class FirebaseMessengerService {
 
 
   async deleteReaction(messageID: string, reaktionID: string) {
-    const chatOrChannelPath = this.chatOrChannel('chatOrChannel');
+    const chatOrChannelPath = this.checkCollectionChatOrChannel();
     const chatIdOrChannelId = this.messengerService.chartId || this.messengerService.channel?.channelID; 
     if (!chatIdOrChannelId) {
       return;
