@@ -4,6 +4,7 @@ import {
   signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,
   User,
+  signInAnonymously,
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
@@ -413,5 +414,35 @@ export class AuthserviceService {
     const emailQuery = query(usersRef, where('email', '==', email));
     const querySnapshot = await getDocs(emailQuery);
     return !querySnapshot.empty;
+  }
+
+  anonymousLogin() {
+    signInAnonymously(this.firebaseAuth)
+      .then((userCredential) => {
+        let user = userCredential.user;
+        let userRef = doc(this.firestore, `users/${user.uid}`);
+        let anonymUser = {
+          userID: user.uid,
+          password: '',
+          email: 'guest@guest.de',
+          username: 'Neuer Gast',
+          avatar: this.defaultAvatarURL,
+          userStatus: 'on',
+          isFocus: false,
+        }; setDoc(userRef, anonymUser)
+            .then(() => {
+            this.currentUserSig.set(anonymUser);
+            this.router.navigate(['/dashboard']);
+          })
+        
+      })
+  }
+
+
+  isAnonymous() {
+    if(this.firebaseAuth.currentUser?.isAnonymous){
+      return true
+    }
+    return false
   }
 }

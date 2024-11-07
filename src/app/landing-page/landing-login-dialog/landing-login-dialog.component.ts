@@ -101,7 +101,7 @@ export class LandingLoginDialogComponent {
    * The guest account has the email 'gast@gast.de' and the password 'abcdABCD1234!"§$'.
    */
   guestLogin(){
-    this.authService.guestLogin()
+    this.authService.anonymousLogin();
   }
 }
 
