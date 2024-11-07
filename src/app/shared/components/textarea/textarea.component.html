@@ -22,8 +22,9 @@
             </div>
             }
         </div>
-        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea
-            pattern="^[\s\S]*\S[\s\S]*$" placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
+        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea [mention]="items"
+            [mentionConfig]="{triggerChar: '@', labelKey: 'value'}" pattern="^[\s\S]*\S[\s\S]*$"
+            placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">
             <div id="button-container-left">
                 <p>

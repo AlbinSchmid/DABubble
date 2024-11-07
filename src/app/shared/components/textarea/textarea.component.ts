@@ -19,6 +19,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { user } from '@angular/fire/auth';
 import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 import { Message } from '../../../models/message.class';
+import { MentionModule } from 'angular-mentions';
 
 @Component({
   selector: 'app-textarea',
@@ -29,6 +30,7 @@ import { Message } from '../../../models/message.class';
     EmojiBoardComponent,
     MatIcon,
     MatMenuModule,
+    MentionModule,
   ],
   templateUrl: './textarea.component.html',
   styleUrls: ['./textarea.component.scss'],
@@ -58,6 +60,15 @@ export class TextareaComponent {
   messenger = 'messenger';
   mentionPersonView = false;
   showEmojiBoard = false;
+  items: [
+    { name: 'item1', value: 'Item 1' },
+    { name: 'item2', value: 'Item 2' },
+    { name: 'item3', value: 'Item 3' }
+  ];
+
+  mentionConfig = {
+    mentionChar: "@",
+  }
 
 
   constructor(private dialog: MatDialog, private storage: Storage) {
