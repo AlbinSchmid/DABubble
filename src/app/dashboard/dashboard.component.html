@@ -6,15 +6,16 @@
                 <mat-drawer id="sidenav-left" #drawer mode="side" position="start" [opened]="isSideNavOpen">
                     <app-channels-userlist></app-channels-userlist>
                 </mat-drawer>
-                
+
                 <mat-drawer-content>
-                    <app-messenger *ngIf="messengerService.showMessenger"></app-messenger>
+                    <app-messenger></app-messenger>
                 </mat-drawer-content>
 
-                <mat-drawer id="sidenav-left" #drawerThread mode="side" [opened]="threadService.showThreadSideNav" position="end">
+                <mat-drawer id="sidenav-left" #drawerThread mode="side" [opened]="threadService.showThreadSideNav"
+                    position="end">
                     <app-thread></app-thread>
                 </mat-drawer>
-                
+
             </mat-drawer-container>
         </section>
         <button class="toggle-btn" (click)="toggleSideNav()"
