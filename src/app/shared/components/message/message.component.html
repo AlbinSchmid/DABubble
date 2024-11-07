@@ -43,7 +43,7 @@
         <button *ngIf="!reduceContent" (click)="openThead()"><img src="/assets/icons/comment.png" alt=""></button>
         <button id="intercation-more-btn" (click)="showOrHideMenu()">
             <mat-icon>more_vert</mat-icon>
-            <div (click)="editMessage = true" *ngIf="hoveredMenu == true" (mouseleave)="hoveredMenu = false">
+            <div (click)="editMessage = true;" *ngIf="hoveredMenu == true" (mouseleave)="hoveredMenu = false">
                 <p>Nachricht bearbeiten</p>
             </div>
         </button>

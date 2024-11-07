@@ -151,11 +151,14 @@ export class EditMessageComponent implements OnInit {
   checkWithMessageShouldUptade() {
     const imageTags = this.messageItems.map(item => item).join(' ');
     this.message.content = `${this.messengerService.editMessageContent} ${imageTags}`.trim();
+    console.log(this.message.messageID);
+    
+    
     if (this.editAnswerMessage) {
-      this.firebase.updateAnswer(this.message, this.message.messageID)
+      this.firebase.updateSomethingAtMessage(this.threadService.messageToReplyTo.messageID, 'answer', this.message.messageID, this.message)
         .catch(err => console.error('Error updating message answer:', err));
     } else {
-      this.firebase.updateMessage(this.message, this.message.messageID)
+      this.firebase.updateSomethingAtMessage('noID', 'noCollection', this.message.messageID, this.message)
         .catch(err => console.error('Error updating message:', err));
     }
     this.closeEdit();

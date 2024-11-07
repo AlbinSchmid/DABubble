@@ -62,7 +62,7 @@ export class EmojisReaktionComponent{
   addUserToReaction() {
     this.reaction.senderIDs.push(this.authService.currentUserSig()?.userID || '');
     this.reaction.senderNames.push(this.authService.currentUserSig()?.username || '');
-    this.firebaseMessenger.updateReaction(this.reaction, this.reaction.messageID, this.reaction.reactionID);
+    this.firebaseMessenger.updateSomethingAtMessage(this.reaction.messageID, 'reaction', this.reaction.reactionID, this.reaction);
   }
 
 
@@ -72,7 +72,7 @@ export class EmojisReaktionComponent{
     if (this.reaction.senderIDs.length == 0) {
       this.firebaseMessenger.deleteReaction(this.reaction.messageID, this.reaction.reactionID);
     } else {
-      this.firebaseMessenger.updateReaction(this.reaction, this.reaction.messageID, this.reaction.reactionID);
+      this.firebaseMessenger.updateSomethingAtMessage(this.reaction.messageID, 'reaction', this.reaction.reactionID, this.reaction);
     }
   }
 
