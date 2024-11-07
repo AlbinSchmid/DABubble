@@ -65,7 +65,7 @@ export class MessageComponent implements OnInit {
     }
     this.checkDateIfAlreadyIncludeInArray();
     this.unsubReactionList = this.subReactionList();
-    this.unsubAnswersList = this.subAnswersList();
+    this.unsubAnswersList = this.subAnswersList(); //Für die zahlen
   }
 
 
@@ -132,7 +132,7 @@ export class MessageComponent implements OnInit {
 
 
   subReactionList() {
-    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatOrChannel()}/messeges/${this.message.messageID}/reactions`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatIDOrChannelID()}/messages/${this.message.messageID}/reactions`)
     return onSnapshot(messegeRef, (list) => {
       this.reactions = [];
       list.forEach(element => {
@@ -143,7 +143,7 @@ export class MessageComponent implements OnInit {
 
 
   subMentionsList() {
-    const messegeRef = collection(this.firestore, `channels/${this.messengerService.channel.channelID}/messeges/${this.message.messageID}/mentioned`)
+    const messegeRef = collection(this.firestore, `channels/${this.messengerService.channel.channelID}/messages/${this.message.messageID}/mentions`)
     return onSnapshot(messegeRef, (list) => {
       this.mentionedUsers = [];
       list.forEach(element => {
@@ -178,7 +178,7 @@ export class MessageComponent implements OnInit {
 
 
   subAnswersList() {
-    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatOrChannel()}/messeges/${this.message.messageID}/answers`)
+    const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatIDOrChannelID()}/messages/${this.message.messageID}/answers`)
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
       list.forEach(element => {
@@ -228,7 +228,7 @@ export class MessageComponent implements OnInit {
     this.threadService.showThreadSideNav = true;
     this.threadService.messageToReplyTo = this.message;
     console.log(this.threadService.scrollContainer);
-    this.unsubAnswerList = this.firebaseMessenger.subAnswersList();
+    this.unsubAnswerList = this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
   }
 
 

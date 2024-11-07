@@ -60,7 +60,7 @@ export class EmojiBoardComponent {
 
 
   searchReaction(messageID: string, reactionContent: string, userID: string) {
-    let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatOrChannel()}/messeges/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
+    let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatIDOrChannelID()}/messages/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
         console.log(userID);
@@ -123,10 +123,10 @@ export class EmojiBoardComponent {
       if (!this.reaction[0].senderIDs.includes(this.authService.currentUserSig()?.userID ?? '')) {
         this.reaction[0].senderIDs.push(this.authService.currentUserSig()?.userID || '');
         this.reaction[0].senderNames.push(this.authService.currentUserSig()?.username || '');
-        this.firebaseMessenger.updateReaction(this.reaction[0], this.reaction[0].messageID, this.reaction[0].reactionID);
+        this.firebaseMessenger.updateSomethingAtMessage(this.reaction[0].messageID, 'reaction', this.reaction[0].reactionID, this.reaction[0]);
       }
     } else {
-      this.firebaseMessenger.createReaktion(this.message.messageID);
+      this.firebaseMessenger.createReaktion(this.message.messageID, 'reaction');
     }
   }
 

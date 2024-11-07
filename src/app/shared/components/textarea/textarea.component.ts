@@ -281,7 +281,7 @@ export class TextareaComponent {
   private updateContent(messenger: any, originalContent: string) {
     if (messenger === 'messenger') {
       this.firebaseMessenger.content = originalContent;
-      this.firebaseMessenger.createMessage(false, 'noCollection' ,this.alreadyMentionUsers);
+      this.firebaseMessenger.createMessage('noID', 'noCollection' ,this.alreadyMentionUsers);
     } else {
       this.firebaseMessenger.answerContent = originalContent;
       this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);

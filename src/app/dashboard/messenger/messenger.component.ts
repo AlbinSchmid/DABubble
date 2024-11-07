@@ -70,7 +70,7 @@ export class MessengerComponent implements AfterViewInit {
     
     this.messengerService.messageDates = [];
     this.firebaseMessenger.messages = [];
-    this.firebaseMessenger.subChatsList();  
+    this.firebaseMessenger.subSomethingList('noID', 'noCollection');  
   }
   
   
