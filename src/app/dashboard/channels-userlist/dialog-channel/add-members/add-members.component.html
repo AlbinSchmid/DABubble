@@ -17,7 +17,7 @@
         class="add-specific-member-contain" (wheel)="onWheel($event)" (animationstart)="scrollToRightAfterAnimation()">
         <mat-chip-grid #chipGrid>
             <div class="chip-contain" *ngFor="let member of channelDataService.membersSource(); let i = index">
-                <img src="assets/img/avatar.png" alt="user_img">
+                <img src="{{ member.avatar }}" alt="user_img">
                 <span>{{ member.username }}</span>
                 <div class="icon-wrapper">
                     <mat-icon (click)="remove(member)" fontIcon="close"></mat-icon>
