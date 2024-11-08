@@ -60,10 +60,10 @@ export class FirestoreService {
       let currentUserData = this.authService.currentUserSig();
       let currentUser = currentUserData ? currentUserData.username : null;
 
-      userList = userList.filter(user => user.username !== 'Neuer Gast');
+      userList = userList.filter(user => user.username !== 'Neuer Gast' && user.email !== 'gast@gast.de');
       userList.sort((a, b) => a.username.localeCompare(b.username));
 
-      if (currentUser && currentUser !== 'Neuer Gast') {
+      if (currentUser && currentUser !== 'Neuer Gast' || currentUserData?.email !== 'gast@gast.de') {
         let currentUserIndex = userList.findIndex(user => user.username === currentUser);
         if (currentUserIndex > -1) {
           let [currentUserObj] = userList.splice(currentUserIndex, 1);

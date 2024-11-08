@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { UploadImageService } from '../../../../shared/services/upload-image.service';
 import { deleteObject, ref } from '@angular/fire/storage';
+import { FirestoreService } from '../../../../shared/services/firebase-services/firestore.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -28,7 +29,8 @@ export class EditUserComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null
   avatarChanged: boolean = false;
-  imgUpload = inject(UploadImageService)
+  imgUpload = inject(UploadImageService);
+  firestoreService: FirestoreService = inject(FirestoreService);
   newAvatar: string;
   originalAvatar: string;
   inputPassword: string = '';
@@ -173,13 +175,20 @@ export class EditUserComponent implements OnInit {
     }
   }
 
-/**
- * Changes the current user's name.
- * Validates the input name before proceeding. If the name is invalid,
- * the function returns early without making changes. Otherwise, it updates
- * the user's name and displays a success message. After a brief timeout,
- * it closes the edit user editor.
- */
+
+
+  ngOnDestroy(): void {
+    this.firestoreService.stopSnapshot();
+  }
+
+
+  /**
+   * Changes the current user's name.
+   * Validates the input name before proceeding. If the name is invalid,
+   * the function returns early without making changes. Otherwise, it updates
+   * the user's name and displays a success message. After a brief timeout,
+   * it closes the edit user editor.
+   */
   changeName() {
     if (!this.isNameValid()) {
       return;
@@ -195,11 +204,11 @@ export class EditUserComponent implements OnInit {
    * Shows a success message after the avatar has been updated.
    * Waits for a short time before closing the edit user editor.
    */
-  changeAvatar(){
-      this.sending = true;
-      this.updateAvatar();
-      this.successMessage = 'Avatar erfolgreich aktualisiert.';
-      this.timeoutCLose()
+  changeAvatar() {
+    this.sending = true;
+    this.updateAvatar();
+    this.successMessage = 'Avatar erfolgreich aktualisiert.';
+    this.timeoutCLose()
   }
 
   /**
@@ -290,14 +299,16 @@ export class EditUserComponent implements OnInit {
 
   /**
    * Updates the user's name in the Firestore and Firebase Authentication services.
+   * Also initializes a snapshot listener to keep the user list updated in real time.
    * 
    * @param newUsername The new username to be set.
    * @throws If no user is logged in, or if the update fails.
    */
-  updateName() {
+  async updateName() {
     if (this.inputName?.length > 0) {
       try {
-        this.authService.updateName(this.inputName);
+        await this.authService.updateName(this.inputName);
+        this.firestoreService.startUserSnapshot('users');
       } catch (error) {
         console.error('Error updating name:', error);
       }
