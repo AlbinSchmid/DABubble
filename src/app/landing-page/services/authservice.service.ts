@@ -24,12 +24,12 @@ export class AuthserviceService {
   guestEmail = 'gast@gast.de';
   guestPassword = 'abcdABCD1234!"§$';
   private tempUserData: UserInterface | null = null;
-  private readonly defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
+  defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
 
-  constructor() {
-    onAuthStateChanged(this.firebaseAuth, (user) => {
-      if (user) { this.handleUserLogin(user);} else {this.setCurrentUser(null);}});
-  }
+    constructor() {
+      onAuthStateChanged(this.firebaseAuth, (user) => {
+       if (user) { this.handleUserLogin(user);} else {this.setCurrentUser(null);}});
+   }
 
   
   /**
@@ -42,7 +42,7 @@ export class AuthserviceService {
       const userData: UserInterface = userDoc.data() as UserInterface;
       this.setCurrentUser(userData);
     } else {
-      const userData: UserInterface = this.loginSetUserData(user)
+      const userData: UserInterface = this.setAnynymousData(user)
       this.setCurrentUser(userData);
     }
   }
@@ -89,7 +89,8 @@ export class AuthserviceService {
    * Updates the `currentUserSig` signal with the provided user data, which can be a `UserInterface` object or null.
    */
   setCurrentUser(userData: UserInterface | null): void {
-    this.currentUserSig.set(userData);
+    // Ensure that you never set undefined or null, as it may cause issues in certain cases.
+    this.currentUserSig.set(userData || null);  // Safeguard: set null if userData is undefined or null
   }
 
   /**
@@ -409,11 +410,10 @@ export class AuthserviceService {
         let anonymUser = this.setAnynymousData(user) ; 
         setDoc(userRef, anonymUser)
             .then(() => {
-            this.currentUserSig.set(anonymUser);
-            this.router.navigate(['/dashboard']);
-          })
-      })
-  }
+          this.router.navigate(['/dashboard']);
+        })
+    })
+}
 
   /**
    * Creates a new anonymous user object from the given User object.

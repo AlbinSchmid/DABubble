@@ -154,7 +154,6 @@ export class EditUserComponent implements OnInit {
     this.imgUpload.filePreview = null;
     this.isOpenEditEditor = false;
     this.isOpenEditEditorChange.emit(this.isOpenEditEditor = false);
-    this.reloadCurrentUser();
   }
 
   /**
@@ -333,8 +332,6 @@ export class EditUserComponent implements OnInit {
         this.newAvatar = downloadUrl;
         await this.imgUpload.updateUserAvatar(downloadUrl);
         await this.imgUpload.updateAvatarInFirestore(downloadUrl);
-        this.reloadCurrentUser();
-        this.cancelProcess();
       } catch (error) {
         console.error('Error updating avatar:', error);
       }
@@ -342,19 +339,6 @@ export class EditUserComponent implements OnInit {
   }
 
 
-  /**
-   * Reloads the current user from Firebase Authentication and updates the
-   * application state with the new avatar URL if the user is signed in.
-   * @returns {void}
-   */
-  reloadCurrentUser() {
-    const currentUser = this.authService.currentUserSig();
-    this.authService.firebaseAuth.currentUser?.reload().then(() => {
-      if (currentUser) {
-        currentUser.avatar = this.newAvatar;
-      }
-    });
-  }
 
   /**
    * Called when the user selects a new avatar. Triggers the onFileSelected event

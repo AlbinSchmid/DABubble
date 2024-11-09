@@ -14,6 +14,8 @@ import { AuthserviceService } from '../landing-page/services/authservice.service
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserInterface } from '../landing-page/interfaces/userinterface';
 import { Subject, takeUntil, timeout } from 'rxjs';
+import { doc, getDoc } from '@angular/fire/firestore';
+import { onAuthStateChanged } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -49,11 +51,14 @@ export class DashboardComponent {
 
   constructor() { }
 
-  /**
-   * OnInit lifecycle hook. Starts observing the user stream from the AuthService
-   * with a timeout of 5 seconds, navigating to the home page if the user is not found.
-   */
   ngOnInit(): void {
+    onAuthStateChanged(this.authService.firebaseAuth, (user) => {
+      if (user) {
+        this.authService.handleUserLogin(user);
+      } else {
+        this.authService.setCurrentUser(null);
+      }
+    });
     this.authService.user$
       .pipe(
         timeout(5000), takeUntil(this.userFound$)

@@ -9,24 +9,17 @@ const CHECK_INTERVAL = 1000;
 @Injectable({
   providedIn: 'root',
 })
-export class AutoLogoutService implements OnDestroy {
+export class AutoLogoutService  {
   private lastAction: number;
-  private visibilityChangeHandler: (event: Event) => void;
   constructor(
     private auth: AuthserviceService,
     private router: Router,
     private ngZone: NgZone
   ) {
-    this.visibilityChangeHandler = this.handleVisibilityChange.bind(this);
     this.reset(); 
     this.initListener();
     this.initInterval();
   }
-
-  ngOnDestroy() {
-    document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
-  }
-
 
   initListener() {
     this.ngZone.runOutsideAngular(() => {
@@ -61,11 +54,5 @@ export class AutoLogoutService implements OnDestroy {
         this.router.navigate(['/']);
       }
     });
-  }
-
-  private handleVisibilityChange(event: Event) {
-    if (document.hidden) {
-      this.auth.logout();
-    }
   }
 }
