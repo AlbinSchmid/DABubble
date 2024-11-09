@@ -65,14 +65,9 @@ export class LandingNewPasswordComponent implements OnInit {
    * Otherwise, it navigates to the root page.
    */
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const action = params['action'];
-      if (action === 'resetPassword') {
-        this.router.navigate(['neues-passwort']);
-      } else{
-        this.router.navigate(['/']);
-      }
-    });
+    if (!this.oobCode) {
+      this.router.navigate(['/']);
+    }
   }
 
   /**
