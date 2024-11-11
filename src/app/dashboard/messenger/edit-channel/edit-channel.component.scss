@@ -421,3 +421,16 @@ input {
 .below-the-fold-contain {
     width: 100%;
 }
+
+button {
+    &:disabled {
+        pointer-events: none;
+    }
+}
+
+.edit-user-btn {
+    &:disabled {
+        pointer-events: none !important;
+        color: #686868 !important;
+    }
+}

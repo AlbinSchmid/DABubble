@@ -48,7 +48,12 @@ export class EditChannelComponent {
     this.descriptionTxt = this.messengerService.channel.description;
     this.titleTxt = this.messengerService.channel.title;
 
-    console.log(this.messengerService.channel.userIDs);
+    console.log(this.isGlobalChannel());
+
+  }
+
+  isGlobalChannel() {
+    return this.titleTxt === 'Allgemein';
   }
 
 

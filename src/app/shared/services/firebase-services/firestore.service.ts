@@ -81,7 +81,8 @@ export class FirestoreService {
 
   /**
    * Sets up a snapshot listener for the 'channels' collection and updates the `channelList$` observable.
-   * Only channels that include the current user's ID are shown, sorted alphabetically by title.
+   * Only channels that include the current user's ID or have the title "Allgemein" are shown,
+   * sorted alphabetically by title.
    * @param {string} collId - The collection ID to listen to (typically 'channels').
    */
   startChannelSnapshot(collId: string) {
@@ -97,13 +98,16 @@ export class FirestoreService {
       let currentUserId = currentUserData ? currentUserData.userID : null;
 
       if (currentUserId) {
-        channelList = channelList.filter(channel => channel.userIDs.includes(currentUserId));
+        channelList = channelList.filter(channel =>
+          channel.userIDs.includes(currentUserId) || channel.title === 'Allgemein'
+        );
       }
 
       channelList.sort((a, b) => a.title.localeCompare(b.title));
       this.channelList$.next(channelList);
     });
   }
+
 
   /**
    * Stops the currently active Firestore snapshot listener, if one exists.
