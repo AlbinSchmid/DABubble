@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../../landing-page/interfaces/userinterface';
 import { MatCardModule } from '@angular/material/card';
 import { ChannelDataService } from '../channel-data.service';
+import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-add-members',
@@ -30,6 +31,7 @@ import { ChannelDataService } from '../channel-data.service';
   styleUrl: './add-members.component.scss'
 })
 export class AddMembersComponent {
+  @ViewChild('userInput') userInputElement!: ElementRef<HTMLInputElement>;
 
   @Output() inputSelectedChange = new EventEmitter<boolean>();
   @Output() inputValueChange = new EventEmitter<boolean>();
@@ -37,12 +39,15 @@ export class AddMembersComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
   channelDataService: ChannelDataService = inject(ChannelDataService);
+  authService: AuthserviceService = inject(AuthserviceService);
+
 
   channelListSubscription!: Subscription;
   channelList: Channel[] = [];
 
   userListSubscription!: Subscription;
   userList: UserInterface[] = [];
+  inputUserList: UserInterface[] = [];
 
   filteredUsers: UserInterface[] = [];
 
@@ -55,7 +60,9 @@ export class AddMembersComponent {
   pickChannelValue: string;
 
 
-  constructor() { }
+  constructor() {
+    this.inputUserList.push(this.authService.currentUserSig()!);
+  }
 
   get pickChannel(): string {
     return this.pickChannelValue;
@@ -67,8 +74,10 @@ export class AddMembersComponent {
   }
 
   ngOnInit(): void {
-    this.channelListSubscription = this.firestoreService.channelList$.subscribe(channel => {
-      this.channelList = channel;
+    let currentUserId = this.authService.currentUserSig()!.userID;
+
+    this.channelListSubscription = this.firestoreService.channelList$.subscribe(channels => {
+      this.channelList = channels.filter(channel => channel.userIDs.includes(currentUserId));
     });
 
     this.userListSubscription = this.firestoreService.userList$.subscribe(user => {
@@ -85,12 +94,24 @@ export class AddMembersComponent {
 
   scrollToRight(): void {
     let element = document.querySelector('.add-specific-member-contain') as HTMLElement;
+
     if (element) {
+
       setTimeout(() => {
         element.scrollTo({
           left: element.scrollWidth,
           behavior: 'smooth'
         });
+
+        if (this.inputUserList.length < 3) {
+          this.userInputElement.nativeElement.focus();
+        } else {
+          element.addEventListener('scroll', () => {
+            if (element.scrollLeft + element.clientWidth >= element.scrollWidth) {
+              this.userInputElement.nativeElement.focus();
+            }
+          }, { once: false });
+        }
       }, 100);
     }
   }
@@ -106,7 +127,7 @@ export class AddMembersComponent {
 
   scrollToRightAfterAnimation() {
     let element = document.querySelector('.add-specific-member-contain') as HTMLElement;
-    this.channelDataService.membersSource.set([]);
+    this.channelDataService.membersSource.set([...this.inputUserList]);
     if (element) {
       setTimeout(() => {
         element.scrollTo({
@@ -197,11 +218,12 @@ export class AddMembersComponent {
     let inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim().toLowerCase();
     let existingMembers = this.channelDataService.membersSource().map(member => member.userID);
+    let currentUser = this.authService.currentUserSig()!.userID;
 
     if (value) {
       this.filteredUsers = this.userList.filter(user => {
         let fullName = user.username.toLowerCase();
-        return fullName.includes(value) && !existingMembers.includes(user.userID);
+        return fullName.includes(value) && !existingMembers.includes(user.userID) && user.userID !== currentUser;
       });
       this.highlightedIndex = -1;
     } else {
@@ -213,11 +235,9 @@ export class AddMembersComponent {
   add(user: UserInterface): void {
     if (user) {
       this.channelDataService.membersSource.update(members => [...members, user]);
-      let inputElement = document.querySelector('#userinput') as HTMLInputElement;
-      if (inputElement) {
-        inputElement.value = '';
-        this.filteredUsers = [];
-      }
+      this.inputUserList = this.channelDataService.membersSource();
+      this.userInputElement.nativeElement.value = '';
+      this.filteredUsers = [];
     }
     this.scrollToRight();
   }
@@ -227,6 +247,7 @@ export class AddMembersComponent {
       let index = members.indexOf(member);
       if (index >= 0) {
         members.splice(index, 1);
+        this.inputUserList = this.channelDataService.membersSource();
       }
       return [...members];
     });

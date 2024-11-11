@@ -121,7 +121,6 @@ export class FirestoreService {
    */
   async addDoc(obj: EntityTypes, collId: string) {
     await addDoc(this.getCollectionRef(collId), obj)
-      .then(docRef => console.log(docRef?.id))
       .catch(err => console.error(err));
   }
 

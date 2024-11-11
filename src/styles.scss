@@ -257,12 +257,14 @@ mat-card {
     overflow: hidden;
     opacity: 0;
     direction: ltr;
+    overflow-anchor: none !important;
 
     mat-chip-grid {
         pointer-events: none !important;
     }
 
     .chip-contain {
+        flex: none;
         display: flex;
         align-items: center;
         gap: 10px;
