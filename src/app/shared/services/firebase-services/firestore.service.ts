@@ -21,13 +21,17 @@ export class FirestoreService {
 
   userList$ = new BehaviorSubject<UserInterface[]>([]);
   channelList$ = new BehaviorSubject<Channel[]>([]);
+
   unsubList!: () => void;
 
   currentlyFocusedChat: EntityTypes;
 
   constructor() { }
 
-
+  /**
+   * Sets the currently focused chat entity and returns it.
+   * @param {EntityTypes} obj - The entity to focus on.
+   */
   setAndGetCurrentlyFocusedChat(obj: EntityTypes) {
     this.currentlyFocusedChat = obj;
   }
@@ -44,8 +48,8 @@ export class FirestoreService {
 
   /**
    * Sets up a Firestore snapshot listener for the 'users' collection and updates the `userList$` observable.
-   * It filters out unwanted users (e.g., 'Neuer Gast'), sorts the remaining users by username,
-   * and ensures that the current user is always at the top of the list (unless the current user is 'Neuer Gast').
+   * It filters out unwanted users (e.g., 'Neuer Gast' and 'gast@gast.de'), sorts the remaining users by username,
+   * and ensures that the current user is always at the top of the list.
    * @param {string} collId - The collection ID to listen to (typically 'users').
    */
   startUserSnapshot(collId: string) {
@@ -75,21 +79,27 @@ export class FirestoreService {
     });
   }
 
-
   /**
    * Sets up a snapshot listener for the 'channels' collection and updates the `channelList$` observable.
-   * Sorts the channels by their title in alphabetical order and pushes the sorted list to `channelList$`.
+   * Only channels that include the current user's ID are shown, sorted alphabetically by title.
    * @param {string} collId - The collection ID to listen to (typically 'channels').
    */
   startChannelSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
       let channelList: Channel[] = [];
+
       snapshot.forEach(doc => {
         let channelObj = this.setDummyObject(doc.data() as Channel, doc.id) as Channel;
         channelList.push(channelObj);
       });
 
-      // Sort channels alphabetically by title
+      let currentUserData = this.authService.currentUserSig();
+      let currentUserId = currentUserData ? currentUserData.userID : null;
+
+      if (currentUserId) {
+        channelList = channelList.filter(channel => channel.userIDs.includes(currentUserId));
+      }
+
       channelList.sort((a, b) => a.title.localeCompare(b.title));
       this.channelList$.next(channelList);
     });
@@ -213,7 +223,6 @@ export class FirestoreService {
   async updateDoc(collId: string, docId: string, updatedDoc: {}) {
     await updateDoc(this.getSingleDocRef(collId, docId), updatedDoc);
   }
-
 
   /**
    * Returns a reference to a Firestore collection based on its ID.
