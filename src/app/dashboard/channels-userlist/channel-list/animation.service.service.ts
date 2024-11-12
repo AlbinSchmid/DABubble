@@ -48,11 +48,8 @@ export class AnimationChannelService {
     icon.classList.toggle('rotate-right', !this.isChannelOpen);
   }
 
-
-
-
-
-
-
-
+  async updateListOfChannels() {
+    if (this.isChannelOpen) this.toggleChannels();
+    await new Promise(resolve => setTimeout(resolve, this.arrayTimerChannels() + 200));
+  }
 }

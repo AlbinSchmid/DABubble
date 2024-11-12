@@ -107,7 +107,7 @@ export class AddMembersComponent {
           this.userInputElement.nativeElement.focus();
         } else {
           element.addEventListener('scroll', () => {
-            if (element.scrollLeft + element.clientWidth >= element.scrollWidth) {
+            if (element.scrollLeft + element.clientWidth >= element.scrollWidth && this.userInputElement) {
               this.userInputElement.nativeElement.focus();
             }
           }, { once: false });
@@ -158,12 +158,12 @@ export class AddMembersComponent {
   isFocus(selectedTitle: string) {
     this.channelList.forEach(channel => {
       if (channel.title === selectedTitle) {
-        this.channelDataService.membersSource.set([]);
         if (this.selectInput) {
           setTimeout(() => {
-            this.channelDataService.membersSource.update(members => [...members, ...channel.userIDs]);
+            this.channelDataService.membersSource.update(() => [...channel.userIDs]);
           }, 200);
         } else {
+          this.channelDataService.membersSource.set([]);
           this.channelDataService.membersSource.update(members => [...members, ...channel.userIDs]);
         }
       }

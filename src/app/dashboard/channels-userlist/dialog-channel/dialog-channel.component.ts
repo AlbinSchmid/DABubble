@@ -93,15 +93,9 @@ export class DialogChannelComponent {
   }
 
   async addChannel() {
-    try {
-      this.dialogRef.close();
-      if (this.channelAnimationService.isChannelOpen) this.channelAnimationService.toggleChannels();
-      await new Promise(resolve => setTimeout(resolve, this.channelAnimationService.arrayTimerChannels() + 200));
-      await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
-
-      this.channelAnimationService.toggleChannels();
-    } catch (error) {
-      console.error("Failed to add the channel:", error);
-    }
+    this.dialogRef.close();
+    await this.channelAnimationService.updateListOfChannels();
+    await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
+    this.channelAnimationService.toggleChannels();
   }
 }

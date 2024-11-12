@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDoc, onSnapshot, QuerySnapshot, updateDoc } from '@angular/fire/firestore';
 import { Channel } from '../../interfaces/channel';
 import { BehaviorSubject } from 'rxjs';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
@@ -48,66 +48,120 @@ export class FirestoreService {
 
   /**
    * Sets up a Firestore snapshot listener for the 'users' collection and updates the `userList$` observable.
-   * It filters out unwanted users (e.g., 'Neuer Gast' and 'gast@gast.de'), sorts the remaining users by username,
-   * and ensures that the current user is always at the top of the list.
+   * It filters out unwanted users, sorts the remaining users by username, and ensures that the current user
+   * is always at the top of the list.
    * @param {string} collId - The collection ID to listen to (typically 'users').
    */
   startUserSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
       let userList: UserInterface[] = [];
 
-      snapshot.forEach(doc => {
-        let userObj = this.setDummyObject(doc.data() as UserInterface, doc.id) as UserInterface;
-        userList.push(userObj);
-      });
-
-      let currentUserData = this.authService.currentUserSig();
-      let currentUser = currentUserData ? currentUserData.username : null;
-
-      userList = userList.filter(user => user.username !== 'Neuer Gast' && user.email !== 'gast@gast.de');
-      userList.sort((a, b) => a.username.localeCompare(b.username));
-
-      if (currentUser && currentUser !== 'Neuer Gast' || currentUserData?.email !== 'gast@gast.de') {
-        let currentUserIndex = userList.findIndex(user => user.username === currentUser);
-        if (currentUserIndex > -1) {
-          let [currentUserObj] = userList.splice(currentUserIndex, 1);
-          userList.unshift(currentUserObj);
-        }
-      }
-
-      this.userList$.next(userList);
+      this.extractUsersFromSnapshot(snapshot, userList);
+      let filteredUserList = this.filterUnwantedUsers(userList);
+      this.sortAndPrioritizeCurrentUser(filteredUserList);
+      this.userList$.next(filteredUserList);
     });
   }
 
   /**
+   * Extracts users from a Firestore snapshot and adds them to the provided list.
+   * @param {QuerySnapshot} snapshot - The Firestore snapshot containing user documents.
+   * @param {UserInterface[]} userList - The array to populate with extracted users.
+   */
+  extractUsersFromSnapshot(snapshot: QuerySnapshot, userList: UserInterface[]): void {
+    snapshot.forEach(doc => {
+      let userObj = this.setDummyObject(doc.data() as UserInterface, doc.id) as UserInterface;
+      userList.push(userObj);
+    });
+  }
+
+  /**
+   * Filters out unwanted users based on username and email criteria.
+   * @param {UserInterface[]} userList - The full list of users to filter.
+   * @returns {UserInterface[]} - The filtered list of users.
+   */
+  filterUnwantedUsers(userList: UserInterface[]): UserInterface[] {
+    return userList.filter(user => user.username !== 'Neuer Gast' && user.email !== 'gast@gast.de');
+  }
+
+  /**
+   * Sorts users alphabetically by username and ensures that the current user is placed at the top of the list.
+   * @param {UserInterface[]} userList - The list of users to sort.
+   */
+  sortAndPrioritizeCurrentUser(userList: UserInterface[]): void {
+    let currentUserData = this.authService.currentUserSig();
+    let currentUser = currentUserData ? currentUserData.username : null;
+
+    userList.sort((a, b) => a.username.localeCompare(b.username));
+
+    if (currentUser && currentUser !== 'Neuer Gast' || currentUserData?.email !== 'gast@gast.de') {
+      let currentUserIndex = userList.findIndex(user => user.username === currentUser);
+      if (currentUserIndex > -1) {
+        let [currentUserObj] = userList.splice(currentUserIndex, 1);
+        userList.unshift(currentUserObj);
+      }
+    }
+  }
+
+  /**
    * Sets up a snapshot listener for the 'channels' collection and updates the `channelList$` observable.
-   * Only channels that include the current user's ID or have the title "Allgemein" are shown,
-   * sorted alphabetically by title.
+   * Only channels that include the current user's ID or have the title "Allgemein" are shown.
+   * The "Allgemein" channel is always shown at the top, and the rest are sorted alphabetically by title.
    * @param {string} collId - The collection ID to listen to (typically 'channels').
    */
   startChannelSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
       let channelList: Channel[] = [];
 
-      snapshot.forEach(doc => {
-        let channelObj = this.setDummyObject(doc.data() as Channel, doc.id) as Channel;
-        channelList.push(channelObj);
-      });
-
-      let currentUserData = this.authService.currentUserSig();
-      let currentUserId = currentUserData ? currentUserData.userID : null;
-
-      if (currentUserId) {
-        channelList = channelList.filter(channel =>
-          channel.userIDs.includes(currentUserId) || channel.title === 'Allgemein'
-        );
-      }
-
-      channelList.sort((a, b) => a.title.localeCompare(b.title));
-      this.channelList$.next(channelList);
+      this.extractChannelsFromSnapshot(snapshot, channelList);
+      let filteredChannelList = this.filterChannelsForCurrentUser(channelList);
+      this.sortAndPrioritizeGeneralChannel(filteredChannelList);
+      this.channelList$.next(filteredChannelList);
     });
   }
 
+  /**
+   * Extracts channels from a Firestore snapshot and adds them to the provided list.
+   * @param {QuerySnapshot} snapshot - The Firestore snapshot containing channel documents.
+   * @param {Channel[]} channelList - The array to populate with extracted channels.
+   */
+  extractChannelsFromSnapshot(snapshot: QuerySnapshot, channelList: Channel[]): void {
+    snapshot.forEach(doc => {
+      let channelObj = this.setDummyObject(doc.data() as Channel, doc.id) as Channel;
+      channelList.push(channelObj);
+    });
+  }
+
+  /**
+   * Filters channels for the current user, including only those channels the user is a part of 
+   * or the channel with the title "Allgemein".
+   * @param {Channel[]} channelList - The full list of channels to filter.
+   * @returns {Channel[]} - The filtered list of channels for the current user.
+   */
+  filterChannelsForCurrentUser(channelList: Channel[]): Channel[] {
+    let currentUserData = this.authService.currentUserSig();
+    let currentUserId = currentUserData ? currentUserData.userID : null;
+
+    if (currentUserId) {
+      return channelList.filter(channel =>
+        channel.userIDs.includes(currentUserId) || channel.title === 'Allgemein'
+      );
+    }
+    return [];
+  }
+
+  /**
+   * Sorts channels alphabetically by title, but ensures the "Allgemein" channel is always at the top.
+   * @param {Channel[]} channelList - The list of channels to sort.
+   */
+  sortAndPrioritizeGeneralChannel(channelList: Channel[]): void {
+    channelList.sort((a, b) => a.title.localeCompare(b.title));
+    let generalChannelIndex = channelList.findIndex(channel => channel.title === 'Allgemein');
+    if (generalChannelIndex > 0) {
+      let [generalChannel] = channelList.splice(generalChannelIndex, 1);
+      channelList.unshift(generalChannel);
+    }
+  }
 
   /**
    * Stops the currently active Firestore snapshot listener, if one exists.
