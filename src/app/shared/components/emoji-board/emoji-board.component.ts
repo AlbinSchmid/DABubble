@@ -8,6 +8,7 @@ import { collection, doc, Firestore, onSnapshot } from '@angular/fire/firestore'
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { query, where, } from 'firebase/firestore';
 import { Message } from '../../../models/message.class';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-emoji-board',
@@ -55,6 +56,7 @@ export class EmojiBoardComponent {
       senderIDs: element.senderIDs || '',
       senderNames: element.senderNames || '',
       messageID: this.message.messageID || '',
+      latestReactionTime: element.latestReactionTime || '',
     }
   }
 
@@ -99,7 +101,7 @@ export class EmojiBoardComponent {
       this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent.slice(0, start) + emoji + this.firebaseMessenger.answerContent.slice(end);
     } if (this.binding == this.firebaseMessenger.reaktionContent) {
       this.addEmojiToReaction(start, emoji, end);
-    } if (this.binding.name == 'textareaEdit') {      
+    } if (this.binding.name == 'textareaEdit') {
       this.messengerService.editMessageContent = this.messengerService.editMessageContent.slice(0, start) + emoji + this.messengerService.editMessageContent.slice(end);
     }
   }

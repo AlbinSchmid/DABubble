@@ -46,6 +46,7 @@ export class MessageComponent implements OnInit {
   reactions: ReactionInterface[] = [];
   answers: MessageInterface[] = [];
   mentionedUsers: any[] = [];
+  lastTwoReactins: any[] = [];
 
   hoveredMenu = false;
   showEmojiBoard = false;
@@ -60,6 +61,7 @@ export class MessageComponent implements OnInit {
 
 
   ngOnInit() {    
+    
     if (this.messengerService.channel.channelID !== '') {
       this.unsubMentionsList = this.subMentionsList();
     }
@@ -138,6 +140,7 @@ export class MessageComponent implements OnInit {
       list.forEach(element => {
         this.reactions.push(this.setRectionObject(element.data(), element.id));
       });
+      console.log(this.reactions);
     })
   }
 
@@ -173,6 +176,7 @@ export class MessageComponent implements OnInit {
       senderIDs: element.senderIDs || '',
       senderNames: element.senderNames || '',
       messageID: this.message.messageID || '',
+      latestReactionTime: element.latestReactionTime || '',
     }
   }
 

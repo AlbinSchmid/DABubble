@@ -120,6 +120,8 @@ export class FirebaseMessengerService {
 
 
   createReaktion(messageID: string, collectionOfMessage: string) {
+    let date = new Date();
+    let timeStamp = date.getTime();
     let reaction = {
       content: this.reaktionContent,
       senderIDs: [
@@ -128,6 +130,7 @@ export class FirebaseMessengerService {
       senderNames: [
         this.authService.currentUserSig()?.username,
       ],
+      latestReactionTime: timeStamp,
     }
     this.addSomethingToMessage(messageID, collectionOfMessage, reaction, false);
   }
