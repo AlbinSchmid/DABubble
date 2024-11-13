@@ -235,15 +235,17 @@ export class FirebaseMessengerService {
       list.forEach(element => {
         this.messengerService.chartId = element.id
       })
-      if (this.messengerService.chartId == '') {
-        this.tryOtherOption = true;
-        this.searchChat(user);
-        if (alreadyTriedOtherOptins) {
-          this.createChat(user);
+      setTimeout(() => {
+        if (this.messengerService.chartId == '') {
+          this.tryOtherOption = true;
+          this.searchChat(user);
+          if (alreadyTriedOtherOptins) {
+            this.createChat(user);
+          }
+        } else {
+          this.messengerService.showMessenger = true;
         }
-      } else {
-        this.messengerService.showMessenger = true;
-      }
+      });
     })
   }
 

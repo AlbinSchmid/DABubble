@@ -37,7 +37,7 @@ export class UserListComponent {
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
 
-  constructor(private threadService: ThreadService, private firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
+  constructor(private threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
 
 
   showMessenger(user: any) {
