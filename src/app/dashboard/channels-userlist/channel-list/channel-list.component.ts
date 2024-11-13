@@ -17,8 +17,7 @@ import { FirebaseMessengerService } from '../../../shared/services/firebase-serv
   standalone: true,
   imports: [
     CommonModule,
-    MatIconModule,
-    DialogChannelComponent
+    MatIconModule
   ],
   templateUrl: './channel-list.component.html',
   styleUrl: './channel-list.component.scss'

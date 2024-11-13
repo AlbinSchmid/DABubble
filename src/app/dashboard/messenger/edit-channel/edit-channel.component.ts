@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
+import { Channel } from '../../../shared/interfaces/channel';
+import { AnimationChannelService } from '../../channels-userlist/channel-list/animation.service.service';
 
 @Component({
   selector: 'app-edit-channel',
@@ -32,10 +34,12 @@ export class EditChannelComponent {
 
   @Output() closeOverlay = new EventEmitter<void>();
 
-  messengerService: MessengerService = inject(MessengerService);
   ngZone: NgZone = inject(NgZone);
+
+  messengerService: MessengerService = inject(MessengerService);
   authService: AuthserviceService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
+  channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
 
   editTitle: boolean = false;
   editDescription: boolean = false;
@@ -47,17 +51,13 @@ export class EditChannelComponent {
   constructor() {
     this.descriptionTxt = this.messengerService.channel.description;
     this.titleTxt = this.messengerService.channel.title;
-
-    console.log(this.isGlobalChannel());
-
   }
 
   isGlobalChannel() {
     return this.titleTxt === 'Allgemein';
   }
 
-
-  onCloseClick() {
+  closeDialog() {
     this.closeOverlay.emit();
   }
 
@@ -91,8 +91,30 @@ export class EditChannelComponent {
     }
   }
 
-  leaveTheChannel() {
-    console.log('Der', this.authService.currentUserSig()?.username, 'verlässt den Channel!');
+  async leaveTheChannel() {
+    let currentUserId = this.authService.currentUserSig()?.userID;
+    let editChannelID = this.messengerService.channel.channelID!;
+
+    if (currentUserId) {
+      this.messengerService.channel.userIDs = this.messengerService.channel.userIDs.filter(id => id !== currentUserId);
+      if (this.messengerService.channel.userIDs.length === 0) {
+        await this.channelAnimationService.updateListOfChannels();
+        await this.firestoreService.deleteDoc('channels', editChannelID);
+        this.closeDialogAndHopToGlobalChannel();
+      } else {
+        await this.channelAnimationService.updateListOfChannels();
+        await this.firestoreService.updateDoc('channels', editChannelID, { userIDs: this.messengerService.channel.userIDs });
+        this.closeDialogAndHopToGlobalChannel();
+      }
+    }
+  }
+
+  closeDialogAndHopToGlobalChannel() {
+    this.closeDialog();
+    let globalChannel = this.firestoreService.channelList$.value.find(channel => channel.title === 'Allgemein');
+    globalChannel!.isFocus = true;
+    this.messengerService.channel = globalChannel as Channel;
+    this.channelAnimationService.toggleChannels();
   }
 
   async updateContent(content: string) {

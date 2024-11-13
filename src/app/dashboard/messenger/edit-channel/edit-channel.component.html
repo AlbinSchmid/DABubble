@@ -5,7 +5,7 @@
                 <mat-icon fontIcon="tag" class="tag-icon"></mat-icon>
                 <h2>{{ titleTxt }}</h2>
             </div>
-            <mat-icon fontIcon="close" class="close" (click)="onCloseClick()"></mat-icon>
+            <mat-icon fontIcon="close" class="close" (click)="closeDialog()"></mat-icon>
         </header>
         <div [ngClass]="{ 'contain-without-input': !editTitle, 'contain-with-input': editTitle }">
             <div [ngClass]="{ 'headline-contain-without-input': !editTitle, 'headline-contain-with-input': editTitle }">
