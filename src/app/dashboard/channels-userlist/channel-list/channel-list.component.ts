@@ -44,20 +44,6 @@ export class ChannelListComponent {
   }
 
 
-  showChannel(channel: any) {
-    this.threadService.showThreadSideNav = false;
-    this.messengerService.showMessenger = false;
-    this.threadService.showThread = false;
-    this.messengerService.chartId = '';
-    this.messengerService.channel = channel;
-    this.messengerService.openChannel = true;
-    this.messengerService.openChart = false;
-    setTimeout(() => {
-      this.messengerService.showMessenger = true;
-    }, 100);
-  }
-
-
   ngOnInit(): void {
     this.firestoreService.startSnapshot('channels');
 

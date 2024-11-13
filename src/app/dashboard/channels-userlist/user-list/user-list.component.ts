@@ -39,19 +39,6 @@ export class UserListComponent {
 
   constructor(private threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
 
-
-  showMessenger(user: any) {
-    this.threadService.showThreadSideNav = false;
-    this.messengerService.chartId = '';
-    this.messengerService.showMessenger = false;
-    this.threadService.showThread = false;
-    this.messengerService.openChannel = false;
-    this.messengerService.openChart = true;
-    this.messengerService.user = user;
-    this.messengerService.channel;
-    this.firebaseMessenger.searchChat(user);
-  }
-
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
     this.firestoreService.startSnapshot('channels');

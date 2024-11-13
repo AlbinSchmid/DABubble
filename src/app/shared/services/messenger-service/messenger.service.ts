@@ -4,6 +4,7 @@ import { Channel } from '../../interfaces/channel';
 import { Message } from '../../../models/message.class';
 import { ThreadService } from '../thread-service/thread.service';
 import { FirebaseMessengerService } from '../firebase-services/firebase-messenger.service';
+import { User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -48,14 +49,30 @@ export class MessengerService {
   }
 
 
-  showChartOrChannel(user: UserInterface) {
-    this.threadService.showThreadSideNav = false;
-    this.chartId = '';
-    this.showMessenger = false;
-    this.threadService.showThread = false;
+  showChannel(channel: Channel) {
+    this.closeEverthing();
+    this.channel = channel;
+    this.openChannel = true;
+    this.openChart = false;
+    setTimeout(() => {
+      this.showMessenger = true;
+    });
+  }
+
+
+  showChart(user: UserInterface) {
+    this.closeEverthing();
     this.openChannel = false;
     this.openChart = true;
     this.user = user;
-    this.channel;
   }
+
+
+  closeEverthing() {
+    this.showMessenger = false;
+    this.threadService.showThreadSideNav = false;
+    this.threadService.showThread = false;
+    this.chartId = '';
+  }
+
 }
