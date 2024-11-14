@@ -39,8 +39,10 @@
         </div>
     </div>
     <div class="interaction" *ngIf="hoveredMessageId == messageIndex && !editMessage">
-        <app-emoji-board [messageInteraction]="true" [lastTwoReactions]="lastTwoReactins.slice(0, 2)"
-        [binding]="firebaseMessenger.reaktionContent"></app-emoji-board>
+        @for (reaction of lastTwoReactins.slice(0,2); track $index) { 
+            <app-emojis-reaktion [reaction]="reaction" [messageInteraction]="true"
+                    [index]="messageIndex"></app-emojis-reaktion>
+        }
         <button (click)="openOrCloseEmojiBoard()"><mat-icon>add_reaction</mat-icon></button>
         <button *ngIf="!reduceContent" (click)="openThead()"><img src="/assets/icons/comment.png" alt=""></button>
         <button id="intercation-more-btn" (click)="showOrHideMenu()">

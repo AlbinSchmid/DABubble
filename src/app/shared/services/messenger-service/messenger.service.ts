@@ -57,11 +57,7 @@ export class MessengerService {
     this.openNewMessage = false;
     setTimeout(() => {
       this.showMessenger = true;
-<<<<<<< HEAD
     },10);
-=======
-    }, 100);
->>>>>>> 9ee63552e9daec866ba965dfd084be17bc7e3410
   }
 
   getEmptyChannel(): Channel {

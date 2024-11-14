@@ -163,6 +163,10 @@ section {
         gap: 4px;
         animation: 125ms swipe ease-in-out forwards;
 
+        #last-two-reactions {
+            position: initial !important;
+        }
+
         button {
             position: relative;
             display: flex;

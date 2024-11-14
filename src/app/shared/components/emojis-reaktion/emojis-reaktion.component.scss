@@ -54,6 +54,39 @@ section {
     }
 }
 
+#last-two-reactions-div {
+    display: flex;
+
+    button {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        transition: 125ms ease-in-out !important;
+        padding: 8px;
+    
+        &:hover {
+            background-color: #ECEEFE;
+            border-radius: 100%;
+        }
+    
+        mat-icon {
+            overflow: visible;
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+    
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
+
 .usedAlready {
     border-color: #444DF2 !important;
     background-color: rgba(#444DF2, 0.05) !important;

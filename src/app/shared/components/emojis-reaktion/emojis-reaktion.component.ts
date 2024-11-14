@@ -18,6 +18,7 @@ export class EmojisReaktionComponent{
   authService = inject(AuthserviceService);
   firebaseMessenger = inject(FirebaseMessengerService);
   messengerService = inject(MessengerService);
+  @Input() messageInteraction: boolean;
   @Input() reaction: ReactionInterface = {
     content: '',
     senderIDs: [],
