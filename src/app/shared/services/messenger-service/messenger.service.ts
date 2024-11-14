@@ -57,7 +57,7 @@ export class MessengerService {
     this.openChart = false;
     setTimeout(() => {
       this.showMessenger = true;
-    });
+    }, 100);
   }
 
 
