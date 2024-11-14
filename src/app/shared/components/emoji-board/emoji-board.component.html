@@ -1,4 +1,9 @@
-<section>
+<div *ngIf="messageInteraction">
+    @for (reaction of lastTwoReactions; track $index) {
+        <button>{{reaction.content}}</button>
+    }
+</div>
+<section *ngIf="!messageInteraction">
     <div class="emoji-tabs">
         <button (click)="switchBoard('normal')" [class.active]="activeBoard === 'normal'">😮</button>
         <button (click)="switchBoard('work')" [class.active]="activeBoard === 'work'">📌</button>

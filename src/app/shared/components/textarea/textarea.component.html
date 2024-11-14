@@ -14,14 +14,6 @@
     </div>
     @if (!sourceThread) {
     <div class="interaction-div">
-        <!-- <div class="mention-all-user-div" *ngIf="alreadyMentionUsers.length > 0">
-            @for (user of usersToMention; track $index) {
-            <div>
-                &#64;{{user.userName}}
-                <mat-icon id="test" (click)="deleteMentionUser(user)">close</mat-icon>
-            </div>
-            }
-        </div> -->
         <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea (input)="checkForMention($event)" [mentionConfig]="mentionConfig" pattern="^[\s\S]*\S[\s\S]*$" (mentionActivated)="onMentionActivate($event)"
             placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">
@@ -63,7 +55,6 @@
     <div class="interaction-div">
         <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textarea
             placeholder='Antworten...' #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
-
         <div id="interaction">
             <div id="button-container-left">
                 <p>

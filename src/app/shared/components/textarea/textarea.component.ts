@@ -100,21 +100,22 @@ export class TextareaComponent {
   checkForMention(event: Event): void {
     const inputContent = this.firebaseMessenger.content;
     const mentionIndex = inputContent.lastIndexOf('@');
-    
-    if (/\B@\w*$/.test(inputContent) ) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
-      if (mentionIndex !== -1) {
-        this.mentionPersonView = true;
-        const searchText = inputContent.substring(mentionIndex + 1);
-        this.mentionConfig.items = this.usersToMention.filter(user =>
-          user.userName.toLowerCase().startsWith(searchText.toLowerCase())
-        );
+    if (this.messengerService.openChannel) {
+      if (/\B@\w*$/.test(inputContent) ) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
+        if (mentionIndex !== -1) {
+          this.mentionPersonView = true;
+          const searchText = inputContent.substring(mentionIndex + 1);
+          this.mentionConfig.items = this.usersToMention.filter(user =>
+            user.userName.toLowerCase().startsWith(searchText.toLowerCase())
+          );
+        } else {
+          this.mentionPersonView = false;
+        }
+      } else if (/\B@\w*\s$/.test(inputContent)) { // In diese IF kontrollorieren wir ob nach dem @ (und weiter Zeichen) ein Leerzeichen steht;
+        this.mentionPersonView = false;
       } else {
         this.mentionPersonView = false;
       }
-    } else if (/\B@\w*\s$/.test(inputContent)) { // In diese IF kontrollorieren wir ob nach dem @ (und weiter Zeichen) ein Leerzeichen steht;
-      this.mentionPersonView = false;
-    } else {
-      this.mentionPersonView = false;
     }
   }
 

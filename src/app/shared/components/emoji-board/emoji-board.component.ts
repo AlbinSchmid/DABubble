@@ -28,6 +28,8 @@ export class EmojiBoardComponent {
 
   @Input() message = new Message;
   @Input() binding: any;
+  @Input() messageInteraction: boolean;
+  @Input() lastTwoReactions: ReactionInterface[] = [];
   @Output() callFunction = new EventEmitter<any>();
 
   normalEmojis: string[] = [
