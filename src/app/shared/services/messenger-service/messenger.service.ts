@@ -34,6 +34,7 @@ export class MessengerService {
   };
   openChannel = false;
   openChart = false;
+  showNewMessage: boolean = false;
   messageDates: string[] = [];
   scrollContainer: any;
 

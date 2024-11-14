@@ -16,12 +16,14 @@ import { UserInterface } from '../landing-page/interfaces/userinterface';
 import { Subject, takeUntil, timeout } from 'rxjs';
 import { doc, getDoc } from '@angular/fire/firestore';
 import { onAuthStateChanged } from '@angular/fire/auth';
+import { NewMessageComponent } from './new-message/new-message.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     HeaderComponent,
+    NewMessageComponent,
     ChannelsUserlistComponent,
     MessengerComponent,
     ThreadComponent,
