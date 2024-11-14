@@ -97,6 +97,8 @@ export class MessengerService {
     this.openChannel = false;
     this.openChart = false;
     this.openNewMessage = true;
+    this.channel.isFocus = false;
+    this.user.isFocus = false;
     this.channel = this.getEmptyChannel();
     this.user = this.getEmptyUser();
   }
