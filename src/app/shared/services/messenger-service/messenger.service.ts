@@ -40,7 +40,7 @@ export class MessengerService {
   };
   openChannel = false;
   openChart = false;
-  showNewMessage: boolean = false;
+  openNewMessage: boolean = false;
   messageDates: string[] = [];
   scrollContainer: any;
 
@@ -49,25 +49,57 @@ export class MessengerService {
     container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
   }
 
-
   showChannel(channel: Channel) {
     this.closeEverthing();
     this.channel = channel;
     this.openChannel = true;
     this.openChart = false;
+    this.openNewMessage = false;
     setTimeout(() => {
       this.showMessenger = true;
     }, 100);
   }
 
+  getEmptyChannel(): Channel {
+    return {
+      channelID: '',
+      title: '',
+      description: '',
+      createdBy: '',
+      isFocus: false,
+      userIDs: [],
+      messages: [],
+    }
+  }
+
+  getEmptyUser(): UserInterface {
+    return {
+      userID: '',
+      password: '',
+      email: '',
+      username: '',
+      avatar: '',
+      userStatus: '',
+      isFocus: false,
+    }
+  }
 
   showChart(user: UserInterface) {
     this.closeEverthing();
     this.openChannel = false;
     this.openChart = true;
+    this.openNewMessage = false;
     this.user = user;
   }
 
+  showNewMessage() {
+    this.closeEverthing();
+    this.openChannel = false;
+    this.openChart = false;
+    this.openNewMessage = true;
+    this.channel = this.getEmptyChannel();
+    this.user = this.getEmptyUser();
+  }
 
   closeEverthing() {
     this.showMessenger = false;
@@ -75,5 +107,4 @@ export class MessengerService {
     this.threadService.showThread = false;
     this.chartId = '';
   }
-
 }

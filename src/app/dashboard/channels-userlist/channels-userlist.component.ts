@@ -25,8 +25,4 @@ export class ChannelsUserlistComponent {
 
   constructor() { }
 
-
-  showNewMessange() {
-    this.messengerService.showNewMessage = true;
-  }
 }
