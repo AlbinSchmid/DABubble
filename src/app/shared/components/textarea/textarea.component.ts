@@ -49,7 +49,6 @@ export class TextareaComponent {
   usersListAll: UserInterface[] = [];
   usersToMention: MentionUserInterface[] = [];
   filteredUsersToMention: MentionUserInterface[] = [];
-  alreadyMentionUsers: MentionUserInterface[] = [];
   selectedFiles: any[] = [];
 
   selectedFile: File;
@@ -74,32 +73,18 @@ export class TextareaComponent {
 
   constructor(private dialog: MatDialog, private storage: Storage) {
   }
-  
+
 
 
   onMentionActivate(event: Event) {
     if (!this.mentionConfig.mentionDialogOpened) {
       console.log('Hello');
-      
+
     }
-  }
-  
-  openMentionDialog() {
-    // const dialogRef = this.dialog.open(MentionDialogComponent, {
-    //   data: {
-    //     users: this.mentionConfig.items
-    //   }
-    // });
-  
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('Der Dialog wurde geschlossen', result);
-    // });
-    // this.mentionConfig.mentionDialogOpened = true;
   }
 
 
   ngOnInit() {
-    this.alreadyMentionUsers = [];
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
     });
@@ -113,55 +98,24 @@ export class TextareaComponent {
 
 
   checkForMention(event: Event): void {
-
-
-
-
-
-    // const inputElement = this.firebaseMessenger.content;
-
-    // // // Aktiviert Mention, wenn nach einem @-Zeichen ein Leerzeichen eingegeben wurde
-    // // if (/\B@\w*$/.test(inputElement) && !this.mentionActive) {
-    // //   console.log("Mention aktiviert: Ein '@' am Anfang eines Wortes wurde eingegeben.");
-    // //   this.openOrCloseMentionPersonView();
-    // //   console.log(this.usersToMention);
-
-
-    // //   this.mentionActive = true; // Mention aktivieren
-    // //   this.mentionPersonView = true;
-    // // }
-
-    // if (/\B@\w*$/.test(inputElement)) { // Falls ein @ am beginn eines Wortes steht      
-    //   let txtSearchUser = inputElement.match(/@(\S+)$/); // txtSearchUser is TRUE wenn ein zeichen nach dem @ sich befindet
-    //   console.log(txtSearchUser);
-      
-    //   this.filteredUsersToMention = this.usersToMention;
-      
-      
-    //   if (!this.mentionActive) {
-    //     console.log("Mention aktiviert: Ein '@' am Anfang eines Wortes wurde eingegeben.");
-    //     this.mentionActive = true; // Mention aktivieren
-    //   }
-      
-    //   if (txtSearchUser) {
-    //     console.log(this.filteredUsersToMention);
-    //     let lowerCaseSearchUser = txtSearchUser[1].toLowerCase();
-    //     this.filteredUsersToMention = this.usersToMention.filter(user => user.userName.toLowerCase().startsWith(lowerCaseSearchUser));
-    //     this.mentionPersonView = true;
-    //   } 
-    // } else {
-    //   this.mentionPersonView = false;
-    // }
-
-    // // Deaktiviert Mention, wenn nach einem @-Zeichen ein Leerzeichen eingegeben wurde
-    // if (this.mentionActive && /\B@\w*\s$/.test(inputElement)) {
-    //   console.log("Mention beendet wegen Leerzeichen.");
-    //   this.openOrCloseMentionPersonView();
-    //   this.mentionActive = false; // Mention deaktivieren
-    //   this.mentionPersonView = false;
-    // }
-
-
+    const inputContent = this.firebaseMessenger.content;
+    const mentionIndex = inputContent.lastIndexOf('@');
+    
+    if (/\B@\w*$/.test(inputContent) ) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
+      if (mentionIndex !== -1) {
+        this.mentionPersonView = true;
+        const searchText = inputContent.substring(mentionIndex + 1);
+        this.mentionConfig.items = this.usersToMention.filter(user =>
+          user.userName.toLowerCase().startsWith(searchText.toLowerCase())
+        );
+      } else {
+        this.mentionPersonView = false;
+      }
+    } else if (/\B@\w*\s$/.test(inputContent)) { // In diese IF kontrollorieren wir ob nach dem @ (und weiter Zeichen) ein Leerzeichen steht;
+      this.mentionPersonView = false;
+    } else {
+      this.mentionPersonView = false;
+    }
   }
 
 
@@ -217,29 +171,11 @@ export class TextareaComponent {
   }
 
 
-  deleteMentionUser(userJson: any) {
-    this.alreadyMentionUsers = this.alreadyMentionUsers.filter(user => user.userID !== userJson.userID);
-    this.usersToMention.push(userJson);
-    this.sortByName(this.usersToMention);
-  }
-
-
   mentionUser(userJson: any) {
-    this.usersToMention = this.usersToMention.filter(user => user.userID !== userJson.userID);
-    this.alreadyMentionUsers.push(userJson);
-
-    // const lastAtIndex = this.firebaseMessenger.content.lastIndexOf('@');
-    // let txtSearchUser = this.firebaseMessenger.content.match(/@(\S+)/); // Hier bekommen wir den Text der Hinter dem @ steht!!
-    // if (!txtSearchUser) {
-    //   // this.firebaseMessenger.content = this.firebaseMessenger.content.substring(0, lastAtIndex) + `@${userJson.userName}` + this.firebaseMessenger.content.substring(lastAtIndex + 1);
-    //   this.firebaseMessenger.content = this.firebaseMessenger.content.replace(/@[^@]*$/, `@${userJson.userName}`);
-    // } else {
-    //   // this.firebaseMessenger.content = this.firebaseMessenger.content.replace(/@[\w-]+/, `@${userJson.userName}`);
-    // }
-
-    // this.filteredUsersToMention = this.usersToMention;
-
-    // this.openOrCloseMentionPersonView();
+    const mentionText = `@${userJson.userName}`;
+    const mentionIndex = this.firebaseMessenger.content.lastIndexOf('@');
+    this.firebaseMessenger.content = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+    this.mentionPersonView = false;
   }
 
 
@@ -382,7 +318,7 @@ export class TextareaComponent {
   private updateContent(messenger: any, originalContent: string) {
     if (messenger === 'messenger') {
       this.firebaseMessenger.content = originalContent;
-      this.firebaseMessenger.createMessage('noID', 'noCollection', this.alreadyMentionUsers);
+      this.firebaseMessenger.createMessage('noID', 'noCollection', false);
     } else {
       this.firebaseMessenger.answerContent = originalContent;
       this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);

@@ -1,6 +1,6 @@
 <section>
     <div id="mention-person"
-        [ngStyle]="{'display': mentionPersonView ? 'block' : 'none', 'padding-bottom.px': alreadyMentionUsers.length > 0 ? '95' : '50'}">
+        [ngStyle]="{'display': mentionPersonView ? 'block' : 'none'}">
         <h6>Mitglieder:</h6>
         <div id="trendline"></div>
         <div id="user-list">
@@ -14,14 +14,14 @@
     </div>
     @if (!sourceThread) {
     <div class="interaction-div">
-        <div class="mention-all-user-div" *ngIf="alreadyMentionUsers.length > 0">
+        <!-- <div class="mention-all-user-div" *ngIf="alreadyMentionUsers.length > 0">
             @for (user of usersToMention; track $index) {
             <div>
                 &#64;{{user.userName}}
                 <mat-icon id="test" (click)="deleteMentionUser(user)">close</mat-icon>
             </div>
             }
-        </div>
+        </div> -->
         <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea (input)="checkForMention($event)" [mentionConfig]="mentionConfig" pattern="^[\s\S]*\S[\s\S]*$" (mentionActivated)="onMentionActivate($event)"
             placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">

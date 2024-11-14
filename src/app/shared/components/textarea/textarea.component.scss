@@ -26,6 +26,7 @@ button {
     z-index: 0;
     left: 60px;
     animation: bottom-top-slide 200ms ease-in-out forwards;
+    padding-bottom: 55px;
 
     h6 {
         font-size: 18px;
@@ -232,8 +233,10 @@ section {
             }
         }
     }
+}
 
-
+::ng-deep .scrollable-menu {
+    display: none !important;
 }
 
 mat-icon {
@@ -251,9 +254,9 @@ mat-icon {
 
 @keyframes bottom-top-slide {
     from {
-        bottom: 50px;
+        bottom: 40px;
     }
     to {
-        bottom: 132px;
+        bottom: 120px;
     }
 }

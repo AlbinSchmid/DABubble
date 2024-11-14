@@ -37,20 +37,7 @@ export class UserListComponent {
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
 
-  constructor(private threadService: ThreadService, private firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
-
-
-  showMessenger(user: any) {
-    this.threadService.showThreadSideNav = false;
-    this.messengerService.chartId = '';
-    this.messengerService.showMessenger = false;
-    this.threadService.showThread = false;
-    this.messengerService.openChannel = false;
-    this.messengerService.openChart = true;
-    this.messengerService.user = user;
-    this.messengerService.channel;
-    this.firebaseMessenger.searchChat(user);
-  }
+  constructor(private threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');

@@ -14,7 +14,7 @@
 <div class="btns-contain max-height-contain" *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection"
     [ngStyle]="{'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0','transition': getDMTransitionDuration()}">
     <button *ngFor="let user of userList; let i = index" [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
-        (click)="focusUser(user); showMessenger(user)"
+        (click)="focusUser(user); messengerService.showChart(user); firebaseMessenger.searchChat(user);"
         [ngClass]="{'focus-btn': user.isFocus,'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
         <div class="profile-img-wrapper">
             <img src="{{ user.avatar }}" alt="user_avatar_img">

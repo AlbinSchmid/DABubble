@@ -120,6 +120,8 @@ export class FirebaseMessengerService {
 
 
   createReaktion(messageID: string, collectionOfMessage: string) {
+    let date = new Date();
+    let timeStamp = date.getTime();
     let reaction = {
       content: this.reaktionContent,
       senderIDs: [
@@ -128,6 +130,7 @@ export class FirebaseMessengerService {
       senderNames: [
         this.authService.currentUserSig()?.username,
       ],
+      latestReactionTime: timeStamp,
     }
     this.addSomethingToMessage(messageID, collectionOfMessage, reaction, false);
   }
@@ -232,15 +235,17 @@ export class FirebaseMessengerService {
       list.forEach(element => {
         this.messengerService.chartId = element.id
       })
-      if (this.messengerService.chartId == '') {
-        this.tryOtherOption = true;
-        this.searchChat(user);
-        if (alreadyTriedOtherOptins) {
-          this.createChat(user);
+      setTimeout(() => {
+        if (this.messengerService.chartId == '') {
+          this.tryOtherOption = true;
+          this.searchChat(user);
+          if (alreadyTriedOtherOptins) {
+            this.createChat(user);
+          }
+        } else {
+          this.messengerService.showMessenger = true;
         }
-      } else {
-        this.messengerService.showMessenger = true;
-      }
+      });
     })
   }
 

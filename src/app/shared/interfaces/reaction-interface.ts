@@ -4,4 +4,5 @@ export interface ReactionInterface {
     senderNames: string[],
     messageID: string,
     reactionID: string,
+    latestReactionTime: number,
 }

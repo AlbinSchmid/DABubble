@@ -24,6 +24,7 @@ export class EmojisReaktionComponent{
     senderNames: [],
     messageID: '',
     reactionID: '',
+    latestReactionTime: 0,
   };
   @Input() index: number;
   userUsedThisReactionAlready: boolean;
