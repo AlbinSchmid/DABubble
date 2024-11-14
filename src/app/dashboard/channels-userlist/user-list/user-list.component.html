@@ -11,17 +11,27 @@
         </div>
     </div>
 </div>
-<div class="btns-contain max-height-contain" *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection"
-    [ngStyle]="{'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0','transition': getDMTransitionDuration()}">
-    <button *ngFor="let user of userList; let i = index" [ngStyle]="{'animation-delay': getAnimationDelayDM(i) + 's'}"
-        (click)="focusUser(user)"
-        [ngClass]="{'focus-btn': user.isFocus,'blob-in': isDirectMessagesOpen, 'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen}">
+
+<div class="btns-contain max-height-contain" *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection" [ngStyle]="{
+        'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0',
+        'transition': isManualToggle ? getDMTransitionDuration() : 'none'
+    }">
+
+    <button *ngFor="let user of userList; let i = index"
+        [ngStyle]="{'animation-delay': isManualToggle ? getAnimationDelayDM(i) + 's' : '0s'}" (click)="focusUser(user)"
+        [ngClass]="{
+            'focus-btn': user.isFocus,
+            'blob-in': isDirectMessagesOpen && isManualToggle,
+            'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen && isManualToggle
+        }">
+
         <div class="profile-img-wrapper">
             <img src="{{ user.avatar }}" alt="user_avatar_img">
             <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>
             <div [ngClass]="{'status-offline-icon': user.userStatus == 'off'}"></div>
             <div [ngClass]="{'status-busy-icon': user.userStatus == 'busy'}"></div>
         </div>
+
         <span class="username-txt">{{ user.username }}</span>
         <span *ngIf="authService.currentUserSig()?.username === user.username" style="margin-left: -5px;">(Du)</span>
     </button>
