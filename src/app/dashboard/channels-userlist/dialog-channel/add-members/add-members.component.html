@@ -24,7 +24,7 @@
                 </div>
             </div>
         </mat-chip-grid>
-        <input #userInput id="userinput" autocomplete="off" placeholder="Name..." [matChipInputFor]="chipGrid"
+        <input #userInput autocomplete="off" placeholder="Name..." [matChipInputFor]="chipGrid"
             (input)="searchUserByName($event)" (keydown)="onKeyDown($event)" />
     </div>
 </mat-radio-group>

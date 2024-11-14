@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { Channel } from '../../../shared/interfaces/channel';
-import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
@@ -25,6 +24,8 @@ export class UserListComponent {
 
   firestoreService: FirestoreService = inject(FirestoreService);
   authService: AuthserviceService = inject(AuthserviceService);
+  firebaseMessengerService: FirebaseMessengerService = inject(FirebaseMessengerService);
+  messengerService: MessengerService = inject(MessengerService);
 
   userList: UserInterface[] = [];
   userListSubscription!: Subscription;
@@ -36,8 +37,9 @@ export class UserListComponent {
   isDirectMessagesOpen: boolean = false;
   isCloseDirectMessagesSection: boolean = false;
   isDirectMessagesButtonDisable: boolean = false;
+  isManualToggle: boolean = false;
 
-  constructor(private threadService: ThreadService, public firebaseMessenger: FirebaseMessengerService, public messengerService: MessengerService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.firestoreService.startSnapshot('users');
@@ -45,6 +47,10 @@ export class UserListComponent {
 
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.userList = users;
+
+      if (!this.isManualToggle) {
+        this.disableAnimation();
+      }
     });
 
     this.channelListSubscription = this.firestoreService.channelList$.subscribe(channels => {
@@ -62,6 +68,7 @@ export class UserListComponent {
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
 
+    this.isManualToggle = true;
     this.isDirectMessagesButtonDisable = true;
     this.isDirectMessagesOpen = !this.isDirectMessagesOpen;
 
@@ -72,9 +79,17 @@ export class UserListComponent {
     setTimeout(() => {
       this.isCloseDirectMessagesSection = this.isDirectMessagesOpen;
       this.isDirectMessagesButtonDisable = false;
+      this.isManualToggle = false;
     }, this.arrayTimerDM());
 
     this.updateTabArrow('#dmIcon');
+  }
+
+  disableAnimation() {
+    let element = document.querySelector('.btns-contain.max-height-contain');
+    if (element) {
+      element.classList.remove('blob-in', 'blob-out');
+    }
   }
 
   updateTabArrow(id: string) {
@@ -113,6 +128,8 @@ export class UserListComponent {
     this.resetChannelFocus();
     this.userList.forEach(u => u.isFocus = false);
     this.firestoreService.setAndGetCurrentlyFocusedChat(user);
+    this.messengerService.showChart(user);
+    this.firebaseMessengerService.searchChat(user);
     user.isFocus = true;
   }
 
