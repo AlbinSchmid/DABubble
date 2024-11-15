@@ -1,9 +1,32 @@
-<section>
+<mat-card>
     <header>
         <h4>Neue Nachricht</h4>
         <input matInput placeholder="An: #channel, @jemanden oder per E-Mail Adresse">
     </header>
-    <div>
-        <app-textarea></app-textarea>
+    <div class="content-contain">
+        <div class="list-contain">
+            <div class="title-list-contain">
+                <mat-icon class="tag" fontIcon="tag"></mat-icon>
+                <h5>Channels</h5>
+            </div>
+            <div class="scroll-contain">
+                <div class="list-contain">
+                </div>
+            </div>
+        </div>
+        <div class="seperator-wrapper">
+            <div class="seperator"></div>
+        </div>
+        <div class="list-contain">
+            <div class="title-list-contain">
+                <mat-icon fontIcon="alternate_email"></mat-icon>
+                <h5 style="margin-top: 2px;">Personen</h5>
+            </div>
+            <div class="scroll-contain">
+                <div class="list-contain">
+                </div>
+            </div>
+        </div>
     </div>
-</section>
+    <app-textarea [sourceThread]="sourceThread"></app-textarea>
+</mat-card>
