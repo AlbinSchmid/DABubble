@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { UserInterface } from '../../../../../landing-page/interfaces/userinterface';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { ChannelDataService } from '../../../dashboard/channels-userlist/dialog-channel/channel-data.service';
+import { ChannelDataService } from '../../channel-data.service';
 
 @Component({
   selector: 'app-filtred-list',

@@ -13,7 +13,7 @@ import { UserInterface } from '../../../../landing-page/interfaces/userinterface
 import { MatCardModule } from '@angular/material/card';
 import { ChannelDataService } from '../channel-data.service';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
-import { FiltredListComponent } from '../../../../shared/components/filtred-list/filtred-list.component';
+import { FiltredListComponent } from './filtred-list/filtred-list.component';
 
 @Component({
   selector: 'app-add-members',
