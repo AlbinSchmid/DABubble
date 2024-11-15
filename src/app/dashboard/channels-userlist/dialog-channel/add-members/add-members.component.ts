@@ -13,6 +13,7 @@ import { UserInterface } from '../../../../landing-page/interfaces/userinterface
 import { MatCardModule } from '@angular/material/card';
 import { ChannelDataService } from '../channel-data.service';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
+import { FiltredListComponent } from '../../../../shared/components/filtred-list/filtred-list.component';
 
 @Component({
   selector: 'app-add-members',
@@ -25,7 +26,8 @@ import { AuthserviceService } from '../../../../landing-page/services/authservic
     MatRadioModule,
     MatChipsModule,
     MatFormFieldModule,
-    MatCardModule
+    MatCardModule,
+    FiltredListComponent
   ],
   templateUrl: './add-members.component.html',
   styleUrl: './add-members.component.scss'
@@ -83,6 +85,10 @@ export class AddMembersComponent {
     this.userListSubscription = this.firestoreService.userList$.subscribe(user => {
       this.userList = user;
     });
+  }
+
+  onUserAdded(user: UserInterface): void {
+    this.add(user);
   }
 
   onWheel(event: WheelEvent) {
