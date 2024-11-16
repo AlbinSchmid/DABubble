@@ -1,7 +1,15 @@
 <mat-card>
     <header>
         <h4>Neue Nachricht</h4>
-        <input matInput placeholder="An: #channel, @jemanden oder per E-Mail Adresse">
+        <div class="search-bar">
+            <input matInput placeholder="An: #channel, @jemanden oder per E-Mail Adresse" #userInput autocomplete="off"
+                (input)="searchUserByName($event)" (keydown)="onKeyDown($event)">
+            <app-user-filtered-list *ngIf="filterUsers" [filteredUsers]="filteredUsers"
+                [highlightedIndex]="highlightedIndex" (userSelected)="onUserAdded($event)"></app-user-filtered-list>
+            <app-channel-filtered-list *ngIf="filterChannels" [filteredChannels]="filteredChannels"
+                [highlightedIndex]="highlightedIndex"
+                (channelSelected)="onChannelAdded($event)"></app-channel-filtered-list>
+        </div>
     </header>
     <div class="content-contain">
         <div class="list-contain">
@@ -10,7 +18,11 @@
                 <h5>Channels</h5>
             </div>
             <div class="scroll-contain">
-                <div class="list-contain">
+                <div class="list">
+                    <button *ngFor="let channel of selectChannels; let i = index" class="channel-btn">
+                        <mat-icon class="tag" fontIcon="tag"></mat-icon>
+                        <span class="channelname-txt">{{ channel.title }}</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -23,7 +35,18 @@
                 <h5 style="margin-top: 2px;">Personen</h5>
             </div>
             <div class="scroll-contain">
-                <div class="list-contain">
+                <div class="list">
+                    <button *ngFor="let user of selectUser; let i = index">
+                        <div class="profile-img-wrapper">
+                            <img src="{{ user.avatar }}" alt="user_avatar_img">
+                            <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>
+                            <div [ngClass]="{'status-offline-icon': user.userStatus == 'off'}"></div>
+                            <div [ngClass]="{'status-busy-icon': user.userStatus == 'busy'}"></div>
+                        </div>
+                        <span class="username-txt">{{ user.username }}</span>
+                        <span *ngIf="authService.currentUserSig()?.username === user.username"
+                            style="margin-left: -5px;">(Du)</span>
+                    </button>
                 </div>
             </div>
         </div>

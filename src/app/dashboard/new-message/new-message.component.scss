@@ -61,7 +61,8 @@ h5 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    justify-content: center;
+    gap: 13px;
     width: 100%;
     height: 94%;
     padding-top: 40px;
@@ -93,18 +94,83 @@ h5 {
         font-weight: 400;
         pointer-events: none;
     }
+}
 
-    .tag {
-        transform: skew(-10deg, -5deg) rotate(5deg);
-    }
+.tag {
+    transform: skew(-10deg, -5deg) rotate(5deg);
 }
 
 .scroll-contain {
     display: flex;
-    justify-content: center;
-    width: 100%;
     height: 80%;
     overflow: hidden;
     overflow-y: scroll;
     scrollbar-width: none;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    width: 100%;
+    height: 94%;
+}
+
+.profile-img-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    div {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border: 2px solid white;
+        width: 14px;
+        height: 14px;
+        border-radius: 100%;
+    }
+}
+
+.username-txt,
+.channelname-txt {
+    white-space: nowrap;
+    text-overflow: unset;
+    overflow: hidden;
+    max-width: 130px;
+    font-size: 20px;
+}
+
+img {
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+button {
+    display: flex;
+    justify-content: start;
+    gap: 20px;
+    width: 100%;
+    pointer-events: none;
+}
+
+.channel-btn {
+    gap: 0;
+}
+
+.search-bar {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+app-user-filtered-list,
+app-channel-filtered-list {
+    position: absolute !important;
+    z-index: 99;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
 }
