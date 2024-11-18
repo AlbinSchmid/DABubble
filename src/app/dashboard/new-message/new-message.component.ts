@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -28,6 +28,8 @@ import { ChannelFilteredListComponent } from './channel-filtered-list/channel-fi
   styleUrl: './new-message.component.scss'
 })
 export class NewMessageComponent {
+  @ViewChild('userInput', { static: true }) userInputElement: ElementRef<HTMLInputElement>;
+
 
   authService: AuthserviceService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
@@ -52,41 +54,54 @@ export class NewMessageComponent {
 
   constructor() { }
 
-
   ngOnInit(): void {
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.userList = users;
-      this.filteredUsers = users;
     });
 
     this.channelListSubscription = this.firestoreService.channelList$.subscribe(channels => {
       this.channelList = channels;
-      this.filteredChannels = channels;
     });
+
+    this.userInputElement.nativeElement.focus();
   }
 
   ngOnDestroy(): void {
     if (this.userListSubscription) {
       this.userListSubscription.unsubscribe();
     }
-
     if (this.channelListSubscription) {
       this.channelListSubscription.unsubscribe();
     }
   }
 
   onUserAdded(user: UserInterface): void {
-    console.log(user);
+    this.selectUser.push(user);
+    this.clearFilters();
+    this.userInputElement.nativeElement.value = '';
+    this.userInputElement.nativeElement.focus();
   }
 
   onChannelAdded(channel: Channel): void {
-    console.log(channel);
+    this.selectChannels.push(channel);
+    this.clearFilters();
+    this.userInputElement.nativeElement.value = '';
+    this.userInputElement.nativeElement.focus();
   }
 
   onKeyDown(event: KeyboardEvent): void {
+    if (this.filterUsers) {
+      this.handleUserListNavigation(event);
+    } else if (this.filterChannels) {
+      this.handleChannelListNavigation(event);
+    }
+  }
+
+  handleUserListNavigation(event: KeyboardEvent): void {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
     }
+
     if (this.filteredUsers.length > 0) {
       if (event.key === 'ArrowDown') {
         this.highlightedIndex = (this.highlightedIndex + 1) % this.filteredUsers.length;
@@ -95,11 +110,27 @@ export class NewMessageComponent {
         this.highlightedIndex = (this.highlightedIndex - 1 + this.filteredUsers.length) % this.filteredUsers.length;
         this.scrollToSelectedUser();
       } else if (event.key === 'Enter' && this.highlightedIndex >= 0) {
+        this.onUserAdded(this.filteredUsers[this.highlightedIndex]);
+        this.highlightedIndex = -1;
+      }
+    }
+  }
 
+  handleChannelListNavigation(event: KeyboardEvent): void {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+    }
 
-        // HIER WIRD DANN DER AUSGEWÄHLTE CHANNEL ODER USER DANN ZUR JEWEILIGEN LISTE GEPUSHT        
-
-
+    if (this.filteredChannels.length > 0) {
+      if (event.key === 'ArrowDown') {
+        this.highlightedIndex = (this.highlightedIndex + 1) % this.filteredChannels.length;
+        this.scrollToSelectedUser();
+      } else if (event.key === 'ArrowUp') {
+        this.highlightedIndex = (this.highlightedIndex - 1 + this.filteredChannels.length) % this.filteredChannels.length;
+        this.scrollToSelectedUser();
+      } else if (event.key === 'Enter' && this.highlightedIndex >= 0) {
+        this.onChannelAdded(this.filteredChannels[this.highlightedIndex]);
+        this.highlightedIndex = -1;
       }
     }
   }
@@ -113,21 +144,70 @@ export class NewMessageComponent {
     }
   }
 
-  searchUserByName(event: Event): void {
+  handleSearching(event: Event): void {
     let inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim().toLowerCase();
 
-    if (value === '@') {
-      this.filterUsers = true;
-      this.filterChannels = false;
-    } else if (value === '#') {
-      this.filterUsers = false;
-      this.filterChannels = true;
-    } else if (value === '') {
-      this.filterUsers = false;
-      this.filterChannels = false;
+    if (value === '') {
+      this.clearFilters();
+    } else if (value.startsWith('@')) {
+      this.filterByUsername(value.slice(1));
+    } else if (value.startsWith('#')) {
+      this.filterByChannel(value.slice(1));
     } else {
-      // user nach email filtern
+      this.filterByEmail(value);
     }
+  }
+
+  clearFilters(): void {
+    this.filterUsers = false;
+    this.filterChannels = false;
+    this.filteredUsers = [];
+    this.filteredChannels = [];
+  }
+
+  filterByUsername(value: string): void {
+    this.filterUsers = true;
+    this.filterChannels = false;
+    this.filteredUsers = this.userList.filter(user =>
+      user.username.toLowerCase().includes(value) &&
+      !this.selectUser.includes(user)
+    );
+  }
+
+  filterByChannel(value: string): void {
+    this.filterUsers = false;
+    this.filterChannels = true;
+    this.filteredChannels = this.channelList.filter(channel =>
+      channel.title.toLowerCase().includes(value) &&
+      !this.selectChannels.includes(channel)
+    );
+  }
+
+  filterByEmail(value: string): void {
+    this.filterUsers = true;
+    this.filterChannels = false;
+    this.filteredUsers = this.userList.filter(user =>
+      user.email.toLowerCase().includes(value) &&
+      !this.selectUser.includes(user)
+    );
+  }
+
+  searchUserByEmail(value: string) {
+    this.filterUsers = true;
+    this.filterChannels = false;
+
+    this.filteredUsers = this.userList.filter(user =>
+      user.email.toLowerCase().includes(value) &&
+      !this.selectUser.includes(user)
+    );
+  }
+
+  removeSelectedUser(user: UserInterface): void {
+    this.selectUser = this.selectUser.filter(selectedUser => selectedUser.userID !== user.userID);
+  }
+
+  removeSelectedChannel(channel: Channel): void {
+    this.selectChannels = this.selectChannels.filter(selectedChannel => selectedChannel.channelID !== channel.channelID);
   }
 }

@@ -174,3 +174,11 @@ app-channel-filtered-list {
     left: 0;
     pointer-events: none;
 }
+
+.remove-btn {
+    pointer-events: auto;
+
+    &:hover {
+        color: #BB1519;
+    }
+}
