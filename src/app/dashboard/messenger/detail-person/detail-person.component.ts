@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { CommonModule } from '@angular/common';
+import { MentionUserInterface } from '../../../shared/interfaces/mention-user-interface';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 
 @Component({
@@ -20,10 +22,11 @@ import { CommonModule } from '@angular/common';
 })
 export class DetailPersonComponent {
   readonly dialogRef = inject(MatDialogRef<DetailPersonComponent>);
+  public data: UserInterface = inject(MAT_DIALOG_DATA);
 
 
   constructor(public messengerService: MessengerService) {
-    
+
   }
   
   

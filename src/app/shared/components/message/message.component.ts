@@ -239,7 +239,7 @@ export class MessageComponent implements OnInit {
     this.threadService.showThreadSideNav = true;
     this.threadService.messageToReplyTo = this.message;
     console.log(this.threadService.scrollContainer);
-    this.unsubAnswerList = this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
+    this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
   }
 
 

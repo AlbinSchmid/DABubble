@@ -3,12 +3,12 @@
         <h2>Profil</h2>
         <mat-icon (click)="closeDialog()">close</mat-icon>
     </header>
-    <img src="{{messengerService.user.avatar}}" alt="">
+    <img src="{{data.avatar}}" alt="">
     <div id="name-container">
-        <h1>{{ messengerService.user.username }}</h1>
+        <h1>{{ data.username }}</h1>
         <div>
-            <div id="status-container" [ngClass]="{'status-online-icon': messengerService.user.userStatus == 'on',  'status-offline-icon': messengerService.user.userStatus == 'off',  'status-busy-icon': messengerService.user.userStatus == 'busy'}"></div>
-            <p [ngClass]="{'status-online-txt': messengerService.user.userStatus == 'on', 'status-offline-txt': messengerService.user.userStatus == 'off', 'status-busy-txt': messengerService.user.userStatus == 'busy'}">{{ checkUserStatus() }}</p>
+            <div id="status-container" [ngClass]="{'status-online-icon': data.userStatus == 'on',  'status-offline-icon': data.userStatus == 'off',  'status-busy-icon': messengerService.user.userStatus == 'busy'}"></div>
+            <p [ngClass]="{'status-online-txt': data.userStatus == 'on', 'status-offline-txt': data.userStatus == 'off', 'status-busy-txt': data.userStatus == 'busy'}">{{ checkUserStatus() }}</p>
         </div>
     </div>
     <div id="email-container">
@@ -16,7 +16,7 @@
 
         <div>
             <h2>E-Mail-Adresse</h2>
-            <a href="mailto:{{ messengerService.user.email }}">{{ messengerService.user.email }}</a>
+            <a href="mailto:{{ data.email }}">{{ data.email }}</a>
         </div>
     </div>
 </section>
