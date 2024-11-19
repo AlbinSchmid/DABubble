@@ -3,39 +3,47 @@
         <h1>{{checkText()}}</h1>
         <mat-icon (click)="closeDialog()">close</mat-icon>
     </header>
-    
+
     @if (!addPersonView) {
-        <div id="users">
-            @for (user of users; track $index) {
-                <div (click)="openDialogDetailPerson(user)">
-                    <img src="{{user.avatar}}" alt="">
-                    <p *ngIf="user.userID !== authService.currentUserSig()?.userID">{{user.userName}}</p>
-                    <p *ngIf="user.userID == authService.currentUserSig()?.userID">
-                        {{user.userName}} (Du)
-                    </p>
-                </div>
-            }
+    <div id="users">
+        @for (user of users; track $index) {
+        <div (click)="openDialogDetailPerson(user)">
+            <img src="{{user.avatar}}" alt="">
+            <p *ngIf="user.userID !== authService.currentUserSig()?.userID">{{user.username}}</p>
+            <p *ngIf="user.userID == authService.currentUserSig()?.userID">
+                {{user.username}} (Du)
+            </p>
         </div>
-        
-        <button (click)="addPersonView = true">
-            <mat-icon>group_add</mat-icon>
-            <p>Mitglieder hinzufügen</p>
-        </button>
+        }
+    </div>
+
+    <button (click)="addPersonView = true">
+        <mat-icon>group_add</mat-icon>
+        <p>Mitglieder hinzufügen</p>
+    </button>
     } @else {
-        <p id="channel-title"><span>#</span> {{messengerService.channel.title}}</p>
-    
-        <!-- RENE HIER BITTE DEINE CODE EINFÜGEN DANKE, DEIN APP COMPONENT HABE ICH HIER SCHON EINGEFÜGT ABER AUSKOMMENTIERT -->
-         
-        <!-- <div>
-            <app-add-members [data]="data" (inputSelectedChange)="onSelectInputChanged($event)"
-                (inputValueChange)="inputValueChange($event)"></app-add-members>
-        </div> -->
-    
-        <div id="add-button-div">
-            <button class="primary default" mat-button>
-                Hinzufügen
-            </button>
-        </div>
+    <p id="channel-title"><span>#</span> {{messengerService.channel.title}}</p>
+
+
+    <div class="add-specific-member-contain" (wheel)="onWheel($event)">
+        <mat-chip-grid #chipGrid>
+            <div class="chip-contain" *ngFor="let member of memberSourceService.membersSource(); let i = index">
+                <img src="{{ member.avatar }}" alt="user_img">
+                <span>{{ member.username }}</span>
+                <div class="icon-wrapper">
+                    <mat-icon *ngIf="i !== 0" (mousedown)="remove(member)" fontIcon="close"></mat-icon>
+                </div>
+            </div>
+        </mat-chip-grid>
+        <input #userInput autocomplete="off" placeholder="Name..." [matChipInputFor]="chipGrid"
+            (input)="searchUserByName($event)" (keydown)="onKeyDown($event)" />
+    </div>
+
+    <div id="add-button-div">
+        <button class="primary default" mat-button>
+            Hinzufügen
+        </button>
+    </div>
     }
-    
+
 </section>
