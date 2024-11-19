@@ -36,6 +36,7 @@ section {
     max-height: 100vh;
 
     header {
+        justify-content: space-between;
         display: flex;
         align-items: center;
         box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
@@ -44,6 +45,55 @@ section {
         max-height: 80px;
         padding: 0 40px;
         z-index: 20;
+
+        #add-user-complete-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+
+            button {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 3px 10px;
+                border-radius: 30px;
+
+                div {
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        object-fit: cover;
+                        border-radius: 100%;
+                        width: 40px;
+                        height: 40px;
+                        border: 3px solid white;
+                        margin: 0;
+                    }
+                }
+
+                .user-count {
+                    font-size: 20px;
+                    font-weight: 700;
+                    margin: 0;
+                }
+
+                &:hover {
+                    .user-count {
+                        color: #444DF2;
+                    }
+                    background-color: #ECEEFE;
+                }
+            }
+
+            mat-icon {
+                font-size: 30px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
 
         .user-name-contain {
             border-radius: 30px;
@@ -166,4 +216,10 @@ app-edit-channel {
     position: absolute;
     top: -110px;
     left: 0;
+}
+
+app-add-person {
+    position: absolute;
+    top: -110px;
+    right: -80px;
 }

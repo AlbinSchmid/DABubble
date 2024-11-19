@@ -1,5 +1,9 @@
-<section>
-    <button (click)="alreadyExisitingReaktion()" [ngStyle]="{'border-color': getBorderColor(), 'background-color': getBackgroundColor()}">
+<div *ngIf="messageInteraction" id="last-two-reactions-div">
+    <button (click)="alreadyExisitingReaktion()">{{reaction.content}}</button>
+</div>
+<section *ngIf="!messageInteraction">
+    <button (click)="alreadyExisitingReaktion()"
+        [ngStyle]="{'border-color': getBorderColor(), 'background-color': getBackgroundColor()}">
         <div>
             <span>{{ reaction.content }}</span>
             <h6>{{ controllNamesArrayLength() }}</h6>

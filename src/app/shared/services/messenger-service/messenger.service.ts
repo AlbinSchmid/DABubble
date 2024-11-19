@@ -4,6 +4,7 @@ import { Channel } from '../../interfaces/channel';
 import { Message } from '../../../models/message.class';
 import { ThreadService } from '../thread-service/thread.service';
 import { FirebaseMessengerService } from '../firebase-services/firebase-messenger.service';
+import { User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,7 @@ export class MessengerService {
   };
   openChannel = false;
   openChart = false;
+  openNewMessage: boolean = false;
   messageDates: string[] = [];
   scrollContainer: any;
 
@@ -47,15 +49,64 @@ export class MessengerService {
     container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
   }
 
+  showChannel(channel: Channel) {
+    this.closeEverthing();
+    this.channel = channel;
+    this.openChannel = true;
+    this.openChart = false;
+    this.openNewMessage = false;
+    setTimeout(() => {
+      this.showMessenger = true;
+    },10);
+  }
 
-  showChartOrChannel(user: UserInterface) {
-    this.threadService.showThreadSideNav = false;
-    this.chartId = '';
-    this.showMessenger = false;
-    this.threadService.showThread = false;
+  getEmptyChannel(): Channel {
+    return {
+      channelID: '',
+      title: '',
+      description: '',
+      createdBy: '',
+      isFocus: false,
+      userIDs: [],
+      messages: [],
+    }
+  }
+
+  getEmptyUser(): UserInterface {
+    return {
+      userID: '',
+      password: '',
+      email: '',
+      username: '',
+      avatar: '',
+      userStatus: '',
+      isFocus: false,
+    }
+  }
+
+  showChart(user: UserInterface) {
+    this.closeEverthing();
     this.openChannel = false;
     this.openChart = true;
+    this.openNewMessage = false;
     this.user = user;
-    this.channel;
+  }
+
+  showNewMessage() {
+    this.closeEverthing();
+    this.openChannel = false;
+    this.openChart = false;
+    this.openNewMessage = true;
+    this.channel.isFocus = false;
+    this.user.isFocus = false;
+    this.channel = this.getEmptyChannel();
+    this.user = this.getEmptyUser();
+  }
+
+  closeEverthing() {
+    this.showMessenger = false;
+    this.threadService.showThreadSideNav = false;
+    this.threadService.showThread = false;
+    this.chartId = '';
   }
 }

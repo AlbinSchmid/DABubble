@@ -18,6 +18,7 @@ export class EmojisReaktionComponent{
   authService = inject(AuthserviceService);
   firebaseMessenger = inject(FirebaseMessengerService);
   messengerService = inject(MessengerService);
+  @Input() messageInteraction: boolean;
   @Input() reaction: ReactionInterface = {
     content: '',
     senderIDs: [],
@@ -61,9 +62,11 @@ export class EmojisReaktionComponent{
 
 
   addUserToReaction() {
-    this.reaction.senderIDs.push(this.authService.currentUserSig()?.userID || '');
-    this.reaction.senderNames.push(this.authService.currentUserSig()?.username || '');
-    this.firebaseMessenger.updateSomethingAtMessage(this.reaction.messageID, 'reaction', this.reaction.reactionID, this.reaction);
+    if (!this.reaction.senderIDs.includes(this.authService.currentUserSig()?.userID ?? '')) {
+      this.reaction.senderIDs.push(this.authService.currentUserSig()?.userID || '');
+      this.reaction.senderNames.push(this.authService.currentUserSig()?.username || '');
+      this.firebaseMessenger.updateSomethingAtMessage(this.reaction.messageID, 'reaction', this.reaction.reactionID, this.reaction);
+    } 
   }
 
 

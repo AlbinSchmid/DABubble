@@ -61,7 +61,6 @@ export class MessageComponent implements OnInit {
 
 
   ngOnInit() {    
-    
     if (this.messengerService.channel.channelID !== '') {
       this.unsubMentionsList = this.subMentionsList();
     }
@@ -140,8 +139,16 @@ export class MessageComponent implements OnInit {
       list.forEach(element => {
         this.reactions.push(this.setRectionObject(element.data(), element.id));
       });
-      console.log(this.reactions);
+      this.getNearestTwoReactions();
     })
+  }
+
+
+  getNearestTwoReactions() {
+    const now = Date.now();
+    this.lastTwoReactins = this.reactions.sort((a, b) => {
+      return Math.abs(a.latestReactionTime - now) - Math.abs(b.latestReactionTime - now);
+    });    
   }
 
 
@@ -232,7 +239,7 @@ export class MessageComponent implements OnInit {
     this.threadService.showThreadSideNav = true;
     this.threadService.messageToReplyTo = this.message;
     console.log(this.threadService.scrollContainer);
-    this.unsubAnswerList = this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
+    this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
   }
 
 

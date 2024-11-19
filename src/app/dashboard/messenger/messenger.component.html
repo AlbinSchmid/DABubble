@@ -5,7 +5,7 @@
             <h4>{{ messengerService.user.username }}</h4>
         </button>
         <div class="edit-channel-contain" *ngIf="messengerService.openChannel">
-            <button (click)="toggleEditChannel()" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
+            <button (click)="this.editChannelIsOpen = !this.editChannelIsOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
                 class="channel-title-contain" [class.active]="editChannelIsOpen">
                 <mat-icon class="tag-icon" fontIcon="tag"></mat-icon>
                 <h4>{{ messengerService.channel.title }}</h4>
@@ -13,8 +13,24 @@
             </button>
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
                 [cdkConnectedOverlayOpen]="editChannelIsOpen" [cdkConnectedOverlayHasBackdrop]="true"
-                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="closeEditChannel()">
-                <app-edit-channel (closeOverlay)="closeEditChannel()"></app-edit-channel>
+                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.editChannelIsOpen = false">
+                <app-edit-channel (closeOverlay)="this.editChannelIsOpen = false"></app-edit-channel>
+            </ng-template>
+        </div>
+        <div id="add-user-complete-container" *ngIf="messengerService.openChannel">
+            <button (click)=" this.showAddPerson = !this.showAddPerson" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
+                <div>
+                    @for (user of usersInChannel; track $index) {
+                        <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
+                    }
+                </div>
+                <p class="user-count">{{usersInChannel.length}}</p>
+            </button>
+            <mat-icon (click)="openDialogAddPersonDirect()">group_add</mat-icon>
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
+                [cdkConnectedOverlayOpen]="showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
+                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.showAddPerson = false">
+                <app-add-person (closeOverlay)="this.showAddPerson = false"  [addPersonView]="showAddPersonDialogDirect" [users]="usersInChannel"></app-add-person>
             </ng-template>
         </div>
     </header>
