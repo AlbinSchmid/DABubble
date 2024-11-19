@@ -17,7 +17,7 @@
             weiter
         </button>
         <button *ngIf="showAddMembersDialog" (click)="addChannel()"
-            [disabled]="selectInput && channelDataService.membersSource().length === 0 || channelDataService.membersSource().length == 0"
+            [disabled]="selectInput && memberSourceService.membersSource().length === 0 || memberSourceService.membersSource().length == 0"
             class="primary default" mat-button>
             Erstellen
         </button>

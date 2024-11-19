@@ -11,9 +11,9 @@ import { Channel } from '../../../../shared/interfaces/channel';
 import { Subscription } from 'rxjs';
 import { UserInterface } from '../../../../landing-page/interfaces/userinterface';
 import { MatCardModule } from '@angular/material/card';
-import { ChannelDataService } from '../channel-data.service';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { FiltredListComponent } from './filtred-list/filtred-list.component';
+import { MembersSourceService } from '../../../../shared/services/members-source.service';
 
 @Component({
   selector: 'app-add-members',
@@ -40,7 +40,7 @@ export class AddMembersComponent {
 
 
   firestoreService: FirestoreService = inject(FirestoreService);
-  channelDataService: ChannelDataService = inject(ChannelDataService);
+  memberSourceService: MembersSourceService = inject(MembersSourceService);
   authService: AuthserviceService = inject(AuthserviceService);
 
 
@@ -133,7 +133,7 @@ export class AddMembersComponent {
 
   scrollToRightAfterAnimation() {
     let element = document.querySelector('.add-specific-member-contain') as HTMLElement;
-    this.channelDataService.membersSource.set([...this.inputUserList]);
+    this.memberSourceService.membersSource.set([...this.inputUserList]);
     if (element) {
       setTimeout(() => {
         element.scrollTo({
@@ -166,11 +166,11 @@ export class AddMembersComponent {
       if (channel.title === selectedTitle) {
         if (this.selectInput) {
           setTimeout(() => {
-            this.channelDataService.membersSource.update(() => [...channel.userIDs]);
+            this.memberSourceService.membersSource.update(() => [...channel.userIDs]);
           }, 200);
         } else {
-          this.channelDataService.membersSource.set([]);
-          this.channelDataService.membersSource.update(members => [...members, ...channel.userIDs]);
+          this.memberSourceService.membersSource.set([]);
+          this.memberSourceService.membersSource.update(members => [...members, ...channel.userIDs]);
         }
       }
     });
@@ -223,7 +223,7 @@ export class AddMembersComponent {
   searchUserByName(event: Event): void {
     let inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim().toLowerCase();
-    let existingMembers = this.channelDataService.membersSource().map(member => member.userID);
+    let existingMembers = this.memberSourceService.membersSource().map(member => member.userID);
     let currentUser = this.authService.currentUserSig()!.userID;
 
     if (value) {
@@ -240,8 +240,8 @@ export class AddMembersComponent {
 
   add(user: UserInterface): void {
     if (user) {
-      this.channelDataService.membersSource.update(members => [...members, user]);
-      this.inputUserList = this.channelDataService.membersSource();
+      this.memberSourceService.membersSource.update(members => [...members, user]);
+      this.inputUserList = this.memberSourceService.membersSource();
       this.userInputElement.nativeElement.value = '';
       this.filteredUsers = [];
     }
@@ -249,11 +249,11 @@ export class AddMembersComponent {
   }
 
   remove(member: UserInterface): void {
-    this.channelDataService.membersSource.update(members => {
+    this.memberSourceService.membersSource.update(members => {
       let index = members.indexOf(member);
       if (index >= 0) {
         members.splice(index, 1);
-        this.inputUserList = this.channelDataService.membersSource();
+        this.inputUserList = this.memberSourceService.membersSource();
       }
       return [...members];
     });

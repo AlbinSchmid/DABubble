@@ -8,6 +8,7 @@ import { AnimationChannelService } from '../channel-list/animation.service.servi
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
 import { MatIconModule } from '@angular/material/icon';
 import { ChannelDataService } from './channel-data.service';
+import { MembersSourceService } from '../../../shared/services/members-source.service';
 
 @Component({
   selector: 'app-dialog-channel',
@@ -27,6 +28,7 @@ export class DialogChannelComponent {
   firestoreService: FirestoreService = inject(FirestoreService);
   authService: AuthserviceService = inject(AuthserviceService);
   channelDataService: ChannelDataService = inject(ChannelDataService);
+  memberSourceService: MembersSourceService = inject(MembersSourceService);
   channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
   dialogRef: MatDialogRef<DialogChannelComponent> = inject(MatDialogRef);
 
@@ -83,7 +85,7 @@ export class DialogChannelComponent {
   }
 
   getUserIDs(): string[] {
-    let members = this.channelDataService.membersSource();
+    let members = this.memberSourceService.membersSource();
 
     if (members[0].username) {
       return members.map(user => user.userID);
