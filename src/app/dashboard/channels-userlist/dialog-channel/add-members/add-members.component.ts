@@ -243,6 +243,7 @@ export class AddMembersComponent {
       this.memberSourceService.membersSource.update(members => [...members, user]);
       this.inputUserList = this.memberSourceService.membersSource();
       this.userInputElement.nativeElement.value = '';
+      this.highlightedIndex = -1;
       this.filteredUsers = [];
     }
     this.scrollToRight();
