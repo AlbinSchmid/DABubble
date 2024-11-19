@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { DetailPersonComponent } from '../detail-person/detail-person.component';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { AddMembersComponent } from '../../channels-userlist/dialog-channel/add-members/add-members.component';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-add-person',
@@ -21,7 +22,7 @@ export class AddPersonComponent {
   authService = inject(AuthserviceService);
   dialog = inject(MatDialog);
 
-  @Input() users: MentionUserInterface[] = [];
+  @Input() users: UserInterface[] = [];
   @Input() addPersonView: boolean = false;
   @Output() closeOverlay = new EventEmitter<void>();
 

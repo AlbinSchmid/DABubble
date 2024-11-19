@@ -6,6 +6,8 @@ import { ThreadService } from '../thread-service/thread.service';
 import { MessengerService } from '../messenger-service/messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
+import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +56,21 @@ export class FirebaseMessengerService {
       setTimeout(() => {
         this.messengerService.scrollToBottom(this.threadService.scrollContainer)
       });
+    })
+  }
+
+
+
+  subChannelUserList(callback: any) {
+    const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
+    return onSnapshot(messegeRef, (list) => {
+      if (list.exists()) {
+        if (callback) {
+          callback(list);
+        }
+      } else {
+        console.error("doc is empty or doesn't exist");
+      }
     })
   }
 
@@ -243,7 +260,23 @@ export class FirebaseMessengerService {
             this.createChat(user);
           }
         } else {
-          this.messengerService.showMessenger = true;
+          if (this.messengerService.openChannel) {
+            // this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
+            //   this.usersListAll = users;
+            //   this.unsubChannelList = this.firebaseMessenger.subChannelUserList((list: any) => {
+            //     this.usersInChannel = [];
+            //     const usersIDs = list.data()['userIDs'];
+            //     for (let i = 0; i < usersIDs.length; i++) {
+            //       const userID = usersIDs[i];
+            //       const user = this.usersListAll.filter(user => user.userID === userID);
+            //       this.usersInChannel.push(this.firebaseMessenger.getCleanJson(user));
+            //     }
+            //   });
+            // });
+          }
+          this.messengerService.messageDates = [];
+          this.messages = [];
+          this.subSomethingList('noID', 'noCollection');
         }
       });
     })
@@ -252,7 +285,7 @@ export class FirebaseMessengerService {
 
   async updateSomethingAtMessage(messageID: string, collectionOfMessage: string, docID: string, array: any,) {
     let ref = doc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages${this.checkCollectionOfMessage(messageID, collectionOfMessage)}`), docID);
-    await updateDoc(ref, this.getCleanJson(array)).catch(
+    await updateDoc(ref, this.whatShouldBeUpdated(array)).catch(
       (err) => {
         console.error(err);
       }
@@ -261,16 +294,16 @@ export class FirebaseMessengerService {
 
 
 
-/**
- * Extracts and returns a simplified JSON object from a given message object.
- * 
- * The returned JSON object includes the message content, sender ID, and the 
- * date in milliseconds since the Unix Epoch, derived from the message's date.
- * 
- * @param message - The message object to be processed.
- * @returns {object} A JSON object containing content, senderId, and date.
- */
-  getCleanJson(message: any): object {
+  /**
+   * Extracts and returns a simplified JSON object from a given message object.
+   * 
+   * The returned JSON object includes the message content, sender ID, and the 
+   * date in milliseconds since the Unix Epoch, derived from the message's date.
+   * 
+   * @param message - The message object to be processed.
+   * @returns {object} A JSON object containing content, senderId, and date.
+   */
+  whatShouldBeUpdated(message: any): object {
     return {
       content: message.content,
       senderId: message.senderID,
@@ -297,14 +330,14 @@ export class FirebaseMessengerService {
   }
 
 
-/**
- * Extracts and returns a clean reaction object containing only the sender IDs 
- * and sender names from the provided reaction data.
- * 
- * @param reaction - The reaction data object containing various details.
- * @returns {object} An object with `senderIDs` and `senderNames` extracted from the reaction.
- */
-  getCleanReaction(reaction: any):object {
+  /**
+   * Extracts and returns a clean reaction object containing only the sender IDs 
+   * and sender names from the provided reaction data.
+   * 
+   * @param reaction - The reaction data object containing various details.
+   * @returns {object} An object with `senderIDs` and `senderNames` extracted from the reaction.
+   */
+  getCleanReaction(reaction: any): object {
     return {
       senderIDs: reaction.senderIDs,
       senderNames: reaction.senderNames,
@@ -312,13 +345,13 @@ export class FirebaseMessengerService {
   }
 
 
-/**
- * Determines the collection type based on the current context.
- * 
- * @returns {string} - Returns 'chats' if the messenger service is in chat mode,
- * otherwise returns 'channels'.
- */
-  checkCollectionChatOrChannel():string {
+  /**
+   * Determines the collection type based on the current context.
+   * 
+   * @returns {string} - Returns 'chats' if the messenger service is in chat mode,
+   * otherwise returns 'channels'.
+   */
+  checkCollectionChatOrChannel(): string {
     if (this.messengerService.openChart) {
       return 'chats';
     } else {
@@ -334,7 +367,7 @@ export class FirebaseMessengerService {
    * Otherwise, return an empty string.
    * @returns {string} - the document ID
    */
-checkDocChatIDOrChannelID(): string {
+  checkDocChatIDOrChannelID(): string {
     if (this.messengerService.openChart) {
       return `${this.messengerService.chartId}`;
     } else if (this.messengerService.openChannel) {
@@ -345,14 +378,14 @@ checkDocChatIDOrChannelID(): string {
   }
 
 
- 
+
   /**
    * Check the collection of a message.
    * @param messageID - The id of the message
    * @param collection - The collection of the message (answer, reaction, mention)
    * @returns {string} The path of the collection
    */
-  checkCollectionOfMessage(messageID: string, collection: string):string {
+  checkCollectionOfMessage(messageID: string, collection: string): string {
     console.log(collection);
     if (collection == 'answer') {
       return `/${messageID}/answers`;
@@ -363,5 +396,19 @@ checkDocChatIDOrChannelID(): string {
     } else {
       return '';
     }
+  }
+
+
+  getCleanJson(user: UserInterface[]): UserInterface {
+    let userJson = {
+      userID: user[0]['userID'],
+      password: user[0]['password'],
+      email: user[0]['email'],
+      username: user[0]['username'],
+      avatar: user[0]['avatar'],
+      userStatus: user[0]['userStatus'],
+      isFocus: user[0]['isFocus'],
+    }
+    return userJson;
   }
 }

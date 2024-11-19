@@ -1,7 +1,7 @@
 <section>
     <header>
         <h2>Profil</h2>
-        <mat-icon (click)="closeDialog()">close</mat-icon>
+        <mat-icon (click)="this.dialogRef.close()">close</mat-icon>
     </header>
     <img src="{{data.avatar}}" alt="">
     <div id="name-container">

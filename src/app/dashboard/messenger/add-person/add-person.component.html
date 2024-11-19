@@ -9,9 +9,9 @@
             @for (user of users; track $index) {
                 <div (click)="openDialogDetailPerson(user)">
                     <img src="{{user.avatar}}" alt="">
-                    <p *ngIf="user.userID !== authService.currentUserSig()?.userID">{{user.userName}}</p>
+                    <p *ngIf="user.userID !== authService.currentUserSig()?.userID">{{user.username}}</p>
                     <p *ngIf="user.userID == authService.currentUserSig()?.userID">
-                        {{user.userName}} (Du)
+                        {{user.username}} (Du)
                     </p>
                 </div>
             }
