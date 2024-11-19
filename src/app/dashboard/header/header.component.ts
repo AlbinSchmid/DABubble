@@ -8,6 +8,8 @@ import { MenuComponent } from './menu/menu.component';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { UserInterface } from '../../landing-page/interfaces/userinterface';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { SearchService } from '../../shared/services/search-service/search.service';
+import { SearchResultComponent } from "../../shared/components/search-result/search-result.component";
 
 @Component({
   selector: 'app-header',
@@ -18,8 +20,9 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
     MatCardModule,
     RouterLink,
     CommonModule,
-    MenuComponent
-  ],
+    MenuComponent,
+    SearchResultComponent
+],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -31,12 +34,17 @@ export class HeaderComponent {
   isProfileMenuOpen = false;
   isUnderMenuOpen = false;
   isOpenEditEditor = false;
+  searchService = inject(SearchService)
 
   /**
    * Focuses the search input element.
    */
   focusSearchInput(): void {
     this.searchInput.nativeElement.focus();
+  }
+
+  onSearch(){
+    this.searchService.search(this.searchInput.nativeElement.value)
   }
 
   /**

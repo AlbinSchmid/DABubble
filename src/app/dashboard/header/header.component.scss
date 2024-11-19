@@ -412,3 +412,24 @@ mat-icon {
         }
     }
 }
+
+
+.search-results-contain{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100px;
+  box-sizing: border-box;
+  padding: 20px;
+  width: 90%;
+  background-color: white;
+  color: black;
+  z-index: 999999;
+  border: 2px solid #444DF2;
+  border-radius: 30px;
+  max-height: 350px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}

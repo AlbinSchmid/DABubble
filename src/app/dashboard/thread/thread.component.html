@@ -9,7 +9,7 @@
 
     </header>
     <div id="content">
-        <div id="messages-container" #content>
+        <div id="messages-container" class="threadContent" #content>
             <div class="message">
                 <img src="{{ threadService.messageToReplyTo.senderAvatar }}" alt="Profile">
                 <div id="message-content">
@@ -30,7 +30,7 @@
                 <div></div>
             </div>
             @for (message of firebaseMessenger.answers; track $index) {
-                <app-message [messageIndex]="$index" [message]="message" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage" [sourceThread]="sourceThread"></app-message>
+                <app-message id="{{ message.content }}" [messageIndex]="$index" [message]="message" [reduceContent]="reduceInteraktionBtn" [editAnswerMessage]="editAnswerMessage" [sourceThread]="sourceThread"></app-message>
             }
             
         </div>

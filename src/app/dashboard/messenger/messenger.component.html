@@ -33,7 +33,7 @@
                     dir statt.</p>
             </div>
             @for (message of firebaseMessenger.messages; track $index) {
-            <app-message [message]="message" [message]="message" [messageIndex]="$index"></app-message>
+            <app-message id="{{message.messageID}}" [message]="message" [message]="message" [messageIndex]="$index"></app-message>
             }
         </div>
         <app-textarea [sourceThread]="sourceThread"></app-textarea>

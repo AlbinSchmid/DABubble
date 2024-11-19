@@ -3,11 +3,18 @@
         <img src="/assets/img/logo-with-text.png" alt="DABubble Logo">
     </div>
     <div class="search-bar-contain" (click)="focusSearchInput()">
-        <input #searchInput placeholder="Devspace durchsuchen . . ." type="text">
+        <input #searchInput placeholder="Devspace durchsuchen . . ." type="text" (input)="onSearch()">
         <div>
             <mat-icon fontIcon="search" class="search-icon"></mat-icon>
         </div>
     </div>
+    @if(searchService.madeQuery){
+            <div class="search-results-contain">
+                <app-search-result></app-search-result>
+            </div>
+    }
+
+
     <div class="profile-contain-header">
         <div [matMenuTriggerFor]="menu">
             <div class=" username-menu-contain-header">
