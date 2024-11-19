@@ -20,7 +20,8 @@ import { UserInterface } from '../../landing-page/interfaces/userinterface';
 import { FirestoreService } from '../../shared/services/firebase-services/firestore.service';
 import { MentionUserInterface } from '../../shared/interfaces/mention-user-interface';
 import { AddPersonComponent } from './add-person/add-person.component';
-import { AddMembersComponent } from "../channels-userlist/dialog-channel/add-members/add-members.component";
+import { list } from '@angular/fire/storage';
+import { UserInChannel } from '../../models/mentioned-user.class';
 registerLocaleData(localeDe);
 
 @Component({
@@ -38,24 +39,29 @@ registerLocaleData(localeDe);
     EditChannelComponent,
     OverlayModule,
     AddPersonComponent
-],
+  ],
   templateUrl: './messenger.component.html',
   styleUrl: './messenger.component.scss'
 })
 export class MessengerComponent implements AfterViewInit {
   firestore: Firestore = inject(Firestore);
   firestoreService: FirestoreService = inject(FirestoreService);
-  @ViewChild('content') scrollContainer: ElementRef;
-
   dialog = inject(MatDialog);
+  datePipe = inject(DatePipe);
   authService = inject(AuthserviceService);
   firebaseMessenger = inject(FirebaseMessengerService);
   threadService = inject(ThreadService);
   messengerService = inject(MessengerService);
 
+  @ViewChild('content') scrollContainer: ElementRef;
+
   messagesDates: string[] = [];
-  
-  unsubChatList: any;
+  usersListAll: UserInterface[] = [];
+  // usersInChannel = new UserInChannel();
+  usersInChannel: UserInterface[] = [];
+
+  userListSubscription: any;
+  unsubChannelList: any;
   reversedMessge: any;
   dateContent: string;
   dateTodayString: string;
@@ -64,88 +70,80 @@ export class MessengerComponent implements AfterViewInit {
   sourceThread = false;
   isEditChannelOpen = false;
   editChannelIsOpen = false;
-
   showAddPerson = false;
+  showAddPersonDialogDirect = false;
   dateCount = 0;
 
-  unsubChannelList: any;
-  usersInChannel: MentionUserInterface[] = [];
-  usersListAll: UserInterface[] = [];
-  userListSubscription: any;
 
-  showAddPersonDialogDirect = false;
-
-
-  constructor(public datePipe: DatePipe) {
-  }
-  
-  
+  /**
+  * Initializes the component by checking if a channel is open and retrieves the users of the channel.
+  * Resets the message dates and messages list in the messenger service and firebase messenger service, respectively.
+  * Subscribes to a list with default parameters ('noID', 'noCollection') in the firebase messenger service.
+  */
   ngOnInit() {
     if (this.messengerService.openChannel) {
-      this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
-        this.usersListAll = users;
-        this.unsubChannelList = this.subChannelList();
-      });
-
+      this.getTheUsersOfChannel();
+      // this.usersInChannel.getTheUsersOfChannel();
     }
     this.messengerService.messageDates = [];
     this.firebaseMessenger.messages = [];
     this.firebaseMessenger.subSomethingList('noID', 'noCollection');
   }
-  
-  
+
+
+  /**
+   * Sets the scrollContainer in the messenger service to the ElementRef of the ViewChild with the name 'content'.
+   * This is necessary because the ViewChild is not yet available in the constructor or ngOnInit.
+   */
   ngAfterViewInit() {
-    this.messengerService.scrollContainer = this.scrollContainer; 
+    this.messengerService.scrollContainer = this.scrollContainer;
   }
 
 
-  ngOnDestroy() {
-    this.unsubChatList;
+  /**
+   * Unsubscribes from the channel user list and the list of all users when the component is destroyed.
+   */
+  ngOnDesroy() {
+    this.unsubChannelList;
+    this.userListSubscription;
   }
 
 
-  subChannelList() {
-    const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
-    return onSnapshot(messegeRef, (list) => {
-      if (list.exists()) {
+  /**
+   * Retrieves the users of the currently open channel by subscribing to the channel user list observable.
+   * It first subscribes to the list of all users and then filters this list by the user IDs stored in the channel user list.
+   */
+  getTheUsersOfChannel() {
+    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
+      this.usersListAll = users;
+      this.unsubChannelList = this.firebaseMessenger.subChannelUserList((list: any) => {
         this.usersInChannel = [];
         const usersIDs = list.data()['userIDs'];
-        for (let i = 0; i < usersIDs.length; i++) {        
+        for (let i = 0; i < usersIDs.length; i++) {
           const userID = usersIDs[i];
           const user = this.usersListAll.filter(user => user.userID === userID);
-          this.usersInChannel.push(this.getCleanJson(user));
+          this.usersInChannel.push(this.firebaseMessenger.getCleanJson(user));
         }
-      } else {
-        console.error("doc is empty or doesn't exist");
-      }
-    })
+      });
+    });
   }
 
 
-  getCleanJson(user: UserInterface[]) {
-    let userJson = {
-      avatar: user[0]['avatar'],
-      userID: user[0]['userID'],
-      userName: user[0]['username'],
-      email: user[0]['email'],
-      userStatus: user[0]['userStatus'],
-    }
-    return userJson;
-  }
-
-
-  chatOrChannelHeader(src: string) {
+/**
+ * Returns the header text based on the current context.
+ * 
+ * If the user is in a private chat, it returns the username of the chat partner.
+ * If the user is in a channel, it returns the channel title prefixed with '#'.
+ * 
+ * @param {string} src - The source string (not used in the function).
+ * @returns {string} - The username or channel title for the header.
+ */
+  chatOrChannelHeader(src: string):string {
     if (this.messengerService.openChart) {
       return `${this.messengerService.user.username}`
     } else {
       return `# ${this.messengerService.channel.title}`
     }
-  }
-
-
-  check(messageDate: Date): string {
-    const formattedMessageDate = formatDate(messageDate, 'd. MMMM', 'de',);
-    return formattedMessageDate;
   }
 
 
@@ -176,31 +174,14 @@ export class MessengerComponent implements AfterViewInit {
     });
   }
 
-  openDialogShowPerson() {
-    this.showAddPerson = !this.showAddPerson;
-  }
 
-  openDialogAddPerson() {
+/**
+ * Toggles the visibility of the "Add Person" dialog.
+ * Sets showAddPersonDialogDirect to true and toggles 
+ * the showAddPerson state.
+ */
+  openDialogAddPersonDirect() {
     this.showAddPersonDialogDirect = true;
     this.showAddPerson = !this.showAddPerson;
-
-    // this.dialog.open(AddPersonComponent, {
-    //   data: this.usersInChannel,
-    //   panelClass: 'my-custom-dialog',
-    // });
-  }
-
-  toggleEditChannel() {
-    this.editChannelIsOpen = !this.editChannelIsOpen;
-  }
-
-
-  closeEditChannel() {
-    this.editChannelIsOpen = false;
-  }
-
-
-  closeAddPerson() {
-    this.showAddPerson = false;
   }
 }

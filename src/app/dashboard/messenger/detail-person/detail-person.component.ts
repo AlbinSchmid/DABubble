@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { CommonModule } from '@angular/common';
-import { MentionUserInterface } from '../../../shared/interfaces/mention-user-interface';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 
 
@@ -21,21 +19,18 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
   styleUrl: './detail-person.component.scss'
 })
 export class DetailPersonComponent {
+  messengerService = inject(MessengerService)
   readonly dialogRef = inject(MatDialogRef<DetailPersonComponent>);
   public data: UserInterface = inject(MAT_DIALOG_DATA);
 
-
-  constructor(public messengerService: MessengerService) {
-
-  }
   
-  
-  closeDialog() {
-    this.dialogRef.close();
-  }
-  
-  
-  checkUserStatus() {
+/**
+ * Checks the current user's status and returns a string representation.
+ * 
+ * @returns {string} - Returns 'Aktiv' if the user is online, 'Offline' if the user is offline,
+ * and 'Beschäftigt' if the user is busy.
+ */
+  checkUserStatus():string {
     if (this.messengerService.user.userStatus == 'on') {
       return 'Aktiv';
     } else if (this.messengerService.user.userStatus == 'off') {
@@ -44,5 +39,4 @@ export class DetailPersonComponent {
       return 'Beschäftigt'
     }
   }
-
 }
