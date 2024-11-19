@@ -8,6 +8,7 @@ import { Channel } from '../../../shared/interfaces/channel';
 import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
+import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
   styleUrl: './user-list.component.scss'
 })
 export class UserListComponent {
-
+  threadService = inject(ThreadService);
   firestoreService: FirestoreService = inject(FirestoreService);
   authService: AuthserviceService = inject(AuthserviceService);
   firebaseMessengerService: FirebaseMessengerService = inject(FirebaseMessengerService);

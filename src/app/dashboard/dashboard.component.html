@@ -8,7 +8,7 @@
                 </mat-drawer>
 
                 <mat-drawer-content>
-                    <app-messenger *ngIf="messengerService.showMessenger"></app-messenger>
+                    <app-messenger *ngIf="messengerService.openMessenger"></app-messenger>
                     <app-new-message *ngIf="messengerService.openNewMessage"></app-new-message>
                 </mat-drawer-content>
 

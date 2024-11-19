@@ -20,17 +20,17 @@
         <div id="add-user-complete-container" *ngIf="messengerService.openChannel">
             <button (click)=" this.showAddPerson = !this.showAddPerson" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
                 <div>
-                    @for (user of usersInChannel; track $index) {
+                    @for (user of threadService.usersInChannel; track $index) {
                         <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
                     }
                 </div>
-                <p class="user-count">{{usersInChannel.length}}</p>
+                <p class="user-count">{{threadService.usersInChannel.length}}</p>
             </button>
-            <mat-icon (click)="openDialogAddPersonDirect()">group_add</mat-icon>
+            <mat-icon (click)="this.showAddPerson = !this.showAddPerson">group_add</mat-icon>
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
                 [cdkConnectedOverlayOpen]="showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
                 [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.showAddPerson = false">
-                <app-add-person (closeOverlay)="this.showAddPerson = false"  [addPersonView]="showAddPersonDialogDirect" [users]="usersInChannel"></app-add-person>
+                <app-add-person (closeOverlay)="this.showAddPerson = false"  [addPersonView]="showAddPersonDialogDirect" [users]="threadService.usersInChannel"></app-add-person>
             </ng-template>
         </div>
     </header>
@@ -49,7 +49,7 @@
                     dir statt.</p>
             </div>
             @for (message of firebaseMessenger.messages; track $index) {
-            <app-message id="{{message.messageID}}" [message]="message" [message]="message" [messageIndex]="$index"></app-message>
+            <app-message [message]="message" [message]="message" [messageIndex]="$index"></app-message>
             }
         </div>
         <app-textarea [sourceThread]="sourceThread"></app-textarea>

@@ -5,13 +5,14 @@ import { Message } from '../../../models/message.class';
 import { ThreadService } from '../thread-service/thread.service';
 import { FirebaseMessengerService } from '../firebase-services/firebase-messenger.service';
 import { User } from '@angular/fire/auth';
+import { FirestoreService } from '../firebase-services/firestore.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessengerService {
   threadService = inject(ThreadService);
-  // firebaseMessenger = inject(FirebaseMessengerService);
+  firestoreService: FirestoreService = inject(FirestoreService);
 
   message = new Message;
   editMessageContent: string;
@@ -43,11 +44,13 @@ export class MessengerService {
   openNewMessage: boolean = false;
   messageDates: string[] = [];
   scrollContainer: any;
+  openMessenger = false;
 
 
   scrollToBottom(container: any) {
     container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
   }
+
 
   showChannel(channel: Channel) {
     this.closeEverthing();
@@ -55,10 +58,8 @@ export class MessengerService {
     this.openChannel = true;
     this.openChart = false;
     this.openNewMessage = false;
-    setTimeout(() => {
-      this.showMessenger = true;
-    },10);
   }
+
 
   getEmptyChannel(): Channel {
     return {
@@ -72,6 +73,7 @@ export class MessengerService {
     }
   }
 
+
   getEmptyUser(): UserInterface {
     return {
       userID: '',
@@ -84,6 +86,7 @@ export class MessengerService {
     }
   }
 
+
   showChart(user: UserInterface) {
     this.closeEverthing();
     this.openChannel = false;
@@ -91,6 +94,7 @@ export class MessengerService {
     this.openNewMessage = false;
     this.user = user;
   }
+
 
   showNewMessage() {
     this.closeEverthing();
@@ -102,6 +106,7 @@ export class MessengerService {
     this.channel = this.getEmptyChannel();
     this.user = this.getEmptyUser();
   }
+
 
   closeEverthing() {
     this.showMessenger = false;

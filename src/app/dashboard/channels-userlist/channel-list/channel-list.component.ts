@@ -24,6 +24,7 @@ import { FirebaseMessengerService } from '../../../shared/services/firebase-serv
 })
 export class ChannelListComponent {
 
+  firebaseMessengerService = inject(FirebaseMessengerService);
   firestoreService: FirestoreService = inject(FirestoreService);
   firebaseMessenger = inject(FirebaseMessengerService);
   messengerService = inject(MessengerService);
@@ -94,11 +95,17 @@ export class ChannelListComponent {
   }
 
   focusChannel(channel: Channel) {
+    this.threadService.channelID = channel.channelID;
     this.resetUserFocus();
     this.channelList.forEach(c => c.isFocus = false);
     this.firestoreService.setAndGetCurrentlyFocusedChat(channel);
     this.messengerService.showChannel(channel);
     channel.isFocus = true;
+    this.threadService.getTheUsersOfChannel();
+    this.messengerService.messageDates = [];
+    this.firebaseMessengerService.messages = [];
+    this.firebaseMessengerService.subSomethingList('noID', 'noCollection');
+    this.messengerService.openMessenger = true;
   }
 
   resetUserFocus(): void {

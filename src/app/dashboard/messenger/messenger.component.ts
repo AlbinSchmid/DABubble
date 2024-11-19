@@ -21,7 +21,6 @@ import { FirestoreService } from '../../shared/services/firebase-services/firest
 import { MentionUserInterface } from '../../shared/interfaces/mention-user-interface';
 import { AddPersonComponent } from './add-person/add-person.component';
 import { list } from '@angular/fire/storage';
-import { UserInChannel } from '../../models/mentioned-user.class';
 registerLocaleData(localeDe);
 
 @Component({
@@ -57,8 +56,7 @@ export class MessengerComponent implements AfterViewInit {
 
   messagesDates: string[] = [];
   usersListAll: UserInterface[] = [];
-  // usersInChannel = new UserInChannel();
-  usersInChannel: UserInterface[] = [];
+  usersInChannel: any[] = [];
 
   userListSubscription: any;
   unsubChannelList: any;
@@ -76,22 +74,6 @@ export class MessengerComponent implements AfterViewInit {
 
 
   /**
-  * Initializes the component by checking if a channel is open and retrieves the users of the channel.
-  * Resets the message dates and messages list in the messenger service and firebase messenger service, respectively.
-  * Subscribes to a list with default parameters ('noID', 'noCollection') in the firebase messenger service.
-  */
-  ngOnInit() {
-    if (this.messengerService.openChannel) {
-      this.getTheUsersOfChannel();
-      // this.usersInChannel.getTheUsersOfChannel();
-    }
-    this.messengerService.messageDates = [];
-    this.firebaseMessenger.messages = [];
-    this.firebaseMessenger.subSomethingList('noID', 'noCollection');
-  }
-
-
-  /**
    * Sets the scrollContainer in the messenger service to the ElementRef of the ViewChild with the name 'content'.
    * This is necessary because the ViewChild is not yet available in the constructor or ngOnInit.
    */
@@ -106,26 +88,6 @@ export class MessengerComponent implements AfterViewInit {
   ngOnDesroy() {
     this.unsubChannelList;
     this.userListSubscription;
-  }
-
-
-  /**
-   * Retrieves the users of the currently open channel by subscribing to the channel user list observable.
-   * It first subscribes to the list of all users and then filters this list by the user IDs stored in the channel user list.
-   */
-  getTheUsersOfChannel() {
-    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
-      this.usersListAll = users;
-      this.unsubChannelList = this.firebaseMessenger.subChannelUserList((list: any) => {
-        this.usersInChannel = [];
-        const usersIDs = list.data()['userIDs'];
-        for (let i = 0; i < usersIDs.length; i++) {
-          const userID = usersIDs[i];
-          const user = this.usersListAll.filter(user => user.userID === userID);
-          this.usersInChannel.push(this.firebaseMessenger.getCleanJson(user));
-        }
-      });
-    });
   }
 
 

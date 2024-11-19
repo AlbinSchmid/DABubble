@@ -29,7 +29,6 @@ export class FirebaseMessengerService {
   tryOtherOption: boolean;
   messageOrThread: string;
 
-
   async deleteReaction(messageID: string, reaktionID: string) {
     const path = `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages/${messageID}/reactions/${reaktionID}`;
     try {
@@ -56,21 +55,6 @@ export class FirebaseMessengerService {
       setTimeout(() => {
         this.messengerService.scrollToBottom(this.threadService.scrollContainer)
       });
-    })
-  }
-
-
-
-  subChannelUserList(callback: any) {
-    const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
-    return onSnapshot(messegeRef, (list) => {
-      if (list.exists()) {
-        if (callback) {
-          callback(list);
-        }
-      } else {
-        console.error("doc is empty or doesn't exist");
-      }
     })
   }
 
@@ -259,24 +243,11 @@ export class FirebaseMessengerService {
           if (alreadyTriedOtherOptins) {
             this.createChat(user);
           }
-        } else {
-          if (this.messengerService.openChannel) {
-            // this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
-            //   this.usersListAll = users;
-            //   this.unsubChannelList = this.firebaseMessenger.subChannelUserList((list: any) => {
-            //     this.usersInChannel = [];
-            //     const usersIDs = list.data()['userIDs'];
-            //     for (let i = 0; i < usersIDs.length; i++) {
-            //       const userID = usersIDs[i];
-            //       const user = this.usersListAll.filter(user => user.userID === userID);
-            //       this.usersInChannel.push(this.firebaseMessenger.getCleanJson(user));
-            //     }
-            //   });
-            // });
-          }
+        } else if (this.messengerService.chartId != '') {
           this.messengerService.messageDates = [];
           this.messages = [];
           this.subSomethingList('noID', 'noCollection');
+          this.messengerService.openMessenger = true;
         }
       });
     })
@@ -396,19 +367,5 @@ export class FirebaseMessengerService {
     } else {
       return '';
     }
-  }
-
-
-  getCleanJson(user: UserInterface[]): UserInterface {
-    let userJson = {
-      userID: user[0]['userID'],
-      password: user[0]['password'],
-      email: user[0]['email'],
-      username: user[0]['username'],
-      avatar: user[0]['avatar'],
-      userStatus: user[0]['userStatus'],
-      isFocus: user[0]['isFocus'],
-    }
-    return userJson;
   }
 }
