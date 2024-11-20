@@ -19,7 +19,7 @@
             </div>
             <div class="scroll-contain">
                 <div class="list">
-                    <button *ngFor="let channel of selectChannels; let i = index" class="channel-btn">
+                    <button *ngFor="let channel of messengerService.selectChannelsNewMessage; let i = index" class="channel-btn">
                         <mat-icon class="tag" fontIcon="tag"></mat-icon>
                         <span class="channelname-txt">{{ channel.title }}</span>
                         <mat-icon class="remove-btn" style="margin-left: 10px;" fontIcon="delete_outline"
@@ -38,7 +38,7 @@
             </div>
             <div class="scroll-contain">
                 <div class="list">
-                    <button *ngFor="let user of selectUser; let i = index">
+                    <button *ngFor="let user of messengerService.selectUserNewMessage; let i = index">
                         <div class="profile-img-wrapper">
                             <img src="{{ user.avatar }}" alt="user_avatar_img">
                             <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>

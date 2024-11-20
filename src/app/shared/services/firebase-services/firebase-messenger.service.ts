@@ -29,6 +29,9 @@ export class FirebaseMessengerService {
   tryOtherOption: boolean;
   messageOrThread: string;
 
+  forCount = 0;
+
+
   async deleteReaction(messageID: string, reaktionID: string) {
     const path = `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages/${messageID}/reactions/${reaktionID}`;
     try {
@@ -140,19 +143,19 @@ export class FirebaseMessengerService {
   /**
    * Get the time when message is created and filled the array. 
    */
-  createMessage(messageID: string, collectionOfMessage: string, mentionedUsers: any) {
+  createMessage(messageID: string, collectionOfMessage: string, mentionedUsers: any, chartID?: string, chartOrChannel?: string) {
     let date = new Date();
     let timeStamp = date.getTime();
     let message = {};
     if (messageID == 'noID') {
-      this.createNormalMessage(message, timeStamp, messageID, collectionOfMessage, mentionedUsers);
+      this.createNormalMessage(message, timeStamp, messageID, collectionOfMessage, mentionedUsers, chartID, chartOrChannel);
     } else {
       this.createAnswerMessage(message, timeStamp, messageID, collectionOfMessage, mentionedUsers)
     }
   }
 
 
-  createNormalMessage(message: any, timeStamp: number, messageID: string, collectionOfMessage: string, mentionedUsers: any) {
+  createNormalMessage(message: any, timeStamp: number, messageID: string, collectionOfMessage: string, mentionedUsers: any, chartID?: string, chartOrChannel?: string) {
     message = {
       content: this.content,
       senderID: this.authService.currentUserSig()?.userID,
@@ -161,7 +164,7 @@ export class FirebaseMessengerService {
       date: timeStamp,
     };
     this.content = '';
-    this.addSomethingToMessage(messageID, collectionOfMessage, message, mentionedUsers);
+    this.addSomethingToMessage(messageID, collectionOfMessage, message, mentionedUsers, chartID, chartOrChannel);
   }
 
 
@@ -182,8 +185,8 @@ export class FirebaseMessengerService {
    * We save the message in our firebase.
    * @param message - the sent message
    */
-  async addSomethingToMessage(messageID: string, collectionOfMessage: string, array: any, mentionedUsers: any) {
-    const ref = `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages${this.checkCollectionOfMessage(messageID, collectionOfMessage)}`
+  async addSomethingToMessage(messageID: string, collectionOfMessage: string, array: any, mentionedUsers: any, chartID?: string, chartOrChannel?: string) {
+    const ref = `${this.checkCollectionChatOrChannel(chartOrChannel)}/${this.checkDocChatIDOrChannelID(chartID, chartOrChannel)}/messages${this.checkCollectionOfMessage(messageID, collectionOfMessage)}`
     await addDoc(collection(this.firestore, ref), array).catch(
       (err) => {
         console.error(err);
@@ -224,7 +227,8 @@ export class FirebaseMessengerService {
    * @param userID - the user ID
    * @returns - return the element with this user
    */
-  searchChat(user: any) {
+  searchChat(user: any, newMessageComponent?: boolean, callback?: any) {
+    this.messengerService.chartId = '';
     let alreadyTriedOtherOptins = false;
     let messegaRef = query(collection(this.firestore, 'chats'), where('user1', '==', user.userID), where('user2', '==', this.authService.currentUserSig()?.userID));
     if (this.tryOtherOption) {
@@ -235,21 +239,45 @@ export class FirebaseMessengerService {
     return onSnapshot(messegaRef, (list) => {
       list.forEach(element => {
         this.messengerService.chartId = element.id
+        if (callback) {
+          callback(element.id);
+        }
       })
       setTimeout(() => {
         if (this.messengerService.chartId == '') {
           this.tryOtherOption = true;
-          this.searchChat(user);
+          if (newMessageComponent === true) {
+            this.searchChat(user, true);
+          } else {
+            this.searchChat(user);
+          }
           if (alreadyTriedOtherOptins) {
             this.createChat(user);
           }
         } else if (this.messengerService.chartId != '') {
           this.messengerService.messageDates = [];
           this.messages = [];
-          this.subSomethingList('noID', 'noCollection');
-          this.messengerService.openMessenger = true;
+          if (newMessageComponent !== true) {
+            this.messengerService.openMessenger = true;
+            this.subSomethingList('noID', 'noCollection');
+          }
         }
       });
+    })
+  }
+
+
+  searchChannel(channel: any, callback?: any) {
+    this.messengerService.channel.channelID = '';
+    let alreadyTriedOtherOptins = false;
+    let messegaRef = query(collection(this.firestore, 'channels'), where('title', '==', channel.title));
+    return onSnapshot(messegaRef, (list) => {
+      list.forEach(element => {
+        this.messengerService.chartId = element.id
+        if (callback) {
+          callback(element.id);
+        }
+      })
     })
   }
 
@@ -322,12 +350,19 @@ export class FirebaseMessengerService {
    * @returns {string} - Returns 'chats' if the messenger service is in chat mode,
    * otherwise returns 'channels'.
    */
-  checkCollectionChatOrChannel(): string {
-    if (this.messengerService.openChart) {
+  checkCollectionChatOrChannel(chartOrChannel?: string): string {
+    if (chartOrChannel !== undefined) {
+      if (chartOrChannel == 'chart') {
+        return 'chats';
+      } else {
+        return 'channels';
+      }
+    } else if (this.messengerService.openChart) {
       return 'chats';
     } else {
       return 'channels';
     }
+
   }
 
 
@@ -338,11 +373,19 @@ export class FirebaseMessengerService {
    * Otherwise, return an empty string.
    * @returns {string} - the document ID
    */
-  checkDocChatIDOrChannelID(): string {
-    if (this.messengerService.openChart) {
-      return `${this.messengerService.chartId}`;
-    } else if (this.messengerService.openChannel) {
-      return `${this.messengerService.channel.channelID}`;
+  checkDocChatIDOrChannelID(chartID?: string, chartOrChannel?: string): string {
+    if (this.messengerService.openChart || chartOrChannel === 'chart') {
+      if (chartID !== undefined) {
+        return `${chartID}`;
+      } else {
+        return `${this.messengerService.chartId}`;
+      }
+    } else if (this.messengerService.openChannel || chartOrChannel === 'channel') {
+      if (chartID !== undefined) {
+        return `${chartID}`;
+      } else {
+        return `${this.messengerService.channel.channelID}`;
+      }
     } else {
       return '';
     }
@@ -357,7 +400,6 @@ export class FirebaseMessengerService {
    * @returns {string} The path of the collection
    */
   checkCollectionOfMessage(messageID: string, collection: string): string {
-    console.log(collection);
     if (collection == 'answer') {
       return `/${messageID}/answers`;
     } else if (collection == 'reaction') {

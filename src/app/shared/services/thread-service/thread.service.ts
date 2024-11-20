@@ -48,7 +48,6 @@ export class ThreadService {
           const userID = usersIDs[i];
           const user = usersListAll.filter(user => user.userID === userID);
           this.usersInChannel.push(this.getCleanJson(user));
-          console.log(this.usersInChannel);
         }
       });
     });

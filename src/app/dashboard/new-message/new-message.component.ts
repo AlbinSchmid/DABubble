@@ -11,6 +11,7 @@ import { FirestoreService } from '../../shared/services/firebase-services/firest
 import { Subscription } from 'rxjs';
 import { UserFilteredListComponent } from './user-filtered-lists/user-filtered-list.component';
 import { ChannelFilteredListComponent } from './channel-filtered-list/channel-filtered-list.component';
+import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
 
 @Component({
   selector: 'app-new-message',
@@ -30,7 +31,7 @@ import { ChannelFilteredListComponent } from './channel-filtered-list/channel-fi
 export class NewMessageComponent {
   @ViewChild('userInput', { static: true }) userInputElement: ElementRef<HTMLInputElement>;
 
-
+  messengerService: MessengerService = inject(MessengerService);
   authService: AuthserviceService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
 
@@ -39,9 +40,6 @@ export class NewMessageComponent {
 
   channelList: Channel[] = [];
   channelListSubscription!: Subscription;
-
-  selectUser: UserInterface[] = [];
-  selectChannels: Channel[] = [];
 
   filteredUsers: UserInterface[] = [];
   filteredChannels: Channel[] = [];
@@ -76,14 +74,14 @@ export class NewMessageComponent {
   }
 
   onUserAdded(user: UserInterface): void {
-    this.selectUser.push(user);
+    this.messengerService.selectUserNewMessage.push(user);
     this.clearFilters();
     this.userInputElement.nativeElement.value = '';
     this.userInputElement.nativeElement.focus();
   }
 
   onChannelAdded(channel: Channel): void {
-    this.selectChannels.push(channel);
+    this.messengerService.selectChannelsNewMessage.push(channel);
     this.clearFilters();
     this.userInputElement.nativeElement.value = '';
     this.userInputElement.nativeElement.focus();
@@ -171,7 +169,7 @@ export class NewMessageComponent {
     this.filterChannels = false;
     this.filteredUsers = this.userList.filter(user =>
       user.username.toLowerCase().includes(value) &&
-      !this.selectUser.includes(user)
+      !this.messengerService.selectUserNewMessage.includes(user)
     );
   }
 
@@ -180,7 +178,7 @@ export class NewMessageComponent {
     this.filterChannels = true;
     this.filteredChannels = this.channelList.filter(channel =>
       channel.title.toLowerCase().includes(value) &&
-      !this.selectChannels.includes(channel)
+      !this.messengerService.selectChannelsNewMessage.includes(channel)
     );
   }
 
@@ -189,7 +187,7 @@ export class NewMessageComponent {
     this.filterChannels = false;
     this.filteredUsers = this.userList.filter(user =>
       user.email.toLowerCase().includes(value) &&
-      !this.selectUser.includes(user)
+      !this.messengerService.selectUserNewMessage.includes(user)
     );
   }
 
@@ -199,15 +197,15 @@ export class NewMessageComponent {
 
     this.filteredUsers = this.userList.filter(user =>
       user.email.toLowerCase().includes(value) &&
-      !this.selectUser.includes(user)
+      !this.messengerService.selectUserNewMessage.includes(user)
     );
   }
 
-  removeSelectedUser(user: UserInterface): void {
-    this.selectUser = this.selectUser.filter(selectedUser => selectedUser.userID !== user.userID);
+  removeSelectedUser(user: UserInterface): void {    
+    this.messengerService.selectUserNewMessage = this.messengerService.selectUserNewMessage.filter(selectedUser => selectedUser.userID !== user.userID);
   }
 
   removeSelectedChannel(channel: Channel): void {
-    this.selectChannels = this.selectChannels.filter(selectedChannel => selectedChannel.channelID !== channel.channelID);
+    this.messengerService.selectChannelsNewMessage = this.messengerService.selectChannelsNewMessage.filter(selectedChannel => selectedChannel.channelID !== channel.channelID);
   }
 }

@@ -46,6 +46,12 @@ export class MessengerService {
   scrollContainer: any;
   openMessenger = false;
 
+  selectUserNewMessage: UserInterface[] = [];
+  selectChannelsNewMessage: Channel[] = [];
+
+
+
+
 
   scrollToBottom(container: any) {
     container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
@@ -97,6 +103,7 @@ export class MessengerService {
 
 
   showNewMessage() {
+    this.openMessenger = false;
     this.closeEverthing();
     this.openChannel = false;
     this.openChart = false;

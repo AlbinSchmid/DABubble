@@ -101,7 +101,7 @@ export class TextareaComponent {
     const inputContent = this.firebaseMessenger.content;
     const mentionIndex = inputContent.lastIndexOf('@');
     if (this.messengerService.openChannel) {
-      if (/\B@\w*$/.test(inputContent) ) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
+      if (/\B@\w*$/.test(inputContent)) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
         if (mentionIndex !== -1) {
           this.mentionPersonView = true;
           const searchText = inputContent.substring(mentionIndex + 1);
@@ -319,7 +319,41 @@ export class TextareaComponent {
   private updateContent(messenger: any, originalContent: string) {
     if (messenger === 'messenger') {
       this.firebaseMessenger.content = originalContent;
-      this.firebaseMessenger.createMessage('noID', 'noCollection', false);
+      let text = this.firebaseMessenger.content;
+      if (this.messengerService.selectUserNewMessage.length > 0 || this.messengerService.selectChannelsNewMessage.length > 0) {
+        if (this.messengerService.selectUserNewMessage.length > 0) {
+          for (let i = 0; i < this.messengerService.selectUserNewMessage.length; i++) {
+            let user = this.messengerService.selectUserNewMessage[i];
+            this.firebaseMessenger.searchChat(user, true, (chartID: string) => {
+              let chartOrChannel = 'chart';
+              this.firebaseMessenger.content = text;
+              this.firebaseMessenger.createMessage('noID', 'noCollection', false, chartID, chartOrChannel);
+            });
+            if (i === this.messengerService.selectUserNewMessage.length - 1) {
+              setTimeout(() => {
+                this.messengerService.selectUserNewMessage = [];
+              }, 10);
+            }
+          }
+        }
+        if (this.messengerService.selectChannelsNewMessage.length > 0) {
+          for (let i = 0; i < this.messengerService.selectChannelsNewMessage.length; i++) {
+            let channel = this.messengerService.selectChannelsNewMessage[i];
+            this.firebaseMessenger.searchChannel(channel, (chartID: string) => {
+              let chartOrChannel = 'channel';
+              this.firebaseMessenger.content = text;
+              this.firebaseMessenger.createMessage('noID', 'noCollection', false, chartID, chartOrChannel = 'channel');
+            });
+            if (i === this.messengerService.selectChannelsNewMessage.length - 1) {
+              setTimeout(() => {
+                this.messengerService.selectChannelsNewMessage = [];
+              }, 10);
+            }
+          }
+        }
+      } else {
+        this.firebaseMessenger.createMessage('noID', 'noCollection', false);
+      }
     } else {
       this.firebaseMessenger.answerContent = originalContent;
       this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);
