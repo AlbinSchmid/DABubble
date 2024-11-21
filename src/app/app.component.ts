@@ -17,9 +17,15 @@ export class AppComponent {
 
   constructor(
     private autoLogout: AutoLogoutService
-  ) { }
+  ) { 
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.setItem('isReloading', 'true');
+    });
+  }
 
   onDragStart(event: DragEvent) {
     event.preventDefault();
   }
+
+
 }
