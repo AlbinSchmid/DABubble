@@ -6,6 +6,7 @@ import { ThreadService } from '../thread-service/thread.service';
 import { FirebaseMessengerService } from '../firebase-services/firebase-messenger.service';
 import { User } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase-services/firestore.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,9 @@ export class MessengerService {
   selectUserNewMessage: UserInterface[] = [];
   selectChannelsNewMessage: Channel[] = [];
 
+  textareaMessenger = new Subject<void>();
+  textareaThread = new Subject<void>();
+
 
 
 
@@ -64,6 +68,9 @@ export class MessengerService {
     this.openChannel = true;
     this.openChart = false;
     this.openNewMessage = false;
+    setTimeout(() => {
+      this.textareaMessenger.next();
+    },);
   }
 
 
@@ -99,6 +106,9 @@ export class MessengerService {
     this.openChart = true;
     this.openNewMessage = false;
     this.user = user;
+    setTimeout(() => {
+      this.textareaMessenger.next();
+    },);
   }
 
 

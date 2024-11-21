@@ -99,6 +99,8 @@ export class ChannelListComponent {
     this.resetUserFocus();
     this.channelList.forEach(c => c.isFocus = false);
     this.firestoreService.setAndGetCurrentlyFocusedChat(channel);
+    this.firebaseMessenger.content = '';
+    this.firebaseMessenger.answerContent = '';
     this.messengerService.showChannel(channel);
     channel.isFocus = true;
     this.threadService.getTheUsersOfChannel();

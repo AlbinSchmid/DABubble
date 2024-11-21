@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="interaction-div">
-        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea
+        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textareaMessenger
             (input)="checkForMention(firebaseMessenger.content)" [mentionConfig]="mentionConfig"
             pattern="^[\s\S]*\S[\s\S]*$" placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">
@@ -31,7 +31,7 @@
                 *ngIf="texterea.valid || selectedFiles.length > 0"><img src="/assets/icons/send.png"
                     alt="send-icon"></button>
         </div>
-        <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea"
+        <app-emoji-board *ngIf="showEmojiBoard" [binding]="textareaMessenger"
             (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
         <div style="display: flex; gap: 15px; padding-top: 10px;" *ngIf="selectedFiles.length > 0">
             <div *ngFor="let file of selectedFiles">
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="interaction-div">
-        <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textarea
+        <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textareaThread
             (input)="checkForMention(firebaseMessenger.answerContent)" [mentionConfig]="mentionConfig"
             placeholder='Antworten...' #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
         <div id="interaction">
@@ -82,7 +82,7 @@
             <button id="send-message-btn" (click)="uploadFiles('thread')" *ngIf="texterea.valid"><img
                     src="/assets/icons/send.png" alt="send-icon"></button>
         </div>
-        <app-emoji-board *ngIf="showEmojiBoard" [binding]="textarea"
+        <app-emoji-board *ngIf="showEmojiBoard" [binding]="textareaThread"
             (callFunction)="openOrCloseEmojiBoard()"></app-emoji-board>
         <div style="display: flex; gap: 15px; padding-top: 10px;" *ngIf="selectedFiles.length > 0">
             <div *ngFor="let file of selectedFiles">

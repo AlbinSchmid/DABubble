@@ -25,7 +25,7 @@ export class UserListComponent {
   threadService = inject(ThreadService);
   firestoreService: FirestoreService = inject(FirestoreService);
   authService: AuthserviceService = inject(AuthserviceService);
-  firebaseMessengerService: FirebaseMessengerService = inject(FirebaseMessengerService);
+  firebaseMessenger: FirebaseMessengerService = inject(FirebaseMessengerService);
   messengerService: MessengerService = inject(MessengerService);
 
   userList: UserInterface[] = [];
@@ -129,8 +129,10 @@ export class UserListComponent {
     this.resetChannelFocus();
     this.userList.forEach(u => u.isFocus = false);
     this.firestoreService.setAndGetCurrentlyFocusedChat(user);
+    this.firebaseMessenger.content = '';
+    this.firebaseMessenger.answerContent = '';
     this.messengerService.showChart(user);
-    this.firebaseMessengerService.searchChat(user);
+    this.firebaseMessenger.searchChat(user);
     user.isFocus = true;
   }
 

@@ -240,6 +240,9 @@ export class MessageComponent implements OnInit {
     this.threadService.messageToReplyTo = this.message;
     console.log(this.threadService.scrollContainer);
     this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
+    setTimeout(() => {
+      this.messengerService.textareaThread.next();
+    },10);
   }
 
 

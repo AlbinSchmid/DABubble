@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FirebaseMessengerService } from '../../services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../services/messenger-service/messenger.service';
 import { CommonModule } from '@angular/common';
@@ -20,6 +20,7 @@ import { user } from '@angular/fire/auth';
 import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 import { Message } from '../../../models/message.class';
 import { MentionModule } from 'angular-mentions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-textarea',
@@ -69,6 +70,9 @@ export class TextareaComponent {
   }
   mentionActive: boolean = false;
 
+  @ViewChild('textareaMessenger') textareaMessenger!: ElementRef;
+  @ViewChild('textareaThread') textareaThread!: ElementRef;
+  private subscription!: Subscription;
 
   constructor(private dialog: MatDialog, private storage: Storage) {
 
@@ -76,7 +80,12 @@ export class TextareaComponent {
 
 
   ngOnInit() {
-    console.log('HHHH');
+    this.subscription = this.messengerService.textareaMessenger.subscribe(() => {
+      this.textareaMessenger.nativeElement.focus();
+    });
+    this.subscription = this.messengerService.textareaThread.subscribe(() => {
+      this.textareaThread.nativeElement.focus();
+    });
     
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
@@ -85,7 +94,11 @@ export class TextareaComponent {
   }
 
 
+  ngAfterViewInit(): void {
+  }
+
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.unsubChannelList;
   }
 
