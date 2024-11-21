@@ -2,15 +2,16 @@ import { Injectable, NgZone } from '@angular/core';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { Router } from '@angular/router';
 
-const MINUTES_UNITL_AUTO_LOGOUT = 5; 
-const CHECK_INTERVAL = 1000; 
+const MINUTES_UNITL_AUTO_LOGOUT = 5;
+const CHECK_INTERVAL = 1000;
+const TAB_HIDDEN_TIMEOUT = 5 * 60 * 1000;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AutoLogoutService {
-  private lastAction: number;
-
+  lastAction: number;
+  tabHiddenTimeout: any;
   constructor(
     private auth: AuthserviceService,
     private router: Router,
@@ -20,14 +21,14 @@ export class AutoLogoutService {
     this.initListener();
     this.initInterval();
     this.initVisibilityListener();
-    this.initTabCloseListener(); 
+    this.initTabCloseListener();
   }
 
-/**
- * Initializes event listeners for user activity to reset the last action timestamp.
- * Listens for click, keypress, mouse movement, and touchstart events on the document body.
- * Runs outside of Angular's zone to avoid triggering change detection unnecessarily.
- */
+  /**
+   * Initializes event listeners for user activity to reset the last action timestamp.
+   * Listens for click, keypress, mouse movement, and touchstart events on the document body.
+   * Runs outside of Angular's zone to avoid triggering change detection unnecessarily.
+   */
   initListener() {
     this.ngZone.runOutsideAngular(() => {
       document.body.addEventListener('click', () => this.reset());
@@ -37,11 +38,11 @@ export class AutoLogoutService {
     });
   }
 
-/**
- * Initializes an interval to check whether the user should be logged out due to
- * inactivity every CHECK_INTERVAL milliseconds. Runs outside of Angular's zone
- * to avoid triggering change detection unnecessarily.
- */
+  /**
+   * Initializes an interval to check whether the user should be logged out due to
+   * inactivity every CHECK_INTERVAL milliseconds. Runs outside of Angular's zone
+   * to avoid triggering change detection unnecessarily.
+   */
   initInterval() {
     this.ngZone.runOutsideAngular(() => {
       setInterval(() => this.check(), CHECK_INTERVAL);
@@ -79,16 +80,42 @@ export class AutoLogoutService {
   }
 
   /**
-   * Initializes a listener for the visibilitychange event to detect when the
-   * user switches to a different tab. If the user switches to a different tab,
-   * this calls the handleTabHidden function to log out the user after a delay.
+   * Initializes a listener for the `visibilitychange` event to detect when the
+   * user switches to a different tab or minimizes the browser. If the tab is hidden,
+   * it starts a 5-minute timer to log out the user.
    */
   initVisibilityListener() {
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        this.handleTabHidden();
+        this.startTabHiddenTimer(); 
+      } else {
+        this.clearTabHiddenTimer(); 
       }
     });
+  }
+
+  /**
+   * Starts a timer to log out the user after 5 minutes of tab being hidden.
+  */
+  startTabHiddenTimer() {
+    this.clearTabHiddenTimer(); 
+    this.tabHiddenTimeout = setTimeout(() => {
+      this.ngZone.run(() => {
+        this.auth.logout();
+        this.router.navigate(['/']);
+      });
+    }, TAB_HIDDEN_TIMEOUT);
+  }
+
+  /**
+   * Clears the timer that logs out the user after the tab is hidden for a certain
+   * amount of time.
+   */
+  clearTabHiddenTimer() {
+    if (this.tabHiddenTimeout) {
+      clearTimeout(this.tabHiddenTimeout);
+      this.tabHiddenTimeout = null;
+    }
   }
 
   /**
@@ -108,12 +135,12 @@ export class AutoLogoutService {
     });
   }
 
-/**
- * Initializes event listeners for the 'beforeunload' and 'unload' events to handle tab or window closure.
- * The 'beforeunload' event sets a sessionStorage flag to indicate a potential page reload.
- * The 'unload' event checks this flag, and if the page is not reloading, logs out the user.
- * Runs the logout process within Angular's zone to ensure proper change detection.
- */
+  /**
+   * Initializes event listeners for the 'beforeunload' and 'unload' events to handle tab or window closure.
+   * The 'beforeunload' event sets a sessionStorage flag to indicate a potential page reload.
+   * The 'unload' event checks this flag, and if the page is not reloading, logs out the user.
+   * Runs the logout process within Angular's zone to ensure proper change detection.
+   */
   initTabCloseListener() {
     window.addEventListener('beforeunload', () => {
       sessionStorage.setItem('isReloading', 'true');
