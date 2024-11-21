@@ -67,24 +67,17 @@ export class TextareaComponent {
     mentionChar: "@",
     mentionDialogOpened: false,
   }
-
   mentionActive: boolean = false;
 
 
   constructor(private dialog: MatDialog, private storage: Storage) {
-  }
 
-
-
-  onMentionActivate(event: Event) {
-    if (!this.mentionConfig.mentionDialogOpened) {
-      console.log('Hello');
-
-    }
   }
 
 
   ngOnInit() {
+    console.log('HHHH');
+    
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
     });
@@ -97,8 +90,9 @@ export class TextareaComponent {
   }
 
 
-  checkForMention(event: Event): void {
-    const inputContent = this.firebaseMessenger.content;
+  checkForMention(content: any): void {
+    this.subChannelList();
+    const inputContent = content;
     const mentionIndex = inputContent.lastIndexOf('@');
     if (this.messengerService.openChannel) {
       if (/\B@\w*$/.test(inputContent)) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
@@ -125,10 +119,11 @@ export class TextareaComponent {
     return onSnapshot(messegeRef, (list) => {
       if (list.exists()) {
         this.usersToMention = [];
+        this.mentionConfig.items = [];
         const usersIDs = list.data()['userIDs'];
         for (let i = 0; i < usersIDs.length; i++) {
           const userID = usersIDs[i];
-          const user = this.usersListAll.filter(user => user.userID === userID);
+          const user = this.usersListAll.filter(user => user.userID === userID);         
           this.usersToMention.push(this.getCleanJson(user));
           this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
         }
@@ -155,6 +150,7 @@ export class TextareaComponent {
 
 
   openOrCloseMentionPersonView() {
+    this.subChannelList();
     if (this.mentionPersonView) {
       this.mentionPersonView = false;
     } else {
@@ -172,11 +168,17 @@ export class TextareaComponent {
   }
 
 
-  mentionUser(userJson: any) {
+  mentionUser(userJson: any, src: string) {
     const mentionText = `@${userJson.userName}`;
-    const mentionIndex = this.firebaseMessenger.content.lastIndexOf('@');
-    this.firebaseMessenger.content = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+    if (src === 'messenger') {
+      const mentionIndex = this.firebaseMessenger.content.lastIndexOf('@');
+      this.firebaseMessenger.content = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+    } else {
+      const mentionIndex = this.firebaseMessenger.answerContent.lastIndexOf('@');
+      this.firebaseMessenger.answerContent = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+    }
     this.mentionPersonView = false;
+    
   }
 
 

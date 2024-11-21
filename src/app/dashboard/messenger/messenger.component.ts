@@ -59,7 +59,6 @@ export class MessengerComponent implements AfterViewInit {
   usersInChannel: any[] = [];
 
   userListSubscription: any;
-  unsubChannelList: any;
   reversedMessge: any;
   dateContent: string;
   dateTodayString: string;
@@ -86,7 +85,6 @@ export class MessengerComponent implements AfterViewInit {
    * Unsubscribes from the channel user list and the list of all users when the component is destroyed.
    */
   ngOnDesroy() {
-    this.unsubChannelList;
     this.userListSubscription;
   }
 

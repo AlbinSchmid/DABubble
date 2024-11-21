@@ -1,21 +1,21 @@
 <section>
-    <div id="mention-person"
-        [ngStyle]="{'display': mentionPersonView ? 'block' : 'none'}">
+    @if (!sourceThread) {
+    <div id="mention-person" [ngStyle]="{'display': mentionPersonView ? 'block' : 'none'}">
         <h6>Mitglieder:</h6>
         <div id="trendline"></div>
         <div id="user-list">
             @for (user of mentionConfig.items; track $index) {
-            <div (click)="mentionUser(user)">
+            <div (click)="mentionUser(user, 'messenger')">
                 <img src="{{ user.avatar }}" alt="">
                 <p>{{ user.userName }}</p>
             </div>
             }
         </div>
     </div>
-    @if (!sourceThread) {
     <div class="interaction-div">
-        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea (input)="checkForMention($event)" [mentionConfig]="mentionConfig" pattern="^[\s\S]*\S[\s\S]*$" (mentionActivated)="onMentionActivate($event)"
-            placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
+        <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textarea
+            (input)="checkForMention(firebaseMessenger.content)" [mentionConfig]="mentionConfig"
+            pattern="^[\s\S]*\S[\s\S]*$" placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">
             <div id="button-container-left">
                 <p>
@@ -52,8 +52,21 @@
         </div>
     </div>
     } @else {
+    <div id="mention-person" [ngStyle]="{'display': mentionPersonView ? 'block' : 'none', 'left.px' : 40, 'right.px' : 40}">
+        <h6>Mitglieder:</h6>
+        <div id="trendline"></div>
+        <div id="user-list">
+            @for (user of mentionConfig.items; track $index) {
+            <div (click)="mentionUser(user, 'thread')">
+                <img src="{{ user.avatar }}" alt="">
+                <p>{{ user.userName }}</p>
+            </div>
+            }
+        </div>
+    </div>
     <div class="interaction-div">
         <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textarea
+            (input)="checkForMention(firebaseMessenger.answerContent)" [mentionConfig]="mentionConfig"
             placeholder='Antworten...' #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
         <div id="interaction">
             <div id="button-container-left">
@@ -62,12 +75,9 @@
                     <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
                         multiple style="display: none;">
                 </p>
-
                 <div></div>
-
                 <button (click)="openOrCloseEmojiBoard()"></button>
-                <button *ngIf="messengerService.openChannel"></button>
-                <button *ngIf="messengerService.openChannel"></button>
+                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView()"></button>
             </div>
             <button id="send-message-btn" (click)="uploadFiles('thread')" *ngIf="texterea.valid"><img
                     src="/assets/icons/send.png" alt="send-icon"></button>
@@ -77,7 +87,7 @@
         <div style="display: flex; gap: 15px; padding-top: 10px;" *ngIf="selectedFiles.length > 0">
             <div *ngFor="let file of selectedFiles">
                 <div
-                    style="display: flex; align-items: flex-start; position: relative;  cursor: pointer; flex-wrap: wrap;">
+                    style="display: flex; align-items: flex-start; position: relative; cursor: pointer; flex-wrap: wrap;">
                     <img style="width: 48px; height: 48px;" *ngIf="file.type.startsWith('image')" [src]="file.data"
                         (click)="viewFile(file)" class="preview-img" />
                     <span (click)="deletePreviewFile(file)"
