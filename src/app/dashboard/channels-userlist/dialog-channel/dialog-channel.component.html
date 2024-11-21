@@ -12,9 +12,15 @@
             (inputValueChange)="inputValueChange($event)"></app-add-members>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button *ngIf="!showAddMembersDialog" [disabled]="!channelDataService.titleSource.length"
-            class="primary default" mat-button (click)="showAddMembers()">
+        <button *ngIf="!showAddMembersDialog && !channelTitleExist()"
+            [disabled]="isTitleInputEmpty() || channelTitleExist()" class="primary default" mat-button
+            (click)="showAddMembers()">
             weiter
+        </button>
+        <button *ngIf="!showAddMembersDialog && channelTitleExist()"
+            [disabled]="isTitleInputEmpty() || channelTitleExist()" class="primary default" mat-button
+            (click)="showAddMembers()">
+            Channel existiert bereits
         </button>
         <button *ngIf="showAddMembersDialog" (click)="addChannel()"
             [disabled]="selectInput && memberSourceService.membersSource().length === 0 || memberSourceService.membersSource().length == 0"

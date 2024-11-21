@@ -100,4 +100,18 @@ export class DialogChannelComponent {
     await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
     this.channelAnimationService.toggleChannels();
   }
+
+  isTitleInputEmpty() {
+    return !this.channelDataService.titleSource.length;
+  }
+
+  channelTitleExist(): boolean {
+    const inputTitle = this.channelDataService.titleSource.toLowerCase();
+    for (let channel of this.firestoreService.channelList$.value) {
+      if (channel.title.toLowerCase() === inputTitle) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
