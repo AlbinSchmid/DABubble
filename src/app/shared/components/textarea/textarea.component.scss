@@ -260,3 +260,11 @@ mat-icon {
         bottom: 120px;
     }
 }
+
+@media screen and (max-width: 600px) {
+    section {
+        .interaction-div {
+            margin: 8px !important;
+        }
+    }
+}

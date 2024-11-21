@@ -133,3 +133,13 @@ app-new-message {
     font-weight: 500;
     color: #444DF2;
 }
+
+@media screen and (max-width: 600px) {
+
+    main,
+    mat-drawer-content {
+        padding: 0px;
+    }
+
+}
+
