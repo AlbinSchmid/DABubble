@@ -433,3 +433,26 @@ mat-icon {
   overflow-y: scroll;
   scrollbar-width: none;
 }
+
+@media screen and (max-width: 1300px) {
+    .profile-contain-header {
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .img-contain {
+        min-width: 260px;
+
+        // img {
+        //     width: 160px;
+        //     height: 45px;
+        // }
+    }
+}
+
+@media screen and (max-width: 1020px) {
+    .search-bar-contain {
+        display: none;
+    }
+}
