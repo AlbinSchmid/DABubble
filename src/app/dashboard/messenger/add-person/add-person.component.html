@@ -17,7 +17,7 @@
         }
     </div>
 
-    <button (click)="addPersonView = true">
+    <button (click)="openAddPerson()">
         <mat-icon>group_add</mat-icon>
         <p>Mitglieder hinzufügen</p>
     </button>
@@ -31,16 +31,19 @@
                 <img src="{{ member.avatar }}" alt="user_img">
                 <span>{{ member.username }}</span>
                 <div class="icon-wrapper">
-                    <mat-icon *ngIf="i !== 0" (mousedown)="remove(member)" fontIcon="close"></mat-icon>
+                    <mat-icon (mousedown)="remove(member)" fontIcon="close"></mat-icon>
                 </div>
             </div>
         </mat-chip-grid>
-        <input #userInput autocomplete="off" placeholder="Name..." [matChipInputFor]="chipGrid"
+        <input #userInput autocomplete="off" placeholder="Name eingeben" [matChipInputFor]="chipGrid"
             (input)="searchUserByName($event)" (keydown)="onKeyDown($event)" />
     </div>
-
+    <app-filtered-list [filteredUsers]="filteredUsers" [highlightedIndex]="highlightedIndex"
+        (userSelected)="onUserAdded($event)">
+    </app-filtered-list>
     <div id="add-button-div">
-        <button class="primary default" mat-button>
+        <button (click)="addMembersToChannel()" [disabled]="memberSourceService.membersSource().length == 0"
+            class="primary default" mat-button>
             Hinzufügen
         </button>
     </div>
