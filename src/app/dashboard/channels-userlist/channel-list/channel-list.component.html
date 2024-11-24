@@ -21,6 +21,9 @@
         [ngClass]="{'focus-btn': channel.isFocus,'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
         <mat-icon fontIcon="tag"></mat-icon>
         <span>{{ channel.title }}</span>
+        <span *ngIf="getDuplicateChannelsNumber(channel)" style="margin-left: -5px;">
+            ({{ getDuplicateChannelsNumber(channel) }})
+        </span>
     </button>
     <button (click)="openDialog()" class="add-channel-btn"
         [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"
