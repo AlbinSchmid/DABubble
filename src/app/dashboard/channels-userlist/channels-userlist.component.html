@@ -1,5 +1,5 @@
 <mat-card appearance="outlined">
-    <header>
+    <header class="devspace-header">
         <div class="image-title-contain">
             <img src="assets/img/workspace_logo.png" alt="devspace_logo">
             <h1>Devspace</h1>
@@ -7,6 +7,11 @@
         <mat-icon class="new-message-icon" fontIcon="rate_review"
             (click)="messengerService.showNewMessage()"></mat-icon>
     </header>
+
+    <header class="search-header">
+        <span>SEARCH BAR HERE...</span>
+    </header>
+
     <div class="scroll-contain">
         <div class="channels-and-dm-contain">
             <app-channel-list></app-channel-list>

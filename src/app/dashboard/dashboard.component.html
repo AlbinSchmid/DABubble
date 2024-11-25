@@ -1,5 +1,5 @@
 <ng-container *ngIf="isUserLoaded; else loading">
-    <main>
+    <main class="main-contain">
         <app-header></app-header>
         <section>
             <mat-drawer-container>
@@ -28,6 +28,12 @@
                 <mat-icon fontIcon="open_in_browser"></mat-icon>
             </div>
         </button>
+    </main>
+
+    <main class="responsive-main-contain">
+        <app-header></app-header>
+        <app-channels-userlist></app-channels-userlist>
+        <app-thread style="display: none;"></app-thread>
     </main>
 </ng-container>
 

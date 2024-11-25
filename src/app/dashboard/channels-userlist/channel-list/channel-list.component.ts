@@ -90,7 +90,6 @@ export class ChannelListComponent {
     return null;
   }
 
-
   getAnimationDelayAddChannel() {
     let totalButtons = this.channelList.length;
 

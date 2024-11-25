@@ -4,6 +4,10 @@ header {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+
+    @media(max-width:600px) {
+        padding: 15px 16px;
+    }
 }
 
 h2 {
@@ -52,6 +56,15 @@ input {
 .img-contain {
     padding-left: 25px;
     min-width: 366px;
+
+    @media(max-width:780px) {
+        padding: 0;
+        width: 200px;
+    }
+
+    @media(max-width:600px) {
+        width: 160px;
+    }
 }
 
 .profile-contain-header {
@@ -98,6 +111,10 @@ input {
         color: black !important;
         background-color: transparent;
         padding-right: 16px;
+
+        @media(max-width:600px) {
+            display: none !important;
+        }
     }
 
     &:hover {
@@ -140,6 +157,10 @@ input {
     white-space: nowrap;
     text-overflow: ellipsis;
     transition: color 140ms ease;
+
+    @media(max-width:780px) {
+        display: none;
+    }
 }
 
 button {
@@ -414,24 +435,24 @@ mat-icon {
 }
 
 
-.search-results-contain{
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100px;
-  box-sizing: border-box;
-  padding: 20px;
-  width: 90%;
-  background-color: white;
-  color: black;
-  z-index: 999999;
-  border: 2px solid #444DF2;
-  border-radius: 30px;
-  max-height: 350px;
-  overflow-y: scroll;
-  scrollbar-width: none;
+.search-results-contain {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100px;
+    box-sizing: border-box;
+    padding: 20px;
+    width: 90%;
+    background-color: white;
+    color: black;
+    z-index: 999999;
+    border: 2px solid #444DF2;
+    border-radius: 30px;
+    max-height: 350px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 @media screen and (max-width: 1300px) {
