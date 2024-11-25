@@ -51,6 +51,11 @@ export class SearchService {
   _redirectService?: RedirectService;
   injector = inject(Injector);
 
+  /**
+   * Returns the RedirectService instance, which is used to redirect users to the
+   * appropiate route based on the search query. If the instance is not yet created,
+   * it will be created using the Injector.
+   */
   get redirectService(): RedirectService {
     if (!this._redirectService) {
       this._redirectService = this.injector.get(RedirectService);
@@ -58,6 +63,12 @@ export class SearchService {
     return this._redirectService;
   }
 
+/**
+ * Initializes the SearchService by subscribing to the user and channel lists from the FirestoreService.
+ * 
+ * Subscribes to the `userList$` observable to keep the `userList` updated with the latest user data.
+ * Subscribes to the `channelList$` observable to update `foundChannels` with the current channel data.
+ */
   constructor() {
     this.userListSubscription = this.firestoreService.userList$.subscribe(user => {
       this.userList = user;
@@ -67,6 +78,11 @@ export class SearchService {
     })
   }
 
+  /**
+   * Fetches all messages from all chats the current user is in.
+   * Queries the 'chats' collection and for each chat document, fetches the messages from it.
+   * The messages are stored in the `messages` field of the service.
+   */
   async fetchAllMessages() {
     const currentUser = await this.getCurrentUser();
     if (!currentUser) return;
@@ -77,6 +93,9 @@ export class SearchService {
     await Promise.all(fetchPromises);
   }
 
+/**
+ * Retrieves the current user's ID from the authentication service.
+ */
   async getCurrentUser(): Promise<string | undefined> {
     let currentUser = this.authService.currentUserSig()?.userID;
     while (!currentUser) {
@@ -86,6 +105,10 @@ export class SearchService {
     return currentUser;
   }
 
+  /**
+   * Fetches all the messages from a given chat document and checks if the current user is one of the users in the chat.
+   * If the user is one of the users, it fetches all the messages from the chat and adds it to the messages array..
+   */
   async fetchMessagesFromChat(chatDoc: any, currentUser: string): Promise<void> {
     const chatData = chatDoc.data();
     const { user1, user2 } = chatData;
@@ -99,6 +122,9 @@ export class SearchService {
     }
   }
 
+/**
+ * Extracts message data from the provided Firestore document.
+ */
   async extractMessageData(messageDoc: any): Promise<void> {
     if (messageDoc.exists()) {
       const messageData = messageDoc.data();
@@ -116,6 +142,9 @@ export class SearchService {
     }
   }
 
+  /**
+   * Sets the message data for a given message document.
+   */
   setMessageData(messageData: any, messageDoc: any) {
     return {
       content: messageData['content'],
@@ -126,6 +155,9 @@ export class SearchService {
     };
   }
 
+  /**
+   * Sets the answer data for a given answer document.
+   */
   setAnswerData(answerData: any, messageDoc: any, messageData: any) {
     return {
       content: answerData['content'],
@@ -136,14 +168,24 @@ export class SearchService {
     };
   }
 
+  /**
+   * Unsubscribes all subscriptions stored in the unsubscribeMap.
+   */
   unsubscribeAll() {
     this.unsubscribeMap.forEach((unsubscribe) => unsubscribe());
     this.unsubscribeMap.clear();
   }
 
+/**
+ * Searches for messages, users, channels, and threads based on the provided query.
+ * Clears previous search results and updates the state of `madeQuery` based on the query's validity.
+ * If the query is empty or consists only of whitespace, the function will clear previous search results
+ * and set `madeQuery` to false. Otherwise, it filters channels, retrieves messages from found channels,
+ * fetches all messages, and filters data based on the query, setting `madeQuery` to true.
+ */
+/******  7a5c1189-7e07-4d01-9858-a4cf1ac8fce6  *******/
   async search(query: string) {
     if (!query || !query.trim()) {
-      this.madeQuery = false;
       this.redirectService.clearSearchResults();
       return;
     }
@@ -155,6 +197,9 @@ export class SearchService {
     this.madeQuery = true;
   }
 
+  /**
+   * This function filters all data that is needed for the search result view for the 1-1 messages.
+   */
   async filterData(query: string) {
     this.searchResults = this.messages.filter(message =>
       message.content.toLowerCase().includes(query.toLowerCase())
@@ -171,6 +216,10 @@ export class SearchService {
     this.filterInChannel(query);
   }
 
+/**
+ * Filters messages and answers within found channels based on the given query.
+ * Updates the `filteredMessagesInChannels` array to include only those channels where the messages or answers contain the query string.
+ */
   filterInChannel(query: string) {
     this.filteredMessagesInChannels = this.foundMessagesInChannels
       .map(channelWithMessages => {
@@ -192,6 +241,9 @@ export class SearchService {
       );
   }
 
+  /**
+   * Clears all arrays after a search query has been made
+   */  
   clearArrays() {
     this.searchResults = [];
     this.filteredUsers = [];
@@ -203,6 +255,9 @@ export class SearchService {
     this.foundMessagesInChannels = [];
   }
 
+  /**
+   * Filters the channels that were found in the channel search, and stores only the channels the current user is a part of in the `filteredChannels` array.
+   */
   async filterChannels() {
     const userId = this.authService.currentUserSig()?.userID;
     this.foundChannels.forEach((channel) => {
@@ -212,6 +267,9 @@ export class SearchService {
     })
   }
 
+  /**
+   * Gets all messages and answers for all channels that were found in the channel search, and stores them in the `foundMessagesInChannels` array.
+   */
   async getMessagesForAllFoundChannels() {
     if (!this.foundChannels || this.foundChannels.length === 0) {
       return;
@@ -224,6 +282,9 @@ export class SearchService {
     ) as ChannelWithMessages[];
   }
 
+  /**
+   * Returns a ChannelWithMessages object for the given channel.
+   */
   async getChannelWithMessages(channel: Channel) {
     const channelDoc = await this.getChannelDocument(channel.title);
     if (!channelDoc) {
@@ -239,6 +300,9 @@ export class SearchService {
     };
   }
 
+  /**
+   * Gets a channel document from the 'channels' collection by title.
+   */
   async getChannelDocument(title: string) {
     const channelsCollection = collection(this.firestore, 'channels');
     const channelQuery = query(channelsCollection, where('title', '==', title));
@@ -249,6 +313,9 @@ export class SearchService {
     return channelSnapshot.docs[0];
   }
 
+  /**
+   * Gets all messages with their answers from a channel.
+   */
   async getMessagesWithAnswers(channelId: string) {
     const messagesCollection = collection(this.firestore, `channels/${channelId}/messages`);
     const messagesSnapshot = await getDocs(messagesCollection);
@@ -264,6 +331,9 @@ export class SearchService {
     return { messagesWithAnswers, topLevelAnswers };
   }
 
+  /**
+   * Returns the data of a message document as a MessageInterface object
+   */
   getMessageData(messageDoc: any): MessageInterface {
     return {
       content: messageDoc.data()['content'],
@@ -276,6 +346,9 @@ export class SearchService {
     } as MessageInterface;
   }
 
+  /**
+   * Gets all answers to a message in a channel.
+   */
   async getAnswers(channelId: string, messageId: string): Promise<MessageInterface[]> {
     const answersCollection = collection(
       this.firestore,
@@ -292,6 +365,9 @@ export class SearchService {
     })) as MessageInterface[];
   }
 
+  /**
+   * Clears all search results and resets the arrays.
+   */
   clearSearchResults() {
     setTimeout(() => {
       this.clearArrays();
