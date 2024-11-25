@@ -1,5 +1,5 @@
 <ng-container *ngIf="isUserLoaded; else loading">
-    <main class="main-contain">
+    <main *ngIf="viewportService.width > 1020" class="main-contain">
         <app-header></app-header>
         <section>
             <mat-drawer-container>
@@ -30,7 +30,7 @@
         </button>
     </main>
 
-    <main class="responsive-main-contain">
+    <main *ngIf="viewportService.width <= 1020" class="responsive-main-contain">
         <app-header></app-header>
         <app-channels-userlist></app-channels-userlist>
         <app-thread style="display: none;"></app-thread>

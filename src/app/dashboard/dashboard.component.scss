@@ -10,10 +10,6 @@
     background-color: #ECEEFE;
     padding: 20px;
     overflow: hidden;
-
-    @media(max-width:1020px) {
-        display: none;
-    }
 }
 
 mat-drawer-content {
@@ -139,19 +135,15 @@ app-new-message {
 }
 
 .responsive-main-contain {
-    display: none;
-
-    @media(max-width:1020px) {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 100vw;
-        max-width: 100%;
-        height: 100lvh;
-        background-color: #ECEEFE;
-        overflow: hidden;
-        padding: 20px;
-    }
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    max-width: 100%;
+    height: 100lvh;
+    background-color: #ECEEFE;
+    overflow: hidden;
+    padding: 20px;
 
     app-channels-userlist {
         width: 100%;

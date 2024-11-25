@@ -14,9 +14,9 @@ import { AuthserviceService } from '../landing-page/services/authservice.service
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserInterface } from '../landing-page/interfaces/userinterface';
 import { Subject, takeUntil, timeout, timer } from 'rxjs';
-import { doc, getDoc } from '@angular/fire/firestore';
 import { onAuthStateChanged } from '@angular/fire/auth';
 import { NewMessageComponent } from './new-message/new-message.component';
+import { ViewportService } from '../shared/services/viewport.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,6 +40,7 @@ export class DashboardComponent {
   @ViewChild('drawer') drawer!: MatDrawer;
   @ViewChild('drawerThread') drawerThread!: MatDrawer;
 
+  viewportService: ViewportService = inject(ViewportService);
   authService: AuthserviceService = inject(AuthserviceService);
   threadService: ThreadService = inject(ThreadService);
   messengerService: MessengerService = inject(MessengerService);
@@ -51,6 +52,8 @@ export class DashboardComponent {
   isLoggingOut = false;
   isSideNavOpen: boolean = true;
   errorMessage: string | null = null;
+
+
   constructor() { }
 
   ngOnInit(): void {
