@@ -1,5 +1,5 @@
 <ng-container *ngIf="isUserLoaded; else loading">
-    <main>
+    <main class="main-contain">
         <app-header></app-header>
         <section>
             <mat-drawer-container>
@@ -29,10 +29,17 @@
             </div>
         </button>
     </main>
+
+    <main class="responsive-main-contain">
+        <app-header></app-header>
+        <app-channels-userlist></app-channels-userlist>
+        <app-thread style="display: none;"></app-thread>
+    </main>
 </ng-container>
 
 <ng-template #loading>
     <div class="loading-container">
         <mat-spinner class="loading-spinner"></mat-spinner>
+        <div class="loading-text">{{errorMessage}}</div>
     </div>
 </ng-template>

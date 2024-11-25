@@ -75,6 +75,21 @@ export class ChannelListComponent {
     }
   }
 
+  getDuplicateChannelsNumber(channel: Channel): number | null {
+    let title = channel.title;
+    let count = 0;
+
+    for (let currentChannel of this.channelList) {
+      if (currentChannel.title === title) {
+        count++;
+      }
+      if (currentChannel === channel) {
+        return count > 1 ? count : null;
+      }
+    }
+    return null;
+  }
+
   getAnimationDelayAddChannel() {
     let totalButtons = this.channelList.length;
 

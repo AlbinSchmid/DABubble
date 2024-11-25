@@ -19,7 +19,10 @@ export class FirestoreService {
   firestore: Firestore = inject(Firestore);
   authService: AuthserviceService = inject(AuthserviceService);
 
+  userList: UserInterface[] = [];
   userList$ = new BehaviorSubject<UserInterface[]>([]);
+
+  channelList: Channel[] = [];
   channelList$ = new BehaviorSubject<Channel[]>([]);
 
   unsubList!: () => void;
@@ -54,10 +57,11 @@ export class FirestoreService {
    */
   startUserSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
-      let userList: UserInterface[] = [];
+      this.userList = [];
 
-      this.extractUsersFromSnapshot(snapshot, userList);
-      let filteredUserList = this.filterUnwantedUsers(userList);
+      this.extractUsersFromSnapshot(snapshot, this.userList);
+      let filteredUserList = this.filterUnwantedUsers(this.userList);
+      this.setUserIDsToGlobalChannel(this.getUserIDs(filteredUserList));
       this.sortAndPrioritizeCurrentUser(filteredUserList);
       this.userList$.next(filteredUserList);
     });
@@ -111,13 +115,24 @@ export class FirestoreService {
    */
   startChannelSnapshot(collId: string) {
     this.unsubList = onSnapshot(this.getCollectionRef(collId), (snapshot) => {
-      let channelList: Channel[] = [];
+      this.channelList = [];
 
-      this.extractChannelsFromSnapshot(snapshot, channelList);
-      let filteredChannelList = this.filterChannelsForCurrentUser(channelList);
+      this.extractChannelsFromSnapshot(snapshot, this.channelList);
+      let filteredChannelList = this.filterChannelsForCurrentUser(this.channelList);
       this.sortAndPrioritizeGeneralChannel(filteredChannelList);
       this.channelList$.next(filteredChannelList);
     });
+  }
+
+  setUserIDsToGlobalChannel(userIDs: string[]) {
+    let generalChannel = this.channelList.find(channel => channel.title === 'Allgemein');
+    if (generalChannel) {
+      this.updateDoc('channels', generalChannel.channelID!, { userIDs: userIDs });
+    }
+  }
+
+  getUserIDs(list: UserInterface[]): string[] {
+    return list.map(user => user.userID);
   }
 
   /**

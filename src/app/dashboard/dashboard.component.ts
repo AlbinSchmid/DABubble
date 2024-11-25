@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { AuthserviceService } from '../landing-page/services/authservice.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserInterface } from '../landing-page/interfaces/userinterface';
-import { Subject, takeUntil, timeout } from 'rxjs';
+import { Subject, takeUntil, timeout, timer } from 'rxjs';
 import { doc, getDoc } from '@angular/fire/firestore';
 import { onAuthStateChanged } from '@angular/fire/auth';
 import { NewMessageComponent } from './new-message/new-message.component';
@@ -50,7 +50,7 @@ export class DashboardComponent {
   isUserLoaded = false;
   isLoggingOut = false;
   isSideNavOpen: boolean = true;
-
+  errorMessage: string | null = null;
   constructor() { }
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export class DashboardComponent {
             this.isUserLoaded = false;
           }
         },
-        (err: any) => { this.handleError(err); }
+        (err: any) => { this.handleErrorWithDelay(err); }
       );
   }
 
@@ -94,14 +94,13 @@ export class DashboardComponent {
    * the home page and shows an alert with the error message.
    * @param {any} err The error object to be handled.
    */
-  handleError(err: any) {
-    if (err.name === 'TimeoutError') {
+  handleErrorWithDelay(err: any) {
+    const errorMessage = err.name === 'TimeoutError' ? 'Zeitüberschreitung, versuchen Sie es bitte erneut!' : 'Ein unerwarteter Fehler ist aufgetreten: ' + err.message;
+    this.errorMessage = errorMessage;
+    timer(2000).subscribe(() => {
+      this.errorMessage = null;
       this.router.navigate(['']);
-      alert('Zeitüberschreitung, versuchen Sie es bitte erneut!');
-    } else {
-      this.router.navigate(['']);
-      alert('Ein unerwarteter Fehler ist aufgetreten:' + err.message);
-    }
+    });
   }
 
   /**

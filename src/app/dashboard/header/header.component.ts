@@ -3,7 +3,6 @@ import { Component, ViewChild, ElementRef, inject, Output } from '@angular/core'
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
 import { MenuComponent } from './menu/menu.component';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { UserInterface } from '../../landing-page/interfaces/userinterface';
@@ -18,11 +17,10 @@ import { SearchResultComponent } from "../../shared/components/search-result/sea
     MatIconModule,
     MatMenuModule,
     MatCardModule,
-    RouterLink,
     CommonModule,
     MenuComponent,
     SearchResultComponent
-],
+  ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -43,7 +41,7 @@ export class HeaderComponent {
     this.searchInput.nativeElement.focus();
   }
 
-  onSearch(){
+  onSearch() {
     this.searchService.search(this.searchInput.nativeElement.value)
   }
 
@@ -61,7 +59,7 @@ export class HeaderComponent {
     if (this.isProfileMenuOpen) {
       menuElement!.classList.remove('open');
       menuElement!.classList.add('close');
-      setTimeout(() => { this.isProfileMenuOpen = false;}, 120);
+      setTimeout(() => { this.isProfileMenuOpen = false; }, 120);
     }
     if (this.isUnderMenuOpen) {
       setTimeout(() => this.isUnderMenuOpen = false, 120);
@@ -104,13 +102,13 @@ export class HeaderComponent {
    * Updates the userStatus property with the user's current status.
    * If the user status is not found in Firestore, the userStatus is set to 'on'.
    * @param uid The user ID to fetch the user status for.
-   */ 
+   */
   async fetchUserStatus(uid: string): Promise<void> {
-    const userDocRef = doc(this.firestore, `users/${uid}`); 
+    const userDocRef = doc(this.firestore, `users/${uid}`);
     const userDocSnap = await getDoc(userDocRef);
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data() as UserInterface;
-      this.userStatus = userData.userStatus || 'on'; 
+      this.userStatus = userData.userStatus || 'on';
     }
   }
 
@@ -122,7 +120,7 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.authService.user$.subscribe((user: any) => {
       if (user) {
-        this.fetchUserStatus(user.uid); 
+        this.fetchUserStatus(user.uid);
         const newUser: UserInterface = this.setNewUser(user);
         this.authService.currentUserSig.set(newUser);
       } else {
@@ -136,15 +134,15 @@ export class HeaderComponent {
    * The returned object includes the user's ID, email, display name, avatar, focus status, and current status.
    * The password field is initialized as an empty string.
    */
-  setNewUser(user:any){
-   return {
+  setNewUser(user: any) {
+    return {
       userID: user.uid,
       password: '',
       email: user.email,
       username: user.displayName,
       avatar: user.photoURL,
       isFocus: user.isFocus,
-      userStatus: this.userStatus 
+      userStatus: this.userStatus
     };
   }
 }

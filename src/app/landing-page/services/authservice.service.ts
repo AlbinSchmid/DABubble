@@ -1,14 +1,11 @@
 import { Injectable, inject, signal } from '@angular/core';
-import {
-  Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
+import {Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
   signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
-  sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,
-  User,
-  signInAnonymously, onAuthStateChanged
+  sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,User,signInAnonymously,onAuthStateChanged
 } from '@angular/fire/auth';
 import { UserInterface } from '../interfaces/userinterface';
 import { catchError, from, map, Observable, throwError } from 'rxjs';
-import { doc, Firestore, getDoc, setDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, collection, query, where, getDocs, deleteDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,15 +20,16 @@ export class AuthserviceService {
   errorMessage: string = '';
   guestEmail = 'gast@gast.de';
   guestPassword = 'abcdABCD1234!"§$';
-  private tempUserData: UserInterface | null = null;
+  tempUserData: UserInterface | null = null;
+  logoutPromise: Promise<void>;
   defaultAvatarURL = 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a';
 
-    constructor() {
-      onAuthStateChanged(this.firebaseAuth, (user) => {
-       if (user) { this.handleUserLogin(user);} else {this.setCurrentUser(null);}});
-   }
+  constructor() {
+    onAuthStateChanged(this.firebaseAuth, (user) => {
+      if (user) { this.handleUserLogin(user); } else { this.setCurrentUser(null); }
+    });
+  }
 
-  
   /**
    * Persist the user on page reload
    */
@@ -46,6 +44,7 @@ export class AuthserviceService {
       this.setCurrentUser(userData);
     }
   }
+
   /**
    * Registers a new user using the provided email, username, password, and avatar.
    * Creates a new user in the Firestore 'users' collection and sets the user's display name and avatar.
@@ -89,14 +88,12 @@ export class AuthserviceService {
    * Updates the `currentUserSig` signal with the provided user data, which can be a `UserInterface` object or null.
    */
   setCurrentUser(userData: UserInterface | null): void {
-    // Ensure that you never set undefined or null, as it may cause issues in certain cases.
-    this.currentUserSig.set(userData || null);  // Safeguard: set null if userData is undefined or null
+    this.currentUserSig.set(userData || null);
   }
 
   /**
    * Authenticates a user with the provided email and password.
-   * On successful login, retrieves the user document from Firestore, updates the user's status to 'on',
-   * sets the user data in the application state, and handles potential errors.
+   * On successful login, retrieves the user document from Firestore, updates the user's status to 'on'.
    */
   login(email: string, password: string): Observable<void> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async (response) => {
@@ -122,7 +119,7 @@ export class AuthserviceService {
    * Constructs a user data object from the provided user and avatar URL.
    * The returned object includes default values for email, password, userStatus, and isFocus fields.
    */
-  loginSetUserData(user:User){
+  loginSetUserData(user: User) {
     return {
       userID: user.uid,
       email: user.email || '',
@@ -259,17 +256,49 @@ export class AuthserviceService {
    */
   logout(): Observable<void> {
     const user = this.firebaseAuth.currentUser;
-    if (!user) return from(Promise.reject('No user is currently logged in.'));
+    if (!user) {
+      return from(Promise.reject('No user is currently logged in.'));
+    }
     const userRef = doc(this.firestore, `users/${user.uid}`);
-    const updateStatusPromise = setDoc(userRef, { userStatus: 'off' }, { merge: true })
-      .then(() => { return signOut(this.firebaseAuth); })
-      .then(() => { this.router.navigate(['']); })
-      .catch(error => { console.error('Error logging out:', error); throw error; });
-    return from(updateStatusPromise);
+    if (user.isAnonymous) {
+      this.logoutAnonym(userRef, user);
+    } else {
+      this.logoutNormalUser(userRef);
+    }
+    return from(
+      this.logoutPromise.then(() => {
+        this.router.navigate(['']);
+      })
+    );
   }
 
   /**
-   * Sets the temporary user data in local storage.
+   * This method is called when the user logs out and is anonymous.
+   * It deletes the user document from Firestore and signs out the user.
+   */
+  logoutAnonym(userRef: any, user: any) {
+    this.logoutPromise = deleteDoc(userRef)
+      .then(() => user.delete())
+      .catch(error => {
+        console.error('Error logging out and deleting account:', error);
+        throw error;
+      });
+  }
+
+  /**
+   * This method is called when the user logs out and is not anonymous.
+   * It sets the user status to 'off' in Firestore and signs out the user..
+   */
+  logoutNormalUser(userRef: any) {
+    this.logoutPromise = setDoc(userRef, { userStatus: 'off' }, { merge: true })
+      .then(() => signOut(this.firebaseAuth))
+      .catch(error => {
+        console.error('Error logging out:', error);
+        throw error;
+      });
+  }
+
+  /**
    * This data is used by the sign-up process to create a new user account.
    */
   setTempUserData(userData: UserInterface) {
@@ -277,18 +306,14 @@ export class AuthserviceService {
   }
 
   /**
-   * Gets the temporary user data saved in local storage.
    * This data is used by the sign-up process to create a new user account.
-   * Returns null if no temporary user data is saved.
    */
   getTempUserData(): UserInterface | null {
     return this.tempUserData;
   }
 
   /**
-   * Clears the temporary user data from local storage.
-   * This method sets the temporary user data to null, effectively removing any previously stored data used
-   * during the sign-up process.
+   * Clears the temporary user data.
    */
   clearTempUserData() {
     this.tempUserData = null;
@@ -297,7 +322,6 @@ export class AuthserviceService {
   /**
    * Sends a password reset email to the specified email address.
    * Returns an observable that resolves to void when the email is sent successfully.
-   * If the promise is rejected, it will return an observable that emits an error.
    */
   resetPassword(email: string): Observable<void> {
     const promise = sendPasswordResetEmail(this.firebaseAuth, email);
@@ -396,39 +420,39 @@ export class AuthserviceService {
     return !querySnapshot.empty;
   }
 
-/**
- * Performs an anonymous login using Firebase Authentication.
- * On successful login, creates an anonymous user document in Firestore,
- * sets the user data in the application state, and navigates to the dashboard.
- * If the user document creation fails, logs an error.
- */
+  /**
+   * Performs an anonymous login using Firebase Authentication.
+   * On successful login, creates an anonymous user document in Firestore,
+   * sets the user data in the application state, and navigates to the dashboard.
+   * If the user document creation fails, logs an error.
+   */
   anonymousLogin() {
     signInAnonymously(this.firebaseAuth)
       .then((userCredential) => {
         let user = userCredential.user;
         let userRef = doc(this.firestore, `users/${user.uid}`);
-        let anonymUser = this.setAnynymousData(user) ; 
+        let anonymUser = this.setAnynymousData(user);
         setDoc(userRef, anonymUser)
-            .then(() => {
-          this.router.navigate(['/dashboard']);
-        })
-    })
-}
+          .then(() => {
+            this.router.navigate(['/dashboard']);
+          })
+      })
+  }
 
   /**
    * Creates a new anonymous user object from the given User object.
    * The returned object includes default values for email, password, userStatus, and isFocus fields.
    */
-  setAnynymousData(user:User){
-      return {
-        userID: user.uid,
-        password: '',
-        email: 'gast@gast.de',
-        username: 'Neuer Gast',
-        avatar: this.defaultAvatarURL,
-        userStatus: 'on',
-        isFocus: false,
-      }
+  setAnynymousData(user: User) {
+    return {
+      userID: user.uid,
+      password: '',
+      email: 'gast@gast.de',
+      username: 'Neuer Gast',
+      avatar: this.defaultAvatarURL,
+      userStatus: 'on',
+      isFocus: false,
+    }
   }
 
   /**
@@ -436,7 +460,7 @@ export class AuthserviceService {
    * Returns true if the current user is anonymous, otherwise returns false.
    */
   isAnonymous() {
-    if(this.firebaseAuth.currentUser?.isAnonymous){
+    if (this.firebaseAuth.currentUser?.isAnonymous) {
       return true
     }
     return false
