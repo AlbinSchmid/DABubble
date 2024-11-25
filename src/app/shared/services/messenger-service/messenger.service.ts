@@ -47,12 +47,23 @@ export class MessengerService {
   messageDates: string[] = [];
   scrollContainer: any;
   openMessenger = false;
+  showAddPerson = false;
 
   selectUserNewMessage: UserInterface[] = [];
   selectChannelsNewMessage: Channel[] = [];
 
   textareaMessenger = new Subject<void>();
   textareaThread = new Subject<void>();
+  showMessageBtn: boolean;
+
+  
+  sortByName(array: any[]) {
+    array.sort((a, b) => {
+      const nameA = a?.userName || '';
+      const nameB = b?.userName || '';
+      return nameA.localeCompare(nameB);
+    });
+  }
   
 
   scrollToBottom(container: any) {

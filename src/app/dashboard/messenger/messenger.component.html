@@ -18,7 +18,7 @@
             </ng-template>
         </div>
         <div id="add-user-complete-container" *ngIf="messengerService.openChannel">
-            <button (click)=" this.showAddPerson = !this.showAddPerson; showAddPersonDialogDirect = false" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
+            <button (click)=" this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = false" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
                 <div>
                     @for (user of threadService.usersInChannel; track $index) {
                         <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
@@ -26,11 +26,11 @@
                 </div>
                 <p class="user-count">{{threadService.usersInChannel.length}}</p>
             </button>
-            <mat-icon (click)="this.showAddPerson = !this.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
+            <mat-icon (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
-                [cdkConnectedOverlayOpen]="showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
-                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.showAddPerson = false">
-                <app-add-person (closeOverlay)="this.showAddPerson = false"  [addPersonView]="showAddPersonDialogDirect" [users]="threadService.usersInChannel"></app-add-person>
+                [cdkConnectedOverlayOpen]="this.messengerService.showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
+                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.messengerService.showAddPerson = false">
+                <app-add-person (closeOverlay)="this.messengerService.showAddPerson= false"  [addPersonView]="showAddPersonDialogDirect" [users]="threadService.usersInChannel"></app-add-person>
             </ng-template>
         </div>
     </header>

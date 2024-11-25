@@ -39,11 +39,14 @@ export class AddPersonComponent {
 
   @Input() users: UserInterface[] = [];
   @Input() addPersonView: boolean = false;
+
   @Output() closeOverlay = new EventEmitter<void>();
+
 
   checkText() {
     return this.addPersonView ? 'Leute hinzufügen' : 'Mitglieder';
   }
+
 
   openAddPerson() {
     this.memberSourceService.membersSource.set([]);
@@ -51,16 +54,20 @@ export class AddPersonComponent {
     setTimeout(() => this.userInputElement.nativeElement.focus(), 100);
   }
 
+
   closeDialog() {
     this.closeOverlay.emit();
   }
 
 
   openDialogDetailPerson(user: any) {
+    this.messengerService.showMessageBtn = true;
+    user.isFocus = true;
     this.dialog.open(DetailPersonComponent, {
       data: user,
     });
   }
+
 
   onWheel(event: WheelEvent) {
     let element = event.currentTarget as HTMLElement;
@@ -68,6 +75,7 @@ export class AddPersonComponent {
     event.preventDefault();
     element.scrollLeft += event.deltaY;
   }
+
 
   remove(member: UserInterface): void {
     this.memberSourceService.membersSource.update(members => {
@@ -78,6 +86,7 @@ export class AddPersonComponent {
       return [...members];
     });
   }
+
 
   onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -96,6 +105,7 @@ export class AddPersonComponent {
     }
   }
 
+
   scrollToSelectedUser(): void {
     let matCardContent = document.querySelector('mat-card-content') as HTMLElement;
     let selectedButton = matCardContent.querySelectorAll('button')[this.highlightedIndex] as HTMLElement;
@@ -104,6 +114,7 @@ export class AddPersonComponent {
       selectedButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
     }
   }
+
 
   add(user: UserInterface): void {
     if (user) {
@@ -114,6 +125,7 @@ export class AddPersonComponent {
     }
     this.scrollToRight();
   }
+
 
   scrollToRight(): void {
     let element = document.querySelector('.add-specific-member-contain') as HTMLElement;
@@ -139,6 +151,7 @@ export class AddPersonComponent {
     }
   }
 
+
   searchUserByName(event: Event): void {
     let inputElement = event.target as HTMLInputElement;
     let value = inputElement.value.trim().toLowerCase();
@@ -157,6 +170,7 @@ export class AddPersonComponent {
       this.highlightedIndex = -1;
     }
   }
+
 
   existingMembersOnChannel() {
     return this.users.map(member => member.userID);
@@ -180,6 +194,7 @@ export class AddPersonComponent {
     await this.firestoreService.updateDoc('channels', channel.channelID!, { userIDs: allMember });
     this.closeDialog();
   }
+
 
   getUserIDs(): string[] {
     let members = this.memberSourceService.membersSource();

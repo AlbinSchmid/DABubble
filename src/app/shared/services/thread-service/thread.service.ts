@@ -48,10 +48,21 @@ export class ThreadService {
           const userID = usersIDs[i];
           const user = usersListAll.filter(user => user.userID === userID);
           this.usersInChannel.push(this.getCleanJson(user));
+          this.sortByName(this.usersInChannel);          
         }
       });
     });
   }
+
+
+  sortByName(array: any[]) {
+    array.sort((a, b) => {
+      const nameA = a?.username || '';
+      const nameB = b?.username || '';
+      return nameA.localeCompare(nameB);
+    });
+  }
+
 
   getCleanJson(user: UserInterface[]): UserInterface {
     let userJson = {

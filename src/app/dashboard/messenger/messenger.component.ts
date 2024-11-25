@@ -123,6 +123,7 @@ export class MessengerComponent implements AfterViewInit {
    * Open the detail View of the channel or person
    */
   openDialog() {
+    this.messengerService.showMessageBtn = false;
     this.dialog.open(DetailPersonComponent, {
       data: {
         avatar: this.messengerService.user.avatar,

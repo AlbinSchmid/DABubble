@@ -108,4 +108,12 @@ section {
             padding: 12px;
         }
     }
+
+    .send-message-btn {
+        padding: 0 30px;
+
+        mat-icon {
+            width: 27px;
+        }
+    }
 }

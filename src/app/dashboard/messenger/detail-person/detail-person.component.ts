@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { CommonModule } from '@angular/common';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
+import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
 
 
 @Component({
@@ -19,9 +20,12 @@ import { UserInterface } from '../../../landing-page/interfaces/userinterface';
   styleUrl: './detail-person.component.scss'
 })
 export class DetailPersonComponent {
-  messengerService = inject(MessengerService)
+  messengerService = inject(MessengerService);
+  firebaseMessenger = inject(FirebaseMessengerService);
+  dialog = inject(MatDialog);
   readonly dialogRef = inject(MatDialogRef<DetailPersonComponent>);
-  public data: UserInterface = inject(MAT_DIALOG_DATA);
+
+  data: UserInterface = inject(MAT_DIALOG_DATA);
 
   
 /**
@@ -38,5 +42,12 @@ export class DetailPersonComponent {
     } else {
       return 'Beschäftigt'
     }
+  }
+
+  openUser() {
+    this.messengerService.showAddPerson = false;
+    this.dialog.closeAll();
+    this.messengerService.showChart(this.data);
+    this.firebaseMessenger.searchChat(this.data);
   }
 }

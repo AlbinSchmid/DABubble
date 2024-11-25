@@ -155,7 +155,7 @@ export class TextareaComponent {
           this.usersToMention.push(this.getCleanJson(user));
           this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
         }
-        this.sortByName(this.usersToMention);
+        this.messengerService.sortByName(this.usersToMention);
         this.usersToMention.forEach((user) => {
           this.mentionConfig.items.push(user);
         });
@@ -188,15 +188,6 @@ export class TextareaComponent {
       this.mentionPersonView = true;
       this.mentionPersonViewFromBtn = true;
     }
-  }
-
-
-  sortByName(array: any[]) {
-    array.sort((a, b) => {
-      const nameA = a?.userName || '';
-      const nameB = b?.userName || '';
-      return nameA.localeCompare(nameB);
-    });
   }
 
 
