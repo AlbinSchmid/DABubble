@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { SearchService } from '../../services/search-service/search.service';
 import { CommonModule } from '@angular/common';
+import { RedirectService } from '../../services/redirect-service/redirect.service';
 
 @Component({
   selector: 'app-search-result',
@@ -18,6 +19,7 @@ export class SearchResultComponent {
   showMessagesInChannels:boolean = false
   showMesagesInChannelThreads: boolean = false
   elementRef = inject(ElementRef);
+  redirectService = inject(RedirectService);
 
   
   toggleView(view: 'users' | 'threads' | 'messages' | 'channels' | 'messagesInChannels' | 'channelsThreads') {

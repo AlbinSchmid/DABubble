@@ -15,7 +15,7 @@
 @if(showMessages){
   @for (result of searchService.searchResults; track $index) {
     <div class="search-results-contain">
-      <div class="search-results-wrapper message" (click)="this.searchService.goToMessage(result.messageID)">
+      <div class="search-results-wrapper message" (click)="this.redirectService.goToMessage(result.messageID)">
         <span class="sender-name">Von: {{result.senderName}}</span>
         <span class="message-content">Nachricht: {{result.content }} </span>
         <span class="message-date">Datum: {{result.date | date:'yyyy-MM-dd-hh:mm' }}</span>
@@ -35,7 +35,7 @@
 @if( showUsers){
   @for (user of searchService.filteredUsers; track $index) {
     <div class="search-results-contain">
-      <div class="search-results-wrapper" (click)="this.searchService.goToUser(user)">
+      <div class="search-results-wrapper" (click)="this.redirectService.goToUser(user)">
         <img src="{{user.avatar}}" alt="">
         <span>{{user.username }} </span>
       </div>
@@ -54,7 +54,7 @@
 @if(showThreads){
   @for (message of searchService.filteredThreads; track $index) {
     <div class="search-results-contain">
-      <div class="search-results-wrapper" (click)="this.searchService.openThead(message, message.senderID) ;">
+      <div class="search-results-wrapper" (click)="this.redirectService.openThead(message, message.senderID) ;">
         <span class="sender-name">Von: {{message.senderName}}</span>
         <span class="message-content">Nachricht: {{message.content }} </span>
         <span class="message-date">Datum: {{message.date | date:'yyyy-MM-dd-hh:mm' }}</span>
@@ -74,7 +74,7 @@
 @if( showChannels){
   @for (channel of searchService.filteredChannels; track $index) {
     <div class="search-results-contain">
-      <div class="search-results-wrapper" (click)="this.searchService.goToChannel(channel)">
+      <div class="search-results-wrapper" (click)="this.redirectService.goToChannel(channel)">
         <span>{{channel.title }} </span>
       </div>
     </div>
@@ -93,7 +93,7 @@
   @for (channelWithMessages of searchService.filteredMessagesInChannels; track $index){
     <div class="search-results-contain">
       <div *ngFor="let message of channelWithMessages.messages" class="search-results-wrapper message"
-        (click)="this.searchService.goToMessageInChannel( message.messageID ,channelWithMessages.channel)">
+        (click)="this.redirectService.goToMessageInChannel( message.messageID ,channelWithMessages.channel)">
         <span class="sender-name">Von: {{ message.senderName }}</span>
         <span class="message-content">Nachricht: {{ message.content }}</span>
         <span class="message-date">Datum: {{ message.date | date:'yyyy-MM-dd-hh:mm' }}</span>
@@ -115,7 +115,7 @@
     <div class="search-results-contain">
       <div *ngFor="let message of channelWithMessages.answers" id="{{channelWithMessages.answers.length}}">
         <div class="search-results-wrapper message"
-          (click)="this.searchService.openThreadInChannel(message, message.messageID, channelWithMessages.channel)">
+          (click)="this.redirectService.openThreadInChannel(message, message.messageID, channelWithMessages.channel)">
           <span class="sender-name">Von: {{ message.senderName }}</span>
           <span class="message-content">Nachricht: {{ message.content }}</span>
           <span class="message-date">Datum: {{ message.date | date:'yyyy-MM-dd-hh:mm' }}</span>

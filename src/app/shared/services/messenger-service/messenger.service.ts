@@ -77,6 +77,8 @@ export class MessengerService {
     this.openChannel = true;
     this.openChart = false;
     this.openNewMessage = false;
+    console.log(this.channel);
+    
     setTimeout(() => {
       this.textareaMessenger.next();
     },);
