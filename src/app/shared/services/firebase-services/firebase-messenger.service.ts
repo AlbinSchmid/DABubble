@@ -8,6 +8,8 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { UserInterface } from '../../../landing-page/interfaces/userinterface';
 import { User } from '@angular/fire/auth';
+import { FirestoreService } from './firestore.service';
+import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +32,9 @@ export class FirebaseMessengerService {
   messageOrThread: string;
 
   forCount = 0;
+
+
+
 
 
   async deleteReaction(messageID: string, reaktionID: string) {

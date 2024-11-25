@@ -14,6 +14,8 @@ import { collection, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { MessageParserService } from '../../services/message-parser.service';
 import { Message } from '../../../models/message.class';
+import { TextareaServiceService } from '../../services/textarea-service/textarea-service.service';
+import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 
 @Component({
   selector: 'app-message',
@@ -36,6 +38,7 @@ export class MessageComponent implements OnInit {
   threadService = inject(ThreadService);
   messengerService = inject(MessengerService);
   firestore: Firestore = inject(Firestore);
+  textareaService = inject(TextareaServiceService);
 
   @Input() message = new Message;
   @Input() messageIndex: number;
@@ -47,6 +50,7 @@ export class MessageComponent implements OnInit {
   answers: MessageInterface[] = [];
   mentionedUsers: any[] = [];
   lastTwoReactins: any[] = [];
+  usersToMention: MentionUserInterface[] = [];
 
   hoveredMenu = false;
   showEmojiBoard = false;
@@ -59,8 +63,10 @@ export class MessageComponent implements OnInit {
   showDate: boolean;
   unsubAnswerList: any;
 
+  unsubChannelList: any;
 
-  ngOnInit() {    
+
+  ngOnInit() {
     if (this.messengerService.channel.channelID !== '') {
       this.unsubMentionsList = this.subMentionsList();
     }
@@ -148,7 +154,7 @@ export class MessageComponent implements OnInit {
     const now = Date.now();
     this.lastTwoReactins = this.reactions.sort((a, b) => {
       return Math.abs(a.latestReactionTime - now) - Math.abs(b.latestReactionTime - now);
-    });    
+    });
   }
 
 
@@ -242,7 +248,7 @@ export class MessageComponent implements OnInit {
     this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
     setTimeout(() => {
       this.messengerService.textareaThread.next();
-    },10);
+    }, 10);
   }
 
 

@@ -7,6 +7,7 @@ import { FirebaseMessengerService } from '../firebase-services/firebase-messenge
 import { User } from '@angular/fire/auth';
 import { FirestoreService } from '../firebase-services/firestore.service';
 import { Subject } from 'rxjs';
+import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -52,10 +53,7 @@ export class MessengerService {
 
   textareaMessenger = new Subject<void>();
   textareaThread = new Subject<void>();
-
-
-
-
+  
 
   scrollToBottom(container: any) {
     container.nativeElement.scrollTop = container.nativeElement.scrollHeight;

@@ -25,7 +25,7 @@
                 </p>
                 <div></div>
                 <button (click)="openOrCloseEmojiBoard()"></button>
-                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView()"></button>
+                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('messenger')"></button>
             </div>
             <button id="send-message-btn" (click)="uploadFiles(messenger)"
                 *ngIf="texterea.valid || selectedFiles.length > 0"><img src="/assets/icons/send.png"
@@ -77,7 +77,7 @@
                 </p>
                 <div></div>
                 <button (click)="openOrCloseEmojiBoard()"></button>
-                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView()"></button>
+                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('thread')"></button>
             </div>
             <button id="send-message-btn" (click)="uploadFiles('thread')" *ngIf="texterea.valid"><img
                     src="/assets/icons/send.png" alt="send-icon"></button>

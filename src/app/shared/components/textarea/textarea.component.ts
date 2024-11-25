@@ -60,7 +60,10 @@ export class TextareaComponent {
   date = new Date();
   messenger = 'messenger';
   mentionPersonView = false;
+  mentionPersonViewFromBtn = false;
+  mentionPersonBtnSrc: string;
   showEmojiBoard = false;
+  laodMentionUsers = true;
 
   mentionConfig = {
     labelKey: 'userName',
@@ -90,7 +93,6 @@ export class TextareaComponent {
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
     });
-    this.unsubChannelList = this.subChannelList();
   }
 
 
@@ -104,11 +106,17 @@ export class TextareaComponent {
 
 
   checkForMention(content: any): void {
-    this.subChannelList();
+    this.mentionPersonBtnSrc = '';
+    this.mentionPersonViewFromBtn = false;
     const inputContent = content;
     const mentionIndex = inputContent.lastIndexOf('@');
     if (this.messengerService.openChannel) {
       if (/\B@\w*$/.test(inputContent)) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
+        if (this.laodMentionUsers) {
+          this.subChannelList();
+          this.laodMentionUsers = false;
+        }
+
         if (mentionIndex !== -1) {
           this.mentionPersonView = true;
           const searchText = inputContent.substring(mentionIndex + 1);
@@ -162,12 +170,16 @@ export class TextareaComponent {
   }
 
 
-  openOrCloseMentionPersonView() {
+  openOrCloseMentionPersonView(src: string) {
+    this.mentionPersonBtnSrc = src;
     this.subChannelList();
     if (this.mentionPersonView) {
       this.mentionPersonView = false;
+      this.mentionPersonViewFromBtn = false;
+      this.mentionPersonBtnSrc = '';
     } else {
       this.mentionPersonView = true;
+      this.mentionPersonViewFromBtn = true;
     }
   }
 
@@ -182,13 +194,21 @@ export class TextareaComponent {
 
 
   mentionUser(userJson: any, src: string) {
-    const mentionText = `@${userJson.userName}`;
-    if (src === 'messenger') {
-      const mentionIndex = this.firebaseMessenger.content.lastIndexOf('@');
-      this.firebaseMessenger.content = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+    const mentionText = `@${userJson.userName}`;    
+    if (this.mentionPersonViewFromBtn) {
+      if (this.mentionPersonBtnSrc === 'messenger') {
+        this.firebaseMessenger.content = this.firebaseMessenger.content + mentionText;
+      } else if (this.mentionPersonBtnSrc === 'thread') {
+        this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent + mentionText;
+      }
     } else {
-      const mentionIndex = this.firebaseMessenger.answerContent.lastIndexOf('@');
-      this.firebaseMessenger.answerContent = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+      if (src === 'messenger') {
+        const mentionIndex = this.firebaseMessenger.content.lastIndexOf('@');
+        this.firebaseMessenger.content = this.firebaseMessenger.content.substring(0, mentionIndex) + mentionText;
+      } else {
+        const mentionIndex = this.firebaseMessenger.answerContent.lastIndexOf('@');
+        this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent.substring(0, mentionIndex) + mentionText;
+      }
     }
     this.mentionPersonView = false;
     
