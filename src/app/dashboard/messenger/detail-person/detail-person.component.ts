@@ -31,9 +31,9 @@ export class DetailPersonComponent {
  * and 'Beschäftigt' if the user is busy.
  */
   checkUserStatus():string {
-    if (this.messengerService.user.userStatus == 'on') {
+    if (this.data.userStatus == 'on') {
       return 'Aktiv';
-    } else if (this.messengerService.user.userStatus == 'off') {
+    } else if (this.data.userStatus == 'off') {
       return 'Offline'
     } else {
       return 'Beschäftigt'

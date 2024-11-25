@@ -247,8 +247,10 @@ export class MessageComponent implements OnInit {
     console.log(this.threadService.scrollContainer);
     this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
     setTimeout(() => {
-      this.messengerService.textareaThread.next();
-    }, 10);
+      if (this.messengerService.textareaThread) {
+        this.messengerService.textareaThread.next();
+      }
+    }, 20);
   }
 
 

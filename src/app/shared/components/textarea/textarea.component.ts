@@ -84,12 +84,17 @@ export class TextareaComponent {
 
   ngOnInit() {
     this.subscription = this.messengerService.textareaMessenger.subscribe(() => {
-      this.textareaMessenger.nativeElement.focus();
+      if (this.textareaMessenger) {
+        this.textareaMessenger.nativeElement.focus();
+      }
     });
     this.subscription = this.messengerService.textareaThread.subscribe(() => {
-      this.textareaThread.nativeElement.focus();
+      if (this.textareaThread) {
+        this.textareaThread.nativeElement.focus();
+
+      }
     });
-    
+
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
     });
@@ -97,6 +102,8 @@ export class TextareaComponent {
 
 
   ngAfterViewInit(): void {
+
+
   }
 
   ngOnDestroy() {
@@ -144,7 +151,7 @@ export class TextareaComponent {
         const usersIDs = list.data()['userIDs'];
         for (let i = 0; i < usersIDs.length; i++) {
           const userID = usersIDs[i];
-          const user = this.usersListAll.filter(user => user.userID === userID);         
+          const user = this.usersListAll.filter(user => user.userID === userID);
           this.usersToMention.push(this.getCleanJson(user));
           this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
         }
@@ -194,7 +201,7 @@ export class TextareaComponent {
 
 
   mentionUser(userJson: any, src: string) {
-    const mentionText = `@${userJson.userName}`;    
+    const mentionText = `@${userJson.userName}`;
     if (this.mentionPersonViewFromBtn) {
       if (this.mentionPersonBtnSrc === 'messenger') {
         this.firebaseMessenger.content = this.firebaseMessenger.content + mentionText;
@@ -211,7 +218,7 @@ export class TextareaComponent {
       }
     }
     this.mentionPersonView = false;
-    
+
   }
 
 

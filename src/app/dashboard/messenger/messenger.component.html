@@ -18,7 +18,7 @@
             </ng-template>
         </div>
         <div id="add-user-complete-container" *ngIf="messengerService.openChannel">
-            <button (click)=" this.showAddPerson = !this.showAddPerson" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
+            <button (click)=" this.showAddPerson = !this.showAddPerson; showAddPersonDialogDirect = false" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
                 <div>
                     @for (user of threadService.usersInChannel; track $index) {
                         <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
@@ -26,7 +26,7 @@
                 </div>
                 <p class="user-count">{{threadService.usersInChannel.length}}</p>
             </button>
-            <mat-icon (click)="this.showAddPerson = !this.showAddPerson">group_add</mat-icon>
+            <mat-icon (click)="this.showAddPerson = !this.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
                 [cdkConnectedOverlayOpen]="showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
                 [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.showAddPerson = false">
