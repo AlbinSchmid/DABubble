@@ -22,10 +22,6 @@ mat-card-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    @media(max-width:1020px) {
-        display: none;
-    }
 }
 
 .image-title-contain {
@@ -61,6 +57,11 @@ h1 {
     @media(max-width:1020px) {
         width: 100%;
         max-width: 80%;
+    }
+
+    @media(max-width:500px) {
+        width: 100%;
+        max-width: unset;
     }
 }
 
@@ -271,11 +272,7 @@ app-channel-list {
 }
 
 .search-header {
-    display: none;
-
-    @media(max-width:1020px) {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-    }
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }

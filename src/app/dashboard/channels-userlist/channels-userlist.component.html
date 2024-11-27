@@ -1,5 +1,5 @@
 <mat-card appearance="outlined">
-    <header class="devspace-header">
+    <header *ngIf="viewportService.width >= 1250" class="devspace-header">
         <div class="image-title-contain">
             <img src="assets/img/workspace_logo.png" alt="devspace_logo">
             <h1>Devspace</h1>
@@ -8,8 +8,8 @@
             (click)="messengerService.showNewMessage()"></mat-icon>
     </header>
 
-    <header class="search-header">
-        <span>SEARCH BAR HERE...</span>
+    <header *ngIf="viewportService.width < 1250" class="search-header">
+        <span>SEARCH BAR HERE... 1250</span>
     </header>
 
     <div class="scroll-contain">

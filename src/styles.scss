@@ -7,12 +7,16 @@
 
 $purple: #444DF2;
 
-html {
-    height: auto;
+html,
+body {
+    height: 100lvh;
     max-height: 100%;
     width: 100vw;
     max-width: 100%;
+    overflow: hidden;
+}
 
+html {
     button {
         &.primary {
             .mat-ripple-element {

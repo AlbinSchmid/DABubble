@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, ElementRef, inject, Output } from '@angular/core';
+import { Component, ViewChild, ElementRef, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -9,6 +9,7 @@ import { UserInterface } from '../../landing-page/interfaces/userinterface';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { SearchService } from '../../shared/services/search-service/search.service';
 import { SearchResultComponent } from "../../shared/components/search-result/search-result.component";
+import { ViewportService } from '../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-header',
@@ -26,13 +27,20 @@ import { SearchResultComponent } from "../../shared/components/search-result/sea
 })
 export class HeaderComponent {
   @ViewChild('searchInput') searchInput!: ElementRef;
-  authService = inject(AuthserviceService)
-  firestore = inject(Firestore)
-  userStatus = 'on'
-  isProfileMenuOpen = false;
-  isUnderMenuOpen = false;
-  isOpenEditEditor = false;
-  searchService = inject(SearchService)
+
+  authService: AuthserviceService = inject(AuthserviceService)
+  firestore: Firestore = inject(Firestore);
+  searchService: SearchService = inject(SearchService);
+  viewportService: ViewportService = inject(ViewportService);
+
+  userStatus: string = 'on';
+
+  isProfileMenuOpen: boolean = false;
+  isUnderMenuOpen: boolean = false;
+  isOpenEditEditor: boolean = false;
+
+
+  constructor() { }
 
   /**
    * Focuses the search input element.

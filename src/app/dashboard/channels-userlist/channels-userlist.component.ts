@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserListComponent } from './user-list/user-list.component';
 import { ChannelListComponent } from './channel-list/channel-list.component';
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
+import { ViewportService } from '../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-channels-userlist',
@@ -22,6 +23,7 @@ import { MessengerService } from '../../shared/services/messenger-service/messen
 export class ChannelsUserlistComponent {
 
   messengerService: MessengerService = inject(MessengerService);
+  viewportService: ViewportService = inject(ViewportService);
 
   constructor() { }
 

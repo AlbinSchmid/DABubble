@@ -30,7 +30,8 @@
         </button>
     </main>
 
-    <main *ngIf="viewportService.width <= 1020" class="responsive-main-contain">
+    <main *ngIf="viewportService.width <= 1020" class="responsive-main-contain"
+        [ngClass]="{'p-bottom100' : browserTypeOnTouchService.isSafari() && browserTypeOnTouchService.isTouch(), 'p-bottom130': browserTypeOnTouchService.isChrome() && browserTypeOnTouchService.isTouch()}">
         <app-header></app-header>
         <app-channels-userlist></app-channels-userlist>
         <app-thread style="display: none;"></app-thread>

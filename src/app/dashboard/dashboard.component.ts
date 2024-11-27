@@ -17,6 +17,7 @@ import { Subject, takeUntil, timeout, timer } from 'rxjs';
 import { onAuthStateChanged } from '@angular/fire/auth';
 import { NewMessageComponent } from './new-message/new-message.component';
 import { ViewportService } from '../shared/services/viewport.service';
+import { BrowserTypeOnTouchService } from '../shared/services/browser-type-on-touch.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,6 +45,7 @@ export class DashboardComponent {
   authService: AuthserviceService = inject(AuthserviceService);
   threadService: ThreadService = inject(ThreadService);
   messengerService: MessengerService = inject(MessengerService);
+  browserTypeOnTouchService: BrowserTypeOnTouchService = inject(BrowserTypeOnTouchService);
   router: Router = inject(Router);
 
   userFound$ = new Subject<void>();
