@@ -224,27 +224,27 @@ app-add-person {
     right: -80px;
 }
 
-@media screen and (max-width: 600px) {
-    section {
-        border-radius: 0px;
+// @media screen and (max-width: 600px) {
+//     section {
+//         border-radius: 0px;
 
-        header {
-            padding: 0 8px;
+//         header {
+//             padding: 0 18px;
 
-            button {
-                padding: 0px !important;
-            }
-        }
-    }
+//             button {
+//                 padding: 0px !important;
+//             }
+//         }
+//     }
 
-    #info {
-        padding: 0 8px !important;
+//     #info {
+//         padding: 0 8px !important;
 
-        div {
-            img {
-                width: 88px !important;
-                height: 88px !important;
-            }
-        }
-    }
-}
+//         div {
+//             img {
+//                 width: 88px !important;
+//                 height: 88px !important;
+//             }
+//         }
+//     }
+// }

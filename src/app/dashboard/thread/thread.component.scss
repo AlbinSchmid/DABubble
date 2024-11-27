@@ -8,6 +8,10 @@ button {
     transition: 125ms ease-in-out !important;
 }
 
+::ng-deep .mat-mdc-card {
+    box-shadow: none !important;
+}
+
 mat-card {
     display: flex;
     flex-direction: column;
@@ -218,6 +222,43 @@ mat-card {
 
                 }
 
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1550px) {
+    mat-card {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    mat-card {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    mat-card {
+        border-radius: 0px !important;
+
+        header {
+            padding: 0 18px;
+
+            button {
+                padding: 0px !important;
+            }
+        }
+    }
+
+    #info {
+        padding: 0 8px !important;
+
+        div {
+            img {
+                width: 88px !important;
+                height: 88px !important;
             }
         }
     }

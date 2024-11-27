@@ -3,20 +3,19 @@
         <app-header></app-header>
         <section>
             <mat-drawer-container>
-                <mat-drawer id="sidenav-left" #drawer mode="side" position="start" [opened]="isSideNavOpen">
+                <mat-drawer #drawer mode="side" position="start" [opened]="isSideNavOpen">
                     <app-channels-userlist></app-channels-userlist>
                 </mat-drawer>
 
                 <mat-drawer-content>
                     <app-messenger *ngIf="messengerService.openMessenger"></app-messenger>
                     <app-new-message *ngIf="messengerService.openNewMessage"></app-new-message>
+                    <app-thread *ngIf="threadService.showThreadSideNav"></app-thread>
                 </mat-drawer-content>
 
-                <mat-drawer id="sidenav-left" #drawerThread mode="side" [opened]="threadService.showThreadSideNav"
-                    position="end">
-                    <app-thread></app-thread>
+                <mat-drawer #drawerThread mode="side" class="mat-drawer-thread"
+                    [opened]="threadService.showThreadSideNav" position="end">
                 </mat-drawer>
-
             </mat-drawer-container>
         </section>
         <button class="toggle-btn" (click)="toggleSideNav()"
@@ -33,8 +32,9 @@
     <main *ngIf="viewportService.width <= 1020" class="responsive-main-contain"
         [ngClass]="{'p-bottom100' : browserTypeOnTouchService.isSafari() && browserTypeOnTouchService.isTouch(), 'p-bottom130': browserTypeOnTouchService.isChrome() && browserTypeOnTouchService.isTouch()}">
         <app-header></app-header>
-        <app-channels-userlist></app-channels-userlist>
-        <app-thread style="display: none;"></app-thread>
+        <app-channels-userlist *ngIf="!messengerService.openMessenger && !threadService.showThreadSideNav"></app-channels-userlist>
+        <app-messenger *ngIf="messengerService.openMessenger"></app-messenger>
+        <app-thread *ngIf="threadService.showThreadSideNav"></app-thread>
     </main>
 </ng-container>
 
