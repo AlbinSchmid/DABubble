@@ -35,7 +35,7 @@
         <div *ngIf="!reduceContent" id="answer-container">
             <a (click)="openThead()">{{ giveAnswerLengthBack() }}</a>
             <p><span *ngIf="answers.length > 0">Letzte Antwort {{ giveDateBack(answers[this.answers.length - 1].date,
-                    'answerText') }} um</span> {{ giveLastAnswerDateBack() | date: 'H:mm' }}</p>
+                    'answerText') }} um {{ giveLastAnswerDateBack() | date: 'H:mm' }}</span></p>
         </div>
     </div>
     <div class="interaction" *ngIf="hoveredMessageId == messageIndex && !editMessage">

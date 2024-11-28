@@ -5,7 +5,8 @@
             <p><mark>&#64;</mark>{{ threadService.messageToReplyTo.senderName }}</p>
         </div>
 
-        <mat-icon (click)="threadService.showThreadSideNav = false;">close</mat-icon>
+        <mat-icon (click)="threadService.showThreadSideNav = false; messengerService.openMessenger = true;" *ngIf="viewportService.width <= 1550">arrow_back</mat-icon>
+        <mat-icon (click)="threadService.showThreadSideNav = false;" *ngIf="viewportService.width >= 1550">close</mat-icon>
 
     </header>
     <div id="content">

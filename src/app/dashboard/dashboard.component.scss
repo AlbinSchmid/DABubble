@@ -45,6 +45,8 @@ app-messenger {
     width: 100%;
 }
 
+
+
 .toggle-btn {
     position: absolute;
     display: flex;
@@ -171,3 +173,32 @@ app-new-message {
 .p-bottom100 {
     padding-bottom: 100px;
 }
+
+@media screen and (max-width: 1550px) {
+    app-thread {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 1020px) {
+    app-messenger {
+        height: 10%;
+    }
+}
+
+// @media screen and (max-width: 1200px) {
+//     #sidenav-left {
+//         width: 100% !important;
+//     }
+// }
+
+// @media screen and (max-width: 600px) {
+//     .main-contain {
+//         padding: 0;
+//     }
+
+//     .mat-drawer-content {
+//         padding: 0;
+//     }    
+// }

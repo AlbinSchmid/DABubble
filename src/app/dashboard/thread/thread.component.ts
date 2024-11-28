@@ -9,6 +9,7 @@ import { MessageComponent } from '../../shared/components/message/message.compon
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
 import { MessageParserService } from '../../shared/services/message-parser.service';
+import { ViewportService } from '../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-thread',
@@ -25,6 +26,7 @@ import { MessageParserService } from '../../shared/services/message-parser.servi
   styleUrl: './thread.component.scss'
 })
 export class ThreadComponent implements AfterViewInit{
+  viewportService = inject(ViewportService)
   reduceInteraktionBtn = true;
   editAnswerMessage = true;
   sourceThread = true;

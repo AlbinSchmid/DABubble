@@ -16,6 +16,7 @@ import { MessageParserService } from '../../services/message-parser.service';
 import { Message } from '../../../models/message.class';
 import { TextareaServiceService } from '../../services/textarea-service/textarea-service.service';
 import { MentionUserInterface } from '../../interfaces/mention-user-interface';
+import { ViewportService } from '../../services/viewport.service';
 
 @Component({
   selector: 'app-message',
@@ -32,6 +33,7 @@ import { MentionUserInterface } from '../../interfaces/mention-user-interface';
   styleUrl: './message.component.scss'
 })
 export class MessageComponent implements OnInit {
+  viewportService = inject(ViewportService);
   authService = inject(AuthserviceService);
   mesageparser = inject(MessageParserService);
   firebaseMessenger = inject(FirebaseMessengerService);
@@ -242,6 +244,9 @@ export class MessageComponent implements OnInit {
    * Open the thread for answer
    */
   openThead() {
+    if (this.viewportService.width <= 1550) {
+      this.messengerService.openMessenger = false;
+    }
     this.threadService.showThreadSideNav = true;
     this.threadService.messageToReplyTo = this.message;
     console.log(this.threadService.scrollContainer);
