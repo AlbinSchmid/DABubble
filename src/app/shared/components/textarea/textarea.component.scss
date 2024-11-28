@@ -164,6 +164,10 @@ section {
                 display: flex;
                 gap: 5px;
 
+                p {
+                    margin: 0;
+                }
+
                 div {
                     width: 1px;
                     background-color: #ADB0D9;
@@ -226,7 +230,6 @@ section {
             }
 
             #send-message-btn {
-
                 &:hover {
                     opacity: 0.6;
                 }
@@ -261,10 +264,32 @@ mat-icon {
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1020px) {
     section {
         .interaction-div {
-            margin: 8px !important;
+            margin: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) clamp(0.5rem, 0.1571rem + 1.7143vw, 1.25rem) !important; // 8px - 40px, 8px - 20px
+            padding: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important; // 12px - 20px
         }
+    }
+
+    textarea {
+        font-size: clamp(1rem, 0.9429rem + 0.2857vw, 1.125rem) !important; // 16px - 18px
+
+        &::placeholder { 
+            font-size: clamp(0.875rem, 0.7607rem + 0.5714vw, 1.125rem) !important; // 14px - 18px
+        }
+    }
+
+    #send-message-btn {
+        img {
+            width: clamp(1.5rem, 1.3286rem + 0.8571vw, 1.875rem);
+        }
+    }
+
+    mat-icon {
+        width: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; // 30px - 40px
+        height: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; // 30px - 40px
+        font-size: clamp(1.375rem, 1.3179rem + 0.2857vw, 1.5rem) !important; // 22px - 24px
+
     }
 }

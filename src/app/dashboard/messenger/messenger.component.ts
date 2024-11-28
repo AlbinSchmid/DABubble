@@ -21,6 +21,7 @@ import { FirestoreService } from '../../shared/services/firebase-services/firest
 import { MentionUserInterface } from '../../shared/interfaces/mention-user-interface';
 import { AddPersonComponent } from './add-person/add-person.component';
 import { list } from '@angular/fire/storage';
+import { ViewportService } from '../../shared/services/viewport.service';
 registerLocaleData(localeDe);
 
 @Component({
@@ -43,6 +44,7 @@ registerLocaleData(localeDe);
   styleUrl: './messenger.component.scss'
 })
 export class MessengerComponent implements AfterViewInit {
+  viewportService = inject(ViewportService);
   firestore: Firestore = inject(Firestore);
   firestoreService: FirestoreService = inject(FirestoreService);
   dialog = inject(MatDialog);
@@ -71,12 +73,22 @@ export class MessengerComponent implements AfterViewInit {
   showAddPersonDialogDirect = false;
   dateCount = 0;
 
+  @ViewChild('name') nameHeadline: ElementRef;
+  isTextWrapped = false;
+  resizeObserver!: ResizeObserver;
+  checkTextSenderName = false;
+  windowWith = 0;
+
+
+
 
   /**
    * Sets the scrollContainer in the messenger service to the ElementRef of the ViewChild with the name 'content'.
    * This is necessary because the ViewChild is not yet available in the constructor or ngOnInit.
    */
   ngAfterViewInit() {
+    this.resizeObserver = new ResizeObserver(() => this.checkTextStatus());
+    this.resizeObserver.observe(this.nameHeadline.nativeElement);
     this.messengerService.scrollContainer = this.scrollContainer;
   }
 
@@ -86,6 +98,27 @@ export class MessengerComponent implements AfterViewInit {
    */
   ngOnDesroy() {
     this.userListSubscription;
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
+
+  checkTextStatus() {
+    if (this.nameHeadline.nativeElement) {
+      const element = this.nameHeadline.nativeElement;
+      const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
+      const elementHeight = element.offsetHeight;
+      this.isTextWrapped = elementHeight > lineHeight;
+      if (this.isTextWrapped && !this.checkTextSenderName) {
+        this.windowWith = this.viewportService.width;
+        this.checkTextSenderName = true;
+        this.messengerService.messageName = `${this.messengerService.getFirstWord(this.messengerService.user.username)}. ${this.messengerService.getSecondWordFirstLetter(this.messengerService.user.username)}`;
+      } else if (this.windowWith < this.viewportService.width) {      
+        this.messengerService.messageName = this.messengerService.user.username;
+        this.checkTextSenderName = false;
+      }
+    }
   }
 
 
@@ -128,7 +161,7 @@ export class MessengerComponent implements AfterViewInit {
       data: {
         avatar: this.messengerService.user.avatar,
         userID: this.messengerService.user.userID,
-        userName: this.messengerService.user.username,
+        username: this.messengerService.user.username,
         email: this.messengerService.user.email,
         userStatus: this.messengerService.user.userStatus
       },

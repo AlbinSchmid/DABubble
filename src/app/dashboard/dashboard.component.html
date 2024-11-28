@@ -10,11 +10,11 @@
                 <mat-drawer-content>
                     <app-messenger *ngIf="messengerService.openMessenger"></app-messenger>
                     <app-new-message *ngIf="messengerService.openNewMessage"></app-new-message>
-                    <app-thread *ngIf="threadService.showThreadSideNav"></app-thread>
                 </mat-drawer-content>
-
+                
                 <mat-drawer #drawerThread mode="side" class="mat-drawer-thread"
-                    [opened]="threadService.showThreadSideNav" position="end">
+                [opened]="threadService.showThreadSideNav" position="end">
+                <app-thread *ngIf="threadService.showThreadSideNav"></app-thread>
                 </mat-drawer>
             </mat-drawer-container>
         </section>

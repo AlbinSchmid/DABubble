@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild, viewChild } from '@angular/core';
 import { ThreadService } from '../../services/thread-service/thread.service';
 import { EditMessageComponent } from './edit-message/edit-message.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,7 @@ import { ViewportService } from '../../services/viewport.service';
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss'
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnDestroy{
   viewportService = inject(ViewportService);
   authService = inject(AuthserviceService);
   mesageparser = inject(MessageParserService);
@@ -54,6 +54,7 @@ export class MessageComponent implements OnInit {
   lastTwoReactins: any[] = [];
   usersToMention: MentionUserInterface[] = [];
 
+  messageName: string;
   hoveredMenu = false;
   showEmojiBoard = false;
   hoveredMessageId: number;
@@ -66,15 +67,43 @@ export class MessageComponent implements OnInit {
   unsubAnswerList: any;
 
   unsubChannelList: any;
+  @ViewChild('nameHeadline') nameHeadline: ElementRef;
+  isTextWrapped = false;
+  resizeObserver!: ResizeObserver;
+  checkTextSenderName = false;
+  windowWith: number;
 
 
   ngOnInit() {
+    this.messageName = this.message.senderName;
     if (this.messengerService.channel.channelID !== '') {
       this.unsubMentionsList = this.subMentionsList();
     }
     this.checkDateIfAlreadyIncludeInArray();
     this.unsubReactionList = this.subReactionList();
     this.unsubAnswersList = this.subAnswersList(); //Für die zahlen
+  }
+
+
+  ngAfterViewInit() {
+    this.resizeObserver = new ResizeObserver(() => this.checkTextStatus());
+    this.resizeObserver.observe(this.nameHeadline.nativeElement);
+  }
+
+
+  checkTextStatus() {
+    const element = this.nameHeadline.nativeElement;
+    const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
+    const elementHeight = element.offsetHeight;
+    this.isTextWrapped = elementHeight > lineHeight;
+    if (this.isTextWrapped && !this.checkTextSenderName) {
+      this.windowWith = this.viewportService.width;
+      this.checkTextSenderName = true;
+      this.messageName = `${this.messengerService.getFirstWord(this.message.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.message.senderName)}`;
+    } else if (this.windowWith < this.viewportService.width) {
+      this.messageName = this.message.senderName;
+      this.checkTextSenderName = false;
+    }
   }
 
 
@@ -210,6 +239,9 @@ export class MessageComponent implements OnInit {
 
   ngOnDestroy() {
     this.unsubReactionList;
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
 

@@ -55,6 +55,19 @@ export class MessengerService {
   textareaMessenger = new Subject<void>();
   textareaThread = new Subject<void>();
   showMessageBtn: boolean;
+  messageName: string;
+
+
+  getFirstWord(name: string): string {
+    const words = name.split(" "); // Teilt den String in ein Array von Wörtern
+    return words[0]; // Gibt das erste Wort zurück
+  }
+
+
+  getSecondWordFirstLetter(name: string): string {
+    const words = name.split(" "); // Teilt den String in ein Array von Wörtern
+    return words[1]?.charAt(0) || ""; // Gibt den ersten Buchstaben des zweiten Wortes zurück
+  }
 
   
   sortByName(array: any[]) {
@@ -67,7 +80,9 @@ export class MessengerService {
   
 
   scrollToBottom(container: any) {
-    container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
+    if (container) {
+      container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
+    } 
   }
 
 
@@ -120,6 +135,7 @@ export class MessengerService {
     setTimeout(() => {
       this.textareaMessenger.next();
     },);
+    this.messageName = user.username;
   }
 
 

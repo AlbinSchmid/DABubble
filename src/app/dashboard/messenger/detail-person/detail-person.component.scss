@@ -44,6 +44,8 @@ section {
             max-width: 80%;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 40px;
+            margin-bottom: 20px;
         }
 
         div {
@@ -126,11 +128,23 @@ section {
     max-width: 500px;
 }
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 1020px) {
     section {
+        padding: clamp(1.25rem, 0.9643rem + 1.4286vw, 1.875rem) !important; // 20px - 30px
+
         img {
-            width: 150px;
-            height: 150px;
+            width: clamp(7.5rem, 6.6429rem + 4.2857vw, 9.375rem) !important; // 120px - 150px
+            height: clamp(7.5rem, 6.6429rem + 4.2857vw, 9.375rem) !important; // 120px - 150px
+        }
+
+        h1 {
+            font-size: clamp(1.75rem, 1.6357rem + 0.5714vw, 2rem) !important; // 28px - 32px
+        }
+    }
+    
+    #email-container {
+        h2 {
+            font-size: clamp(1.125rem, 1.0679rem + 0.2857vw, 1.25rem) !important; // 18px - 20px
         }
     }
 }

@@ -21,6 +21,7 @@ import { MentionUserInterface } from '../../interfaces/mention-user-interface';
 import { Message } from '../../../models/message.class';
 import { MentionModule } from 'angular-mentions';
 import { Subscription } from 'rxjs';
+import { ViewportService } from '../../services/viewport.service';
 
 @Component({
   selector: 'app-textarea',
@@ -38,6 +39,7 @@ import { Subscription } from 'rxjs';
   providers: []
 })
 export class TextareaComponent {
+  viewportService = inject(ViewportService);
   authService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
   firestore: Firestore = inject(Firestore);

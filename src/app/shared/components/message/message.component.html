@@ -9,7 +9,7 @@
     <img src="{{message.senderAvatar}}" alt="Profile" id="img-avatar">
     <div id="message-content" *ngIf="!editMessage">
         <div>
-            <h6>{{ message.senderName }}</h6>
+            <h6 #nameHeadline>{{ messageName }}</h6>
             <p>{{ message.date | date:'H:mm' }}
                 <span>Uhr</span>
             </p>

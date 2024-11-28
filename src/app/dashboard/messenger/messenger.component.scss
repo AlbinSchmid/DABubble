@@ -83,6 +83,7 @@ section {
                     .user-count {
                         color: #444DF2;
                     }
+
                     background-color: #ECEEFE;
                 }
             }
@@ -137,7 +138,7 @@ section {
 
 
             #info {
-                padding: 100px 30px 10px 30px;
+                padding: 0 clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem); // 8 - 30px
 
                 div {
                     display: flex;
@@ -224,27 +225,32 @@ app-add-person {
     right: -80px;
 }
 
-// @media screen and (max-width: 600px) {
-//     section {
-//         border-radius: 0px;
+@media screen and (max-width: 1020px) {
+    header {
+        padding: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) !important; // 8px - 40px
 
-//         header {
-//             padding: 0 18px;
+    }
+    
+    h4 {
+        font-size: clamp(1.375rem, 1.3179rem + 0.2857vw, 1.5rem) !important; // 22px - 24px
+    }
+    
+    #info {
+        div {
+            img {
+                width: clamp(5rem, 4.4286rem + 2.8571vw, 6.25rem) !important; // 80px - 100px
+                height: clamp(5rem, 4.4286rem + 2.8571vw, 6.25rem) !important; // 80px - 100px
+            }
+    
+            h4 {
+                margin-left: clamp(0.625rem, 0.3393rem + 1.4286vw, 1.25rem) !important; // 10px - 20px
+                line-height: 25px;
+            }
+        }
 
-//             button {
-//                 padding: 0px !important;
-//             }
-//         }
-//     }
-
-//     #info {
-//         padding: 0 8px !important;
-
-//         div {
-//             img {
-//                 width: 88px !important;
-//                 height: 88px !important;
-//             }
-//         }
-//     }
-// }
+        p {
+            margin-top: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important; // 12px - 20px
+            font-size: clamp(1rem, 0.8857rem + 0.5714vw, 1.25rem) !important; // 16px - 20px
+        }
+    }
+}
