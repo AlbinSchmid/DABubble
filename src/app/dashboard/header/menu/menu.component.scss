@@ -263,7 +263,7 @@ mat-icon {
     padding: 15px 10px 15px 10px;
     opacity: 0;
     overflow: hidden;
-    
+
     img {
         object-fit: cover;
         object-position: top;
@@ -409,12 +409,14 @@ mat-icon {
     margin-left: -3px;
     flex-direction: column;
     gap: 20px;
+
     .email-wrapper {
-    display: flex;
-    align-items: start;
-    gap: 20px;
-    align-items: center;
+        display: flex;
+        align-items: start;
+        gap: 20px;
+        align-items: center;
     }
+
     div {
         .email-title {
             font-size: 20px;

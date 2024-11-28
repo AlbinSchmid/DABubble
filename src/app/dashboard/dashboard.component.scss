@@ -146,6 +146,11 @@ app-new-message {
     overflow: hidden;
     padding: 20px;
 
+    @media(max-width:460px) {
+        gap: 0;
+        padding: 10px;
+    }
+
     app-channels-userlist {
         width: 100%;
         height: 100%;

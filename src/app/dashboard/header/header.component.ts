@@ -23,7 +23,7 @@ import { ViewportService } from '../../shared/services/viewport.service';
     SearchResultComponent
   ],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
   @ViewChild('searchInput') searchInput!: ElementRef;
@@ -35,6 +35,7 @@ export class HeaderComponent {
 
   userStatus: string = 'on';
 
+  isMenuOpen: boolean = false;
   isProfileMenuOpen: boolean = false;
   isUnderMenuOpen: boolean = false;
   isOpenEditEditor: boolean = false;
@@ -43,73 +44,122 @@ export class HeaderComponent {
   constructor() { }
 
   /**
-   * Focuses the search input element.
+   * Focuses the search input element to allow the user to type a search query.
    */
   focusSearchInput(): void {
     this.searchInput.nativeElement.focus();
   }
 
-  onSearch() {
-    this.searchService.search(this.searchInput.nativeElement.value)
+  /**
+   * Handles the search functionality by passing the user's input to the SearchService.
+   */
+  onSearch(): void {
+    this.searchService.search(this.searchInput.nativeElement.value);
   }
 
   /**
-   * Closes the profile menu and under menu, and also closes the edit user
-   * editor if it is open. The menu and under menu are closed by adding the
-   * class 'close' to the element with the class 'profile-menu-contain', and
-   * removing the class 'open' from the same element. The edit user editor is
-   * closed by setting the boolean isOpenEditEditor to false. The menu is
-   * closed after a delay of 120ms, and the edit user editor is closed after
-   * the same delay.
+   * Closes the profile menu. Chooses the appropriate method to close either
+   * the normal menu or the mobile menu based on the viewport size.
    */
   closeProfileMenu(): void {
-    let menuElement = document.querySelector('.profile-menu-contain');
-    if (this.isProfileMenuOpen) {
-      menuElement!.classList.remove('open');
-      menuElement!.classList.add('close');
-      setTimeout(() => { this.isProfileMenuOpen = false; }, 120);
-    }
-    if (this.isUnderMenuOpen) {
-      setTimeout(() => this.isUnderMenuOpen = false, 120);
-    }
-    if (this.isOpenEditEditor) {
-      setTimeout(() => this.isOpenEditEditor = false, 120);
+    if (!this.isMobileMenuOpen()) {
+      this.closeNormalMenu();
+    } else {
+      this.closeMobileMenu();
     }
   }
 
   /**
-   * Updates the user status with the given new status. The new status is one
-   * of 'on', 'off', or 'busy'. This function is called when the user status is changed in the menu component.
-   * @param newStatus The new status of the user. Must be one of 'on', 'off', or 'busy'.
+   * Closes the normal profile menu with a fade-out animation.
+   */
+  closeNormalMenu(): void {
+    const menuElement = document.querySelector('.profile-menu-contain');
+    if (this.isProfileMenuOpen) {
+      menuElement?.classList.remove('open');
+      menuElement?.classList.add('close');
+      setTimeout(() => {
+        this.isProfileMenuOpen = false;
+      }, 120);
+    }
+    if (this.isUnderMenuOpen) {
+      setTimeout(() => {
+        this.isUnderMenuOpen = false;
+      }, 120);
+    }
+    if (this.isOpenEditEditor) {
+      setTimeout(() => {
+        this.isOpenEditEditor = false;
+      }, 120);
+    }
+  }
+
+  /**
+   * Closes the mobile profile menu with a slide-down animation.
+   */
+  closeMobileMenu(): void {
+    const menuElement = document.querySelector('.cdk-overlay-pane');
+    if (this.isProfileMenuOpen || this.isMenuOpen) {
+      menuElement?.classList.remove('openMobileMenu');
+      menuElement?.classList.add('closeMobileMenu');
+      setTimeout(() => {
+        this.isMenuOpen = false;
+        this.isProfileMenuOpen = false;
+      }, 120);
+    }
+    if (this.isUnderMenuOpen) {
+      setTimeout(() => {
+        this.isUnderMenuOpen = false;
+        this.isMenuOpen = false;
+      }, 120);
+    }
+    if (this.isOpenEditEditor) {
+      setTimeout(() => {
+        this.isOpenEditEditor = false;
+        this.isMenuOpen = false;
+      }, 120);
+    }
+  }
+
+  /**
+   * Opens the mobile profile menu with a slide-up animation.
+   */
+  openProfileMenu(): void {
+    if (!this.isMobileMenuOpen()) return;
+
+    const menuElement = document.querySelector('.cdk-overlay-pane');
+    menuElement?.classList.remove('closeMobileMenu');
+    menuElement?.classList.add('openMobileMenu');
+    this.isMenuOpen = true;
+  }
+
+  /**
+   * Updates the user's status.
+   * @param newStatus - The new status of the user ('on', 'off', or 'busy').
    */
   onStatusChange(newStatus: string): void {
     this.userStatus = newStatus;
   }
 
   /**
-   * Sets the boolean isUnderMenuOpen to the given value. This function is
-   * called when the under menu is opened or closed in the menu component.
-   * @param isOpen The new value of isUnderMenuOpen.
+   * Updates the state of the under menu.
+   * @param isOpen - Whether the under menu is open.
    */
   onUnderMenuStatusChange(isOpen: boolean): void {
     this.isUnderMenuOpen = isOpen;
   }
 
   /**
-   * Updates the state of the edit editor's open status.
-   * Sets the boolean isUnderMenuOpen to the given value.
-   * This function is called when the edit editor is opened or closed in the menu component.
-   * @param isOpen The new open state of the edit editor.
+   * Updates the state of the edit editor.
+   * @param isOpen - Whether the edit editor is open.
    */
   onEditEditorChange(isOpen: boolean): void {
     this.isUnderMenuOpen = isOpen;
   }
 
   /**
-   * Fetches the user status from Firestore with the given user ID.
-   * Updates the userStatus property with the user's current status.
-   * If the user status is not found in Firestore, the userStatus is set to 'on'.
-   * @param uid The user ID to fetch the user status for.
+   * Fetches the user status from Firestore for a given user ID.
+   * @param uid - The user ID for which to fetch the status.
+   * @returns A promise that resolves when the user status is updated.
    */
   async fetchUserStatus(uid: string): Promise<void> {
     const userDocRef = doc(this.firestore, `users/${uid}`);
@@ -121,9 +171,8 @@ export class HeaderComponent {
   }
 
   /**
-   * OnInit lifecycle hook. Listens to the user stream from the AuthService
-   * and updates the current user and user status when the user changes.
-   * If the user is not signed in, the current user is set to null.
+   * Lifecycle hook to initialize the component.
+   * Subscribes to the user stream and updates the current user and status.
    */
   ngOnInit(): void {
     this.authService.user$.subscribe((user: any) => {
@@ -138,11 +187,11 @@ export class HeaderComponent {
   }
 
   /**
-   * Constructs a new user object from the provided user information.
-   * The returned object includes the user's ID, email, display name, avatar, focus status, and current status.
-   * The password field is initialized as an empty string.
+   * Creates a new user object from the raw user data.
+   * @param user - The raw user data from the authentication service.
+   * @returns A formatted UserInterface object.
    */
-  setNewUser(user: any) {
+  setNewUser(user: any): UserInterface {
     return {
       userID: user.uid,
       password: '',
@@ -150,7 +199,15 @@ export class HeaderComponent {
       username: user.displayName,
       avatar: user.photoURL,
       isFocus: user.isFocus,
-      userStatus: this.userStatus
+      userStatus: this.userStatus,
     };
+  }
+
+  /**
+   * Checks if the current viewport size qualifies as mobile.
+   * @returns True if the viewport width is less than or equal to 460px.
+   */
+  isMobileMenuOpen(): boolean {
+    return this.viewportService.width <= 460;
   }
 }

@@ -6,7 +6,7 @@
     <button class="log-out-btn" (click)="closeThreadAndMessenger()" (click)="authService.logout()">Log out</button>
 </div>
 } @else {
-<div (click)="noClickable($event)" class="profile-menu-contain open ">
+<div (click)="noClickable($event)" class="profile-menu-contain open">
     <div class="profile-menu-top">
         <span *ngIf="!isOpenEditEditor">Profil</span>
         <span *ngIf="isOpenEditEditor">Dein Profil bearbeiten</span>
@@ -32,8 +32,7 @@
             <div class="user-name-contain">
                 <span class="user-name">{{authService.currentUserSig()?.username || 'Neuer Gast'}}</span>
             </div>
-            <button 
-                (click)="toggleEditUserEditor($event)" class="edit-user-btn">
+            <button (click)="toggleEditUserEditor($event)" class="edit-user-btn">
                 Bearbeiten
             </button>
         </div>
@@ -53,15 +52,15 @@
         </div>
         <div *ngIf="isUnderMenuOpen" class="status-undermenu">
             <div *ngIf="!userIsOnline()">
-              <span (click)="setUserStatus($event, 'on')" class="status-online-txt">Online</span>
+                <span (click)="setUserStatus($event, 'on')" class="status-online-txt">Online</span>
             </div>
             <div *ngIf="!userIsBusy()">
-              <span (click)="setUserStatus($event, 'busy')" class="status-busy-txt">Beschäftigt</span>
+                <span (click)="setUserStatus($event, 'busy')" class="status-busy-txt">Beschäftigt</span>
             </div>
             <div *ngIf="!userIsOffline()">
-              <span (click)="setUserStatus($event, 'off')" class="status-offline-txt">Offline</span>
+                <span (click)="setUserStatus($event, 'off')" class="status-offline-txt">Offline</span>
             </div>
-          </div>
+        </div>
         <mat-icon *ngIf="!isUnderMenuOpen" (click)="openUnderMenuStatus($event)" class="change-status-icon"
             fontIcon="navigate_next">
         </mat-icon>
@@ -74,7 +73,7 @@
             <mat-icon class="email-icon" fontIcon="email"></mat-icon>
             <span class="email-title">E-Mail-Adresse</span>
         </div>
-         <span class="user-email">{{authService.currentUserSig()?.email || 'gast@gast.de' }}</span>
+        <span class="user-email">{{authService.currentUserSig()?.email || 'gast@gast.de' }}</span>
     </div>
     } @else {
     <app-edit-user [(isOpenEditEditor)]="isOpenEditEditor"></app-edit-user>
