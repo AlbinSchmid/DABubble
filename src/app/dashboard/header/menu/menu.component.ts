@@ -48,11 +48,11 @@ export class MenuComponent {
   viewportService: ViewportService = inject(ViewportService);
 
   constructor() { }
+
   /**
-   * Closes the thread and messenger components by setting their respective
-   * 'show' properties to false.
+   * Closes both the thread and messenger components by setting their visibility to false.
    */
-  closeThreadAndMessenger() {
+  closeThreadAndMessenger(): void {
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
   }
@@ -60,12 +60,11 @@ export class MenuComponent {
   /**
    * Toggles the visibility of the profile menu.
    * 
-   * If the profile menu is not open, it sets `isProfileMenuOpen` to true 
-   * and emits the change. If the menu is already open, it closes the menu 
-   * by invoking `closeMenu`, waits for 140ms, and then sets 
-   * `isProfileMenuOpen` to false and emits the change.
+   * - Opens the menu if it is currently closed and emits the change.
+   * - If the menu is open, applies the appropriate animation based on the viewport width
+   *   and then closes the menu after a delay, emitting the updated state.
    * 
-   * @param e The event that triggered the toggle action.
+   * @param e - The event that triggered the toggle action.
    */
   toggleProfileMenu(e: Event): void {
     e.stopPropagation();
@@ -92,11 +91,15 @@ export class MenuComponent {
   }
 
   /**
-   * Closes the profile menu by removing the 'open' and 'min-height' classes and
-   * adding the 'close' class to the menu element.
-   * @param menuElement The element that contains the profile menu.
+   * Closes the profile menu by applying the appropriate animation class
+   * based on the viewport size.
+   * 
+   * - For mobile devices (`<= 460px`), adds `close-responsive` class.
+   * - For larger viewports, adds `close` class.
+   * 
+   * @param menuElement - The DOM element representing the profile menu.
    */
-  closeMenu(menuElement: any) {
+  closeMenu(menuElement: any): void {
     if (this.viewportService.width <= 460) {
       menuElement.classList.remove('open-responsive');
       menuElement.classList.add('close-responsive');
@@ -109,11 +112,9 @@ export class MenuComponent {
 
   /**
    * Toggles the visibility of the under menu.
+   * Emits the updated visibility state to the parent component.
    * 
-   * If the under menu is not open, it sets `isUnderMenuOpen` to true and
-   * emits the change. If the under menu is already open, it closes the under
-   * menu by setting `isUnderMenuOpen` to false and emitting the change.
-   * @param e The event that triggered the toggle action.
+   * @param e - The event that triggered the toggle action.
    */
   openUnderMenuStatus(e: Event): void {
     e.stopPropagation();
@@ -122,58 +123,60 @@ export class MenuComponent {
   }
 
   /**
-   * Returns true if the user is online, and false otherwise.
-   * A user is considered online if their status is not set to 'off' or 'busy'.
-   * @returns True if the user is online, false otherwise.
+   * Checks if the user is currently online.
+   * A user is online if their status is neither 'off' nor 'busy'.
+   * 
+   * @returns True if the user is online, otherwise false.
    */
-  userIsOnline() {
+  userIsOnline(): boolean {
     return this.userStatus !== 'off' && this.userStatus !== 'busy';
   }
 
   /**
-   * Returns true if the user is offline, and false otherwise.
-   * A user is considered offline if their status is set to 'off' but not 'busy'.
-   * @returns True if the user is offline, false otherwise.
+   * Checks if the user is currently offline.
+   * A user is offline if their status is set to 'off'.
+   * 
+   * @returns True if the user is offline, otherwise false.
    */
-  userIsOffline() {
-    return this.userStatus !== 'on' && this.userStatus !== 'busy';
+  userIsOffline(): boolean {
+    return this.userStatus === 'off';
   }
 
   /**
-   * Returns true if the user is busy, and false otherwise.
-   * A user is considered busy if their status is set to 'busy' but not 'off'.
-   * @returns True if the user is busy, false otherwise.
+   * Checks if the user is currently busy.
+   * A user is busy if their status is set to 'busy'.
+   * 
+   * @returns True if the user is busy, otherwise false.
    */
-  userIsBusy() {
-    return this.userStatus !== 'off' && this.userStatus !== 'on';
+  userIsBusy(): boolean {
+    return this.userStatus === 'busy';
   }
 
   /**
-   * Sets the user status to the given value and closes the under menu by
-   * setting `isUnderMenuOpen` to false. It also emits a change event for both
-   * `userStatus` and `isUnderMenuOpen` properties.
-   * @param e The event that triggered the status change.
-   * @param status The new status of the user. Must be one of 'on', 'off', or 'busy'.
+   * Sets the user's status to the specified value and closes the under menu.
+   * Emits the updated status and under menu state to the parent component.
+   * 
+   * @param e - The event that triggered the status change.
+   * @param status - The new status for the user ('on', 'off', or 'busy').
    */
-  setUserStatus(e: Event, status: 'on' | 'off' | 'busy') {
+  setUserStatus(e: Event, status: 'on' | 'off' | 'busy'): void {
     e.stopPropagation();
     this.userStatus = status;
     this.isUnderMenuOpen = false;
     this.userStatusChange.emit(this.userStatus);
     this.isUnderMenuOpenChange.emit(this.isUnderMenuOpen);
-    this.updateUserStatus()
+    this.updateUserStatus();
   }
 
   /**
-   * Toggles the open state of the edit user editor. If the edit user editor is
-   * not open, it will be opened by adding the class 'min-height' to the
-   * element with the class 'profile-menu-contain'. If the edit user editor is
-   * open, it will be closed by removing the same class. The open state of the
-   * edit user editor is also emitted as a change event for the
-   * `isOpenEditEditor` property.
-   * @param e The event that triggered the toggle.
+   * Toggles the visibility of the edit user editor.
+   * 
+   * - If the editor is currently closed, it opens it and applies the `min-height` class.
+   * - If the editor is open, it removes the `min-height` class and closes the editor.
+   * 
+   * @param e - The event that triggered the toggle action.
    */
-  toggleEditUserEditor(e: Event) {
+  toggleEditUserEditor(e: Event): void {
     e.stopPropagation();
     let menuElement = document.querySelector('.profile-menu-contain');
     if (menuElement && !this.isOpenEditEditor) {
@@ -190,40 +193,37 @@ export class MenuComponent {
   }
 
   /**
-   * Stops the propagation of the given event. This function is called
-   * for events that should not be propagated to the parent components.
-   * @param e The event to stop propagating.
+   * Prevents the propagation of the specified event.
+   * 
+   * @param e - The event to stop from propagating.
    */
-  noClickable(e: Event) {
+  noClickable(e: Event): void {
     e.stopPropagation();
   }
 
   /**
-   * Updates the current user's status in Firestore with the current value of `userStatus`.
-   * If a user is logged in, the user's document in Firestore is updated with the new status.
-   * Logs an error if the update fails or if no user is found.
+   * Updates the user's status in Firestore with the current value of `userStatus`.
+   * Logs an error if the update fails or if no user is logged in.
    */
-  updateUserStatus() {
+  updateUserStatus(): void {
     const currentUser = this.authService.currentUserSig();
     if (currentUser) {
       const userDocRef = doc(this.firestore, `users/${currentUser.userID}`);
-      updateDoc(userDocRef, { userStatus: this.userStatus })
-        .catch((error) => {
-          console.error('Error updating user status in Firestore:', error);
-        });
+      updateDoc(userDocRef, { userStatus: this.userStatus }).catch((error) => {
+        console.error('Error updating user status in Firestore:', error);
+      });
     } else {
-      console.error('No user found to update status');
+      console.error('No user found to update status.');
     }
   }
 
   /**
-   * Cancels the current editing process if the edit user component exists.
-   * It calls the `cancelProcess` method from the `EditUserComponent` to
-   * restore the original state and close the edit user editor.
+   * Cancels the current editing process by invoking the `cancelProcess` 
+   * method on the `EditUserComponent` if it exists.
    */
-  onCancelProgress() {
+  onCancelProgress(): void {
     if (this.editUserComponent) {
-      this.editUserComponent.cancelProcess(); // Call the method from the child
+      this.editUserComponent.cancelProcess();
     }
   }
 }
