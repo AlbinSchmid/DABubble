@@ -9,7 +9,12 @@
     </header>
 
     <header *ngIf="viewportService.width < 1250" class="search-header">
-        <span>SEARCH BAR HERE... 1250</span>
+        <div class="search-bar-contain" (click)="focusSearchInput()">
+            <input #searchInput placeholder="Suche nach..." type="text" (input)="onSearch()">
+            <div>
+                <mat-icon fontIcon="search" class="search-icon"></mat-icon>
+            </div>
+        </div>
     </header>
 
     <div class="scroll-contain">

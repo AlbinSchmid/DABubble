@@ -496,6 +496,25 @@ mat-icon {
     max-height: 350px;
     overflow-y: scroll;
     scrollbar-width: none;
+
+    @media(max-width:1249px) {
+        top: 183px;
+        transform: none;
+        left: 21px;
+        width: 600px;
+    }
+
+    @media(max-width:1020px) {
+        top: 182px;
+        left: 50%;
+        width: 90%;
+        transform: translateX(-50%);
+    }
+
+    @media(max-width:460px) {
+        top: 150px;
+        width: 96%;
+    }
 }
 
 .cdk-overlay-connected-position-bounding-box {
