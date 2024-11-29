@@ -1,4 +1,7 @@
-@let isMobileMenu = viewportService.width <= 460; @if (!isProfileMenuOpen) { <div class="menu-contain">
+
+@let isMobileMenu = viewportService.width <= 460; 
+
+@if (!isProfileMenuOpen) { <div class="menu-contain">
     <div *ngIf="isMobileMenu" class="line-contain">
         <div class="line"></div>
     </div>
@@ -13,7 +16,8 @@
             *ngIf="isMobileMenu" fontIcon="logout" class="btn-icon"></mat-icon>Log out</button>
     </div>
     } @else {
-    <div (click)="noClickable($event)" class="profile-menu-contain open">
+    <div (click)="noClickable($event)" class="profile-menu-contain"
+        [ngClass]="!isMobileMenu ? 'open' : 'open-responsive'">
         <div class="profile-menu-top">
             <span *ngIf="!isOpenEditEditor">Profil</span>
             <span *ngIf="isOpenEditEditor">Dein Profil bearbeiten</span>

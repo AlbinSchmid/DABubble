@@ -68,6 +68,11 @@ input {
     flex-direction: column;
     gap: 45px;
     height: max-content;
+
+    @media(max-width:460px) {
+        gap: 20px;
+        // background-color: greenyellow !important;
+    }
 }
 
 .btn-contain {
@@ -89,10 +94,10 @@ input {
     position: absolute;
     color: red;
     bottom: -20px;
-  }
+}
 
 
-.response{
+.response {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -110,6 +115,7 @@ input {
     0% {
         transform: translateX(-99%);
     }
+
     100% {
         transform: translateX(0);
     }

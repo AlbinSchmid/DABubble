@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { UploadImageService } from '../../../../shared/services/upload-image.service';
-import { deleteObject, ref } from '@angular/fire/storage';
 import { FirestoreService } from '../../../../shared/services/firebase-services/firestore.service';
 
 @Component({
@@ -23,17 +22,19 @@ import { FirestoreService } from '../../../../shared/services/firebase-services/
   styleUrl: './edit-user.component.scss'
 })
 export class EditUserComponent implements OnInit {
-  authService = inject(AuthserviceService)
+  imgUpload: UploadImageService = inject(UploadImageService);
+  firestoreService: FirestoreService = inject(FirestoreService);
+  authService: AuthserviceService = inject(AuthserviceService);
+
   inputName: string = '';
   inputEmail: string = '';
   errorMessage: string | null = null;
-  successMessage: string | null = null
-  avatarChanged: boolean = false;
-  imgUpload = inject(UploadImageService);
-  firestoreService: FirestoreService = inject(FirestoreService);
+  successMessage: string | null = null;
   newAvatar: string;
   originalAvatar: string;
   inputPassword: string = '';
+
+  avatarChanged: boolean = false;
   sending: boolean = false;
 
   standardAvatar = ['https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',

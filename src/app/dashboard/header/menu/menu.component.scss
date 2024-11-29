@@ -153,6 +153,16 @@ mat-icon {
     }
 }
 
+@keyframes openProfileMenuHeightResponsive {
+    0% {
+        max-height: 250px;
+    }
+
+    100% {
+        max-height: 600px;
+    }
+}
+
 @keyframes openProfileMenuWidth {
     0% {
         max-width: 230px;
@@ -179,7 +189,17 @@ mat-icon {
     }
 
     100% {
-        max-height: 271px;
+        max-height: 260px;
+    }
+}
+
+@keyframes closeProfileMenuHeightResponsive {
+    0% {
+        max-height: 600px;
+    }
+
+    100% {
+        max-height: 250px;
     }
 }
 
@@ -213,6 +233,7 @@ mat-icon {
         max-width: unset;
         width: 90vw;
         padding: 0 10px 15px 10px;
+        overflow: visible !important;
     }
 
     img {
@@ -235,6 +256,14 @@ mat-icon {
 
 .close {
     animation: closeProfileMenu 130ms ease-in-out forwards, closeProfileMenuWidth 130ms ease-in-out forwards, closeProfileMenuHeight 150ms ease-in-out forwards;
+}
+
+.open-responsive {
+    animation: openProfileMenu 300ms ease-in-out forwards, openProfileMenuWidth 300ms ease-in-out forwards, openProfileMenuHeightResponsive 300ms ease-in-out forwards;
+}
+
+.close-responsive {
+    animation: closeProfileMenu 300ms ease-in-out forwards, closeProfileMenuWidth 300ms ease-in-out forwards, closeProfileMenuHeightResponsive 300ms ease-in-out forwards;
 }
 
 .profile-menu-top {

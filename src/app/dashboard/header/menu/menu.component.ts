@@ -76,10 +76,17 @@ export class MenuComponent {
       let menuElement = document.querySelector('.profile-menu-contain');
       if (menuElement) {
         this.closeMenu(menuElement);
-        setTimeout(() => {
-          this.isProfileMenuOpen = false;
-          this.isProfileMenuOpenChange.emit(this.isProfileMenuOpen);
-        }, 140);
+        if (this.viewportService.width <= 460) {
+          setTimeout(() => {
+            this.isProfileMenuOpen = false;
+            this.isProfileMenuOpenChange.emit(this.isProfileMenuOpen);
+          }, 300);
+        } else {
+          setTimeout(() => {
+            this.isProfileMenuOpen = false;
+            this.isProfileMenuOpenChange.emit(this.isProfileMenuOpen);
+          }, 140);
+        }
       }
     }
   }
@@ -90,9 +97,14 @@ export class MenuComponent {
    * @param menuElement The element that contains the profile menu.
    */
   closeMenu(menuElement: any) {
-    menuElement.classList.remove('open');
+    if (this.viewportService.width <= 460) {
+      menuElement.classList.remove('open-responsive');
+      menuElement.classList.add('close-responsive');
+    } else {
+      menuElement.classList.remove('open');
+      menuElement.classList.add('close');
+    }
     menuElement.classList.remove('min-height');
-    menuElement.classList.add('close');
   }
 
   /**

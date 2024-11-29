@@ -126,7 +126,7 @@ export class HeaderComponent {
   openProfileMenu(): void {
     if (!this.isMobileMenuOpen()) return;
 
-    const menuElement = document.querySelector('.cdk-overlay-pane');
+    let menuElement = document.querySelector('.cdk-overlay-pane');
     menuElement?.classList.remove('closeMobileMenu');
     menuElement?.classList.add('openMobileMenu');
     this.isMenuOpen = true;
