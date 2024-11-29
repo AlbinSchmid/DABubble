@@ -126,6 +126,11 @@ mat-card {
     align-items: center !important;
     text-align: center !important;
     padding: 30px !important;
+
+    @media(max-width:545px) {
+        padding: 35px 20px !important;
+        width: 100vw !important;
+    }
 }
 
 .mat-mdc-menu-panel {
@@ -188,6 +193,8 @@ mat-card {
         width: 100vw !important;
         top: unset !important;
         bottom: 0 !important;
+        border-radius: 30px;
+        box-shadow: 0px -3px 10px 0px #00000033;
     }
 
     .mat-mdc-dialog-panel {

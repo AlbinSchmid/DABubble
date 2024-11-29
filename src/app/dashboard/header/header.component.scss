@@ -507,6 +507,16 @@ mat-icon {
     height: 100% !important;
 }
 
+app-menu {
+    @media(max-width:460px) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100vw;
+    }
+}
+
 .openMobileMenu {
     animation: openMobileMenu 0.15s ease-out forwards;
 }

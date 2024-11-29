@@ -6,9 +6,10 @@ import { EditUserComponent } from './edit-user/edit-user.component';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { UploadImageService } from '../../../shared/services/upload-image.service';
 import { Firestore } from '@angular/fire/firestore';
-import { collection, doc, updateDoc } from '@firebase/firestore';
+import { doc, updateDoc } from '@firebase/firestore';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { ThreadService } from '../../../shared/services/thread-service/thread.service';
+import { ViewportService } from '../../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-menu',
@@ -39,12 +40,14 @@ export class MenuComponent {
 
   @ViewChild(EditUserComponent) editUserComponent!: EditUserComponent;
 
-  authService = inject(AuthserviceService)
-  imgUpload = inject(UploadImageService)
-  firestore = inject(Firestore)
-  messengerService = inject(MessengerService)
-  threadService = inject(ThreadService)
+  authService: AuthserviceService = inject(AuthserviceService);
+  imgUpload: UploadImageService = inject(UploadImageService);
+  firestore: Firestore = inject(Firestore);
+  messengerService: MessengerService = inject(MessengerService);
+  threadService: ThreadService = inject(ThreadService);
+  viewportService: ViewportService = inject(ViewportService);
 
+  constructor() { }
   /**
    * Closes the thread and messenger components by setting their respective
    * 'show' properties to false.
