@@ -33,6 +33,10 @@ h2 {
     cursor: url('/assets/img/search_cursor.png'), auto;
     min-width: 318px;
 
+    @media(max-width:1550px) {
+        transform: scale(0.9);
+    }
+
     &:hover {
         box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.1) !important;
     }
@@ -61,6 +65,10 @@ input {
 .img-contain {
     padding-left: 25px;
     min-width: 366px;
+
+    @media(max-width:1550px) {
+        min-width: unset;
+    }
 
     @media(max-width:1200px) {
         min-width: 260px;
