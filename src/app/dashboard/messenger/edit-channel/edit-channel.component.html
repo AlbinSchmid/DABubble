@@ -1,4 +1,4 @@
-<mat-card>
+@let isMobileEdit = viewportService.width <= 460; <mat-card (click)="$event.stopPropagation()">
     <div class="content-contain">
         <header>
             <div class="title-contain">
@@ -10,8 +10,13 @@
         <div [ngClass]="{ 'contain-without-input': !editTitle, 'contain-with-input': editTitle }">
             <div [ngClass]="{ 'headline-contain-without-input': !editTitle, 'headline-contain-with-input': editTitle }">
                 <span>Channel-Name</span>
-                <button [disabled]="isGlobalChannel()" (click)="editChannelTitle()" class="edit-user-btn">
+                <button *ngIf="!isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelTitle()"
+                    class="edit-btn">
                     {{ editTitle ? 'Speichern' : 'Bearbeiten' }}
+                </button>
+                <button *ngIf="isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelTitle()"
+                    class="edit-btn">
+                    <mat-icon [fontIcon]="editTitle ? 'task_alt' : 'edit'"></mat-icon>
                 </button>
             </div>
             <div *ngIf="!editTitle" class="content-title-contain">
@@ -29,14 +34,20 @@
                 <div
                     [ngClass]="{ 'headline-contain-without-textarea': !editDescription, 'headline-contain-with-textarea': editDescription }">
                     <span>Beschreibung</span>
-                    <button [disabled]="isGlobalChannel()" (click)="editChannelDescription()" class="edit-user-btn">
+                    <button *ngIf="!isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelDescription()"
+                        class="edit-btn">
                         {{ editDescription ? 'Speichern' : 'Bearbeiten' }}
+                    </button>
+                    <button *ngIf="isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelDescription()"
+                        class="edit-btn">
+                        <mat-icon [fontIcon]="editDescription ? 'task_alt' : 'edit'"></mat-icon>
                     </button>
                 </div>
                 <div class="textarea-wrapper">
                     <textarea (click)="$event.stopPropagation()" (keydown.enter)="editChannelDescription()"
-                        cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" spellcheck="false" #channelDescriptionTextarea
-                        maxlength="200" placeholder="Dein Text hier" autocomplete="off" [(ngModel)]="descriptionTxt"
+                        [readonly]="!editDescription" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" spellcheck="false"
+                        #channelDescriptionTextarea maxlength="200" placeholder="Dein Text hier" autocomplete="off"
+                        [(ngModel)]="descriptionTxt"
                         [ngClass]="{'txtAreaEditMode': editDescription, 'defaultTxtAreaMode': !editDescription}"></textarea>
                 </div>
             </div>
@@ -57,4 +68,4 @@
         <button [disabled]="isGlobalChannel()" (click)="leaveTheChannel()" class="primary default btn">Channel
             verlassen</button>
     </div>
-</mat-card>
+    </mat-card>

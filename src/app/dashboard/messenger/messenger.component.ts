@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DetailPersonComponent } from './detail-person/detail-person.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe, formatDate, registerLocaleData } from '@angular/common';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
 import { ThreadService } from '../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../shared/services/firebase-services/firebase-messenger.service';
 import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
@@ -15,12 +15,10 @@ import { TextareaComponent } from '../../shared/components/textarea/textarea.com
 import localeDe from '@angular/common/locales/de';
 import { EditChannelComponent } from './edit-channel/edit-channel.component';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { collection, doc, Firestore, onSnapshot } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { UserInterface } from '../../landing-page/interfaces/userinterface';
 import { FirestoreService } from '../../shared/services/firebase-services/firestore.service';
-import { MentionUserInterface } from '../../shared/interfaces/mention-user-interface';
 import { AddPersonComponent } from './add-person/add-person.component';
-import { list } from '@angular/fire/storage';
 import { ViewportService } from '../../shared/services/viewport.service';
 registerLocaleData(localeDe);
 
@@ -96,13 +94,16 @@ export class MessengerComponent implements AfterViewInit {
   /**
    * Unsubscribes from the channel user list and the list of all users when the component is destroyed.
    */
-  ngOnDesroy() {
+  ngOnDestoy() {
     this.userListSubscription;
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
   }
 
+  closeEditChannel() {
+    this.editChannelIsOpen = false;
+  }
 
   checkTextStatus() {
     if (this.nameHeadline.nativeElement) {
@@ -114,7 +115,7 @@ export class MessengerComponent implements AfterViewInit {
         this.windowWith = this.viewportService.width;
         this.checkTextSenderName = true;
         this.messengerService.messageName = `${this.messengerService.getFirstWord(this.messengerService.user.username)}. ${this.messengerService.getSecondWordFirstLetter(this.messengerService.user.username)}`;
-      } else if (this.windowWith < this.viewportService.width) {      
+      } else if (this.windowWith < this.viewportService.width) {
         this.messengerService.messageName = this.messengerService.user.username;
         this.checkTextSenderName = false;
       }
@@ -122,16 +123,16 @@ export class MessengerComponent implements AfterViewInit {
   }
 
 
-/**
- * Returns the header text based on the current context.
- * 
- * If the user is in a private chat, it returns the username of the chat partner.
- * If the user is in a channel, it returns the channel title prefixed with '#'.
- * 
- * @param {string} src - The source string (not used in the function).
- * @returns {string} - The username or channel title for the header.
- */
-  chatOrChannelHeader(src: string):string {
+  /**
+   * Returns the header text based on the current context.
+   * 
+   * If the user is in a private chat, it returns the username of the chat partner.
+   * If the user is in a channel, it returns the channel title prefixed with '#'.
+   * 
+   * @param {string} src - The source string (not used in the function).
+   * @returns {string} - The username or channel title for the header.
+   */
+  chatOrChannelHeader(src: string): string {
     if (this.messengerService.openChart) {
       return `${this.messengerService.user.username}`
     } else {
@@ -169,11 +170,11 @@ export class MessengerComponent implements AfterViewInit {
   }
 
 
-/**
- * Toggles the visibility of the "Add Person" dialog.
- * Sets showAddPersonDialogDirect to true and toggles 
- * the showAddPerson state.
- */
+  /**
+   * Toggles the visibility of the "Add Person" dialog.
+   * Sets showAddPersonDialogDirect to true and toggles 
+   * the showAddPerson state.
+   */
   openDialogAddPersonDirect() {
     this.showAddPersonDialogDirect = true;
     this.showAddPerson = !this.showAddPerson;

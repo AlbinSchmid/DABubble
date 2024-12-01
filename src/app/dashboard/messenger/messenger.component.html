@@ -5,32 +5,38 @@
             <h4 #name>{{ messengerService.messageName }}</h4>
         </button>
         <div class="edit-channel-contain" *ngIf="messengerService.openChannel">
-            <button (click)="this.editChannelIsOpen = !this.editChannelIsOpen" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"
-                class="channel-title-contain" [class.active]="editChannelIsOpen">
+            <button (click)="editChannelIsOpen = !editChannelIsOpen" type="button" cdkOverlayOrigin
+                #trigger="cdkOverlayOrigin" class="channel-title-contain" [class.active]="editChannelIsOpen">
                 <mat-icon class="tag-icon" fontIcon="tag"></mat-icon>
                 <h4>{{ messengerService.channel.title }}</h4>
                 <mat-icon fontIcon="expand_more"></mat-icon>
             </button>
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
                 [cdkConnectedOverlayOpen]="editChannelIsOpen" [cdkConnectedOverlayHasBackdrop]="true"
-                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.editChannelIsOpen = false">
-                <app-edit-channel (closeOverlay)="this.editChannelIsOpen = false"></app-edit-channel>
+                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="editChannelIsOpen = false">
+                <app-edit-channel (click)="closeEditChannel()"
+                    (closeOverlay)="editChannelIsOpen = false"></app-edit-channel>
             </ng-template>
         </div>
         <div id="add-user-complete-container" *ngIf="messengerService.openChannel">
-            <button (click)=" this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = false" cdkOverlayOrigin #trigge="cdkOverlayOrigin">
+            <button
+                (click)=" this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = false"
+                cdkOverlayOrigin #trigge="cdkOverlayOrigin">
                 <div>
                     @for (user of threadService.usersInChannel; track $index) {
-                        <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
+                    <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
                     }
                 </div>
                 <p class="user-count">{{threadService.usersInChannel.length}}</p>
             </button>
-            <mat-icon (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
+            <mat-icon
+                (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
                 [cdkConnectedOverlayOpen]="this.messengerService.showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
-                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="this.messengerService.showAddPerson = false">
-                <app-add-person (closeOverlay)="this.messengerService.showAddPerson= false"  [addPersonView]="showAddPersonDialogDirect" [users]="threadService.usersInChannel"></app-add-person>
+                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'"
+                (backdropClick)="this.messengerService.showAddPerson = false">
+                <app-add-person (closeOverlay)="this.messengerService.showAddPerson= false"
+                    [addPersonView]="showAddPersonDialogDirect" [users]="threadService.usersInChannel"></app-add-person>
             </ng-template>
         </div>
     </header>
@@ -49,7 +55,8 @@
                     dir statt.</p>
             </div>
             @for (message of firebaseMessenger.messages; track $index) {
-            <app-message id="{{message.messageID}}" [message]="message" [message]="message" [messageIndex]="$index"></app-message>
+            <app-message id="{{message.messageID}}" [message]="message" [message]="message"
+                [messageIndex]="$index"></app-message>
             }
         </div>
         <app-textarea [sourceThread]="sourceThread"></app-textarea>

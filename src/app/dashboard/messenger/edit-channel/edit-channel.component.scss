@@ -8,6 +8,21 @@ mat-card {
     height: 616px;
     padding: 40px;
     border-top-left-radius: 0 !important;
+
+    @media(max-width:950px) {
+        width: 95vw;
+        height: max-content;
+        border-radius: 30px !important;
+        gap: 30px;
+    }
+
+    @media(max-width:600px) {
+        padding: 32px 30px 32px 30px;
+    }
+
+    @media(max-width:460px) {
+        padding: 25px;
+    }
 }
 
 h2 {
@@ -132,7 +147,7 @@ header {
     }
 }
 
-.edit-user-btn {
+.edit-btn {
     font-size: 18px !important;
     font-weight: 600 !important;
     color: #535AF1 !important;
@@ -149,6 +164,15 @@ header {
         font-weight: 700 !important;
         margin-right: -1px !important;
         cursor: pointer !important;
+    }
+
+    mat-icon {
+        font-size: 24px !important;
+        font-weight: 100 !important;
+        color: black !important;
+        background-color: #ECEEFE;
+        height: 32px;
+        width: 32px;
     }
 }
 
@@ -264,7 +288,8 @@ input {
     scrollbar-width: none;
     text-wrap: wrap;
     padding: 18px 25px 0 25px;
-    pointer-events: none;
+    user-select: none;
+    cursor: default;
 
     &::placeholder {
         font-size: 18px;

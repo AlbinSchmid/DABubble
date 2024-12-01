@@ -11,6 +11,7 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
 import { FirestoreService } from '../../../shared/services/firebase-services/firestore.service';
 import { Channel } from '../../../shared/interfaces/channel';
 import { AnimationChannelService } from '../../channels-userlist/channel-list/animation.service.service';
+import { ViewportService } from '../../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-edit-channel',
@@ -40,6 +41,7 @@ export class EditChannelComponent {
   authService: AuthserviceService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
   channelAnimationService: AnimationChannelService = inject(AnimationChannelService);
+  viewportService: ViewportService = inject(ViewportService);
 
   editTitle: boolean = false;
   editDescription: boolean = false;
