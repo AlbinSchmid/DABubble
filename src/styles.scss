@@ -201,6 +201,10 @@ mat-card {
     }
 }
 
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+    max-width: none !important;
+}
+
 .status-busy-icon,
 .status-offline-icon,
 .status-online-icon {
