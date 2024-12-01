@@ -229,6 +229,11 @@ mat-icon {
         width: 70vw;
     }
 
+    @media(max-width:545px) and (max-height:640px) {
+        height: 85vh;
+        gap: 18px;
+    }
+
     @media(max-width:460px) {
         max-width: unset;
         width: 90vw;
