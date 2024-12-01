@@ -40,6 +40,13 @@ mat-dialog-content {
     line-height: 24.55px;
     color: black;
     padding-right: 30px;
+
+    @media(max-width:650px) {
+        font-size: 16px !important;
+        line-height: 18px;
+        padding: 0;
+        text-align: center;
+    }
 }
 
 .input-contain {
@@ -47,6 +54,10 @@ mat-dialog-content {
     flex-direction: column;
     align-items: start;
     gap: 20px;
+
+    @media(max-width:400px) {
+        gap: 15px;
+    }
 
     span {
         font-size: 18px;
@@ -69,8 +80,22 @@ textarea {
     border-radius: 30px;
     padding: 18px 20px;
     overflow: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
     resize: none;
     transition: height 170ms ease-in-out;
+
+    @media(max-width:650px) {
+        height: 50px;
+        font-size: 17px;
+        padding: 12px 20px;
+    }
+
+    @media(max-width:400px) {
+        height: 40px;
+        font-size: 14px;
+        padding: 10px 20px;
+    }
 
     &::placeholder {
         color: #686868;
@@ -108,11 +133,25 @@ textarea {
         transform: skew(-10deg, -5deg) rotate(5deg);
         color: #686868;
         pointer-events: none !important;
+
+        @media(max-width:650px) {
+            top: 4px;
+            font-size: 24px !important;
+        }
+
+        @media(max-width:400px) {
+            top: 0;
+            font-size: 19px !important;
+        }
     }
 }
 
 .channel-name-input {
     padding-left: 50px;
+
+    @media(max-width:400px) {
+        padding-left: 40px;
+    }
 }
 
 mat-dialog-actions {

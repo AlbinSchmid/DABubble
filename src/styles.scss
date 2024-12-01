@@ -182,7 +182,6 @@ mat-card {
 }
 
 .mat-mdc-dialog-container {
-    width: auto !important;
     min-width: 100px !important;
     max-width: none !important;
 }
@@ -190,7 +189,7 @@ mat-card {
 .cdk-overlay-pane {
 
     @media(max-width:460px) {
-        width: 100vw !important;
+        // width: 100vw !important;
         top: unset !important;
         bottom: 0 !important;
         border-radius: 30px;
@@ -403,6 +402,7 @@ mat-card {
 
 .mat-mdc-dialog-surface {
     overflow: visible !important;
+    align-items: center !important;
 }
 
 .loading-spinner circle {
