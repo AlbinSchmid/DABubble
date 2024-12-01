@@ -69,7 +69,7 @@ export class MessengerService {
     return words[1]?.charAt(0) || ""; // Gibt den ersten Buchstaben des zweiten Wortes zurück
   }
 
-  
+
   sortByName(array: any[]) {
     array.sort((a, b) => {
       const nameA = a?.userName || '';
@@ -77,12 +77,12 @@ export class MessengerService {
       return nameA.localeCompare(nameB);
     });
   }
-  
+
 
   scrollToBottom(container: any) {
     if (container) {
       container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
-    } 
+    }
   }
 
 
@@ -93,7 +93,7 @@ export class MessengerService {
     this.openChart = false;
     this.openNewMessage = false;
     console.log(this.channel);
-    
+
     setTimeout(() => {
       this.textareaMessenger.next();
     },);
@@ -151,9 +151,8 @@ export class MessengerService {
     this.user = this.getEmptyUser();
   }
 
-
   closeEverthing() {
-    this.showMessenger = false;
+    this.openMessenger = false;
     this.threadService.showThreadSideNav = false;
     this.threadService.showThread = false;
     this.chartId = '';

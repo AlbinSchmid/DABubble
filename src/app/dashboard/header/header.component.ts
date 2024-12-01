@@ -10,6 +10,8 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { SearchService } from '../../shared/services/search-service/search.service';
 import { SearchResultComponent } from "../../shared/components/search-result/search-result.component";
 import { ViewportService } from '../../shared/services/viewport.service';
+import { MessengerService } from '../../shared/services/messenger-service/messenger.service';
+import { ThreadService } from '../../shared/services/thread-service/thread.service';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +33,8 @@ export class HeaderComponent {
   authService: AuthserviceService = inject(AuthserviceService)
   firestore: Firestore = inject(Firestore);
   searchService: SearchService = inject(SearchService);
+  messengerService: MessengerService = inject(MessengerService);
+  threadService: ThreadService = inject(ThreadService);
   viewportService: ViewportService = inject(ViewportService);
 
   userStatus: string = 'on';
@@ -209,5 +213,13 @@ export class HeaderComponent {
    */
   isMobileMenuOpen(): boolean {
     return this.viewportService.width <= 460;
+  }
+
+  messengerOrThreadIsOpen() {
+    return this.messengerService.openMessenger || this.threadService.showThreadSideNav;
+  }
+
+  backToChannelUserList() {
+    this.messengerService.closeEverthing();
   }
 }

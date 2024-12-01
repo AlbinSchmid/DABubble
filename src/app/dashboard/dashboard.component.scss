@@ -8,7 +8,7 @@
     height: 100vh;
     max-height: 100vh;
     background-color: #ECEEFE;
-    padding: 20px;
+    padding: 20px 0 20px 20px;
     overflow: hidden;
 }
 
@@ -157,8 +157,6 @@ app-new-message {
         width: 100%;
         height: 100%;
         overflow: hidden;
-        padding-left: 30px;
-        padding-right: 30px;
 
         @media(max-width:600px) {
             padding: 0;
@@ -186,19 +184,3 @@ app-new-message {
         height: 10%;
     }
 }
-
-// @media screen and (max-width: 1200px) {
-//     #sidenav-left {
-//         width: 100% !important;
-//     }
-// }
-
-// @media screen and (max-width: 600px) {
-//     .main-contain {
-//         padding: 0;
-//     }
-
-//     .mat-drawer-content {
-//         padding: 0;
-//     }    
-// }
