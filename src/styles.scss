@@ -13,10 +13,7 @@ body {
     max-height: 100%;
     width: 100vw;
     max-width: 100%;
-    overflow: hidden;
-}
 
-html {
     button {
         &.primary {
             .mat-ripple-element {
@@ -126,11 +123,6 @@ mat-card {
     align-items: center !important;
     text-align: center !important;
     padding: 30px !important;
-
-    @media(max-width:545px) {
-        padding: 35px 20px !important;
-        width: 100vw !important;
-    }
 }
 
 .mat-mdc-menu-panel {
@@ -148,12 +140,6 @@ mat-card {
     background-color: white !important;
     will-change: transform, opacity;
     pointer-events: none !important;
-
-    @media(max-width:460px) {
-        border: none !important;
-        border-radius: 30px 30px 0 0 !important;
-        width: 100%;
-    }
 }
 
 .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
@@ -166,39 +152,18 @@ mat-card {
 .cdk-overlay-backdrop {
     opacity: 1;
     visibility: visible;
+    // background-color: rgba(0, 0, 0, 0);
     transition: background-color 130ms ease-in-out, opacity 130ms ease-in-out, visibility 0s 130ms;
 }
 
 .cdk-overlay-connected-position-bounding-box {
     top: 112px !important;
-
-    @media(max-width:460px) {
-        top: unset !important;
-        right: 0 !important;
-        left: 0 !important;
-        bottom: 0 !important;
-        width: 100%;
-    }
 }
 
 .mat-mdc-dialog-container {
+    width: auto !important;
     min-width: 100px !important;
     max-width: none !important;
-}
-
-.cdk-overlay-pane {
-
-    @media(max-width:460px) {
-        // width: 100vw !important;
-        top: unset !important;
-        bottom: 0 !important;
-        border-radius: 30px;
-        box-shadow: 0px -3px 10px 0px #00000033;
-    }
-
-    .mat-mdc-dialog-panel {
-        max-width: none !important;
-    }
 }
 
 .cdk-overlay-pane.mat-mdc-dialog-panel {
@@ -352,6 +317,7 @@ mat-card {
     .mat-mdc-standard-chip .mat-mdc-chip-action-label {
         display: flex !important;
         justify-content: space-between !important;
+        // width: 200px !important;
         overflow: hidden !important;
         display: flex !important;
         align-items: center !important;
@@ -406,7 +372,6 @@ mat-card {
 
 .mat-mdc-dialog-surface {
     overflow: visible !important;
-    align-items: center !important;
 }
 
 .loading-spinner circle {
@@ -489,34 +454,6 @@ mat-card {
         opacity: 0;
         transform: translateY(-62px);
         pointer-events: none;
-    }
-}
-
-.openMobileMenu {
-    animation: openMobileMenu 0.15s ease-out forwards;
-}
-
-.closeMobileMenu {
-    animation: closeMobileMenu 0.15s ease-out forwards;
-}
-
-@keyframes openMobileMenu {
-    0% {
-        transform: translateY(100%);
-    }
-
-    100% {
-        transform: translateY(0);
-    }
-}
-
-@keyframes closeMobileMenu {
-    0% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(100%);
     }
 }
 

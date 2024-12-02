@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, Host, HostListener, inject, ViewChild } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { ChannelsUserlistComponent } from './channels-userlist/channels-userlist.component';
 import { MessengerComponent } from './messenger/messenger.component';
@@ -121,5 +121,10 @@ export class DashboardComponent {
    */
   ngOnDestroy(): void {
     this.userFound$.complete();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.authService.reinitializeUser();
   }
 }

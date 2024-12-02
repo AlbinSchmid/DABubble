@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { HostListener, Injectable, inject, signal } from '@angular/core';
 import {Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
   signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,User,signInAnonymously,onAuthStateChanged
@@ -42,6 +42,8 @@ export class AuthserviceService {
     } else {
       const userData: UserInterface = this.setAnynymousData(user)
       this.setCurrentUser(userData);
+      console.log(userData);
+      
     }
   }
 
@@ -432,6 +434,7 @@ export class AuthserviceService {
         let user = userCredential.user;
         let userRef = doc(this.firestore, `users/${user.uid}`);
         let anonymUser = this.setAnynymousData(user);
+        this.currentUserSig.set(anonymUser);
         setDoc(userRef, anonymUser)
           .then(() => {
             this.router.navigate(['/dashboard']);
@@ -449,7 +452,7 @@ export class AuthserviceService {
       password: '',
       email: 'gast@gast.de',
       username: 'Neuer Gast',
-      avatar: this.defaultAvatarURL,
+      avatar: 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
       userStatus: 'on',
       isFocus: false,
     }
@@ -464,5 +467,18 @@ export class AuthserviceService {
       return true
     }
     return false
+  }
+
+  reinitializeUser(): void {
+    const currentUser = this.firebaseAuth.currentUser;
+    if (!currentUser) {
+      this.setCurrentUser(null);
+      return;
+    }
+    if (currentUser.isAnonymous) {
+      this.setCurrentUser(this.setAnynymousData(currentUser));
+    } else {
+      this.handleUserLogin(currentUser).catch(() => this.setCurrentUser(null));
+    }
   }
 }
