@@ -18,7 +18,7 @@
       <div class="search-results-wrapper message" (click)="this.redirectService.goToMessage(result.messageID)">
         <span class="sender-name">Von: {{result.senderName}}</span>
         <span class="message-content">Nachricht: {{result.content }} </span>
-        <span class="message-date">Datum: {{result.date | date:'yyyy-MM-dd-hh:mm' }}</span>
+        <span class="message-date"> {{result.date | date:'yyyy-MM-dd' }}</span>
       </div>
     </div>
   }
@@ -57,7 +57,7 @@
       <div class="search-results-wrapper" (click)="this.redirectService.openThead(message, message.senderID) ;">
         <span class="sender-name">Von: {{message.senderName}}</span>
         <span class="message-content">Nachricht: {{message.content }} </span>
-        <span class="message-date">Datum: {{message.date | date:'yyyy-MM-dd-hh:mm' }}</span>
+        <span class="message-date"> {{message.date | date:'yyyy-MM-dd' }}</span>
       </div>
     </div>
   }
@@ -96,7 +96,7 @@
         (click)="this.redirectService.goToMessageInChannel( message.messageID ,channelWithMessages.channel)">
         <span class="sender-name">Von: {{ message.senderName }}</span>
         <span class="message-content">Nachricht: {{ message.content }}</span>
-        <span class="message-date">Datum: {{ message.date | date:'yyyy-MM-dd-hh:mm' }}</span>
+        <span class="message-date"> {{ message.date | date:'yyyy-MM-dd' }}</span>
       </div>
     </div>
   }
@@ -118,7 +118,7 @@
           (click)="this.redirectService.openThreadInChannel(message, message.messageID, channelWithMessages.channel)">
           <span class="sender-name">Von: {{ message.senderName }}</span>
           <span class="message-content">Nachricht: {{ message.content }}</span>
-          <span class="message-date">Datum: {{ message.date | date:'yyyy-MM-dd-hh:mm' }}</span>
+          <span class="message-date"> {{ message.date | date:'yyyy-MM-dd' }}</span>
         </div>
       </div>
     </div>
