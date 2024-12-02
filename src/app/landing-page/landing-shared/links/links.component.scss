@@ -1,3 +1,5 @@
+@use '../../shared-landing-styles';
+
 .links{
   display: flex;
   flex-direction: row;
@@ -7,6 +9,7 @@
   gap: 10px;
   margin-top: 20px;
   justify-content: center;
+  animation: fadeIn ease-in-out 1s forwards;
   >a{
     padding: 10px 15px;
     border-radius: 30px;
@@ -16,6 +19,8 @@
     &:hover{
       color: #444df4;
       border: 1px solid #797EF3;
+      transition: 150ms ease-in-out !important;
+      font-weight: 500;
     }
   }
 }

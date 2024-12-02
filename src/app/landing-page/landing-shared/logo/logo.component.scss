@@ -1,3 +1,5 @@
+@use '../../shared-landing-styles';
+
 .logo{
   position: relative;
   padding-top: 30px;
@@ -6,6 +8,7 @@
   align-items: center;
   gap: 10px;
   width: 300px;
+  animation: fadeIn ease-in-out 1s forwards;
   >img{
     width: 70px;
     height: 70px;

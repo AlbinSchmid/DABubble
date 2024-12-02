@@ -1,5 +1,7 @@
 @import '../shared-landing-styles.scss';
 
+
+
 section{
   width: 100vw;
   max-width: 100%;
@@ -53,6 +55,7 @@ label a{
   transition: all 0.2s ease-in-out;
   padding: 0px;
   margin: 0;
+  animation: spin ease-in-out 2s infinite;
   &:checked {
     background: transparent;
     border-color: #797EF3;
@@ -79,6 +82,16 @@ label a{
     background-color: #ECEEFE;
     background-size: 150%;
   }
+}
+
+@keyframes spin {
+  from {
+     
+     transform:rotate3d(0.5, 0.5, 1, 0deg);
+    }
+  to { 
+     transform:rotate3d(1, 1, 1, 360deg);
+   }
 }
 
 .button{
