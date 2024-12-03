@@ -140,3 +140,10 @@ label a{
     }
   }
 }
+
+@media (max-height: 1000px){
+  .form-group{
+    margin-bottom: 10px;
+    height: 40px;
+  }
+}
