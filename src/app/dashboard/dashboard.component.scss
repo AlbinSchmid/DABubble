@@ -134,6 +134,12 @@ app-new-message {
     font-size: 32px;
     font-weight: 500;
     color: #444DF2;
+    padding: 10px 10px;
+    text-align: center;
+    border: 1px solid #444DF2;
+    border-radius: 30px;
+    line-height: 32px;
+    width: 90%;
 }
 
 .responsive-main-contain {
@@ -184,5 +190,11 @@ app-new-message {
 @media screen and (max-width: 1020px) {
     app-messenger {
         height: 10%;
+    }
+}
+
+@media (max-width: 600px) {
+    .loading-text {
+        font-size: 24px;
     }
 }

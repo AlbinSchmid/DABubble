@@ -44,6 +44,8 @@
 <ng-template #loading>
     <div class="loading-container">
         <mat-spinner class="loading-spinner"></mat-spinner>
+    @if(errorMessage != null){
         <div class="loading-text">{{errorMessage}}</div>
+    }
     </div>
 </ng-template>
