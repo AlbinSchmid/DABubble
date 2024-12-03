@@ -22,12 +22,21 @@
             <button
                 (click)=" this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = false"
                 cdkOverlayOrigin #trigge="cdkOverlayOrigin">
-                <div>
-                    @for (user of threadService.usersInChannel; track $index) {
-                    <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="">
-                    }
-                </div>
-                <p class="user-count">{{threadService.usersInChannel.length}}</p>
+                @if (viewportService.width > 500) {
+                    <div>
+                        @for (user of threadService.usersInChannel; track $index) {
+                            @if (viewportService.width > 1140) {
+                                <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="" *ngIf="$index < 10">
+                                <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" *ngIf="$index == threadService.usersInChannel.length - 1 && $index > 10">+{{ threadService.usersInChannel.length - 10 }}</div>
+                                <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 10" class="user-count">{{threadService.usersInChannel.length}}</p>
+                            } @else if (viewportService.width < 1140) {
+                                <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="" *ngIf="$index < 4">
+                                <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" *ngIf="$index == threadService.usersInChannel.length - 1 && $index > 10">+{{ threadService.usersInChannel.length - 4 }}</div>
+                                <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 4" class="user-count">{{threadService.usersInChannel.length}}</p>
+                            }
+                        }
+                    </div>
+                }
             </button>
             <mat-icon
                 (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>

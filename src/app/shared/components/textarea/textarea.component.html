@@ -24,8 +24,8 @@
                         multiple style="display: none;">
                 </p>
                 <div *ngIf="viewportService.width > 1020"></div>
-                <button (click)="openOrCloseEmojiBoard()" *ngIf="viewportService.width > 1020"></button>
-                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('messenger')"></button>
+                <mat-icon class="mention-btn" (click)="openOrCloseEmojiBoard()" *ngIf="viewportService.width > 1020">mood</mat-icon>
+                <mat-icon class="mention-btn" *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('messenger')">alternate_email</mat-icon>
             </div>
             <button id="send-message-btn" (click)="uploadFiles(messenger)"
                 *ngIf="texterea.valid || selectedFiles.length > 0"><img src="/assets/icons/send.png"
@@ -52,7 +52,7 @@
         </div>
     </div>
     } @else {
-    <div id="mention-person" [ngStyle]="{'display': mentionPersonView ? 'block' : 'none', 'left.px' : 40, 'right.px' : 40}">
+    <div id="mention-person" [ngStyle]="{'display': mentionPersonView ? 'block' : 'none'}">
         <h6>Mitglieder:</h6>
         <div id="trendline"></div>
         <div id="user-list">
@@ -76,8 +76,8 @@
                         multiple style="display: none;">
                 </p>
                 <div *ngIf="viewportService.width > 1020"></div>
-                <button (click)="openOrCloseEmojiBoard()" *ngIf="viewportService.width > 1020"></button>
-                <button *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('thread')"></button>
+                <mat-icon class="mention-btn" (click)="openOrCloseEmojiBoard()" *ngIf="viewportService.width > 1020">mood</mat-icon>
+                <mat-icon class="mention-btn" *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('thread')">alternate_email</mat-icon>
             </div>
             <button id="send-message-btn" (click)="uploadFiles('thread')" *ngIf="texterea.valid"><img
                     src="/assets/icons/send.png" alt="send-icon"></button>

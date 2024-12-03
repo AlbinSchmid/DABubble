@@ -22,18 +22,18 @@ button {
     background-color: white;
     border-radius: 30px;
     padding: 10px 20px 60px 20px;
-    right: 60px;
     z-index: 0;
-    left: 60px;
     animation: bottom-top-slide 200ms ease-in-out forwards;
     padding-bottom: 55px;
+    width: 100%;
 
-    h6 {
+
+   
+ h6 {
         font-size: 18px;
         font-weight: 700;
         margin: 0 !important;
     }
-
     #trendline {
         background-color: rgba(0, 0, 0, 0.1);
         height: 1px;
@@ -88,9 +88,11 @@ button {
 }
 
 section {
+    position: relative;
+    margin: 0 40px 20px;
+
     .interaction-div {
         position: relative;
-        margin: 0 40px 20px;
         display: flex;
         flex-direction: column;
         z-index: 1;
@@ -160,6 +162,15 @@ section {
             display: flex;
             justify-content: space-between;
 
+            mat-icon {
+                opacity: 0.7;
+
+                    &:hover {
+                        opacity: 1;
+                        scale: 1.05;
+                    }
+            }
+
             #button-container-left {
                 display: flex;
                 gap: 5px;
@@ -200,28 +211,6 @@ section {
                         background-color: #ECEEFE;
                     }
 
-                    &:nth-child(3) {
-                        background-image: url(./../../../../../public/assets/icons/emoij-white.png);
-                        background-position: center;
-                        background-size: 24px;
-                        background-repeat: no-repeat;
-
-                        &:hover {
-                            background-image: url(./../../../../../public/assets/icons/emoij-blue.png);
-                        }
-                    }
-
-                    &:nth-child(4) {
-                        background-image: url(./../../../../../public/assets/icons/tag-white.png);
-                        background-position: center;
-                        background-size: 24px;
-                        background-repeat: no-repeat;
-
-                        &:hover {
-                            background-image: url(./../../../../../public/assets/icons/tag-blue.png);
-                        }
-                    }
-
                     img {
                         width: 24px;
                         height: 24px;
@@ -260,14 +249,15 @@ mat-icon {
         bottom: 40px;
     }
     to {
-        bottom: 120px;
+        bottom: clamp(3.625rem, 2.8536rem + 3.8571vw, 5.3125rem); // 58px - 85px 
     }
 }
 
 @media screen and (max-width: 1020px) {
     section {
+        margin: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) clamp(0.5rem, 0.1571rem + 1.7143vw, 1.25rem) !important; // 8px - 40px, 8px - 20px
+
         .interaction-div {
-            margin: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) clamp(0.5rem, 0.1571rem + 1.7143vw, 1.25rem) !important; // 8px - 40px, 8px - 20px
             padding: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important; // 12px - 20px
         }
     }
@@ -290,6 +280,5 @@ mat-icon {
         width: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; // 30px - 40px
         height: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; // 30px - 40px
         font-size: clamp(1.375rem, 1.3179rem + 0.2857vw, 1.5rem) !important; // 22px - 24px
-
     }
 }

@@ -296,6 +296,7 @@ section {
             border-radius: 30px;
             border: 1px solid #ADB0D9;
             background-color: white;
+            font-size: 18px;
         }
 
         &:nth-child(2) {
@@ -330,6 +331,14 @@ section {
 
     .date-container {
         padding: 0 clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; // 8px - 30px
+
+        div {
+
+            &:nth-child(1) {
+                padding: clamp(0rem, -0.1429rem + 0.7143vw, 0.3125rem) clamp(0.625rem, 0.4821rem + 0.7143vw, 0.9375rem) !important; // 0px - 5px, 10px - 15px
+                font-size: clamp(0.75rem, 0.5786rem + 0.8571vw, 1.125rem) !important; // 12px - 18px
+            }
+        }
     }
 
     #message-content {

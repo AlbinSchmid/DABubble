@@ -71,6 +71,7 @@ mat-card {
         flex-direction: column;
         overflow: hidden !important;
         justify-content: flex-end;
+        height: 100%;
 
         #messages-container {
             display: flex;
