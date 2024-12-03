@@ -212,3 +212,30 @@ form {
     left: 0;
   }
 }
+
+@media(max-height:1050px){
+  .login{
+    margin: 10px 10px;
+    padding: 20px 20px 40px 20px;
+    p{
+      display: none;
+    }
+  }
+  h1{
+    font-size: 24px;
+  }
+
+  form{
+    gap: 10px;
+  }
+
+  .error-message{
+    top: 35px;
+  }
+
+  .global-error-message{
+    font-size: 16px !important;
+  }
+
+
+}

@@ -1,13 +1,13 @@
 
 
 <section class="login">
+  <div class="title">
+    <h1>Anmeldung</h1>
+    <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest</p>
+  </div>
 
-  <h1>Anmeldung</h1>
-  <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest</p>
 
   <div class="max-width inputs">
-    
-    
     <form [formGroup]="loginForm">
       <div class="form-group" [ngClass]="{'focused': isFocused.email}">
         <mat-icon matPrefix
@@ -33,7 +33,7 @@
           [ngClass]="{'input-error': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
         <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
           <span *ngIf="loginForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong> ein</span>
-          <span *ngIf="loginForm.get('password')?.hasError('pattern')"> Passwort muss mindestens <strong> 8</strong> Zeichen lang sein, z.B. <strong>Abc123!.</strong> </span>
+          <span *ngIf="loginForm.get('password')?.hasError('pattern')"> Min <strong> 8</strong> Zeichen z.B. <strong>Abc123!.</strong> </span>
         </div>
         
       </div>

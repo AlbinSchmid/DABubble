@@ -49,7 +49,7 @@
           [ngClass]="{'input-error': accountForm.get('password')?.invalid && accountForm.get('password')?.touched}">
         <div class="error-message" *ngIf="accountForm.get('password')?.invalid && accountForm.get('password')?.touched">
           <span *ngIf="accountForm.get('password')?.hasError('required')">Geben Sie ein <strong>Passwort</strong> ein</span>
-          <span *ngIf="accountForm.get('password')?.hasError('pattern')"> Passwort muss mindestens <strong> 8</strong> Zeichen lang sein, z.B. <strong>Abc123!.</strong> </span>
+          <span *ngIf="accountForm.get('password')?.hasError('pattern')">  Min <strong> 8</strong> Zeichen z.B. <strong>Abc123!.</strong> </span>
         </div>
       </div>
 

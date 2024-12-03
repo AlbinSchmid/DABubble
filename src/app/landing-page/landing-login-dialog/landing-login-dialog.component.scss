@@ -74,3 +74,22 @@
     margin-bottom: 30px;
   }
 }
+
+@media (max-height:1050px){
+  .form-group{
+    margin-bottom: 10px;
+    height: 40px;
+  }
+
+  .title{
+    height: 40px;
+  }
+
+  .google{
+    height: 40px;
+    img{
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
