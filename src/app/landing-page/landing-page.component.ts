@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LandingLoginDialogComponent } from "./landing-login-dialog/landing-login-dialog.component";
 import { StartAnimationComponent } from './start-animation/start-animation.component';
@@ -7,6 +7,7 @@ import { LinksComponent } from './landing-shared/links/links.component';
 import { SessionService } from './services/session.service';
 import { LogoComponent } from "./landing-shared/logo/logo.component";
 import { LandingLoginRegisterButtonComponent } from './landing-login-register-button/landing-login-register-button.component';
+import { AuthserviceService } from './services/authservice.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -18,7 +19,7 @@ import { LandingLoginRegisterButtonComponent } from './landing-login-register-bu
 export class LandingPageComponent implements OnInit, AfterViewInit {
   showAnimation: boolean = true; 
   showLogo: boolean = false; 
-
+  authService = inject(AuthserviceService);
   constructor(private sessionService: SessionService) { }
 
   /**

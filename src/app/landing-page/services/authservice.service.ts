@@ -1,4 +1,4 @@
-import { HostListener, Injectable, inject, signal } from '@angular/core';
+import {  Injectable, inject, signal } from '@angular/core';
 import {Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
   signOut, updateProfile, user, GoogleAuthProvider, signInWithPopup, confirmPasswordReset, updateEmail,
   sendEmailVerification, EmailAuthProvider, reauthenticateWithCredential,User,signInAnonymously,onAuthStateChanged
@@ -469,6 +469,9 @@ export class AuthserviceService {
     return false
   }
 
+  /**
+   * Reinitializes the current user data based on the current user authenticated with the Firebase Authentication service.
+   */
   reinitializeUser(): void {
     const currentUser = this.firebaseAuth.currentUser;
     if (!currentUser) {

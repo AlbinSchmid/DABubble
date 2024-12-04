@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject,
+import { Component, inject, OnInit,
   
 } from '@angular/core';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
@@ -22,11 +22,11 @@ import { AuthserviceService } from '../services/authservice.service';
   selector: 'app-landing-login-dialog',
   standalone: true,
   imports: [CommonModule,MatIconModule, MatInputModule, MatIcon, FormsModule,
-     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton, RouterLink, RouterLinkActive,],
+     MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatButtonModule, MatButton, RouterLink],
   templateUrl: './landing-login-dialog.component.html',
   styleUrl: './landing-login-dialog.component.scss',
 })
-export class LandingLoginDialogComponent {
+export class LandingLoginDialogComponent implements OnInit {
   loginForm: FormGroup;
   authService = inject(AuthserviceService)
   errorMessage!: string | null;
@@ -48,6 +48,10 @@ export class LandingLoginDialogComponent {
       email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
       password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/)]],
     });
+  }
+
+  ngOnInit(): void {
+    this.authService.currentUserSig.set(null);
   }
 
   /**

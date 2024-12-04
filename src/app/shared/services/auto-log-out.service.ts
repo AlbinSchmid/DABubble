@@ -1,6 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { AuthserviceService } from '../../landing-page/services/authservice.service';
 import { Router } from '@angular/router';
+import { doc, updateDoc, Firestore } from '@angular/fire/firestore';
+
 
 const MINUTES_UNITL_AUTO_LOGOUT = 5;
 const CHECK_INTERVAL = 1000;
@@ -15,7 +17,8 @@ export class AutoLogoutService {
   constructor(
     private auth: AuthserviceService,
     private router: Router,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private firestore: Firestore
   ) {
     this.reset();
     this.initListener();
@@ -143,15 +146,16 @@ export class AutoLogoutService {
    */
   initTabCloseListener() {
     window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('isReloading', 'true');
-    });
-    window.addEventListener('unload', () => {
-      const isReloading = sessionStorage.getItem('isReloading');
-      if (!isReloading) {
-        this.ngZone.run(() => {
-          this.auth.logout();
-        });
-      }
-    });
+      this.auth.logout();
+      
+    })
+    
   }
 }
+          
+          
+
+    
+
+
+

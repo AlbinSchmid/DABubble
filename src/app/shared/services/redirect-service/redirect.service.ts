@@ -220,6 +220,7 @@ export class RedirectService {
    */
   openedThreadConfig(message: any, messageToReplyTo: any) {
     setTimeout(() => {
+      if(window.innerWidth < 1550) {this.messengerService.openMessenger = false;}
       this.threadService.messageToReplyTo = message;
       this.threadService.showThread = true;
       this.threadService.showThreadSideNav = true;

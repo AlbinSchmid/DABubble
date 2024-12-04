@@ -1,7 +1,7 @@
 import { Component, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AutoLogoutService } from './shared/services/auto-log-out.service';
-
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-root',
@@ -16,16 +16,14 @@ export class AppComponent {
   title = 'DaBubble';
 
   constructor(
-    private autoLogout: AutoLogoutService
+    private autoLogout: AutoLogoutService,
+    private auth: Auth
   ) { 
-    window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem('isReloading', 'true');
-    });
+
   }
 
   onDragStart(event: DragEvent) {
     event.preventDefault();
   }
-
 
 }
