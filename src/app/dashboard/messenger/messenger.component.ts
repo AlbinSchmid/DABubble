@@ -85,8 +85,10 @@ export class MessengerComponent implements AfterViewInit {
    * This is necessary because the ViewChild is not yet available in the constructor or ngOnInit.
    */
   ngAfterViewInit() {
-    this.resizeObserver = new ResizeObserver(() => this.checkTextStatus());
-    this.resizeObserver.observe(this.nameHeadline.nativeElement);
+    if (this.nameHeadline !== undefined) {
+      this.resizeObserver = new ResizeObserver(() => this.checkTextStatus());
+      this.resizeObserver.observe(this.nameHeadline.nativeElement);
+    }
     this.messengerService.scrollContainer = this.scrollContainer;
   }
 

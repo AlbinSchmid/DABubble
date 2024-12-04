@@ -131,8 +131,8 @@ export class UserListComponent {
     this.firestoreService.setAndGetCurrentlyFocusedChat(user);
     this.firebaseMessenger.content = '';
     this.firebaseMessenger.answerContent = '';
-    this.messengerService.showChart(user);
     this.firebaseMessenger.searchChat(user);
+    this.messengerService.showChart(user);
     user.isFocus = true;
   }
 

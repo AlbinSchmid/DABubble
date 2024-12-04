@@ -93,10 +93,10 @@ export class MessengerService {
     this.openChart = false;
     this.openNewMessage = false;
     console.log(this.channel);
-
     setTimeout(() => {
       this.textareaMessenger.next();
-    },);
+    }, 100);
+    
   }
 
 
@@ -133,8 +133,9 @@ export class MessengerService {
     this.openNewMessage = false;
     this.user = user;
     setTimeout(() => {
+      this.scrollToBottom(this.scrollContainer);
       this.textareaMessenger.next();
-    },);
+    }, 300);
     this.messageName = user.username;
   }
 

@@ -17,7 +17,7 @@
         }
     </div>
 
-    <button (click)="openAddPerson()">
+    <button (click)="openAddPerson()" *ngIf="messengerService.channel.title !== 'Allgemein'">
         <mat-icon>group_add</mat-icon>
         <p>Mitglieder hinzufügen</p>
     </button>

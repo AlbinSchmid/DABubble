@@ -33,13 +33,17 @@
                                 <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" src="{{user.avatar}}" alt="" *ngIf="$index < 4">
                                 <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" *ngIf="$index == threadService.usersInChannel.length - 1 && $index > 10">+{{ threadService.usersInChannel.length - 4 }}</div>
                                 <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 4" class="user-count">{{threadService.usersInChannel.length}}</p>
-                            }
+                            } 
                         }
                     </div>
                 }
             </button>
-            <mat-icon
-                (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
+            @if (messengerService.channel.title !== 'Allgemein') {
+                <mat-icon
+                    *ngIf="viewportService.width > 500" (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = true">group_add</mat-icon>
+                <mat-icon
+                    *ngIf="viewportService.width <= 500" (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = false">group_add</mat-icon>
+            }
             <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
                 [cdkConnectedOverlayOpen]="this.messengerService.showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
                 [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'"
