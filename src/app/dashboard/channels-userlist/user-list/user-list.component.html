@@ -1,6 +1,6 @@
 <div id="dmTab">
     <div class="tab-header">
-        <div (click)="toggleDirectMessages()" class="arrow-tab-title-contain">
+        <div (click)="listHandlingService.toggleDirectMessages()" class="arrow-tab-title-contain">
             <div>
                 <mat-icon id="dmIcon" class="drop-down-icon" fontIcon="arrow_right"></mat-icon>
             </div>
@@ -12,17 +12,18 @@
     </div>
 </div>
 
-<div class="btns-contain max-height-contain" *ngIf="isDirectMessagesOpen || isCloseDirectMessagesSection" [ngStyle]="{
-        'max-height': isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0',
-        'transition': isManualToggle ? getDMTransitionDuration() : 'none'
+<div class="btns-contain max-height-contain"
+    *ngIf="listHandlingService.isDirectMessagesOpen || listHandlingService.isCloseDirectMessagesSection" [ngStyle]="{
+        'max-height': listHandlingService.isDirectMessagesOpen ? getDMMaxHeight() + 'px' : '0',
+        'transition': listHandlingService.isManualToggle ? getDMTransitionDuration() : 'none'
     }">
 
-    <button *ngFor="let user of userList; let i = index"
-        [ngStyle]="{'animation-delay': isManualToggle ? getAnimationDelayDM(i) + 's' : '0s'}" (click)="focusUser(user)"
-        [ngClass]="{
-            'focus-btn': user.isFocus,
-            'blob-in': isDirectMessagesOpen && isManualToggle,
-            'blob-out': isCloseDirectMessagesSection && !isDirectMessagesOpen && isManualToggle
+    <button *ngFor="let user of this.listHandlingService.userList; let i = index"
+        [ngStyle]="{'animation-delay': listHandlingService.isManualToggle ? getAnimationDelayDM(i) + 's' : '0s'}"
+        (click)="focusUser(user)" [ngClass]="{
+            'focus-btn': user.isFocus || user.userID === listHandlingService.focusedUserId,
+            'blob-in': listHandlingService.isDirectMessagesOpen && listHandlingService.isManualToggle,
+            'blob-out': listHandlingService.isCloseDirectMessagesSection && !listHandlingService.isDirectMessagesOpen && listHandlingService.isManualToggle
         }">
 
         <div class="profile-img-wrapper">

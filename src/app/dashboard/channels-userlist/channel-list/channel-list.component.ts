@@ -11,6 +11,7 @@ import { AnimationChannelService } from './animation.service.service';
 import { MessengerService } from '../../../shared/services/messenger-service/messenger.service';
 import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
+import { UserListHandlingService } from '../user-list/user-list-handling.service';
 
 @Component({
   selector: 'app-channel-list',
@@ -29,6 +30,7 @@ export class ChannelListComponent {
   firebaseMessenger = inject(FirebaseMessengerService);
   messengerService = inject(MessengerService);
   threadService = inject(ThreadService);
+  userListHandlingService: UserListHandlingService = inject(UserListHandlingService);
 
   channelList: Channel[] = [];
   channelListSubscription!: Subscription;
@@ -127,6 +129,8 @@ export class ChannelListComponent {
 
   resetUserFocus(): void {
     this.userList.forEach(user => user.isFocus = false);
+    this.userListHandlingService.focusedUserId = '';
+
   }
 
   openDialog() {

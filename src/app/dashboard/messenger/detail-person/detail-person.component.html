@@ -7,8 +7,12 @@
     <div id="name-container">
         <h1>{{ data.username }}</h1>
         <div>
-            <div id="status-container" [ngClass]="{'status-online-icon': data.userStatus == 'on',  'status-offline-icon': data.userStatus == 'off',  'status-busy-icon': messengerService.user.userStatus == 'busy'}"></div>
-            <p [ngClass]="{'status-online-txt': data.userStatus == 'on', 'status-offline-txt': data.userStatus == 'off', 'status-busy-txt': data.userStatus == 'busy'}">{{ checkUserStatus() }}</p>
+            <div id="status-container"
+                [ngClass]="{'status-online-icon': data.userStatus == 'on',  'status-offline-icon': data.userStatus == 'off',  'status-busy-icon': messengerService.user.userStatus == 'busy'}">
+            </div>
+            <p
+                [ngClass]="{'status-online-txt': data.userStatus == 'on', 'status-offline-txt': data.userStatus == 'off', 'status-busy-txt': data.userStatus == 'busy'}">
+                {{ checkUserStatus() }}</p>
         </div>
     </div>
     <div id="email-container">
@@ -20,7 +24,8 @@
         </div>
     </div>
 
-    <button class="primary default send-message-btn" (click)="openUser()" mat-button *ngIf="messengerService.showMessageBtn">
+    <button class="primary default send-message-btn" (click)="openUser(data)" mat-button
+        *ngIf="messengerService.showMessageBtn">
         <mat-icon>chat_bubble</mat-icon>
         Nachricht
     </button>
