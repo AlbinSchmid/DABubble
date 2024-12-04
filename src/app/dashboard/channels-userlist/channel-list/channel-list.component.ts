@@ -123,7 +123,11 @@ export class ChannelListComponent {
     this.threadService.getTheUsersOfChannel();
     this.messengerService.messageDates = [];
     this.firebaseMessengerService.messages = [];
-    this.firebaseMessengerService.subSomethingList('noID', 'noCollection');
+    this.firebaseMessenger.subSomethingList('noID', 'noCollection', () => {
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+      }, 10);
+    });
     this.messengerService.openMessenger = true;
   }
 

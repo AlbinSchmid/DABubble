@@ -57,13 +57,29 @@ export class ThreadComponent implements AfterViewInit {
   }
 
 
-  ngAfterViewInit() {
+  ngAfterViewInit() {  
     this.threadService.scrollContainer = this.scrollContainer;
     this.resizeObserverMessage = new ResizeObserver(() => this.checkTextStatusTest());
     this.resizeObserverHeader = new ResizeObserver(() => this.checkTextStatus());
     this.resizeObserverHeader.observe(this.headerName.nativeElement);
     this.resizeObserverMessage.observe(this.messageToReplayName.nativeElement);
   }
+
+
+  closeThread() {
+    if (this.viewportService.width >= 1550) {
+      this.threadService.showThreadSideNav = false; 
+      this.messengerService.showDate1Count = false;
+    } else if (this.viewportService.width < 1550) {
+      this.threadService.showThreadSideNav = false; 
+      this.messengerService.showDate1Count = false;
+      this.messengerService.openMessenger = true; 
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+      }, 10);
+    } 
+  }
+
 
   checkTextStatusTest() {
     const element = this.messageToReplayName.nativeElement;

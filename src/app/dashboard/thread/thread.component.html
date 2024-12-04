@@ -4,15 +4,15 @@
             <h4>Thread</h4>
             <p #headerName><mark>&#64;</mark>{{ headerSenderName }}</p>
         </div>
-        <mat-icon (click)="threadService.showThreadSideNav = false; messengerService.openMessenger = true;" *ngIf="viewportService.width < 1550">arrow_back</mat-icon>
-        <mat-icon (click)="threadService.showThreadSideNav = false;" *ngIf="viewportService.width >= 1550">close</mat-icon>
+        <mat-icon (click)="closeThread()" *ngIf="viewportService.width < 1550">arrow_back</mat-icon>
+        <mat-icon (click)="closeThread()" *ngIf="viewportService.width >= 1550">close</mat-icon>
     </header>
     <div id="content">
-        <div id="messages-container" class="threadContent" #content>
+        <div id="messages-container" class="threadContent" #content  [ngStyle]="{'padding-top.px': firebaseMessenger.answers.length == 1 ? 100 : 20}">
             <div class="message">
                 <img src="{{ threadService.messageToReplyTo.senderAvatar }}" alt="Profile">
                 <div id="message-content">
-                    <div>
+                    <div class="header">
                         <h6 #messageToReplayName>{{ messageToReplaySenderName }}</h6>
                         <p>
                             {{ threadService.messageToReplyTo.date| date:'H:mm' }}

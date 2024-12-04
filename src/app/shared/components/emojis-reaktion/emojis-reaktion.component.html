@@ -4,7 +4,7 @@
 <section *ngIf="!messageInteraction">
     <button (click)="alreadyExisitingReaktion()"
         [ngStyle]="{'border-color': getBorderColor(), 'background-color': getBackgroundColor()}">
-        <div>
+        <div *ngIf="viewportService.width > 600">
             <span>{{ reaction.content }}</span>
             <h6>{{ controllNamesArrayLength() }}</h6>
             <p>{{ controllText() }}</p>

@@ -52,13 +52,17 @@ export class FirebaseMessengerService {
    * @param messageId - messageId where we get the answeres
    * @returns get the path of the answere chat
    */
-  subSomethingList(messageID: string, collectionOfMessage: string) {
+  subSomethingList(messageID: string, collectionOfMessage: string, callback?: any) {
     const messegeRef = collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages${this.checkCollectionOfMessage(messageID, collectionOfMessage)}`);
     return onSnapshot(messegeRef, (list) => {
       if (collectionOfMessage == 'answer') {
         this.safeAnswersData(list);
       } else if (collectionOfMessage == 'noCollection') {
         this.safeChatData(list);
+      }
+
+      if (callback) {
+        return callback();
       }
     })
   }
@@ -261,7 +265,11 @@ export class FirebaseMessengerService {
           this.messages = [];
           if (newMessageComponent !== true) {
             this.messengerService.openMessenger = true;
-            this.subSomethingList('noID', 'noCollection');
+            this.subSomethingList('noID', 'noCollection', () => {
+              setTimeout(() => {
+                this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+              }, 10);
+            });
           }
         }
       });

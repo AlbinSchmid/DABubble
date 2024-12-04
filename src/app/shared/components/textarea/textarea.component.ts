@@ -395,6 +395,9 @@ export class TextareaComponent {
     } else {
       this.firebaseMessenger.answerContent = originalContent;
       this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.threadService.scrollContainer);
+      }, 10);
     }
   }
 

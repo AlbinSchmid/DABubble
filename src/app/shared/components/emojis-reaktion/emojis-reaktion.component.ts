@@ -4,6 +4,7 @@ import { MessengerService } from '../../services/messenger-service/messenger.ser
 import { CommonModule } from '@angular/common';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
+import { ViewportService } from '../../services/viewport.service';
 
 @Component({
   selector: 'app-emojis-reaktion',
@@ -15,6 +16,7 @@ import { AuthserviceService } from '../../../landing-page/services/authservice.s
   styleUrl: './emojis-reaktion.component.scss'
 })
 export class EmojisReaktionComponent{
+  viewportService = inject(ViewportService);
   authService = inject(AuthserviceService);
   firebaseMessenger = inject(FirebaseMessengerService);
   messengerService = inject(MessengerService);
@@ -28,8 +30,11 @@ export class EmojisReaktionComponent{
     latestReactionTime: 0,
   };
   @Input() index: number;
+  @Input() reactionIndex: number;
+  @Input() reactionsArrayLength: number;
   userUsedThisReactionAlready: boolean;
   foundID: boolean;
+  moreReactionsBtnIsAlreadyUsed = false;
 
   
   getBorderColor() {

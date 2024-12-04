@@ -57,6 +57,8 @@ export class MessengerService {
   showMessageBtn: boolean;
   messageName: string;
 
+  showDate1Count = false;
+
 
   getFirstWord(name: string): string {
     const words = name.split(" "); // Teilt den String in ein Array von Wörtern
@@ -95,9 +97,6 @@ export class MessengerService {
     setTimeout(() => {
       this.textareaMessenger.next();
     }, 100);
-    setTimeout(() => {
-      this.scrollToBottom(this.scrollContainer);
-    }, 300);
   }
 
 
@@ -134,7 +133,6 @@ export class MessengerService {
     this.openNewMessage = false;
     this.user = user;
     setTimeout(() => {
-      this.scrollToBottom(this.scrollContainer);
       this.textareaMessenger.next();
     }, 300);
     this.messageName = user.username;

@@ -1,4 +1,7 @@
 section {
+    display: flex;
+    gap: 8px;
+
     button {
         position: relative;
         background-color: white;
@@ -90,4 +93,12 @@ section {
 .usedAlready {
     border-color: #444DF2 !important;
     background-color: rgba(#444DF2, 0.05) !important;
+}
+
+@media screen and (max-width: 1020px) {
+    #last-two-reactions-div {
+        button {
+            padding: clamp(0.375rem, 0.3179rem + 0.2857vw, 0.5rem) !important; // 6px - 8px
+        }
+    }
 }

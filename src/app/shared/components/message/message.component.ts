@@ -72,6 +72,7 @@ export class MessageComponent implements OnInit, OnDestroy{
   resizeObserver!: ResizeObserver;
   checkTextSenderName = false;
   windowWith: number;
+  openRestReactions = false;
 
 
   ngOnInit() {
@@ -81,7 +82,11 @@ export class MessageComponent implements OnInit, OnDestroy{
     }
     this.checkDateIfAlreadyIncludeInArray();
     this.unsubReactionList = this.subReactionList();
-    this.unsubAnswersList = this.subAnswersList(); //Für die zahlen
+    this.unsubAnswersList = this.subAnswersList(() => {
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+      }, 10);
+    }); //Für die zahlen
   }
 
 
@@ -103,6 +108,21 @@ export class MessageComponent implements OnInit, OnDestroy{
     } else if (this.windowWith < this.viewportService.width) {
       this.messageName = this.message.senderName;
       this.checkTextSenderName = false;
+    }
+  }
+
+
+  howManyReactionsToDisplay() {
+    if (this.viewportService.width >= 1300) {
+      return 10;
+    } else if (this.viewportService.width < 1300 && this.viewportService.width >= 1020) {
+      return 5;
+    } else if (this.viewportService.width < 1020 && this.viewportService.width >= 720) {
+      return 10;
+    } else if (this.viewportService.width < 720 && this.viewportService.width >= 380) {
+      return 4;
+    } else {
+      return 3;
     }
   }
 
@@ -196,9 +216,6 @@ export class MessageComponent implements OnInit, OnDestroy{
       list.forEach(element => {
         this.mentionedUsers.push(this.setMentionedObject(element.data(), element.id));
       });
-      // setTimeout(() => {
-      //   this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
-      // }, 100);
     })
   }
 
@@ -225,7 +242,7 @@ export class MessageComponent implements OnInit, OnDestroy{
   }
 
 
-  subAnswersList() {
+  subAnswersList(callback?: any) {
     const messegeRef = collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatIDOrChannelID()}/messages/${this.message.messageID}/answers`)
     return onSnapshot(messegeRef, (list) => {
       this.answers = [];
@@ -233,6 +250,10 @@ export class MessageComponent implements OnInit, OnDestroy{
         this.answers.push(this.firebaseMessenger.setMessageObject(element.data(), element.id));
       });
       this.firebaseMessenger.sortByDate(this.answers);
+
+      if (callback) {
+        return callback();
+      }
     })
   }
 
@@ -248,6 +269,7 @@ export class MessageComponent implements OnInit, OnDestroy{
   getBoolean(showEmoijBoard: boolean) {
     this.showEmojiBoard = showEmoijBoard;
     this.openOrCloseEmojiBoard();
+    this.messengerService.showDate1Count = false;
   }
 
 
@@ -275,18 +297,26 @@ export class MessageComponent implements OnInit, OnDestroy{
   /**
    * Open the thread for answer
    */
-  openThead() {
+  openThread() {
+    this.messengerService.messageDates = [];
+    this.messengerService.showDate1Count = false;
     if (this.viewportService.width <= 1550) {
       this.messengerService.openMessenger = false;
     }
     this.threadService.showThreadSideNav = true;
     this.threadService.messageToReplyTo = this.message;
-    console.log(this.threadService.scrollContainer);
-    this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer');
+    this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer', () => {
+      setTimeout(() => {
+        this.messengerService.scrollToBottom(this.threadService.scrollContainer);
+      }, 10);
+    });
     setTimeout(() => {
       if (this.messengerService.textareaThread) {
         this.messengerService.textareaThread.next();
       }
+      if (this.firebaseMessenger.answers.length == 0) {
+        this.messengerService.showDate1Count = false;
+      }  
     }, 20);
   }
 
