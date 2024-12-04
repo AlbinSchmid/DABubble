@@ -286,14 +286,13 @@ export class FirebaseMessengerService {
 
   async updateSomethingAtMessage(messageID: string, collectionOfMessage: string, docID: string, array: any,) {
     let ref = doc(collection(this.firestore, `${this.checkCollectionChatOrChannel()}/${this.checkDocChatIDOrChannelID()}/messages${this.checkCollectionOfMessage(messageID, collectionOfMessage)}`), docID);
-    await updateDoc(ref, this.whatShouldBeUpdated(array)).catch(
+    await updateDoc(ref, this.whatShouldBeUpdated(array, collectionOfMessage)).catch(
       (err) => {
         console.error(err);
       }
     )
   }
-
-
+  
 
   /**
    * Extracts and returns a simplified JSON object from a given message object.
@@ -304,11 +303,18 @@ export class FirebaseMessengerService {
    * @param message - The message object to be processed.
    * @returns {object} A JSON object containing content, senderId, and date.
    */
-  whatShouldBeUpdated(message: any): object {
-    return {
-      content: message.content,
-      senderId: message.senderID,
-      date: message.date.getTime(),
+  whatShouldBeUpdated(message: any, collectionOfMessage: string): object {
+    if (collectionOfMessage == 'reaction') {
+      return {
+        senderIDs: message.senderIDs,
+        senderNames: message.senderNames,
+      }
+    } else {
+      return {
+        content: message.content,
+        senderId: message.senderID,
+        date: message.date.getTime(),
+      }
     }
   }
 

@@ -108,7 +108,7 @@ export class MessengerComponent implements AfterViewInit {
   }
 
   checkTextStatus() {
-    if (this.nameHeadline.nativeElement) {
+    if (this.nameHeadline !== undefined) {
       const element = this.nameHeadline.nativeElement;
       const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
       const elementHeight = element.offsetHeight;

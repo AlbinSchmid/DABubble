@@ -65,7 +65,6 @@ export class EmojiBoardComponent {
     let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatIDOrChannelID()}/messages/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
-        console.log(userID);
         this.findReactionWithContent = true;
         this.reaction = [];
         this.reaction.push(this.setRectionObject(element.data(), element.id));
@@ -110,7 +109,6 @@ export class EmojiBoardComponent {
   addEmojiToReaction(start: number, emoji: string, end: number) {
     this.findReactionWithContent = false;
     this.firebaseMessenger.reactions = [];
-    console.log(this.firebaseMessenger.reaktionContent);
     this.firebaseMessenger.reaktionContent = '';
     this.firebaseMessenger.reaktionContent = this.firebaseMessenger.reaktionContent.slice(0, start) + emoji + this.firebaseMessenger.reaktionContent.slice(end);
     this.searchReaction(this.message.messageID, this.firebaseMessenger.reaktionContent, this.authService.currentUserSig()?.userID ?? '');

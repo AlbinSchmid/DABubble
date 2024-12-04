@@ -80,7 +80,7 @@ export class MessengerService {
 
 
   scrollToBottom(container: any) {
-    if (container) {
+    if (container) {      
       container.nativeElement.scrollTop = container.nativeElement.scrollHeight;
     }
   }
@@ -92,11 +92,12 @@ export class MessengerService {
     this.openChannel = true;
     this.openChart = false;
     this.openNewMessage = false;
-    console.log(this.channel);
     setTimeout(() => {
       this.textareaMessenger.next();
     }, 100);
-    
+    setTimeout(() => {
+      this.scrollToBottom(this.scrollContainer);
+    }, 300);
   }
 
 
