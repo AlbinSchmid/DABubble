@@ -95,10 +95,14 @@ export class DialogChannelComponent {
   }
 
   async addChannel() {
-    this.dialogRef.close();
-    await this.channelAnimationService.updateListOfChannels();
-    await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
-    this.channelAnimationService.toggleChannels();
+    try {
+      await this.channelAnimationService.updateListOfChannels();
+      await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
+      this.channelAnimationService.toggleChannels();
+      this.dialogRef.close();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   isTitleInputEmpty() {
@@ -113,5 +117,9 @@ export class DialogChannelComponent {
       }
     }
     return false;
+  }
+
+  ngOnDestroy() {
+    this.memberSourceService.membersSource.set([]);
   }
 }

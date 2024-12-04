@@ -191,13 +191,20 @@ export class AddPersonComponent {
     let newUser = this.getUserIDs();
     let allMember = newUser.concat(this.existingMembersOnChannel());
 
-    await this.firestoreService.updateDoc('channels', channel.channelID!, { userIDs: allMember });
-    this.closeDialog();
+    try {
+      await this.firestoreService.updateDoc('channels', channel.channelID!, { userIDs: allMember });
+      this.closeDialog();
+    } catch (err) {
+      console.error(err);
+    }
   }
-
 
   getUserIDs(): string[] {
     let members = this.memberSourceService.membersSource();
     return members.map(user => user.userID);
+  }
+
+  ngOnDestroy() {
+    this.memberSourceService.membersSource.set([]);
   }
 }
