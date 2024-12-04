@@ -134,13 +134,6 @@ input {
     }
 }
 
-.profile-contain-header {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    max-width: 485px;
-}
-
 .profile-img-wrapper {
     position: relative;
 
@@ -564,16 +557,12 @@ mat-icon {
     }
 }
 
-.cdk-overlay-connected-position-bounding-box {
-    position: absolute !important;
-    bottom: 0 !important;
-    right: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+::ng-deep .cdk-overlay-connected-position-bounding-box {
+    right: 20px !important;
 }
 
 app-menu {
+
     @media(max-width:460px) {
         display: flex;
         justify-content: center;

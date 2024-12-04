@@ -129,6 +129,9 @@ mat-card {
 
     @media(max-width:545px) {
         padding: 35px 20px !important;
+    }
+
+    @media(max-width:460px) {
         width: 100vw !important;
     }
 }

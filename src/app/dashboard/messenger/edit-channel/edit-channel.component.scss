@@ -9,10 +9,13 @@ mat-card {
     padding: 40px;
     border-top-left-radius: 0 !important;
 
+    @media(max-width:1340px) {
+        border-radius: 30px !important;
+    }
+
     @media(max-width:950px) {
         width: 95vw;
         height: max-content;
-        border-radius: 30px !important;
         gap: 30px;
     }
 
