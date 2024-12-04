@@ -15,6 +15,11 @@
         width: 95vw;
     }
 
+    // @media(max-width:755px) {
+    //     padding: 25px;
+    //     width: 95vw;
+    // }
+
     @media(max-width:650px) {
         padding: 25px;
     }
@@ -46,6 +51,10 @@ app-title-description {
     width: 710px;
     height: 345px;
     animation: showElement 0.2s ease-in-out forwards 0.3s;
+
+    @media(max-width:755px) {
+        width: 95vw;
+    }
 }
 
 .add-member-height-fore-two {
@@ -53,6 +62,10 @@ app-title-description {
     width: 710px;
     height: 383px;
     animation: showElement 0.2s ease-in-out forwards 0.3s;
+
+    @media(max-width:755px) {
+        width: 95vw;
+    }
 }
 
 .add-member-height-fore-more {
