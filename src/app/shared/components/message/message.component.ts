@@ -196,9 +196,9 @@ export class MessageComponent implements OnInit, OnDestroy{
       list.forEach(element => {
         this.mentionedUsers.push(this.setMentionedObject(element.data(), element.id));
       });
-      setTimeout(() => {
-        this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
-      });
+      // setTimeout(() => {
+      //   this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+      // }, 100);
     })
   }
 

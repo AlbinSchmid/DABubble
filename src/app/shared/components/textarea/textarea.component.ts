@@ -388,6 +388,9 @@ export class TextareaComponent {
         }
       } else {
         this.firebaseMessenger.createMessage('noID', 'noCollection', false);
+        setTimeout(() => {
+          this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+        }, 10);
       }
     } else {
       this.firebaseMessenger.answerContent = originalContent;

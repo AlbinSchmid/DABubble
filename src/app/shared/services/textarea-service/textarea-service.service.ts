@@ -20,33 +20,6 @@ export class TextareaServiceService {
   userListSubscription: any;
 
 
-  // subChannelList(callback?: any) { 
-  //   this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
-  //     this.usersListAll = users;
-  //   });
-  //   const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
-  //   return onSnapshot(messegeRef, (list) => {
-  //     if (list.exists()) {
-  //       this.usersToMention = [];
-  //       this.messengerService.mentionConfig.items = [];
-  //       const usersIDs = list.data()['userIDs'];
-  //       for (let i = 0; i < usersIDs.length; i++) {
-  //         const userID = usersIDs[i];
-  //         const user = this.usersListAll.filter(user => user.userID === userID);
-  //         this.usersToMention.push(this.getCleanJson(user));
-  //         this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
-  //       }
-  //       this.sortByName(this.usersToMention);
-  //       if (callback) {
-  //         callback(this.usersToMention);
-  //       }
-  //     } else {
-  //       console.error("doc is empty or doesn't exist");
-  //     }
-  //   })
-  // }
-
-
   sortByName(array: any[]) {
     array.sort((a, b) => {
       const nameA = a?.userName || '';

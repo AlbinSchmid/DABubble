@@ -295,3 +295,9 @@ app-add-person {
         right: clamp(-11.375rem, -17.5048rem + 19.6154vw, -5rem) !important; // -80px - -182px
     }
 }
+
+@media screen and (max-width: 500px) {
+    app-add-person {
+        right: -80px !important;
+    }
+}

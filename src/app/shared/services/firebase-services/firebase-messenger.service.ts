@@ -60,9 +60,6 @@ export class FirebaseMessengerService {
       } else if (collectionOfMessage == 'noCollection') {
         this.safeChatData(list);
       }
-      setTimeout(() => {
-        this.messengerService.scrollToBottom(this.threadService.scrollContainer)
-      });
     })
   }
 
