@@ -96,6 +96,7 @@ export class EditChannelComponent {
   async leaveTheChannel() {
     let currentUserId = this.authService.currentUserSig()?.userID;
     let editChannelID = this.messengerService.channel.channelID!;
+    this.messengerService.openMessenger = false;
 
     if (currentUserId) {
       this.messengerService.channel.userIDs = this.messengerService.channel.userIDs.filter(id => id !== currentUserId);
