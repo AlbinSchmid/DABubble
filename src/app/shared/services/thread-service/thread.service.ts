@@ -31,8 +31,6 @@ export class ThreadService {
         if (callback) {
           callback(list);
         }
-      } else {
-        console.error("doc is empty or doesn't exist");
       }
     })
   }

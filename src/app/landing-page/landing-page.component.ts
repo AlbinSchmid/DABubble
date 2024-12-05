@@ -30,6 +30,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
    * false and the showLogo variable is set to true.
    */
   ngOnInit(): void {
+    if(this.authService.currentUserSig()){
+      this.authService.logout();
+    }
     if (this.sessionService.isFirstVisit()) {
       this.showAnimation = true; 
     } else {
