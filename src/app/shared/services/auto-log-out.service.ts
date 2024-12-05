@@ -24,7 +24,6 @@ export class AutoLogoutService {
     this.initListener();
     this.initInterval();
     this.initVisibilityListener();
-    this.initTabCloseListener();
   }
 
   /**
@@ -138,18 +137,6 @@ export class AutoLogoutService {
     });
   }
 
-  /**
-   * Initializes event listeners for the 'beforeunload' and 'unload' events to handle tab or window closure.
-   * The 'beforeunload' event sets a sessionStorage flag to indicate a potential page reload.
-   * The 'unload' event checks this flag, and if the page is not reloading, logs out the user.
-   * Runs the logout process within Angular's zone to ensure proper change detection.
-   */
-  initTabCloseListener() {
-    window.addEventListener('beforeunload', () => {
-      
-    })
-    
-  }
 }
           
           
