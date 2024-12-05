@@ -88,6 +88,7 @@ export class ThreadComponent implements AfterViewInit {
       this.threadService.showThreadSideNav = false;
       this.messengerService.showDate1Count = false;
     } else if (this.viewportService.width < 1550) {
+      this.messengerService.messageDates = [];
       this.threadService.showThreadSideNav = false;
       this.messengerService.showDate1Count = false;
       this.messengerService.openMessenger = true;

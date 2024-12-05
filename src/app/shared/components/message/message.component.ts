@@ -315,11 +315,13 @@ export class MessageComponent implements OnInit, OnDestroy{
    */
   openThread() {
     this.messengerService.messageDates = [];
-    this.messengerService.showDate1Count = false;
     if (this.viewportService.width <= 1550) {
       this.messengerService.openMessenger = false;
     }
-    this.threadService.showThreadSideNav = true;
+    setTimeout(() => {
+      this.threadService.showThreadSideNav = true;
+      
+    }, 10);
     this.threadService.messageToReplyTo = this.message;
     this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer', () => {
       setTimeout(() => {
@@ -330,9 +332,6 @@ export class MessageComponent implements OnInit, OnDestroy{
       if (this.messengerService.textareaThread) {
         this.messengerService.textareaThread.next();
       }
-      if (this.firebaseMessenger.answers.length == 0) {
-        this.messengerService.showDate1Count = false;
-      }  
     }, 20);
   }
 

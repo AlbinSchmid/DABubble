@@ -73,10 +73,7 @@ mat-card {
 
         #messages-container {
             display: flex;
-            // height: 100%;
-            // justify-content: flex-end;
             flex-direction: column;
-            padding: 20px 0;
             overflow-y: auto;
 
             &::-webkit-scrollbar {
