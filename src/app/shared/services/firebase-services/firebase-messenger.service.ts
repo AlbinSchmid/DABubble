@@ -220,10 +220,6 @@ export class FirebaseMessengerService {
       (err) => {
         console.error(err);
       }
-    ).then(
-      (docRef) => {
-        console.log('Document written with ID: ', docRef?.id);
-      }
     )
   }
 
@@ -336,10 +332,6 @@ export class FirebaseMessengerService {
     await addDoc(collection(this.firestore, `chats`), users).catch(
       (err) => {
         console.error(err);
-      }
-    ).then(
-      (docRef) => {
-        console.log('Document written with ID: ', docRef?.id);
       }
     )
   }

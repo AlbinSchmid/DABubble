@@ -39,15 +39,6 @@ export class EditMessageComponent implements OnInit {
   constructor(public firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {  
   }
 
-
-  deleteMentionUser(userJson: any) {
-    console.log(this.mentionedUsers);
-    
-    // this.alreadyMentionUsers = this.alreadyMentionUsers.filter(user => user.userID !== userJson.userID);
-    // this.usersToMention.push(userJson);
-    // this.sortByName(this.usersToMention);
-  }
-
 /**
  * Angular lifecycle hook that is called after data-bound properties
  * of a directive are initialized. Invokes the getMessageText method
@@ -151,9 +142,6 @@ export class EditMessageComponent implements OnInit {
   checkWithMessageShouldUptade() {
     const imageTags = this.messageItems.map(item => item).join(' ');
     this.message.content = `${this.messengerService.editMessageContent} ${imageTags}`.trim();
-    console.log(this.message.messageID);
-    
-    
     if (this.editAnswerMessage) {
       this.firebase.updateSomethingAtMessage(this.threadService.messageToReplyTo.messageID, 'answer', this.message.messageID, this.message)
         .catch(err => console.error('Error updating message answer:', err));

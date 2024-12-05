@@ -100,8 +100,6 @@ export class ThreadComponent implements AfterViewInit {
 
   checkTextStatus() {
     const element = this.headerName.nativeElement;
-    console.log('header');
-    
     const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
     const headerNameHeight = element.offsetHeight;
     this.isTextWrapped = headerNameHeight > lineHeight;

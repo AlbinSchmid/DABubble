@@ -82,7 +82,6 @@ export class LandingLoginDialogComponent implements OnInit {
     const rawForm = this.loginForm.getRawValue();
     this.authService.login(rawForm.email, rawForm.password).subscribe({
       next: () => { 
-        console.log(this.authService.currentUserSig()?.email);
         this.router.navigateByUrl('/dashboard');},
       error: (err) => { this.errorMessage = err.message; }
     });
