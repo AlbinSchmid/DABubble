@@ -30,7 +30,7 @@ export class EditUserComponent implements OnInit {
   inputEmail: string = '';
   errorMessage: string | null = null;
   successMessage: string | null = null;
-  newAvatar: string;
+  newAvatar: string = ''
   originalAvatar: string;
   inputPassword: string = '';
 
@@ -66,6 +66,8 @@ export class EditUserComponent implements OnInit {
       }
     });
     const currentUser = this.authService.currentUserSig();
+    console.log(currentUser?.avatar);
+    
     if (currentUser?.avatar) {
       this.originalAvatar = currentUser.avatar;
     }
@@ -329,8 +331,8 @@ export class EditUserComponent implements OnInit {
     const oldAvatarUrl = currentUser?.avatar;
     if (this.imgUpload.selectedFile) {
       try {
-        const downloadUrl = await this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile);
-        this.newAvatar = downloadUrl;
+        const downloadUrl = await this.imgUpload.uploadUserAvatar(this.imgUpload.selectedFile );
+        this.newAvatar = downloadUrl
         await this.imgUpload.updateUserAvatar(downloadUrl);
         await this.imgUpload.updateAvatarInFirestore(downloadUrl);
       } catch (error) {

@@ -40,7 +40,7 @@
                 <div class="list">
                     <button *ngFor="let user of messengerService.selectUserNewMessage; let i = index">
                         <div class="profile-img-wrapper">
-                            <img src="{{ user.avatar }}" alt="user_avatar_img">
+                            <img src="{{ user.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a' }}" alt="user_avatar_img">
                             <div [ngClass]="{'status-online-icon': user.userStatus == 'on'}"></div>
                             <div [ngClass]="{'status-offline-icon': user.userStatus == 'off'}"></div>
                             <div [ngClass]="{'status-busy-icon': user.userStatus == 'busy'}"></div>
