@@ -34,6 +34,8 @@ export class DialogChannelComponent {
 
   showAddMembersDialog: boolean = false;
   selectInput: boolean = false;
+  channelIsCreated: boolean = false;
+
   inputValueEmpty: boolean = true;
 
 
@@ -96,10 +98,13 @@ export class DialogChannelComponent {
 
   async addChannel() {
     try {
+      this.channelIsCreated = true;
+      this.dialogRef.close();
       await this.channelAnimationService.updateListOfChannels();
       await this.firestoreService.addDoc(this.setChannelOnject(), 'channels');
       this.channelAnimationService.toggleChannels();
-      this.dialogRef.close();
+      this.channelIsCreated = false;
+      this.memberSourceService.membersSource.set([]);
     } catch (err) {
       console.error(err);
     }
@@ -120,6 +125,7 @@ export class DialogChannelComponent {
   }
 
   ngOnDestroy() {
+    if (this.channelIsCreated) return;
     this.memberSourceService.membersSource.set([]);
   }
 }

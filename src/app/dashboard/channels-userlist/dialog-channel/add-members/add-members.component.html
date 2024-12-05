@@ -2,7 +2,7 @@
 <mat-radio-group class="channel-list" [ngClass]="getChannelListClass()" [(ngModel)]="pickChannel"
     (scroll)="onScroll($event)" (change)="resetLowerGroup()">
     @for (channel of channelList; track $index) {
-    <mat-radio-button [value]="channel.title">
+    <mat-radio-button *ngIf="channel.title !==  'Allgemein'" [value]="channel.title">
         <span class="radio-default-txt">Alle Mitglieder von <span class="radio-value-txt">{{ channel.title }}</span>
             hinzufügen</span>
     </mat-radio-button>
@@ -27,10 +27,10 @@
         <input #userInput autocomplete="off" placeholder="Name..." [matChipInputFor]="chipGrid"
             (input)="searchUserByName($event)" (keydown)="onKeyDown($event)" />
     </div>
+    <app-filtred-list [filteredUsers]="filteredUsers" [highlightedIndex]="highlightedIndex"
+        (userSelected)="onUserAdded($event)">
+    </app-filtred-list>
 </mat-radio-group>
-<app-filtred-list [filteredUsers]="filteredUsers" [highlightedIndex]="highlightedIndex"
-    (userSelected)="onUserAdded($event)">
-</app-filtred-list>
 <video *ngIf="needsToAddScroll()" [ngClass]="{'scroll-up': scrolledToEnd}" autoplay loop muted
     src="assets/icons/scroll_animation.mp4">
 </video>

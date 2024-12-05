@@ -14,6 +14,8 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthserviceService } from '../../../../landing-page/services/authservice.service';
 import { FiltredListComponent } from './filtred-list/filtred-list.component';
 import { MembersSourceService } from '../../../../shared/services/members-source.service';
+import { AnimationChannelService } from '../../channel-list/animation.service.service';
+import { ViewportService } from '../../../../shared/services/viewport.service';
 
 @Component({
   selector: 'app-add-members',
@@ -42,7 +44,7 @@ export class AddMembersComponent {
   firestoreService: FirestoreService = inject(FirestoreService);
   memberSourceService: MembersSourceService = inject(MembersSourceService);
   authService: AuthserviceService = inject(AuthserviceService);
-
+  viewportService: ViewportService = inject(ViewportService);
 
   channelListSubscription!: Subscription;
   channelList: Channel[] = [];
@@ -109,7 +111,7 @@ export class AddMembersComponent {
           behavior: 'smooth'
         });
 
-        if (this.inputUserList.length < 3) {
+        if (this.inputUserList.length < 3 && this.viewportService.width > 460) {
           this.userInputElement.nativeElement.focus();
         } else {
           element.addEventListener('scroll', () => {
@@ -140,6 +142,11 @@ export class AddMembersComponent {
           left: element.scrollWidth,
           behavior: 'smooth'
         });
+        element.addEventListener('scroll', () => {
+          if (element.scrollLeft + element.clientWidth >= element.scrollWidth && this.userInputElement) {
+            this.userInputElement.nativeElement.focus();
+          }
+        }, { once: false });
       }, 500);
     }
   }
@@ -148,6 +155,7 @@ export class AddMembersComponent {
     if (this.selectInput) {
       this.endAnimation = false;
       this.selectInput = false;
+      this.filteredUsers = [];
       this.inputSelectedChange.emit(this.selectInput);
       setTimeout(() => this.endAnimation = true, 200);
     } else {
@@ -159,6 +167,11 @@ export class AddMembersComponent {
     this.selectInput = true;
     this.inputSelectedChange.emit(this.selectInput);
     this.pickChannel = '';
+    if (this.inputUserList.length < 2) {
+      setTimeout(() => {
+        this.userInputElement.nativeElement.focus();
+      }, 400);
+    }
   }
 
   isFocus(selectedTitle: string) {
@@ -190,7 +203,7 @@ export class AddMembersComponent {
   getChannelListClass(): string {
     let channels = this.channelList.length;
 
-    if (channels > 3) {
+    if (channels > 4) {
       return 'scrollable';
     } else if (channels == 1) {
       return 'set-min-height-channel-list';
@@ -200,7 +213,7 @@ export class AddMembersComponent {
   }
 
   needsToAddScroll() {
-    return this.channelList.length > 3;
+    return this.channelList.length > 4;
   }
 
   onKeyDown(event: KeyboardEvent): void {

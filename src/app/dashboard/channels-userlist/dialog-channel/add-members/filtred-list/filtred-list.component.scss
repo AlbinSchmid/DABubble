@@ -12,6 +12,19 @@ mat-card {
     scrollbar-width: none;
     overflow-x: hidden;
 
+    @media(max-width:490px) {
+        padding: 5px;
+        width: 360px;
+    }
+
+    @media(max-width:400px) {
+        width: 290px;
+    }
+
+    @media(max-width:350px) {
+        width: 270px;
+    }
+
     button {
         width: 100%;
         justify-content: flex-start !important;

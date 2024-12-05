@@ -93,7 +93,7 @@ input {
 
     @media(max-width:360px) {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
 
         img {
