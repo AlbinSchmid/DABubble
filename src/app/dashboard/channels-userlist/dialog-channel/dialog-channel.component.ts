@@ -128,4 +128,8 @@ export class DialogChannelComponent {
     if (this.channelIsCreated) return;
     this.memberSourceService.membersSource.set([]);
   }
+
+  isGuestUnnamed() {
+    return this.authService.currentUserSig()?.username === 'Neuer Gast'
+  }
 }
