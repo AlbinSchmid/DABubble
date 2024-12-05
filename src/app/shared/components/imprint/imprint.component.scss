@@ -16,6 +16,9 @@ app-logo {
     ::ng-deep .logo h2 {
         display: none !important;
     }
+    @media (max-width: 650px) {
+        padding-left: 55px;
+    }
 }
 
 mat-card {
@@ -23,8 +26,8 @@ mat-card {
     padding: 48px 56px 48px 56px;
     gap: 32px;
     width: 100%;
-    max-width: 676.27px;
-    height: 469px;
+    max-width: 90%;
+    height: fit-content;
 }
 
 mat-card-content {
@@ -53,4 +56,9 @@ p {
     font-size: 20px;
     font-weight: 500;
     line-height: 24px;
+}
+
+.contact-contain{
+    display: flex;
+    flex-direction: column;
 }
