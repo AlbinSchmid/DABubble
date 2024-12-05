@@ -33,12 +33,12 @@
                 [index]="messageIndex"></app-emojis-reaktion>
             }
             <div class="more-reactions-div">
-                <button class="more-reactions-btn" *ngIf="reactions.length > 6"
+                <button class="more-reactions-btn" *ngIf="reactions.length > howManyReactionsToDisplay()"
                     (click)="openRestReactions = !openRestReactions">
                     +{{ reactions.length - howManyReactionsToDisplay() }}
                 </button>
 
-                <div class="window-more-reactions-div" *ngIf="openRestReactions && hoveredMessageId == messageIndex">
+                <div class="window-more-reactions-div" *ngIf="openRestReactions && hoveredMessageId == messageIndex && reactions.length > howManyReactionsToDisplay()">
                     @for (reaction of reactions; track $index) {
                     <app-emojis-reaktion *ngIf="reaction.messageID == message.messageID && $index >= howManyReactionsToDisplay()"
                         [reaction]="reaction" [reactionsArrayLength]="reactions.length" [reactionIndex]="$index"

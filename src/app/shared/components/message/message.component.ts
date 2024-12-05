@@ -113,16 +113,30 @@ export class MessageComponent implements OnInit, OnDestroy{
 
 
   howManyReactionsToDisplay() {
-    if (this.viewportService.width >= 1300) {
-      return 10;
-    } else if (this.viewportService.width < 1300 && this.viewportService.width >= 1020) {
-      return 5;
-    } else if (this.viewportService.width < 1020 && this.viewportService.width >= 720) {
-      return 10;
-    } else if (this.viewportService.width < 720 && this.viewportService.width >= 380) {
-      return 4;
+    if (this.sourceThread) {
+      if (this.viewportService.width >= 1550) {
+        return 5;
+      } else if (this.viewportService.width < 1550 && this.viewportService.width >= 1140) {
+        return 10;
+      } else if (this.viewportService.width < 1140 && this.viewportService.width >= 1020) {
+        return 6;
+      } else if (this.viewportService.width < 1020 && this.viewportService.width >= 605) {
+        return 8;
+      } else {
+        return 3;
+      }
     } else {
-      return 3;
+      if (this.viewportService.width >= 1300) {
+        return 10;
+      } else if (this.viewportService.width < 1300 && this.viewportService.width >= 1020) {
+        return 5;
+      } else if (this.viewportService.width < 1020 && this.viewportService.width >= 720) {
+        return 10;
+      } else if (this.viewportService.width < 720 && this.viewportService.width >= 380) {
+        return 4;
+      } else {
+        return 3;
+      }
     }
   }
 
