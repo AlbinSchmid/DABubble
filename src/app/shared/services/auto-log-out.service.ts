@@ -146,7 +146,6 @@ export class AutoLogoutService {
    */
   initTabCloseListener() {
     window.addEventListener('beforeunload', () => {
-      this.auth.logout();
       
     })
     

@@ -29,10 +29,10 @@
             </div>
         </div>
         <div *ngIf="!isOpenEditEditor">
-            <img src="{{authService.currentUserSig()?.avatar}}" alt="user_profile_img">
+            <img src="{{authService.currentUserSig()?.avatar || authService.defaultAvatarURL}}" alt="user_profile_img">
         </div>
         <div *ngIf="isOpenEditEditor" style="pointer-events: all;">
-            <img [src]="imgUpload.filePreview ||authService.currentUserSig()?.avatar" (click)="fileInput.click()"
+            <img [src]="imgUpload.filePreview ||authService.currentUserSig()?.avatar || authService.defaultAvatarURL" (click)="fileInput.click()"
                 alt="user_profile_img">
             <input type="file" #fileInput accept="image/*" (change)="imgUpload.onFileSelected($event)"
                 style="display: none;">
