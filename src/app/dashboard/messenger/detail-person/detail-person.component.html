@@ -23,7 +23,6 @@
             <a href="mailto:{{ data.email }}">{{ data.email }}</a>
         </div>
     </div>
-
     <button class="primary default send-message-btn" (click)="openUser(data)" mat-button
         *ngIf="messengerService.showMessageBtn">
         <mat-icon>chat_bubble</mat-icon>

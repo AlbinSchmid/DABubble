@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MessengerService } from '../../../services/messenger-service/messenger.service';
 import { MessageParserService } from '../../../services/message-parser.service';
 import { Message } from '../../../../models/message.class';
+import { ViewportService } from '../../../services/viewport.service';
 
 @Component({
   selector: 'app-edit-message',
@@ -24,6 +25,8 @@ import { Message } from '../../../../models/message.class';
   styleUrl: './edit-message.component.scss'
 })
 export class EditMessageComponent implements OnInit {
+  viewportService = inject(ViewportService);
+
   @Input() mentionedUsers: any[] = [];
   @Input() message = new Message;
   @Input() editAnswerMessage: boolean;

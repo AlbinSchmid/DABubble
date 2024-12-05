@@ -29,18 +29,19 @@ export class AddPersonComponent {
   messengerService = inject(MessengerService);
   authService = inject(AuthserviceService);
   dialog = inject(MatDialog);
-  firestoreService: FirestoreService = inject(FirestoreService);
-
-  @ViewChild('userInput') userInputElement!: ElementRef<HTMLInputElement>;
-  memberSourceService: MembersSourceService = inject(MembersSourceService);
-  filteredUsers: UserInterface[] = [];
-  highlightedIndex: number = -1;
-
+  firestoreService = inject(FirestoreService);
+  memberSourceService = inject(MembersSourceService);
 
   @Input() users: UserInterface[] = [];
   @Input() addPersonView: boolean = false;
-
   @Output() closeOverlay = new EventEmitter<void>();
+
+  @ViewChild('userInput') userInputElement!: ElementRef<HTMLInputElement>;
+
+  filteredUsers: UserInterface[] = [];
+  highlightedIndex = -1;
+
+
 
 
   checkText() {

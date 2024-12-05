@@ -15,12 +15,17 @@ import { MembersSourceService } from '../../../../shared/services/members-source
   styleUrl: './filtered-list.component.scss'
 })
 export class FilteredListComponent {
+  memberSourceService: MembersSourceService = inject(MembersSourceService);
   @Input() filteredUsers: UserInterface[] = [];
   @Input() highlightedIndex: number = -1;
   @Output() userSelected = new EventEmitter<UserInterface>();
 
-  memberSourceService: MembersSourceService = inject(MembersSourceService);
 
+  /**
+   * Emits an event to indicate that a user has been selected.
+   * 
+   * @param user - The user object to be added.
+   */
   addUser(user: UserInterface) {
     this.userSelected.emit(user);
   }

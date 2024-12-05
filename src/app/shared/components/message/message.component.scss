@@ -363,10 +363,6 @@ section {
 
 @media screen and (max-width: 1020px) {
 
-    // .window-more-reactions-div {
-    //     max-width: howManyReactionsToDisplay();
-    // }
-
     app-emoji-board {
         left: clamp(0rem, -12.8571rem + 64.2857vw, 28.125rem) !important;
     }

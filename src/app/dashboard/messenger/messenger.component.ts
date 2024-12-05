@@ -43,8 +43,8 @@ registerLocaleData(localeDe);
 })
 export class MessengerComponent implements AfterViewInit {
   viewportService = inject(ViewportService);
-  firestore: Firestore = inject(Firestore);
-  firestoreService: FirestoreService = inject(FirestoreService);
+  firestore = inject(Firestore);
+  firestoreService = inject(FirestoreService);
   dialog = inject(MatDialog);
   datePipe = inject(DatePipe);
   authService = inject(AuthserviceService);
@@ -53,11 +53,13 @@ export class MessengerComponent implements AfterViewInit {
   messengerService = inject(MessengerService);
 
   @ViewChild('content') scrollContainer: ElementRef;
+  @ViewChild('name') nameHeadline: ElementRef;
 
   messagesDates: string[] = [];
   usersListAll: UserInterface[] = [];
   usersInChannel: any[] = [];
 
+  resizeObserver!: ResizeObserver;
   userListSubscription: any;
   reversedMessge: any;
   dateContent: string;
@@ -69,15 +71,10 @@ export class MessengerComponent implements AfterViewInit {
   editChannelIsOpen = false;
   showAddPerson = false;
   showAddPersonDialogDirect = false;
-  dateCount = 0;
-
-  @ViewChild('name') nameHeadline: ElementRef;
   isTextWrapped = false;
-  resizeObserver!: ResizeObserver;
   checkTextSenderName = false;
+  dateCount = 0;
   windowWith = 0;
-
-
 
 
   /**
@@ -103,10 +100,20 @@ export class MessengerComponent implements AfterViewInit {
     }
   }
 
+
+  /**
+   * Closes the edit channel dialog.
+   */
   closeEditChannel() {
     this.editChannelIsOpen = false;
   }
 
+
+  /**
+   * Checks if the text in the headline of a message is wrapped. If it is and the name has not yet been shortened, it shortens the name.
+   * If the text is not wrapped and the name has been shortened, it sets the name back to the full name.
+   * @private
+   */
   checkTextStatus() {
     if (this.nameHeadline !== undefined) {
       const element = this.nameHeadline.nativeElement;
@@ -114,14 +121,25 @@ export class MessengerComponent implements AfterViewInit {
       const elementHeight = element.offsetHeight;
       this.isTextWrapped = elementHeight > lineHeight;
       if (this.isTextWrapped && !this.checkTextSenderName) {
-        this.windowWith = this.viewportService.width;
-        this.checkTextSenderName = true;
-        this.messengerService.messageName = `${this.messengerService.getFirstWord(this.messengerService.user.username)}. ${this.messengerService.getSecondWordFirstLetter(this.messengerService.user.username)}`;
+        this.getTheShortTxtOfName()
       } else if (this.windowWith < this.viewportService.width) {
         this.messengerService.messageName = this.messengerService.user.username;
         this.checkTextSenderName = false;
       }
     }
+  }
+
+
+  /**
+   * Sets the shortened name of the user if the text in the headline of a message is wrapped.
+   * The shortened name is the first word of the user's name, followed by the first letter of the second word.
+   * Saves the current width of the window and sets a flag to indicate that the name has been shortened.
+   * @private
+   */
+  getTheShortTxtOfName() {
+    this.windowWith = this.viewportService.width;
+    this.checkTextSenderName = true;
+    this.messengerService.messageName = `${this.messengerService.getFirstWord(this.messengerService.user.username)}. ${this.messengerService.getSecondWordFirstLetter(this.messengerService.user.username)}`;
   }
 
 

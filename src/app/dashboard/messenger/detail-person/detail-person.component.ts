@@ -24,12 +24,11 @@ import { UserListHandlingService } from '../../channels-userlist/user-list/user-
 export class DetailPersonComponent {
   messengerService = inject(MessengerService);
   firebaseMessenger = inject(FirebaseMessengerService);
+  dialogRef = inject(MatDialogRef<DetailPersonComponent>);
   dialog = inject(MatDialog);
-  readonly dialogRef = inject(MatDialogRef<DetailPersonComponent>);
-
+  firestoreService = inject(FirestoreService);
+  userListHandlingService = inject(UserListHandlingService);
   data: UserInterface = inject(MAT_DIALOG_DATA);
-  firestoreService: FirestoreService = inject(FirestoreService);
-  userListHandlingService: UserListHandlingService = inject(UserListHandlingService);
 
 
   /**
@@ -48,6 +47,15 @@ export class DetailPersonComponent {
     }
   }
 
+  
+  /**
+   * Opens the messenger UI for a direct message conversation with the given user.
+   * It first closes other UI elements, then sets the messenger service to open a chart
+   * and assigns the given user to the messenger service. Finally, it calls the searchChat
+   * function to retrieve the chat ID associated with a conversation with the given user.
+   * 
+   * @param user - The user object to open the conversation with.
+   */
   openUser(user: UserInterface) {
     this.messengerService.showAddPerson = false;
     this.dialog.closeAll();
@@ -56,6 +64,14 @@ export class DetailPersonComponent {
     this.focusUser(user);
   }
 
+
+  /**
+   * Resets the messenger UI and sets the given user as the currently focused chat.
+   * It sets the user ID, resets the messenger content, shows the user in the messenger,
+   * sets the user as focused, and finally calls the searchChat function to retrieve the
+   * chat ID associated with a conversation with the given user.
+   * @param user - The user object to set as the currently focused chat.
+   */
   focusUser(user: UserInterface) {
     this.resetChannelFocus();
     this.firestoreService.userList.forEach(u => u.isFocus = false);
@@ -67,6 +83,12 @@ export class DetailPersonComponent {
     this.setFocus(user);
   }
 
+  
+  /**
+   * Sets the focus state of the given user to true and updates the
+   * focusedUserId in the UserListHandlingService.
+   * @param user - The user object to set as focused.
+   */
   setFocus(user: UserInterface) {
     let foundUser = this.firestoreService.userList.find(u => u.userID === user.userID);
     if (foundUser) {
@@ -75,6 +97,12 @@ export class DetailPersonComponent {
     }
   }
 
+  
+  /**
+   * Resets the focus state of all channels to false.
+   * This is called when a user is selected to ensure that the previously focused channel
+   * is no longer displayed as focused.
+   */
   resetChannelFocus(): void {
     this.firestoreService.channelList.forEach(channel => channel.isFocus = false);
   }

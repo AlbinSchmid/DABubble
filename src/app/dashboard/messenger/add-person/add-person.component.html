@@ -3,7 +3,6 @@
         <h1>{{checkText()}}</h1>
         <mat-icon (click)="closeDialog()">close</mat-icon>
     </header>
-
     @if (!addPersonView) {
     <div id="users">
         @for (user of users; track $index) {
@@ -16,15 +15,12 @@
         </div>
         }
     </div>
-
     <button (click)="openAddPerson()" *ngIf="messengerService.channel.title !== 'Allgemein'">
         <mat-icon>group_add</mat-icon>
         <p>Mitglieder hinzufügen</p>
     </button>
     } @else {
     <p id="channel-title"><span>#</span> {{messengerService.channel.title}}</p>
-
-
     <div class="add-specific-member-contain" (wheel)="onWheel($event)">
         <mat-chip-grid #chipGrid>
             <div class="chip-contain" *ngFor="let member of memberSourceService.membersSource(); let i = index">
@@ -48,5 +44,4 @@
         </button>
     </div>
     }
-
 </section>

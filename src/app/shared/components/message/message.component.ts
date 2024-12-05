@@ -97,17 +97,19 @@ export class MessageComponent implements OnInit, OnDestroy{
 
 
   checkTextStatus() {
-    const element = this.nameHeadline.nativeElement;
-    const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
-    const elementHeight = element.offsetHeight;
-    this.isTextWrapped = elementHeight > lineHeight;
-    if (this.isTextWrapped && !this.checkTextSenderName) {
-      this.windowWith = this.viewportService.width;
-      this.checkTextSenderName = true;
-      this.messageName = `${this.messengerService.getFirstWord(this.message.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.message.senderName)}`;
-    } else if (this.windowWith < this.viewportService.width) {
-      this.messageName = this.message.senderName;
-      this.checkTextSenderName = false;
+    if (!this.editMessage) {
+      const element = this.nameHeadline.nativeElement;
+      const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
+      const elementHeight = element.offsetHeight;
+      this.isTextWrapped = elementHeight > lineHeight;
+      if (this.isTextWrapped && !this.checkTextSenderName) {
+        this.windowWith = this.viewportService.width;
+        this.checkTextSenderName = true;
+        this.messageName = `${this.messengerService.getFirstWord(this.message.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.message.senderName)}`;
+      } else if (this.windowWith < this.viewportService.width) {
+        this.messageName = this.message.senderName;
+        this.checkTextSenderName = false;
+      }
     }
   }
 
