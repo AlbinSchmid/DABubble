@@ -171,7 +171,7 @@ export class TextareaComponent {
 
   getCleanJson(user: UserInterface[]) {
     let userJson = {
-      avatar: user[0]['avatar'],
+      avatar: user[0]['avatar'] || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
       userID: user[0]['userID'],
       userName: user[0]['username'],
     }

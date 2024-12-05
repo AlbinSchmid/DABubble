@@ -42,8 +42,6 @@ export class AuthserviceService {
     } else {
       const userData: UserInterface = this.setAnynymousData(user)
       this.setCurrentUser(userData);
-      console.log(userData);
-      
     }
   }
 

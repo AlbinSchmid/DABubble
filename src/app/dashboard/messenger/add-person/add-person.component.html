@@ -7,7 +7,7 @@
     <div id="users">
         @for (user of users; track $index) {
         <div (click)="openDialogDetailPerson(user)">
-            <img src="{{user.avatar}}" alt="">
+            <img src="{{user.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'}}" alt="">
             <p *ngIf="user.userID !== authService.currentUserSig()?.userID">{{user.username}}</p>
             <p *ngIf="user.userID == authService.currentUserSig()?.userID">
                 {{user.username}} (Du)
@@ -24,7 +24,7 @@
     <div class="add-specific-member-contain" (wheel)="onWheel($event)">
         <mat-chip-grid #chipGrid>
             <div class="chip-contain" *ngFor="let member of memberSourceService.membersSource(); let i = index">
-                <img src="{{ member.avatar }}" alt="user_img">
+                <img src="{{ member.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a' }}" alt="user_img">
                 <span>{{ member.username }}</span>
                 <div class="icon-wrapper">
                     <mat-icon (mousedown)="remove(member)" fontIcon="close"></mat-icon>

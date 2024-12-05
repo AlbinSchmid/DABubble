@@ -6,6 +6,7 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
 }
 
 app-logo {
@@ -61,4 +62,39 @@ p {
 .contact-contain{
     display: flex;
     flex-direction: column;
+}
+
+@media (max-width:500px){
+    mat-card{
+        padding: 20px 20px 20px 20px;
+    }
+}
+
+@media (max-height: 800px){
+    section{
+        flex-direction: column;
+    }
+    app-logo{
+        position: relative;
+        padding-left: 0px;
+        margin-bottom: 10px;
+    }
+    mat-card{
+        height: 600px;
+        overflow-y: scroll;
+        padding: 20px 20px 20px 20px;
+    }
+}
+
+@media (max-height:650px) and (max-width:4000px){
+    ::ng-deep .logo{
+        justify-content: center;
+        padding-left: 0px !important;
+        padding-top: 10px !important;
+    
+    }
+    mat-card{
+        gap: 10px;
+        justify-content: space-between;
+    }
 }

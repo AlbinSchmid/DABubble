@@ -6,7 +6,7 @@
     [ngClass]="{'message-from-you': message.senderID == authService.currentUserSig()?.userID, 'z-index': showEmojiBoard}"
     (mouseenter)="hoveredMessageId = messageIndex"
     (mouseleave)="hoveredMessageId = -1; hoveredMenu = false; closeEmojiBoard()">
-    <img src="{{message.senderAvatar}}" alt="Profile" id="img-avatar">
+    <img src="{{message.senderAvatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'}}" alt="Profile" id="img-avatar">
     <div id="message-content" *ngIf="!editMessage">
         <div class="header">
             <h6 #nameHeadline>{{ messageName }}</h6>

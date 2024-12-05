@@ -180,15 +180,11 @@ export class UploadImageService {
    */
   async updateAvatarInFirestore(avatarUrl: string) {
     const currentUser = this.authService.currentUserSig();
-    console.log(currentUser?.avatar);
-    
     if (currentUser) {
       try {
         const userDocRef = doc(this.firestore, `users/${currentUser.userID}`);  
         await updateDoc(userDocRef, { avatar: avatarUrl }); 
         this.authService.currentUserSig.set({ ...currentUser, avatar: avatarUrl || this.authService.defaultAvatarURL });
-        console.log('aVatar update' + avatarUrl);
-        
       } catch (error) {
         console.error('Error updating avatar in Firestore:', error);
         throw error;

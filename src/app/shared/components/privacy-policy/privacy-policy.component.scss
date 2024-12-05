@@ -19,7 +19,7 @@ section {
     height: 100%;
     width: 100vw;
     max-width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-top: 156px;
     padding-bottom: 156px;
 }
@@ -75,4 +75,36 @@ p {
     font-size: 20px;
     font-weight: 500;
     line-height: 24px;
+}
+
+@media (max-width: 1200px) {
+    mat-card {
+        width: 90vw;
+        overflow: auto;
+        scrollbar-width: none;
+    }
+    section{
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    app-logo{
+        position: relative;
+        padding-bottom: 20px;
+    }
+
+    ::ng-deep .logo{
+        justify-content: center !important;
+        padding-left: 0px !important;
+        padding-top: 0px !important;
+    }
+}
+
+@media (max-width: 500px){
+    mat-card{
+        padding: 20px 20px 20px 20px;
+    }
 }

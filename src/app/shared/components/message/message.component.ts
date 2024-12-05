@@ -239,7 +239,7 @@ export class MessageComponent implements OnInit, OnDestroy{
   setMentionedObject(element: any, id: string) {
     return {
       mentionedID: id || '',
-      avatar: element.avatar || '',
+      avatar: element.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
       userID: element.userID || '',
       userName: element.userName || '',
     }
