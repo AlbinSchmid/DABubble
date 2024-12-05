@@ -17,8 +17,11 @@
 <div class="btns-contain max-height-contain"
     [ngStyle]="{'max-height': this.channelAnimationService.isChannelOpen ? getChannelsMaxHeight() + 'px' : '0','transition': getChannelsTransitionDuration()}">
     <button *ngFor="let channel of channelList; let i = index" (click)="focusChannel(channel)"
-        [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}"
-        [ngClass]="{'focus-btn': channel.isFocus,'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
+        [ngStyle]="{'animation-delay': getAnimationDelayChannel(i) + 's'}" [ngClass]="{
+            'focus-btn': channel.isFocus || channel.channelID === channelAnimationService.focusedChannelId,
+            'blob-in': this.channelAnimationService.isChannelOpen, 
+            'blob-out': !this.channelAnimationService.isChannelOpen
+            }">
         <mat-icon fontIcon="tag"></mat-icon>
         <span>{{ channel.title }}</span>
         <span *ngIf="getDuplicateChannelsNumber(channel)" style="margin-left: -5px;">

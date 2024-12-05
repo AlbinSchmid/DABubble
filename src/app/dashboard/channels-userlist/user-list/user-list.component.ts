@@ -9,6 +9,7 @@ import { MessengerService } from '../../../shared/services/messenger-service/mes
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 import { UserListHandlingService } from './user-list-handling.service';
+import { AnimationChannelService } from '../channel-list/animation.service.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class UserListComponent {
   firebaseMessenger: FirebaseMessengerService = inject(FirebaseMessengerService);
   messengerService: MessengerService = inject(MessengerService);
   listHandlingService: UserListHandlingService = inject(UserListHandlingService);
+  channelHandlingService: AnimationChannelService = inject(AnimationChannelService);
 
   userListSubscription!: Subscription;
   channelListSubscription!: Subscription;
@@ -99,5 +101,6 @@ export class UserListComponent {
 
   resetChannelFocus(): void {
     this.listHandlingService.channelList.forEach(channel => channel.isFocus = false);
+    this.channelHandlingService.focusedChannelId = '';
   }
 }

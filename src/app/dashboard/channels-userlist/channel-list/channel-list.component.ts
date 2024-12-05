@@ -61,6 +61,7 @@ export class ChannelListComponent {
   }
 
   ngOnDestroy(): void {
+    this.channelAnimationService.focusedChannelId = '';
     this.firestoreService.stopSnapshot();
   }
 
@@ -113,6 +114,7 @@ export class ChannelListComponent {
 
   focusChannel(channel: Channel) {
     this.threadService.channelID = channel.channelID;
+    this.channelAnimationService.focusedChannelId = channel.channelID!;
     this.resetUserFocus();
     this.channelList.forEach(c => c.isFocus = false);
     this.firestoreService.setAndGetCurrentlyFocusedChat(channel);
@@ -134,7 +136,6 @@ export class ChannelListComponent {
   resetUserFocus(): void {
     this.userList.forEach(user => user.isFocus = false);
     this.userListHandlingService.focusedUserId = '';
-
   }
 
   openDialog() {

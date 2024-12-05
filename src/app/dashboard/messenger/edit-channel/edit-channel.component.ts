@@ -103,11 +103,13 @@ export class EditChannelComponent {
       if (this.messengerService.channel.userIDs.length === 0) {
         await this.channelAnimationService.updateListOfChannels();
         await this.firestoreService.deleteDoc('channels', editChannelID);
-        this.closeDialogAndHopToGlobalChannel();
+        // this.closeDialogAndHopToGlobalChannel();
+        this.channelAnimationService.toggleChannels(); // statt zum allgemeinen channel geleitet zu werden
       } else {
         await this.channelAnimationService.updateListOfChannels();
         await this.firestoreService.updateDoc('channels', editChannelID, { userIDs: this.messengerService.channel.userIDs });
-        this.closeDialogAndHopToGlobalChannel();
+        // this.closeDialogAndHopToGlobalChannel();
+        this.channelAnimationService.toggleChannels();  // statt zum allgemeinen channel geleitet zu werden
       }
     }
   }

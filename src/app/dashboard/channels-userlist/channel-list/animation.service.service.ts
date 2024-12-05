@@ -9,6 +9,8 @@ export class AnimationChannelService {
 
   channelList: Channel[] = [];
 
+  focusedChannelId: string | null = '';
+
   isChannelOpen: boolean = false;
   isCloseChannelSection: boolean = false;
   isChannelButtonDisable: boolean = false;
