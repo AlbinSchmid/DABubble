@@ -42,13 +42,19 @@ export class AddPersonComponent {
   highlightedIndex = -1;
 
 
-
-
+  /**
+   * Returns the text to show in the header of the add person view.
+   * If addPersonView is true, it returns 'Leute hinzufügen', otherwise it returns 'Mitglieder'.
+   */
   checkText() {
     return this.addPersonView ? 'Leute hinzufügen' : 'Mitglieder';
   }
 
 
+  /**
+   * Opens the add person view and resets the input field.
+   * Also focuses the input field.
+   */
   openAddPerson() {
     this.memberSourceService.membersSource.set([]);
     this.addPersonView = true;
@@ -56,11 +62,20 @@ export class AddPersonComponent {
   }
 
 
+  /**
+   * Closes the add person dialog by emitting a closeOverlay event.
+   */
   closeDialog() {
     this.closeOverlay.emit();
   }
 
 
+  /**
+   * Opens a dialog to display the details of a selected person.
+   * 
+   * @param user - The user object containing details to be displayed in the dialog.
+   *                Sets the user as focused and shows the message button.
+   */
   openDialogDetailPerson(user: any) {
     this.messengerService.showMessageBtn = true;
     user.isFocus = true;
@@ -70,14 +85,25 @@ export class AddPersonComponent {
   }
 
 
+  /**
+   * Handles the wheel event on the user list element.
+   * Scrolls the element horizontally by the deltaY value of the event.
+   * Prevents the default behavior of the wheel event, so the user list
+   * does not scroll vertically when the user scrolls horizontally.
+   * @param event - The WheelEvent to be handled.
+   */
   onWheel(event: WheelEvent) {
     let element = event.currentTarget as HTMLElement;
-
     event.preventDefault();
     element.scrollLeft += event.deltaY;
   }
 
 
+  /**
+   * Removes a user from the list of selected users.
+   * 
+   * @param member - The user object to be removed.
+   */
   remove(member: UserInterface): void {
     this.memberSourceService.membersSource.update(members => {
       let index = members.indexOf(member);
