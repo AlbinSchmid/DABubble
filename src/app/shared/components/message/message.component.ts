@@ -116,7 +116,6 @@ export class MessageComponent implements OnInit, OnDestroy {
         }
       ];
     }
-
   }
 
 

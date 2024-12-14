@@ -10,6 +10,8 @@ import { MessengerService } from '../../shared/services/messenger-service/messen
 import { TextareaComponent } from '../../shared/components/textarea/textarea.component';
 import { MessageParserService } from '../../shared/services/message-parser.service';
 import { ViewportService } from '../../shared/services/viewport.service';
+import { FirestoreService } from '../../shared/services/firebase-services/firestore.service';
+import { UserInterface } from '../../landing-page/interfaces/userinterface';
 
 @Component({
   selector: 'app-thread',
@@ -51,14 +53,43 @@ export class ThreadComponent implements AfterViewInit {
   editAnswerMessage = true;
   sourceThread = true;
 
+  userListSubscription: any;
+  firestoreService: FirestoreService = inject(FirestoreService);
+  usersListAll: UserInterface[] = [];
+  senderUser: UserInterface[] = [];
+
 
   /**
    * Called when the component is initialized.
    * Sets the header sender name and the message to reply sender name to the sender name of the message to reply to.
    */
   ngOnInit() {
-    this.headerSenderName = this.threadService.messageToReplyTo.senderName;
-    this.messageToReplaySenderName = this.threadService.messageToReplyTo.senderName;
+    this.getDataOfUser();
+    this.headerSenderName = this.senderUser[0].username;
+    this.messageToReplaySenderName = this.senderUser[0].username;
+  }
+
+
+  getDataOfUser() {
+    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
+      this.usersListAll = users;
+    });
+
+    if (this.threadService.messageToReplyTo.senderName !== 'Neuer Gast') {
+      this.senderUser = this.usersListAll.filter(user => user.userID === this.threadService.messageToReplyTo.senderID);
+    } else {
+      this.senderUser = [
+        {
+          userID: this.threadService.messageToReplyTo.senderID,
+          password: '',
+          email: '',
+          username: this.threadService.messageToReplyTo.senderName,
+          avatar: this.threadService.messageToReplyTo.senderAvatar,
+          userStatus: '',
+          isFocus: false,
+        }
+      ];
+    }
   }
 
 
@@ -144,7 +175,7 @@ export class ThreadComponent implements AfterViewInit {
   getShortTextOfName() {
     this.windowWith = this.viewportService.width;
     this.checkTextSenderName = true;
-    this.headerSenderName = `${this.messengerService.getFirstWord(this.threadService.messageToReplyTo.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.threadService.messageToReplyTo.senderName)}`;
+    this.headerSenderName = `${this.messengerService.getFirstWord(this.senderUser[0].username)}. ${this.messengerService.getSecondWordFirstLetter(this.senderUser[0].username)}`;
   }
 
 
@@ -161,7 +192,7 @@ export class ThreadComponent implements AfterViewInit {
     if (this.isTextWrapped && !this.checkTextSenderName) {
       this.getShortTextOfName();
     } else if (this.windowWith < this.viewportService.width) {
-      this.headerSenderName = this.threadService.messageToReplyTo.senderName;
+      this.headerSenderName = this.senderUser[0].username;
       this.checkTextSenderName = false;
     }
   }

@@ -10,7 +10,7 @@
     <div id="content">
         <div id="messages-container" class="threadContent" #content  [ngStyle]="{'padding-top.px': firebaseMessenger.answers.length == 1 ? 100 : 20, 'padding-bottom.px': firebaseMessenger.answers.length == 0 ? 20 : 0}">
             <div class="message">
-                <img src="{{ threadService.messageToReplyTo.senderAvatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a' }}" alt="Profile">
+                <img src="{{ senderUser[0].avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a' }}" alt="Profile">
                 <div id="message-content">
                     <div class="header">
                         <h6 #messageToReplayName>{{ messageToReplaySenderName }}</h6>
