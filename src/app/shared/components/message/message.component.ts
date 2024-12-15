@@ -343,15 +343,19 @@ export class MessageComponent implements OnInit, OnDestroy {
    * Open the thread for answer
    */
   openThread() {
+    this.threadService.openThreadContent = false;
     this.messengerService.messageDates = [];
     if (this.viewportService.width <= 1550) {
       this.messengerService.openMessenger = false;
     }
     setTimeout(() => {
       this.threadService.showThreadSideNav = true;
-
+      this.threadService.openThreadContent = true;
     }, 10);
+
     this.threadService.messageToReplyTo = this.message;
+    this.threadService.getDataOfUser();
+
     this.firebaseMessenger.subSomethingList(this.threadService.messageToReplyTo.messageID, 'answer', () => {
       setTimeout(() => {
         this.messengerService.scrollToBottom(this.threadService.scrollContainer);

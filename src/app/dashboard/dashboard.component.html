@@ -13,7 +13,7 @@
                 </mat-drawer-content>
                 <mat-drawer #drawerThread mode="side" class="mat-drawer-thread"
                     [opened]="threadService.showThreadSideNav" position="end">
-                    <app-thread *ngIf="threadService.showThreadSideNav && viewportService.width >= 1550"></app-thread>
+                    <app-thread *ngIf="threadService.showThreadSideNav && viewportService.width >= 1550 && threadService.openThreadContent"></app-thread>
                 </mat-drawer>
             </mat-drawer-container>
         </section>

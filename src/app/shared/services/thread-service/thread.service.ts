@@ -16,13 +16,49 @@ export class ThreadService {
   showThreadSideNav: boolean = false;
   showThread = false;
   messageId: string;
-  senderName: string = '';
   senderAvatar: string;
   scrollContainer: any;
   channelID: any;
 
   userListSubscription: any;
   usersInChannel: any[] = [];
+  usersListAll: UserInterface[] = [];
+  senderUser: UserInterface[] = [];
+  headerSenderName: string;
+  messageToReplaySenderName: string;
+  openThreadContent = false;
+
+
+
+  getDataOfUser() {
+    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
+      this.usersListAll = users;
+    });
+
+    if (this.messageToReplyTo.senderName !== 'Neuer Gast') {
+      this.senderUser = this.usersListAll.filter(user => user.userID === this.messageToReplyTo.senderID);
+    } else {
+      this.senderUser = [
+        {
+          userID: this.messageToReplyTo.senderID,
+          password: '',
+          email: '',
+          username: this.messageToReplyTo.senderName,
+          avatar: this.messageToReplyTo.senderAvatar,
+          userStatus: '',
+          isFocus: false,
+        }
+      ];
+    }
+    this.messageToReplaySenderName = this.senderUser[0].username;
+    this.headerSenderName = this.senderUser[0].username;
+  }
+
+
+
+
+
+
 
   subChannelUserList(callback: any) {
     const messegeRef = doc(collection(this.firestore, `channels`), this.channelID);
@@ -46,7 +82,7 @@ export class ThreadService {
           const userID = usersIDs[i];
           const user = usersListAll.filter(user => user.userID === userID);
           this.usersInChannel.push(this.getCleanJson(user));
-          this.sortByName(this.usersInChannel);          
+          this.sortByName(this.usersInChannel);
         }
       });
     });

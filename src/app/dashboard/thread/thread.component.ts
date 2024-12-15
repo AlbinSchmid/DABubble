@@ -41,8 +41,6 @@ export class ThreadComponent implements AfterViewInit {
 
   resizeObserverHeader!: ResizeObserver;
   resizeObserverMessage!: ResizeObserver;
-  messageToReplaySenderName: string;
-  headerSenderName: string;
   windowWithMessage: number;
   windowWith: number;
   isTextWrapped = false;
@@ -53,44 +51,6 @@ export class ThreadComponent implements AfterViewInit {
   editAnswerMessage = true;
   sourceThread = true;
 
-  userListSubscription: any;
-  firestoreService: FirestoreService = inject(FirestoreService);
-  usersListAll: UserInterface[] = [];
-  senderUser: UserInterface[] = [];
-
-
-  /**
-   * Called when the component is initialized.
-   * Sets the header sender name and the message to reply sender name to the sender name of the message to reply to.
-   */
-  ngOnInit() {
-    this.getDataOfUser();
-    this.headerSenderName = this.senderUser[0].username;
-    this.messageToReplaySenderName = this.senderUser[0].username;
-  }
-
-
-  getDataOfUser() {
-    this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
-      this.usersListAll = users;
-    });
-
-    if (this.threadService.messageToReplyTo.senderName !== 'Neuer Gast') {
-      this.senderUser = this.usersListAll.filter(user => user.userID === this.threadService.messageToReplyTo.senderID);
-    } else {
-      this.senderUser = [
-        {
-          userID: this.threadService.messageToReplyTo.senderID,
-          password: '',
-          email: '',
-          username: this.threadService.messageToReplyTo.senderName,
-          avatar: this.threadService.messageToReplyTo.senderAvatar,
-          userStatus: '',
-          isFocus: false,
-        }
-      ];
-    }
-  }
 
 
   /**
@@ -143,7 +103,7 @@ export class ThreadComponent implements AfterViewInit {
     if (this.isTextWrappedMessage && !this.checkTextSenderName) {
       this.getShortTextOfNameHeader();
     } else if (this.windowWithMessage < this.viewportService.width) {
-      this.messageToReplaySenderName = this.threadService.messageToReplyTo.senderName;
+      this.threadService.messageToReplaySenderName = this.threadService.messageToReplyTo.senderName;
       this.checkTextSenderNameMessage = false;
     }
   }
@@ -160,7 +120,7 @@ export class ThreadComponent implements AfterViewInit {
   getShortTextOfNameHeader() {
     this.windowWithMessage = this.viewportService.width;
     this.checkTextSenderNameMessage = true;
-    this.messageToReplaySenderName = `${this.messengerService.getFirstWord(this.threadService.messageToReplyTo.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.threadService.messageToReplyTo.senderName)}`;
+    this.threadService.messageToReplaySenderName = `${this.messengerService.getFirstWord(this.threadService.messageToReplyTo.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.threadService.messageToReplyTo.senderName)}`;
   }
 
 
@@ -175,7 +135,7 @@ export class ThreadComponent implements AfterViewInit {
   getShortTextOfName() {
     this.windowWith = this.viewportService.width;
     this.checkTextSenderName = true;
-    this.headerSenderName = `${this.messengerService.getFirstWord(this.senderUser[0].username)}. ${this.messengerService.getSecondWordFirstLetter(this.senderUser[0].username)}`;
+    this.threadService.headerSenderName = `${this.messengerService.getFirstWord(this.threadService.senderUser[0].username)}. ${this.messengerService.getSecondWordFirstLetter(this.threadService.senderUser[0].username)}`;
   }
 
 
@@ -192,7 +152,7 @@ export class ThreadComponent implements AfterViewInit {
     if (this.isTextWrapped && !this.checkTextSenderName) {
       this.getShortTextOfName();
     } else if (this.windowWith < this.viewportService.width) {
-      this.headerSenderName = this.senderUser[0].username;
+      this.threadService.headerSenderName = this.threadService.senderUser[0].username;
       this.checkTextSenderName = false;
     }
   }
