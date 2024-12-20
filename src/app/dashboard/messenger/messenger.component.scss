@@ -19,12 +19,6 @@ button {
     cursor: pointer;
 }
 
-h4 {
-    font-size: 24px;
-    font-weight: 800;
-    margin: 0;
-}
-
 section {
     display: flex;
     flex-direction: column;
@@ -45,6 +39,12 @@ section {
         max-height: 80px;
         padding: 0 40px;
         z-index: 20;
+
+        h4 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+        }
 
         #add-user-complete-container {
             display: flex;
@@ -90,6 +90,7 @@ section {
                     font-size: 20px;
                     font-weight: 700;
                     margin: 0;
+                    margin-left: 5px;
                 }
 
                 &:hover {
@@ -252,17 +253,34 @@ app-add-person {
 @media screen and (max-width: 1020px) {
     header {
         padding: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) !important; // 8px - 40px
+        min-height: clamp(3.4375rem, 2.7232rem + 3.5714vw, 5rem) !important; // 55px - 80px
+
+        img {
+            width: clamp(2.125rem, 1.6679rem + 2.2857vw, 3.125rem) !important; // 34px - 50px
+            height: clamp(2.125rem, 1.6679rem + 2.2857vw, 3.125rem) !important; // 34px - 50px
+        }
+
+        h4 {
+            font-size: clamp(1.125rem, 0.9536rem + 0.8571vw, 1.5rem) !important; // 18px - 24px
+        }
     }
 
-    h4 {
-        font-size: clamp(1.25rem, 1.1357rem + 0.5714vw, 1.5rem) !important; // 20px - 24px
+    section {
+        #content {
+            #messages-container {
+                h4 {
+                    font-size: clamp(1.25rem, 1.1357rem + 0.5714vw, 1.5rem) !important;
+                }
+            }
+        }
     }
+
 
     #info {
         div {
             img {
-                width: clamp(5rem, 4.4286rem + 2.8571vw, 6.25rem) !important; // 80px - 100px
-                height: clamp(5rem, 4.4286rem + 2.8571vw, 6.25rem) !important; // 80px - 100px
+                width: clamp(3.125rem, 1.6964rem + 7.1429vw, 6.25rem) !important; // 50px - 100px
+                height: clamp(3.125rem, 1.6964rem + 7.1429vw, 6.25rem) !important; // 50px - 100px
             }
 
             h4 {
@@ -287,9 +305,7 @@ app-add-person {
             font-size: clamp(1.375rem, 1.1464rem + 1.1429vw, 1.875rem) !important; // 22px - 30px
         }
     }
-}
 
-@media screen and (max-width: 1020px) {
     app-add-person {
         right: clamp(-11.375rem, -17.5048rem + 19.6154vw, -5rem) !important; // -80px - -182px
     }
@@ -298,5 +314,14 @@ app-add-person {
 @media screen and (max-width: 500px) {
     app-add-person {
         right: -80px !important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    app-add-person {
+        position: absolute;
+        top: -547px;
+        bottom: 307px;
+        right: -157px !important;
     }
 }

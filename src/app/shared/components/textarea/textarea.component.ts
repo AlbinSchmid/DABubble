@@ -22,7 +22,6 @@ import { Message } from '../../../models/message.class';
 import { MentionModule } from 'angular-mentions';
 import { Subscription } from 'rxjs';
 import { ViewportService } from '../../services/viewport.service';
-
 @Component({
   selector: 'app-textarea',
   standalone: true,
@@ -66,6 +65,7 @@ export class TextareaComponent {
   mentionPersonBtnSrc: string;
   showEmojiBoard = false;
   laodMentionUsers = true;
+  textareaFocus = false;
 
   mentionConfig = {
     labelKey: 'userName',
@@ -77,6 +77,7 @@ export class TextareaComponent {
 
   @ViewChild('textareaMessenger') textareaMessenger!: ElementRef;
   @ViewChild('textareaThread') textareaThread!: ElementRef;
+  @ViewChild('mentionPersonDiv') mentionPersonDiv!: ElementRef;
   private subscription!: Subscription;
 
   constructor(private dialog: MatDialog, private storage: Storage) {
@@ -102,15 +103,17 @@ export class TextareaComponent {
     });
   }
 
-
-  ngAfterViewInit(): void {
-
-
-  }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
     this.unsubChannelList;
+  }
+
+
+  confirmedWithEnter(event: any, messenger: string, textarea: any) {
+    event.preventDefault();
+    if (textarea.valid || this.selectedFiles.length > 0) {
+      this.uploadFiles(messenger);
+    }
   }
 
 

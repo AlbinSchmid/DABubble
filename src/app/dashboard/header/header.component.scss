@@ -4,15 +4,8 @@ header {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-
-    @media(max-width:600px) {
-        padding: 0;
-    }
-
-    @media(max-width:460px) {
-        height: 100px;
-        margin-top: -10px;
-    }
+    padding: 0 20px 0 20px;
+    margin-bottom: 20px;
 }
 
 h2 {
@@ -28,14 +21,10 @@ h2 {
     background-color: white;
     flex: 1 1 auto;
     box-shadow: 0px 2px 10px 0px #00000014 !important;
-    height: 70px;
+    height: 60px;
     border-radius: 42px;
-    cursor: url('/assets/img/search_cursor.png'), auto;
+    cursor: text;
     min-width: 318px;
-
-    @media(max-width:1550px) {
-        transform: scale(0.9);
-    }
 
     &:hover {
         box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.1) !important;
@@ -48,59 +37,28 @@ input {
     margin-left: 45px;
     border: none;
     outline: none;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
-    cursor: url('/assets/img/search_cursor.png'), auto;
-}
-
-.search-icon {
-    font-size: 35px !important;
-    width: 40px !important;
-    height: 40px !important;
-    color: #686868;
-    margin-right: 45px;
-    cursor: url('/assets/img/search_cursor.png'), auto !important;
+    cursor: text;
 }
 
 .img-contain {
-    min-width: 366px;
-
-    @media(max-width:1550px) {
-        min-width: unset;
-    }
-
-    @media(max-width:1200px) {
-        min-width: 260px;
-    }
-
-    @media(max-width:1020px) {
-        min-width: unset;
-        width: 100%;
-    }
-
-    @media(max-width:600px) {
-        width: 100%;
-        margin-bottom: -8px;
-    }
-
-    @media(max-width:500px) {
-        width: 100%;
-
-        img {
-            width: 190px;
-        }
-    }
-
-    @media(max-width:360px) {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-
-        img {
-            width: 140px;
-        }
-    }
+    display: flex;
 }
+
+.search-icon {
+    font-size: 30px !important;
+    width: 37px !important;
+    height: 37px !important;
+    color: #686868;
+    margin-right: 17px;
+    cursor: pointer;
+}
+
+.dabubble-logo-with-text {
+    width: 242px;
+    margin-right: 100px;
+} 
 
 .img-contain-responsive {
     display: flex;
@@ -136,12 +94,7 @@ input {
 
 .profile-img-wrapper {
     position: relative;
-
-    @media(max-width:460px) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    top: 3px;
 
     div {
         position: absolute;
@@ -151,14 +104,6 @@ input {
         width: 17px;
         height: 17px;
         border-radius: 100%;
-
-        @media(max-width:360px) {
-            width: 12px;
-            height: 12px;
-            bottom: 7px;
-            right: 4px;
-            border: 1px solid #ECEEFE;
-        }
     }
 }
 
@@ -175,16 +120,12 @@ input {
     }
 
     img {
+        position: relative;
         object-fit: cover;
         object-position: top;
         width: 70px;
         height: 70px;
         border-radius: 100%;
-
-        @media(max-width:360px) {
-            width: 50px;
-            height: 50px;
-        }
     }
 
     .profile-menu-icon {
@@ -193,7 +134,6 @@ input {
         width: 40px !important;
         color: black !important;
         background-color: transparent;
-        padding-right: 16px;
 
         @media(max-width:1020px) {
             padding-right: 0;
@@ -597,5 +537,55 @@ app-menu {
 
     100% {
         transform: translateY(100%);
+    }
+}
+
+@media screen and (max-width: 1550px) {
+    .img-contain {
+        img {
+            margin-right: 0;
+        }
+    }
+
+    input {
+        margin-left: 25px;
+    }
+}
+
+@media screen and (max-width: 1020px) {
+    header {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .dabubble-logo-with-text {
+        width: clamp(7.5rem, 4.0143rem + 17.4286vw, 15.125rem); // 120px - 242px
+    }
+
+    .img-contain-responsive {
+        img {
+            width: clamp(2.5rem, 1.6429rem + 4.2857vw, 4.375rem); // 40px - 70px
+            height: clamp(2.5rem, 1.6429rem + 4.2857vw, 4.375rem); // 40px - 70px
+        }
+    }
+
+    .username-menu-contain-header {
+        img {
+            width: clamp(2.1875rem, 1.1875rem + 5vw, 4.375rem); // 30px - 70px
+            height: clamp(2.1875rem, 1.1875rem + 5vw, 4.375rem); // 30px - 70px
+        }
+    }
+
+    .profile-img-wrapper {
+        div {
+            width: clamp(0.75rem, 0.6071rem + 0.7143vw, 1.0625rem); // 12px - 17px
+            height: clamp(0.75rem, 0.6071rem + 0.7143vw, 1.0625rem); // 12px - 17px;
+        }
+    }
+}
+
+@media screen and (max-width: 460px) {
+    header {
+        margin-bottom: 10px;
     }
 }

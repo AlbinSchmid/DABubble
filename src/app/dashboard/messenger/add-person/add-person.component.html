@@ -1,6 +1,6 @@
 <section>
     <header>
-        <h1>{{checkText()}}</h1>
+        <h1 [ngStyle]="{'padding-left.px': addPersonView ? 0 : 20}">{{checkText()}}</h1>
         <mat-icon (click)="closeDialog()">close</mat-icon>
     </header>
     @if (!addPersonView) {

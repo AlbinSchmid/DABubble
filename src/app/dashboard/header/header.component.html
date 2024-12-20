@@ -1,7 +1,7 @@
 <header>
     <div class="img-contain">
         <img *ngIf="!messengerOrThreadIsOpen() && viewportService.width <= 1020 || viewportService.width > 1020"
-            src="assets/img/logo-with-text.png" alt="DABubble Logo">
+            src="assets/img/logo-with-text.png" alt="DABubble Logo" class="dabubble-logo-with-text">
         <div *ngIf="messengerOrThreadIsOpen() && viewportService.width <= 1020" class="img-contain-responsive"
             (mousedown)="backToChannelUserList()">
             <mat-icon fontIcon="chevron_left" class="arrow-left"></mat-icon>

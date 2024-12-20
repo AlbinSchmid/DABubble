@@ -61,6 +61,8 @@ export class ThreadComponent implements AfterViewInit {
    * methods respectively to handle any necessary layout adjustments.
    */
   ngAfterViewInit() {
+    console.log('dsahfjkdsah');
+    
     this.threadService.scrollContainer = this.scrollContainer;
     this.resizeObserverMessage = new ResizeObserver(() => this.checkTextStatusHeader());
     this.resizeObserverHeader = new ResizeObserver(() => this.checkTextStatus());

@@ -50,6 +50,8 @@ section {
         object-fit: cover;
         width: 70px;
         height: 70px;
+        min-width: 70px;
+        min-height: 70px;
         border-radius: 100%;
     }
 
@@ -407,6 +409,8 @@ section {
     #img-avatar {
         width: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
         height: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
+        min-width: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
+        min-height: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
     }
 
     .date-container {

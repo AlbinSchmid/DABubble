@@ -14,7 +14,7 @@
     </div>
     <div class="interaction-div">
         <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textareaMessenger
-            (input)="checkForMention(firebaseMessenger.content)" [mentionConfig]="mentionConfig"
+            (input)="checkForMention(firebaseMessenger.content)" [mentionConfig]="mentionConfig" (keydown.enter)="confirmedWithEnter($event, messenger, texterea)"
             pattern="^[\s\S]*\S[\s\S]*$" placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">
             <div id="button-container-left">
@@ -66,7 +66,7 @@
     </div>
     <div class="interaction-div">
         <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textareaThread
-            (input)="checkForMention(firebaseMessenger.answerContent)" [mentionConfig]="mentionConfig"
+            (input)="checkForMention(firebaseMessenger.answerContent)" [mentionConfig]="mentionConfig" (keydown.enter)="confirmedWithEnter($event, 'thread', texterea)"
             placeholder='Antworten...' #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
         <div id="interaction">
             <div id="button-container-left">

@@ -37,3 +37,15 @@ button {
     overflow: hidden;
     max-width: 130px;
 }
+
+@media screen and (max-width: 1020px) {
+    img {
+        width: clamp(2.125rem, 1.5536rem + 2.8571vw, 3.375rem); // 34px - 54px
+        height: clamp(2.125rem, 1.5536rem + 2.8571vw, 3.375rem); // 34px - 54px
+    }
+
+    button {
+        min-height: clamp(0rem, -1.6571rem + 8.2857vw, 3.625rem) !important; // 0px - 58px
+    } 
+    
+}

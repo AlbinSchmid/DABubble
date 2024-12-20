@@ -10,11 +10,11 @@
         <div [ngClass]="{ 'contain-without-input': !editTitle, 'contain-with-input': editTitle }">
             <div [ngClass]="{ 'headline-contain-without-input': !editTitle, 'headline-contain-with-input': editTitle }">
                 <span>Channel-Name</span>
-                <button *ngIf="!isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelTitle()"
+                <button *ngIf="!isMobileEdit && titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="editChannelTitle()"
                     class="edit-btn">
                     {{ editTitle ? 'Speichern' : 'Bearbeiten' }}
                 </button>
-                <button *ngIf="isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelTitle()"
+                <button *ngIf="isMobileEdit && titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="editChannelTitle()"
                     class="edit-btn">
                     <mat-icon [fontIcon]="editTitle ? 'task_alt' : 'edit'"></mat-icon>
                 </button>
@@ -34,11 +34,11 @@
                 <div
                     [ngClass]="{ 'headline-contain-without-textarea': !editDescription, 'headline-contain-with-textarea': editDescription }">
                     <span>Beschreibung</span>
-                    <button *ngIf="!isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelDescription()"
+                    <button *ngIf="!isMobileEdit && titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="editChannelDescription()"
                         class="edit-btn">
                         {{ editDescription ? 'Speichern' : 'Bearbeiten' }}
                     </button>
-                    <button *ngIf="isMobileEdit" [disabled]="isGlobalChannel()" (click)="editChannelDescription()"
+                    <button *ngIf="isMobileEdit && titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="editChannelDescription()"
                         class="edit-btn">
                         <mat-icon [fontIcon]="editDescription ? 'task_alt' : 'edit'"></mat-icon>
                     </button>
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="btn-wrapper">
-        <button [disabled]="isGlobalChannel()" (click)="leaveTheChannel()" class="primary default btn">Channel
+        <button *ngIf="titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="leaveTheChannel()" class="primary default btn">Channel
             verlassen</button>
     </div>
     </mat-card>

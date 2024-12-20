@@ -366,6 +366,8 @@ export class MessageComponent implements OnInit, OnDestroy {
         this.messengerService.textareaThread.next();
       }
     }, 20);
+    console.log(this.threadService.showThreadSideNav);
+    
   }
 
 

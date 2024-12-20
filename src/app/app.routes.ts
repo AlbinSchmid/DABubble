@@ -21,4 +21,5 @@ export const routes: Routes = [
   { path: 'passwort-zurücksetzen', component: LandingResetSendEmailComponent },
   { path: 'neues-passwort', component: LandingNewPasswordComponent },
   { path: 'messenger', component: MessengerComponent },
+  { path: '**', redirectTo: '' }
 ];
