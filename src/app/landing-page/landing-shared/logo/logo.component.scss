@@ -26,8 +26,20 @@
 
 @media(max-width:650px){
   .logo{
-    padding-left: 0;
+    margin-top: 10px;
+    padding: 0;
     width: 100%;
     justify-content: center;
+
+    img {
+      width: clamp(2.5rem, 1.2879rem + 6.0606vw, 3.75rem);
+      height: clamp(2.5rem, 1.2879rem + 6.0606vw, 3.75rem);
+    }
+
+    h2 {
+      font-size: clamp(1.25rem, 1.0076rem + 1.2121vw, 1.5rem);
+    }
   }
+
+
 }

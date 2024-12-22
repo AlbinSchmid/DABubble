@@ -47,5 +47,15 @@ section{
   }
 }
 
+@media screen and (max-width: 650px) {
+  app-logo {
+    height: clamp(2.5rem, 1.2879rem + 6.0606vw, 3.75rem);
+  }
+
+  .logo-section {
+    height: clamp(2.5rem, 1.2879rem + 6.0606vw, 3.75rem);
+  }
+}
+
 
 

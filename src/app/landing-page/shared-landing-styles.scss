@@ -122,7 +122,7 @@ form {
 }
 
 .arrow-back {
-  position: relative;
+  position: absolute;
   font-size: 32px;
   width: 40px;
   height: 40px;
@@ -192,6 +192,21 @@ form {
 
 }
 
+@media screen and (max-width: 650px) {
+  .login {
+    padding: clamp(0.625rem, 0.0189rem + 3.0303vw, 1.25rem) !important;
+    gap: clamp(0.5rem, -0.2273rem + 3.6364vw, 1.25rem);
+  }
+
+  .form-group {
+    height: clamp(2.8125rem, 1.9034rem + 4.5455vw, 3.75rem);
+  }
+
+  input {
+    font-size: clamp(0.875rem, 0.6326rem + 1.2121vw, 1.125rem);
+  }
+}
+
 @media (max-width:600px) {
   .response {
     bottom: 25%;
@@ -202,11 +217,8 @@ form {
   }
 }
 
-@media(max-width:400px) {
-  .login {
-    margin: 20px 0px;
-  }
 
+@media(max-width:400px) {
   .error-message {
     font-size: 12px;
     flex-wrap: wrap-reverse;
@@ -214,14 +226,24 @@ form {
   }
 }
 
-@media(max-height:1050px){
+@media screen and (max-width: 650px) {
   .login{
-    margin: 10px auto;
+    margin: 30px 10px 10px 10px;
     padding: 20px 20px 40px 20px;
     p{
       display: none;
     }
   }
+}
+
+@media(max-height:1050px){
+  .login{
+    padding: 20px 20px 40px 20px;
+    p{
+      display: none;
+    }
+  }
+  
   h1{
     font-size: 24px;
   }
@@ -231,12 +253,10 @@ form {
   }
 
   .error-message{
-    top: 35px;
+    top: 57px;
   }
 
   .global-error-message{
     font-size: 16px !important;
   }
-
-
 }

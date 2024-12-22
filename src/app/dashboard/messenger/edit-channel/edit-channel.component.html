@@ -1,4 +1,4 @@
-@let isMobileEdit = viewportService.width <= 460; <mat-card (click)="$event.stopPropagation()">
+@let isMobileEdit = viewportService.width <= 460; <mat-card (click)="$event.stopPropagation()" [ngClass]="{'top-180' : browserTypeOnTouchService.isSafari() && browserTypeOnTouchService.isTouch(), 'p-bottom-10': browserTypeOnTouchService.isChrome() && browserTypeOnTouchService.isTouch()}">
     <div class="content-contain">
         <header>
             <div class="title-contain">
@@ -63,9 +63,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="btn-wrapper">
-        <button *ngIf="titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="leaveTheChannel()" class="primary default btn">Channel
-            verlassen</button>
+        <div class="btn-wrapper">
+            <button *ngIf="titleTxt !== 'Allgemein'" [disabled]="isGlobalChannel()" (click)="leaveTheChannel()" class="primary default btn">Channel
+                verlassen</button>
+        </div>
     </div>
     </mat-card>

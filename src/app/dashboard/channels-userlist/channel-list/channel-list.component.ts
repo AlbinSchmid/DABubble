@@ -12,6 +12,7 @@ import { MessengerService } from '../../../shared/services/messenger-service/mes
 import { ThreadService } from '../../../shared/services/thread-service/thread.service';
 import { FirebaseMessengerService } from '../../../shared/services/firebase-services/firebase-messenger.service';
 import { UserListHandlingService } from '../user-list/user-list-handling.service';
+import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 
 @Component({
   selector: 'app-channel-list',
@@ -24,7 +25,7 @@ import { UserListHandlingService } from '../user-list/user-list-handling.service
   styleUrl: './channel-list.component.scss'
 })
 export class ChannelListComponent {
-
+  authService = inject(AuthserviceService);
   firebaseMessengerService = inject(FirebaseMessengerService);
   firestoreService: FirestoreService = inject(FirestoreService);
   firebaseMessenger = inject(FirebaseMessengerService);
@@ -69,7 +70,7 @@ export class ChannelListComponent {
     setTimeout(() => this.channelAnimationService.toggleChannels(), 1000);
   }
 
-  getAnimationDelayChannel(index: number): number {
+  getAnimationDelayChannel(index: number) {
     if (this.channelAnimationService.isChannelOpen) {
       return index * 0.10;
     } else {

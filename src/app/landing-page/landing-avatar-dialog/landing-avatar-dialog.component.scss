@@ -77,11 +77,22 @@ section{
   align-self: flex-end;
 }
 
+@media screen and (max-width: 650px) {
+  h1 {
+    font-size: clamp(1.25rem, 1.0076rem + 1.2121vw, 1.5rem)!important;
+  }
+  
+  .arrow-back {
+    font-size: clamp(1.25rem, 0.5227rem + 3.6364vw, 2rem);
+  }
+
+  .name {
+    font-size: clamp(1.25rem, 0.5227rem + 3.6364vw, 2rem) !important;
+  }
+  
+}
 
 @media (max-width:600px){
-  h1{
-    font-size: 36px;
-  }
   .small-avatar{
     width: 60px;
     height: 60px;
@@ -123,10 +134,9 @@ section{
  
   .arrow-back{
     font-size: 24px;
-    width: 60px;
+    width: 30px;
     height: 30px;
   }
-
 }
 
 

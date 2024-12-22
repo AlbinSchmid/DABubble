@@ -18,8 +18,6 @@ export class UserListHandlingService {
   isManualToggle: boolean = false;
 
 
-  constructor() { }
-
   toggleDirectMessages() {
     if (this.isDirectMessagesButtonDisable) return;
 

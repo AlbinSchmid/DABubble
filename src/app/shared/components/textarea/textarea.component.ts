@@ -42,11 +42,17 @@ export class TextareaComponent {
   authService = inject(AuthserviceService);
   firestoreService: FirestoreService = inject(FirestoreService);
   firestore: Firestore = inject(Firestore);
-  firebaseMessenger: FirebaseMessengerService = inject(FirebaseMessengerService)
-  messengerService: MessengerService = inject(MessengerService)
-  threadService: ThreadService = inject(ThreadService)
+  firebaseMessenger: FirebaseMessengerService = inject(FirebaseMessengerService);
+  messengerService: MessengerService = inject(MessengerService);
+  threadService: ThreadService = inject(ThreadService);
+  dialog = inject(MatDialog);
+  storage = inject(Storage);
 
   @Input() sourceThread: boolean;
+
+  @ViewChild('textareaMessenger') textareaMessenger!: ElementRef;
+  @ViewChild('textareaThread') textareaThread!: ElementRef;
+  @ViewChild('mentionPersonDiv') mentionPersonDiv!: ElementRef;
 
   usersListAll: UserInterface[] = [];
   usersToMention: MentionUserInterface[] = [];
@@ -54,18 +60,24 @@ export class TextareaComponent {
   selectedFiles: any[] = [];
 
   selectedFile: File;
+  mentionPersonBtnSrc: string;
+  subscription!: Subscription;
+
   selectedFileToView: any;
   userListSubscription: any;
   unsubChannelList: any;
   unsubAnswerList: any;
+
   date = new Date();
-  messenger = 'messenger';
+
   mentionPersonView = false;
   mentionPersonViewFromBtn = false;
-  mentionPersonBtnSrc: string;
   showEmojiBoard = false;
-  laodMentionUsers = true;
   textareaFocus = false;
+  mentionActive = false;
+  laodMentionUsers = true;
+
+  messenger = 'messenger';
 
   mentionConfig = {
     labelKey: 'userName',
@@ -73,19 +85,16 @@ export class TextareaComponent {
     mentionChar: "@",
     mentionDialogOpened: false,
   }
-  mentionActive: boolean = false;
-
-  @ViewChild('textareaMessenger') textareaMessenger!: ElementRef;
-  @ViewChild('textareaThread') textareaThread!: ElementRef;
-  @ViewChild('mentionPersonDiv') mentionPersonDiv!: ElementRef;
-  private subscription!: Subscription;
-
-  constructor(private dialog: MatDialog, private storage: Storage) {
-
-  }
 
 
-  ngOnInit() {
+  /**
+   * Lifecycle hook that is called after data-bound properties
+   * of a directive are initialized. Subscribes to the textareas
+   * of the messenger and thread, and sets the focus to the
+   * respective textarea if it exists. Also subscribes to the
+   * list of all users and saves it to the usersListAll property.
+   */
+  ngOnInit(): void {
     this.subscription = this.messengerService.textareaMessenger.subscribe(() => {
       if (this.textareaMessenger) {
         this.textareaMessenger.nativeElement.focus();
@@ -94,22 +103,36 @@ export class TextareaComponent {
     this.subscription = this.messengerService.textareaThread.subscribe(() => {
       if (this.textareaThread) {
         this.textareaThread.nativeElement.focus();
-
       }
     });
-
     this.userListSubscription = this.firestoreService.userList$.subscribe(users => {
       this.usersListAll = users;
     });
   }
 
-  ngOnDestroy() {
+
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   * Unsubscribes from the subscription of the messenger service and
+   * the subscription of the channel list. This is necessary to prevent
+   * memory leaks.
+   */
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
     this.unsubChannelList;
   }
 
 
-  confirmedWithEnter(event: any, messenger: string, textarea: any) {
+  /**
+   * Handles the enter key press event on the textarea.
+   * Prevents the default behavior of the enter key and uploads files if the textarea is valid
+   * or if there are files selected.
+   * 
+   * @param event - The keyboard event triggered by pressing the enter key.
+   * @param messenger - A string indicating the type of messenger ('messenger' or 'thread').
+   * @param textarea - The textarea element being interacted with, used to check validity.
+   */
+  confirmedWithEnter(event: any, messenger: string, textarea: any): void {
     event.preventDefault();
     if (textarea.valid || this.selectedFiles.length > 0) {
       this.uploadFiles(messenger);
@@ -117,28 +140,23 @@ export class TextareaComponent {
   }
 
 
+  /**
+   * Checks for the presence of a mention trigger in the input content and updates
+   * the mention view state accordingly. If a mention trigger is detected, it
+   * initiates the process to check if a full mention was typed. If the mention
+   * trigger is followed by a space, it closes the mention view.
+   * 
+   * @param content - The content of the input field to be checked for mention triggers.
+   */
   checkForMention(content: any): void {
     this.mentionPersonBtnSrc = '';
     this.mentionPersonViewFromBtn = false;
     const inputContent = content;
     const mentionIndex = inputContent.lastIndexOf('@');
     if (this.messengerService.openChannel) {
-      if (/\B@\w*$/.test(inputContent)) { // In diese IF kontrollorieren wir ob das @ am Anfang eines Wortes steht
-        if (this.laodMentionUsers) {
-          this.subChannelList();
-          this.laodMentionUsers = false;
-        }
-
-        if (mentionIndex !== -1) {
-          this.mentionPersonView = true;
-          const searchText = inputContent.substring(mentionIndex + 1);
-          this.mentionConfig.items = this.usersToMention.filter(user =>
-            user.userName.toLowerCase().startsWith(searchText.toLowerCase())
-          );
-        } else {
-          this.mentionPersonView = false;
-        }
-      } else if (/\B@\w*\s$/.test(inputContent)) { // In diese IF kontrollorieren wir ob nach dem @ (und weiter Zeichen) ein Leerzeichen steht;
+      if (/\B@\w*$/.test(inputContent)) {
+        this.checkIfMentionWasTyped(mentionIndex, inputContent);
+      } else if (/\B@\w*\s$/.test(inputContent)) {
         this.mentionPersonView = false;
       } else {
         this.mentionPersonView = false;
@@ -147,24 +165,49 @@ export class TextareaComponent {
   }
 
 
-  subChannelList() {
+  /**
+   * Tests if a mention was typed and if the user wants to open the list of users to mention.
+   * If a mention was typed, it filters the list of users that the user can mention and
+   * opens the list of users to mention. If no mention was typed, it closes the list of
+   * users to mention.
+   * @param mentionIndex - The index of the mention in the input content.
+   * @param inputContent - The content of the input field.
+   */
+  checkIfMentionWasTyped(mentionIndex: number, inputContent: any): void {
+    if (this.laodMentionUsers) {
+      this.subChannelList();
+      this.laodMentionUsers = false;
+    }
+    if (mentionIndex !== -1) {
+      this.mentionPersonView = true;
+      const searchText = inputContent.substring(mentionIndex + 1);
+      this.mentionConfig.items = this.usersToMention.filter(user =>
+        user.userName.toLowerCase().startsWith(searchText.toLowerCase())
+      );
+    } else {
+      this.mentionPersonView = false;
+    }
+  }
+
+
+  /**
+   * Subscribes to the list of users in the channel with the given ID.
+   * When there is a change in the list, it will update the usersToMention array and
+   * the items of the mentionConfig.
+   * @returns An unsubscribe function that can be used to stop listening to the list of users.
+   */
+  subChannelList(): any {
     const messegeRef = doc(collection(this.firestore, `channels`), this.messengerService.channel.channelID);
     return onSnapshot(messegeRef, (list) => {
       if (list.exists()) {
         this.usersToMention = [];
         this.mentionConfig.items = [];
         const usersIDs = list.data()['userIDs'];
-        for (let i = 0; i < usersIDs.length; i++) {
-          const userID = usersIDs[i];
-          const user = this.usersListAll.filter(user => user.userID === userID);
-          this.usersToMention.push(this.getCleanJson(user));
-          this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
-        }
+        this.everyUserGetPushedInArray(usersIDs);
         this.messengerService.sortByName(this.usersToMention);
         this.usersToMention.forEach((user) => {
           this.mentionConfig.items.push(user);
         });
-
       } else {
         console.error("doc is empty or doesn't exist");
       }
@@ -172,9 +215,36 @@ export class TextareaComponent {
   }
 
 
-  getCleanJson(user: UserInterface[]) {
+  /**
+   * Pushes all users from the given usersIDs array in the this.usersToMention array.
+   * The current user is filtered out from the list. The function is called when the
+   * channelList (users in the channel) changes.
+   * @param {string[]} usersIDs - Array of all user IDs in the channel.
+   */
+  everyUserGetPushedInArray(usersIDs: string[]): void {
+    for (let i = 0; i < usersIDs.length; i++) {
+      const userID = usersIDs[i];
+      const user = this.usersListAll.filter(user => user.userID === userID);
+      this.usersToMention.push(this.getCleanJson(user));
+      this.usersToMention = this.usersToMention.filter(user => user.userID !== this.authService.currentUserSig()?.userID);
+    }
+  }
+
+
+  /**
+   * Generates a clean JSON representation of the user data.
+   * 
+   * This function takes an array of `UserInterface` objects and constructs
+   * a simplified JSON object containing the user's avatar, userID, and userName.
+   * If the avatar is not present, a default avatar URL is used.
+   * 
+   * @param user - An array of `UserInterface` objects from which the first element's 
+   *               data is used to construct the JSON object.
+   * @returns A JSON object with the user's avatar, userID, and userName.
+   */
+  getCleanJson(user: UserInterface[]): any {
     let userJson = {
-      avatar: user[0]['avatar'] || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
+      avatar: user[0]['avatar'] || 'https:firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a',
       userID: user[0]['userID'],
       userName: user[0]['username'],
     }
@@ -182,7 +252,16 @@ export class TextareaComponent {
   }
 
 
-  openOrCloseMentionPersonView(src: string) {
+  /**
+   * Opens or closes the mention person view based on the given source.
+   * If the view is already open, it closes the view and sets the
+   * mentionPersonViewFromBtn variable to false. If the view is closed,
+   * it opens the view and sets mentionPersonViewFromBtn to true.
+   * The mentionPersonBtnSrc variable is set to the given source string.
+   * @param {string} src - The source of the mention person view (either 'messenger'
+   *                       or 'thread').
+   */
+  openOrCloseMentionPersonView(src: string): void {
     this.mentionPersonBtnSrc = src;
     this.subChannelList();
     if (this.mentionPersonView) {
@@ -196,14 +275,20 @@ export class TextareaComponent {
   }
 
 
-  mentionUser(userJson: any, src: string) {
+  /**
+   * Adds a mention in the form of `@userName` to the textarea content or the answer content of the
+   * textarea component. If the mention person view was opened from a button, it calls
+   * `ceckIfMessengerOrThreadWithBtn` to determine if the mention is added to the textarea content or
+   * the answer content. If the mention person view was opened from a keypress, it adds the mention to
+   * the content of the textarea component that triggered the mention person view.
+   * @param {any} userJson - A JSON object containing the avatar, userID, and userName of the user to be
+   *                        mentioned.
+   * @param {string} src - The source of the mention person view (either 'messenger' or 'thread').
+   */
+  mentionUser(userJson: any, src: string): void {
     const mentionText = `@${userJson.userName}`;
     if (this.mentionPersonViewFromBtn) {
-      if (this.mentionPersonBtnSrc === 'messenger') {
-        this.firebaseMessenger.content = this.firebaseMessenger.content + mentionText;
-      } else if (this.mentionPersonBtnSrc === 'thread') {
-        this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent + mentionText;
-      }
+      this.ceckIfMessengerOrThreadWithBtn(mentionText);
     } else {
       if (src === 'messenger') {
         const mentionIndex = this.firebaseMessenger.content.lastIndexOf('@');
@@ -214,7 +299,23 @@ export class TextareaComponent {
       }
     }
     this.mentionPersonView = false;
+  }
 
+  
+  /**
+   * Adds a mention in the form of `@userName` to the textarea content or the answer content of the
+   * textarea component, depending on the source of the mention person view.
+   * If the mention person view was opened from the messenger button, the mention is added to the
+   * textarea content. If the mention person view was opened from the thread button, the mention is
+   * added to the answer content.
+   * @param {string} mentionText - The mention text to be added, in the form of `@userName`.
+   */
+  ceckIfMessengerOrThreadWithBtn(mentionText: string): void {
+    if (this.mentionPersonBtnSrc === 'messenger') {
+      this.firebaseMessenger.content = this.firebaseMessenger.content + mentionText;
+    } else if (this.mentionPersonBtnSrc === 'thread') {
+      this.firebaseMessenger.answerContent = this.firebaseMessenger.answerContent + mentionText;
+    }
   }
 
 
@@ -223,7 +324,7 @@ export class TextareaComponent {
    * If the user is in a channel, return "Nachricht an #<channel name>".
    * If the user is in a private chat, return "Schreibe eine Nachricht an <username>".
    */
-  chatOrChannelTxt() {
+  chatOrChannelTxt(): string {
     if (this.messengerService.openChart) {
       return `Schreibe eine Nachricht an ${this.messengerService.user.username}`
     } else {
@@ -235,7 +336,7 @@ export class TextareaComponent {
   /**
    * Open or close the emoji board.
   */
-  openOrCloseEmojiBoard() {
+  openOrCloseEmojiBoard(): void {
     this.showEmojiBoard = !this.showEmojiBoard;
   }
 
@@ -247,7 +348,7 @@ export class TextareaComponent {
    * 
    * @param event - The file input change event containing the selected files.
    */
-  onFileSelected(event: any) {
+  onFileSelected(event: any): void {
     const files = event.target.files;
     for (let file of files) {
       const reader = new FileReader();
@@ -264,7 +365,7 @@ export class TextareaComponent {
    * 
    * @param file - The file to preview.
    */
-  viewFile(file: any) {
+  viewFile(file: any): void {
     const dialogRef = this.dialog.open(FileViewDialogComponent, {
       width: '80%',
       height: '80%',
@@ -283,7 +384,7 @@ export class TextareaComponent {
    * @param messenger - A string indicating the type of messenger ('messenger' or 'thread') 
    *                    to determine the initial content to be updated.
    */
-  async uploadFiles(messenger: any) {
+  async uploadFiles(messenger: any): Promise<void> {
     let originalContent = this.getInitialContent(messenger);
     const folderName = `uploads/${this.messengerService.user.userID}/`;
     for (const file of this.selectedFiles) {
@@ -354,61 +455,102 @@ export class TextareaComponent {
    * a message is created. If the messenger type is 'thread', the answer content is updated
    * and an answer is created for the message with the ID determined by the threadService.
    */
-  private updateContent(messenger: any, originalContent: string) {
+  private updateContent(messenger: any, originalContent: string): void {
     if (messenger === 'messenger') {
       this.firebaseMessenger.content = originalContent;
       let text = this.firebaseMessenger.content;
       if (this.messengerService.selectUserNewMessage.length > 0 || this.messengerService.selectChannelsNewMessage.length > 0) {
-        if (this.messengerService.selectUserNewMessage.length > 0) {
-          for (let i = 0; i < this.messengerService.selectUserNewMessage.length; i++) {
-            let user = this.messengerService.selectUserNewMessage[i];
-            this.firebaseMessenger.searchChat(user, true, (chartID: string) => {
-              let chartOrChannel = 'chart';
-              this.firebaseMessenger.content = text;
-              this.firebaseMessenger.createMessage('noID', 'noCollection', false, chartID, chartOrChannel);
-            });
-            if (i === this.messengerService.selectUserNewMessage.length - 1) {
-              setTimeout(() => {
-                this.messengerService.selectUserNewMessage = [];
-              }, 10);
-            }
-          }
-        }
-        if (this.messengerService.selectChannelsNewMessage.length > 0) {
-          for (let i = 0; i < this.messengerService.selectChannelsNewMessage.length; i++) {
-            let channel = this.messengerService.selectChannelsNewMessage[i];
-            this.firebaseMessenger.searchChannel(channel, (chartID: string) => {
-              let chartOrChannel = 'channel';
-              this.firebaseMessenger.content = text;
-              this.firebaseMessenger.createMessage('noID', 'noCollection', false, chartID, chartOrChannel = 'channel');
-            });
-            if (i === this.messengerService.selectChannelsNewMessage.length - 1) {
-              setTimeout(() => {
-                this.messengerService.selectChannelsNewMessage = [];
-              }, 10);
-            }
-          }
-        }
+        this.checkIfSelectedUsers(text);
+        this.checkIfSelectedChannels(text);
       } else {
-        this.firebaseMessenger.createMessage('noID', 'noCollection', false);
-        setTimeout(() => {
-          this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
-        }, 10);
+        this.createMessageAndScrollToBottom();
       }
     } else {
-      this.firebaseMessenger.answerContent = originalContent;
-      this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);
-      setTimeout(() => {
-        this.messengerService.scrollToBottom(this.threadService.scrollContainer);
-      }, 10);
+      this.createAnswerMessage(originalContent);
     }
   }
 
 
   /**
+   * Creates a message in the messenger using the current content and scrolls to the
+   * bottom of the messenger scroll container after a delay of 10 milliseconds.
+   */
+  createMessageAndScrollToBottom(): void {
+    this.firebaseMessenger.createMessage('noID', 'noCollection', false);
+    setTimeout(() => {
+      this.messengerService.scrollToBottom(this.messengerService.scrollContainer);
+    }, 10);
+  }
+
+
+  /**
+   * Creates an answer message for the message with the ID stored in the thread service
+   * using the provided content and updates the answer content of the firebase messenger.
+   * Scrolls to the bottom of the thread scroll container after a delay of 10 milliseconds.
+   * @param originalContent - the content of the answer message
+   */
+  createAnswerMessage(originalContent: string): void {
+    this.firebaseMessenger.answerContent = originalContent;
+    this.firebaseMessenger.createMessage(this.threadService.messageToReplyTo.messageID, 'answer', false);
+    setTimeout(() => {
+      this.messengerService.scrollToBottom(this.threadService.scrollContainer);
+    }, 10);
+  }
+
+
+  /**
+   * If there are selected users in the messenger service, this function loops through
+   * the selected users and creates a message in the chart of each user using the
+   * provided content.
+   * @param text - the content of the message to be created
+   */
+  checkIfSelectedUsers(text: string): void {
+    if (this.messengerService.selectUserNewMessage.length > 0) {
+      for (let i = 0; i < this.messengerService.selectUserNewMessage.length; i++) {
+        let user = this.messengerService.selectUserNewMessage[i];
+        this.firebaseMessenger.searchChat(user, true, (chartID: string) => {
+          let chartOrChannel = 'chart';
+          this.firebaseMessenger.content = text;
+          this.firebaseMessenger.createMessage('noID', 'noCollection', false, chartID, chartOrChannel);
+        });
+        if (i === this.messengerService.selectUserNewMessage.length - 1) {
+          setTimeout(() => {
+            this.messengerService.selectUserNewMessage = [];
+          }, 10);
+        }
+      }
+    }
+  }
+
+  
+  /**
+   * If there are selected channels in the messenger service, this function loops through
+   * the selected channels and creates a message in each channel using the provided content.
+   * @param text - the content of the message to be created
+   */
+  checkIfSelectedChannels(text: string): void {
+    if (this.messengerService.selectChannelsNewMessage.length > 0) {
+      for (let i = 0; i < this.messengerService.selectChannelsNewMessage.length; i++) {
+        let channel = this.messengerService.selectChannelsNewMessage[i];
+        this.firebaseMessenger.searchChannel(channel, (chartID: string) => {
+          let chartOrChannel = 'channel';
+          this.firebaseMessenger.content = text;
+          this.firebaseMessenger.createMessage('noID', 'noCollection', false, chartID, chartOrChannel = 'channel');
+        });
+        if (i === this.messengerService.selectChannelsNewMessage.length - 1) {
+          setTimeout(() => {
+            this.messengerService.selectChannelsNewMessage = [];
+          }, 10);
+        }
+      }
+    }
+  }
+
+  
+  /**
    * Removes a file from the selected files array and UI.
    */
-  deletePreviewFile(file: any) {
+  deletePreviewFile(file: any): void {
     this.selectedFiles = this.selectedFiles.filter(f => f !== file);
   }
 

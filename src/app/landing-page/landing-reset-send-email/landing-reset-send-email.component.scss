@@ -27,14 +27,14 @@ section{
 }
 
 @media (max-width:650px){
-  h1{
-    line-height: 52px;
+  h1 {
+    font-size: clamp(1.25rem, 1.0076rem + 1.2121vw, 1.5rem);
+  }
+  
+  .arrow-back {
+    font-size: clamp(1.25rem, 0.5227rem + 3.6364vw, 2rem);
   }
 }
 
-@media (max-width:500px){
-  h1{
-    font-size: 32px;
-    line-height: 32px;
-  }
+@media (max-width:650px){
 }

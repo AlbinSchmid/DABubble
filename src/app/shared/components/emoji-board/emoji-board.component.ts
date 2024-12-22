@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AuthserviceService } from '../../../landing-page/services/authservice.service';
 import { collection, doc, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { ReactionInterface } from '../../interfaces/reaction-interface';
-import { query, where, } from 'firebase/firestore';
+import { DocumentData, query, where, } from 'firebase/firestore';
 import { Message } from '../../../models/message.class';
 import { last } from 'rxjs';
 
@@ -42,6 +42,7 @@ export class EmojiBoardComponent {
     '📋', '📌', '🖇️', '📄', '✏️', '📤', '📥', '📧', '📞', '📡',
     '🔒', '🔓', '🗑️', '🧾', '📆', '🏢', '🏛️'
   ];
+
   activeBoard: string = 'normal';
   selectedEmoji: string | null = null;
   reactionContent: string;
@@ -49,7 +50,16 @@ export class EmojiBoardComponent {
   findReactionWithContent = false;
 
 
-  setRectionObject(element: any, id: string) {
+ 
+  /**
+   * Returns an object of ReactionInterface type, which is used to hold the content of a reaction,
+   * the sender's IDs, the sender's names, the ID of the message that the reaction belongs to,
+   * and the latest reaction time.
+   * @param element - the element of the reaction document
+   * @param id - the ID of the reaction
+   * @returns an object of ReactionInterface type
+   */
+  setRectionObject(element: any, id: string): ReactionInterface {
     return {
       reactionID: id || '',
       content: element.content || '',
@@ -61,7 +71,17 @@ export class EmojiBoardComponent {
   }
 
 
-  searchReaction(messageID: string, reactionContent: string, userID: string) {
+  /**
+   * This function is used to search for a reaction in the database.
+   * It takes as parameters the ID of the message that the reaction belongs to,
+   * the content of the reaction that we are searching for, and the ID of the user who is searching.
+   * It returns a snapshot of the reaction that we found. If the reaction is not found, it returns an empty array.
+   * @param messageID - the ID of the message that the reaction belongs to
+   * @param reactionContent - the content of the reaction that we are searching for
+   * @param userID - the ID of the user who is searching
+   * @returns a snapshot of the reaction that we found
+   */
+  searchReaction(messageID: string, reactionContent: string, userID: string):DocumentData {
     let messegeRef = query(collection(this.firestore, `${this.firebaseMessenger.checkCollectionChatOrChannel()}/${this.firebaseMessenger.checkDocChatIDOrChannelID()}/messages/${messageID}/reactions`), where('senderIDs', 'not-in', [userID]), where('content', '==', reactionContent));
     return onSnapshot(messegeRef, (list) => {
       list.forEach(element => {
@@ -93,7 +113,13 @@ export class EmojiBoardComponent {
   }
 
 
-  controllWhichBinding(start: number, emoji: string, end: number) {
+  /**
+   * Depending on which textarea the emoji was choosed, we add the emoji there.
+   * @param start - where the emoji should be added
+   * @param emoji - which emoji is choosed
+   * @param end - where the emoji should be added
+   */
+  controllWhichBinding(start: number, emoji: string, end: number):void {
     if (this.binding.name == 'textareaMessenger') {
       this.firebaseMessenger.content = this.firebaseMessenger.content.slice(0, start) + emoji + this.firebaseMessenger.content.slice(end);
     } if (this.binding.name == 'textareaThread') {
@@ -106,7 +132,14 @@ export class EmojiBoardComponent {
   }
 
 
-  addEmojiToReaction(start: number, emoji: string, end: number) {
+  /**
+   * If the emoji is choosed for a reaction, we add it to the reactionContent and search for the reaction in the database.
+   * If the reaction is already exist, we update the reaction, if not we add it to the database.
+   * @param start - where the emoji should be added in the reactionContent
+   * @param emoji - which emoji is choosed
+   * @param end - where the emoji should be added in the reactionContent
+   */
+  addEmojiToReaction(start: number, emoji: string, end: number):void {
     this.findReactionWithContent = false;
     this.firebaseMessenger.reactions = [];
     this.firebaseMessenger.reaktionContent = '';
@@ -118,7 +151,13 @@ export class EmojiBoardComponent {
   }
 
 
-  checkIfEmojiIsAlreadyExist() {
+  /**
+   * If the emoji is already a reaction, we update the reaction, if not we add it to the database.
+   * If the emoji is already exist, we check if the user who is searching is already in the senderIDs array.
+   * If the user is not in the array, we add him, if the user is already in the array, we do nothing.
+   * If the emoji is not exist, we add it to the database.
+   */
+  checkIfEmojiIsAlreadyExist():void {
     if (this.findReactionWithContent) {
       if (!this.reaction[0].senderIDs.includes(this.authService.currentUserSig()?.userID ?? '')) {
         this.reaction[0].senderIDs.push(this.authService.currentUserSig()?.userID || '');

@@ -249,24 +249,24 @@ mat-icon {
         bottom: 40px;
     }
     to {
-        bottom: clamp(3.625rem, 2.8536rem + 3.8571vw, 5.3125rem); // 58px - 85px 
+        bottom: clamp(3.625rem, 2.8536rem + 3.8571vw, 5.3125rem); 
     }
 }
 
 @media screen and (max-width: 1020px) {
     section {
-        margin: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) clamp(0.5rem, 0.1571rem + 1.7143vw, 1.25rem) !important; // 8px - 40px, 8px - 20px
+        margin: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) clamp(0.5rem, 0.1571rem + 1.7143vw, 1.25rem) !important; 
 
         .interaction-div {
-            padding: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important; // 12px - 20px
+            padding: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important; 
         }
     }
 
     textarea {
-        font-size: clamp(1rem, 0.9429rem + 0.2857vw, 1.125rem) !important; // 16px - 18px
+        font-size: clamp(1rem, 0.9429rem + 0.2857vw, 1.125rem) !important; 
 
         &::placeholder { 
-            font-size: clamp(0.875rem, 0.7607rem + 0.5714vw, 1.125rem) !important; // 14px - 18px
+            font-size: clamp(0.875rem, 0.7607rem + 0.5714vw, 1.125rem) !important; 
         }
     }
 
@@ -277,8 +277,8 @@ mat-icon {
     }
 
     mat-icon {
-        width: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; // 30px - 40px
-        height: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; // 30px - 40px
-        font-size: clamp(1.375rem, 1.3179rem + 0.2857vw, 1.5rem) !important; // 22px - 24px
+        width: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important;
+        height: clamp(1.875rem, 1.5893rem + 1.4286vw, 2.5rem) !important; 
+        font-size: clamp(1.375rem, 1.3179rem + 0.2857vw, 1.5rem) !important;
     }
 }

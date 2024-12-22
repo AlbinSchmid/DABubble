@@ -1,6 +1,5 @@
-@let isMobileMenu = viewportService.width <= 460; 
-
-@if (!isProfileMenuOpen) { <div class="menu-contain">
+@let isMobileMenu = viewportService.width <= 460; @if (!isProfileMenuOpen) { 
+    <div class="menu-contain">
     <div *ngIf="isMobileMenu" class="line-contain">
         <div class="line"></div>
     </div>
@@ -31,8 +30,8 @@
             <img src="{{authService.currentUserSig()?.avatar || authService.defaultAvatarURL}}" alt="user_profile_img">
         </div>
         <div *ngIf="isOpenEditEditor" style="pointer-events: all;">
-            <img [src]="imgUpload.filePreview ||authService.currentUserSig()?.avatar || authService.defaultAvatarURL" (click)="fileInput.click()"
-                alt="user_profile_img">
+            <img [src]="imgUpload.filePreview ||authService.currentUserSig()?.avatar || authService.defaultAvatarURL"
+                (click)="fileInput.click()" alt="user_profile_img">
             <input type="file" #fileInput accept="image/*" (change)="imgUpload.onFileSelected($event)"
                 style="display: none;">
         </div>
@@ -42,7 +41,7 @@
                 <div class="user-name-contain">
                     <span class="user-name">{{authService.currentUserSig()?.username || 'Neuer Gast'}}</span>
                 </div>
-                <button *ngIf="!isMobileMenu" (click)="toggleEditUserEditor($event)" class="edit-user-btn">
+                <button *ngIf="!isMobileMenu && authService.currentUserSig()?.username !== 'Neuer Gast'" (click)="toggleEditUserEditor($event)" class="edit-user-btn">
                     Bearbeiten
                 </button>
                 <button *ngIf="isMobileMenu" (click)="toggleEditUserEditor($event)" class="edit-user-btn">

@@ -52,8 +52,6 @@ app-messenger {
     width: 100%;
 }
 
-
-
 .toggle-btn {
     position: absolute;
     display: flex;
@@ -174,14 +172,6 @@ app-new-message {
             padding: 0;
         }
     }
-}
-
-.p-bottom130 {
-    padding-bottom: 100px !important;
-}
-
-.p-bottom-safari {
-    padding-bottom: 95px !important;
 }
 
 @media screen and (max-width: 1550px) {

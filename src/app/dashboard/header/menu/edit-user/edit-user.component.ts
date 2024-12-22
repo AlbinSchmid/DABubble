@@ -194,10 +194,12 @@ export class EditUserComponent implements OnInit {
   changeName() {
     if (!this.isNameValid()) {
       return;
+    } else if (this.inputName == 'Neuer Gast' || this.inputName == 'neuer Gast' || this.inputName == 'Neuer gast' || this.inputName == 'neuer gast') {
+      this.errorMessage = 'Der Name darf nicht Neuer Gast lauten!';
     } else {
       this.updateName();
       this.successMessage = 'Name erfolgreich aktualisiert.';
-      this.timeoutCLose()
+      this.timeoutCLose();
     }
   }
 

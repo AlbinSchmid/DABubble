@@ -45,11 +45,11 @@
  } 
 }
 
-@media (max-height:1050px){
+@media screen and (max-width:650px){
   .register{
     a{
       font-size: 16px;
-      padding: 10px 8px 10px 8px;
+      padding: clamp(0.25rem, -0.1136rem + 1.8182vw, 0.625rem) 8px clamp(0.25rem, -0.1136rem + 1.8182vw, 0.625rem) 8px;
       text-align: center;
     }
   }

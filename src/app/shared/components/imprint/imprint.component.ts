@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { LogoComponent } from "../../../landing-page/landing-shared/logo/logo.component";
+import { ViewportService } from '../../services/viewport.service';
+import { BrowserTypeOnTouchService } from '../../services/browser-type-on-touch.service';
 
 
 @Component({
@@ -12,11 +15,12 @@ import { LogoComponent } from "../../../landing-page/landing-shared/logo/logo.co
     MatCardModule,
     MatIconModule,
     RouterLink,
-    LogoComponent
+    CommonModule
 ],
   templateUrl: './imprint.component.html',
   styleUrl: './imprint.component.scss'
 })
 export class ImprintComponent {
-
+  viewportService = inject(ViewportService);
+  browserTypeOnTouchService = inject(BrowserTypeOnTouchService);
 }

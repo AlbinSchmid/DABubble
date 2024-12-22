@@ -50,7 +50,6 @@ section {
             display: flex;
             align-items: center;
             gap: 10px;
-            // position: relative;
 
             button {
                 display: flex;
@@ -72,7 +71,7 @@ section {
                         margin: 0;
                     }
 
-                    div {
+                    .more-user-count {
                         background-color: #ECEEFE;
                         display: flex;
                         justify-content: center;
@@ -152,7 +151,7 @@ section {
             }
 
             #info {
-                padding: 0 clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem); // 8 - 30px
+                padding: 0 clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem);
 
                 div {
                     display: flex;
@@ -228,9 +227,6 @@ section {
 }
 
 app-edit-channel {
-    position: absolute;
-    left: 0;
-    top: -112px;
 
     @media(max-width:1340px) {
         position: fixed;
@@ -244,24 +240,35 @@ app-edit-channel {
     }
 }
 
-app-add-person {
+.add-person-position-mobile {
     position: absolute;
-    top: -110px;
-    right: -80px;
+    right: -82px;
+    top: 20px;
+}
+
+.add-person-position-mobile-allgemein-channel {
+    position: absolute;
+    right: -110px;
 }
 
 @media screen and (max-width: 1020px) {
+
+    .more-user-count {
+        width: clamp(2.1875rem, 2.0446rem + 0.7143vw, 2.5rem) !important; 
+        height: clamp(2.1875rem, 2.0446rem + 0.7143vw, 2.5rem) !important;
+    }
+
     header {
-        padding: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) !important; // 8px - 40px
-        min-height: clamp(3.4375rem, 2.7232rem + 3.5714vw, 5rem) !important; // 55px - 80px
+        padding: 0 clamp(0.5rem, -0.4143rem + 4.5714vw, 2.5rem) !important; 
+        min-height: clamp(3.4375rem, 2.7232rem + 3.5714vw, 5rem) !important; 
 
         img {
-            width: clamp(2.125rem, 1.6679rem + 2.2857vw, 3.125rem) !important; // 34px - 50px
-            height: clamp(2.125rem, 1.6679rem + 2.2857vw, 3.125rem) !important; // 34px - 50px
+            width: clamp(2.125rem, 1.6679rem + 2.2857vw, 3.125rem) !important; 
+            height: clamp(2.125rem, 1.6679rem + 2.2857vw, 3.125rem) !important;
         }
 
         h4 {
-            font-size: clamp(1.125rem, 0.9536rem + 0.8571vw, 1.5rem) !important; // 18px - 24px
+            font-size: clamp(1.125rem, 0.9536rem + 0.8571vw, 1.5rem) !important; 
         }
     }
 
@@ -279,49 +286,30 @@ app-add-person {
     #info {
         div {
             img {
-                width: clamp(3.125rem, 1.6964rem + 7.1429vw, 6.25rem) !important; // 50px - 100px
-                height: clamp(3.125rem, 1.6964rem + 7.1429vw, 6.25rem) !important; // 50px - 100px
+                width: clamp(3.125rem, 1.6964rem + 7.1429vw, 6.25rem) !important; 
+                height: clamp(3.125rem, 1.6964rem + 7.1429vw, 6.25rem) !important;
             }
 
             h4 {
-                margin-left: clamp(0.625rem, 0.3393rem + 1.4286vw, 1.25rem) !important; // 10px - 20px
+                margin-left: clamp(0.625rem, 0.3393rem + 1.4286vw, 1.25rem) !important;
                 line-height: 25px;
             }
         }
 
         p {
-            margin-top: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important; // 12px - 20px
-            font-size: clamp(1rem, 0.8857rem + 0.5714vw, 1.25rem) !important; // 16px - 20px
+            margin-top: clamp(0.75rem, 0.5214rem + 1.1429vw, 1.25rem) !important;
+            font-size: clamp(1rem, 0.8857rem + 0.5714vw, 1.25rem) !important;
         }
     }
 
     .channel-title-contain {
-        gap: clamp(0.125rem, -0.2464rem + 1.8571vw, 0.9375rem) !important; // 2px - 15px
-        font-size: clamp(1.375rem, 1.0893rem + 1.4286vw, 2rem) !important; // 22px - 32px
+        gap: clamp(0.125rem, -0.2464rem + 1.8571vw, 0.9375rem) !important; 
+        font-size: clamp(1.375rem, 1.0893rem + 1.4286vw, 2rem) !important;
     }
 
     #add-user-complete-container {
         mat-icon {
-            font-size: clamp(1.375rem, 1.1464rem + 1.1429vw, 1.875rem) !important; // 22px - 30px
+            font-size: clamp(1.375rem, 1.1464rem + 1.1429vw, 1.875rem) !important; 
         }
-    }
-
-    app-add-person {
-        right: clamp(-11.375rem, -17.5048rem + 19.6154vw, -5rem) !important; // -80px - -182px
-    }
-}
-
-@media screen and (max-width: 500px) {
-    app-add-person {
-        right: -80px !important;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    app-add-person {
-        position: absolute;
-        top: -547px;
-        bottom: 307px;
-        right: -157px !important;
     }
 }

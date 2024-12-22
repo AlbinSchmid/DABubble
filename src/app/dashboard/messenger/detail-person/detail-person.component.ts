@@ -56,7 +56,7 @@ export class DetailPersonComponent {
    * 
    * @param user - The user object to open the conversation with.
    */
-  openUser(user: UserInterface) {
+  openUser(user: UserInterface):void {
     this.messengerService.showAddPerson = false;
     this.dialog.closeAll();
     this.messengerService.showChart(this.data);
@@ -72,7 +72,7 @@ export class DetailPersonComponent {
    * chat ID associated with a conversation with the given user.
    * @param user - The user object to set as the currently focused chat.
    */
-  focusUser(user: UserInterface) {
+  focusUser(user: UserInterface):void {
     this.resetChannelFocus();
     this.firestoreService.userList.forEach(u => u.isFocus = false);
     this.firestoreService.setAndGetCurrentlyFocusedChat(user);
@@ -89,7 +89,7 @@ export class DetailPersonComponent {
    * focusedUserId in the UserListHandlingService.
    * @param user - The user object to set as focused.
    */
-  setFocus(user: UserInterface) {
+  setFocus(user: UserInterface):void {
     let foundUser = this.firestoreService.userList.find(u => u.userID === user.userID);
     if (foundUser) {
       foundUser.isFocus = true;

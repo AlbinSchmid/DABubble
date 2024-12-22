@@ -2,8 +2,8 @@
     <div>{{ giveDateBack(message.date, 'dateInfo') }}</div>
     <div></div>
 </div>
-<section class="message" [ngStyle]="{'margin-top.px': messageIndex == 0 ? 10 : 30}"
-    [ngClass]="{'message-from-you': message.senderID == authService.currentUserSig()?.userID, 'z-index': showEmojiBoard}"
+<section class="message"
+    [ngClass]="{'message-from-you': message.senderID == authService.currentUserSig()?.userID, 'z-index': showEmojiBoard, 'margin-top': messageIndex !== 0, 'margin-top-first-message': messageIndex == 0}"
     (mouseenter)="hoveredMessageId = messageIndex"
     (mouseleave)="hoveredMessageId = -1; hoveredMenu = false; closeEmojiBoard()">
     <img src="{{senderUser[0].avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'}}" alt="Profile" id="img-avatar">

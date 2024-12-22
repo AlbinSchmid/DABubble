@@ -14,8 +14,9 @@
     </div>
     <div class="interaction-div">
         <textarea [(ngModel)]="firebaseMessenger.content" name="textareaMessenger" #textareaMessenger
-            (input)="checkForMention(firebaseMessenger.content)" [mentionConfig]="mentionConfig" (keydown.enter)="confirmedWithEnter($event, messenger, texterea)"
-            pattern="^[\s\S]*\S[\s\S]*$" placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
+            (input)="checkForMention(firebaseMessenger.content)" [mentionConfig]="mentionConfig"
+            (keydown.enter)="confirmedWithEnter($event, messenger, texterea)" pattern="^[\s\S]*\S[\s\S]*$"
+            placeholder='{{chatOrChannelTxt()}}' #texterea="ngModel" required></textarea>
         <div id="interaction">
             <div id="button-container-left">
                 <p>
@@ -24,8 +25,10 @@
                         multiple style="display: none;">
                 </p>
                 <div *ngIf="viewportService.width > 1020"></div>
-                <mat-icon class="mention-btn" (click)="openOrCloseEmojiBoard()" *ngIf="viewportService.width > 1020">mood</mat-icon>
-                <mat-icon class="mention-btn" *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('messenger')">alternate_email</mat-icon>
+                <mat-icon class="mention-btn" (click)="openOrCloseEmojiBoard()"
+                    *ngIf="viewportService.width > 1020">mood</mat-icon>
+                <mat-icon class="mention-btn" *ngIf="messengerService.openChannel"
+                    (click)="openOrCloseMentionPersonView('messenger')">alternate_email</mat-icon>
             </div>
             <button id="send-message-btn" (click)="uploadFiles(messenger)"
                 *ngIf="texterea.valid || selectedFiles.length > 0"><img src="/assets/icons/send.png"
@@ -66,8 +69,9 @@
     </div>
     <div class="interaction-div">
         <textarea [(ngModel)]="firebaseMessenger.answerContent" name="textareaThread" #textareaThread
-            (input)="checkForMention(firebaseMessenger.answerContent)" [mentionConfig]="mentionConfig" (keydown.enter)="confirmedWithEnter($event, 'thread', texterea)"
-            placeholder='Antworten...' #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
+            (input)="checkForMention(firebaseMessenger.answerContent)" [mentionConfig]="mentionConfig"
+            (keydown.enter)="confirmedWithEnter($event, 'thread', texterea)" placeholder='Antworten...'
+            #texterea="ngModel" pattern="^[\s\S]*\S[\s\S]*$" required></textarea>
         <div id="interaction">
             <div id="button-container-left">
                 <p>
@@ -76,8 +80,10 @@
                         multiple style="display: none;">
                 </p>
                 <div *ngIf="viewportService.width > 1020"></div>
-                <mat-icon class="mention-btn" (click)="openOrCloseEmojiBoard()" *ngIf="viewportService.width > 1020">mood</mat-icon>
-                <mat-icon class="mention-btn" *ngIf="messengerService.openChannel" (click)="openOrCloseMentionPersonView('thread')">alternate_email</mat-icon>
+                <mat-icon class="mention-btn" (click)="openOrCloseEmojiBoard()"
+                    *ngIf="viewportService.width > 1020">mood</mat-icon>
+                <mat-icon class="mention-btn" *ngIf="messengerService.openChannel"
+                    (click)="openOrCloseMentionPersonView('thread')">alternate_email</mat-icon>
             </div>
             <button id="send-message-btn" (click)="uploadFiles('thread')" *ngIf="texterea.valid"><img
                     src="/assets/icons/send.png" alt="send-icon"></button>

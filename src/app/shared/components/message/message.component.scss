@@ -164,7 +164,6 @@ section {
         border: 1px solid #ADB0D9;
         gap: 4px;
         opacity: 1;
-        // animation: 125ms swipe ease-in-out forwards;
 
         #last-two-reactions {
             position: initial !important;
@@ -338,6 +337,13 @@ section {
     }
 }
 
+.margin-top {
+    margin-top: 30px !important;
+}
+
+.margin-top-first-message {
+    margin-top: 10px !important;
+}
 
 @keyframes swipe {
     from {
@@ -365,30 +371,34 @@ section {
 
 @media screen and (max-width: 1020px) {
 
+    .margin-top {
+        margin-top: clamp(0.3125rem, -0.4018rem + 3.5714vw, 1.875rem) !important; 
+    }
+
     app-emoji-board {
         left: clamp(0rem, -12.8571rem + 64.2857vw, 28.125rem) !important;
     }
 
     section {
-        padding: 5px clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; // 8px - 30px
+        padding: 5px clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; 
 
         .interaction {
-            right: clamp(0.3125rem, -1.5446rem + 9.2857vw, 4.375rem); // 5px - 70px
+            right: clamp(0.3125rem, -1.5446rem + 9.2857vw, 4.375rem);
 
             button {
-                padding: clamp(0.375rem, 0.3179rem + 0.2857vw, 0.5rem) !important; // 6px - 8px
+                padding: clamp(0.375rem, 0.3179rem + 0.2857vw, 0.5rem) !important;
             }
         }
 
         #message-content {
-            gap: clamp(0rem, -0.2286rem + 1.1429vw, 0.5rem) !important; // 0px - 8px
-            margin-left: clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; // 8px - 30px
+            gap: clamp(0rem, -0.2286rem + 1.1429vw, 0.5rem) !important; 
+            margin-left: clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; 
 
             .header {
-                gap: clamp(0rem, -0.3429rem + 1.7143vw, 0.75rem) !important; // 0px - 12px
+                gap: clamp(0rem, -0.3429rem + 1.7143vw, 0.75rem) !important; 
 
                 p {
-                    font-size: clamp(0.75rem, 0.6929rem + 0.2857vw, 0.875rem) !important; // 12px - 14px
+                    font-size: clamp(0.75rem, 0.6929rem + 0.2857vw, 0.875rem) !important;
                     margin-left: 4px;
                 }
             }
@@ -398,48 +408,48 @@ section {
     #intercation-more-btn {
         div {
             min-width: clamp(10.625rem, 9.7679rem + 4.2857vw, 12.5rem);
-            right: clamp(-7.5rem, -5.2143rem + -11.4286vw, -12.5rem) !important; // -150px - -200px
-            padding: clamp(0.25rem, 0.1357rem + 0.5714vw, 0.5rem) clamp(0.5rem, 0.3857rem + 0.5714vw, 0.75rem) !important; // 4px - 8px, 8px . 12px
+            right: clamp(-7.5rem, -5.2143rem + -11.4286vw, -12.5rem) !important; 
+            padding: clamp(0.25rem, 0.1357rem + 0.5714vw, 0.5rem) clamp(0.5rem, 0.3857rem + 0.5714vw, 0.75rem) !important;
             p {
-                font-size: clamp(0.875rem, 0.8179rem + 0.2857vw, 1rem) !important; // 14px - 16px
+                font-size: clamp(0.875rem, 0.8179rem + 0.2857vw, 1rem) !important;
             }
         }
     }
 
     #img-avatar {
-        width: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
-        height: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
-        min-width: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
-        min-height: clamp(3.125rem, 2.5536rem + 2.8571vw, 4.375rem) !important; // 50px - 70px;
+        width: clamp(2.5rem, 1.6429rem + 4.2857vw, 4.375rem) !important; 
+        height: clamp(2.5rem, 1.6429rem + 4.2857vw, 4.375rem) !important; 
+        min-width: clamp(2.5rem, 1.6429rem + 4.2857vw, 4.375rem) !important; 
+        min-height: clamp(2.5rem, 1.6429rem + 4.2857vw, 4.375rem) !important; 
     }
 
     .date-container {
-        padding: 0 clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; // 8px - 30px
+        padding: 0 clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; 
 
         div {
 
             &:nth-child(1) {
-                padding: clamp(0rem, -0.1429rem + 0.7143vw, 0.3125rem) clamp(0.625rem, 0.4821rem + 0.7143vw, 0.9375rem) !important; // 0px - 5px, 10px - 15px
-                font-size: clamp(0.75rem, 0.5786rem + 0.8571vw, 1.125rem) !important; // 12px - 18px
+                padding: clamp(0rem, -0.1429rem + 0.7143vw, 0.3125rem) clamp(0.625rem, 0.4821rem + 0.7143vw, 0.9375rem) !important;
+                font-size: clamp(0.75rem, 0.5786rem + 0.8571vw, 1.125rem) !important;
             }
         }
     }
 
     #message-text {
-        padding: clamp(0.625rem, 0.4821rem + 0.7143vw, 0.9375rem) !important; // 10px - 15px	
+        padding: clamp(0.625rem, 0.4821rem + 0.7143vw, 0.9375rem) !important;
 
         #text {
-            font-size: clamp(0.875rem, 0.8179rem + 0.2857vw, 1rem) !important; // 14px - 16px
+            font-size: clamp(0.875rem, 0.8179rem + 0.2857vw, 1rem) !important; 
         }
     }
 
     #answer-container {
         a {
-            font-size: clamp(0.875rem, 0.8179rem + 0.2857vw, 1rem) !important; // 15px - 18px
+            font-size: clamp(0.875rem, 0.8179rem + 0.2857vw, 1rem) !important;
         }
 
         p {
-            font-size: clamp(0.75rem, 0.6929rem + 0.2857vw, 0.875rem) !important; // 12px - 14px
+            font-size: clamp(0.75rem, 0.6929rem + 0.2857vw, 0.875rem) !important; 
             align-self: flex-start;
         }
     }
@@ -447,19 +457,19 @@ section {
     .message-from-you {
 
         .interaction {
-            left: clamp(0.3125rem, -1.5446rem + 9.2857vw, 4.375rem) !important; // 5px - 70px
+            left: clamp(0.3125rem, -1.5446rem + 9.2857vw, 4.375rem) !important;
             right: auto;
 
         }
 
         #message-content {
-            margin-right: clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; // 8px - 30px
+            margin-right: clamp(0.5rem, -0.1286rem + 3.1429vw, 1.875rem) !important; 
             margin-left: 0px !important;
         }
     }
 
     h6 {
-        font-size: clamp(1rem, 0.9429rem + 0.2857vw, 1.125rem) !important; // 16px - 18px 
+        font-size: clamp(1rem, 0.9429rem + 0.2857vw, 1.125rem) !important; 
         line-height: 20px;
     }
 }

@@ -11,13 +11,13 @@
                 <mat-icon class="tag-icon" fontIcon="tag"></mat-icon>
                 <h4>{{ messengerService.channel.title }}</h4>
                 <mat-icon fontIcon="expand_more"></mat-icon>
+                <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
+                    [cdkConnectedOverlayOpen]="editChannelIsOpen" [cdkConnectedOverlayHasBackdrop]="true"
+                    [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="editChannelIsOpen = false">
+                    <app-edit-channel (click)="closeEditChannel()"
+                        (closeOverlay)="editChannelIsOpen = false"></app-edit-channel>
+                </ng-template>
             </button>
-            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
-                [cdkConnectedOverlayOpen]="editChannelIsOpen" [cdkConnectedOverlayHasBackdrop]="true"
-                [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'" (backdropClick)="editChannelIsOpen = false">
-                <app-edit-channel (click)="closeEditChannel()"
-                    (closeOverlay)="editChannelIsOpen = false"></app-edit-channel>
-            </ng-template>
         </div>
         <div id="add-user-complete-container" *ngIf="messengerService.openChannel">
             <button
@@ -31,32 +31,33 @@
                         src="{{user.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'}}"
                         alt="" *ngIf="$index < 10">
                     <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}"
-                        *ngIf="$index == threadService.usersInChannel.length - 1 && $index > 10">+{{
+                        *ngIf="$index == threadService.usersInChannel.length - 1 && $index >= 10">+{{
                         threadService.usersInChannel.length - 10 }}</div>
                     <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 10" class="user-count">
                         {{threadService.usersInChannel.length}}</p>
-                    } @else if (viewportService.width < 1140) { <img
+                    } @else if (viewportService.width < 1140) { 
+                        <img
                         [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}"
                         src="{{user.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'}}"
                         alt="" *ngIf="$index < 4">
-                        <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}"
-                            *ngIf="$index == threadService.usersInChannel.length - 1 && $index > 10">+{{
+                        <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" class="more-user-count"
+                            *ngIf="$index == threadService.usersInChannel.length - 1 && $index >= 4">+{{
                             threadService.usersInChannel.length - 4 }}</div>
                         <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 4" class="user-count">
                             {{threadService.usersInChannel.length}}</p>
-                        }
-                        }
+                    }
+                    }
                 </div>
                 }@else if (messengerService.channel.title == 'Allgemein') {
                 <div>
                     @for (user of threadService.usersInChannel; track $index) {
                     <img [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}"
                         src="{{user.avatar || 'https://firebasestorage.googleapis.com/v0/b/dabubble-89d14.appspot.com/o/avatars%2Favatar-clean.png?alt=media&token=e32824ef-3240-4fa9-bc6c-a6f7b04d7b0a'}}"
-                        alt="" *ngIf="$index < 4">
-                    <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}"
-                        *ngIf="$index == threadService.usersInChannel.length - 1 && $index > 10">+{{
-                        threadService.usersInChannel.length - 4 }}</div>
-                    <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 4" class="user-count">
+                        alt="" *ngIf="$index < 2">
+                    <div [ngStyle]="{'margin-left.px': $index > 0 ? -10 : 0}" class="more-user-count"
+                        *ngIf="$index == threadService.usersInChannel.length - 1 && $index >= 2">+{{
+                        threadService.usersInChannel.length - 2 }}</div>
+                    <p *ngIf="$index == threadService.usersInChannel.length - 1 && $index < 2" class="user-count">
                         {{threadService.usersInChannel.length}}</p>
                     }
                 </div>
@@ -68,11 +69,12 @@
             <mat-icon *ngIf="viewportService.width <= 500"
                 (click)="this.messengerService.showAddPerson = !this.messengerService.showAddPerson; showAddPersonDialogDirect = false">group_add</mat-icon>
             }
-            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge"
+            <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigge" 
                 [cdkConnectedOverlayOpen]="this.messengerService.showAddPerson" [cdkConnectedOverlayHasBackdrop]="true"
                 [cdkConnectedOverlayBackdropClass]="'overlay-backdrop'"
                 (backdropClick)="this.messengerService.showAddPerson = false">
-                <app-add-person (closeOverlay)="this.messengerService.showAddPerson= false"
+                <app-add-person (closeOverlay)="this.messengerService.showAddPerson= false" [ngClass]="{'add-person-position-mobile': messengerService.channel.title !== 'Allgemein' && viewportService
+                .width <= 500, 'add-person-position-mobile-allgemein-channel': messengerService.channel.title == 'Allgemein' && viewportService.width <= 500}"
                     [addPersonView]="showAddPersonDialogDirect" [users]="threadService.usersInChannel"></app-add-person>
             </ng-template>
         </div>

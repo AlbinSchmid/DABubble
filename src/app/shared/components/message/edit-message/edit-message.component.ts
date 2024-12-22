@@ -26,29 +26,31 @@ import { ViewportService } from '../../../services/viewport.service';
 })
 export class EditMessageComponent implements OnInit {
   viewportService = inject(ViewportService);
+  firebase = inject(FirebaseMessengerService);
+  threadService = inject(ThreadService);
+  messengerService = inject(MessengerService);
+  messageParser = inject(MessageParserService);
 
   @Input() mentionedUsers: any[] = [];
   @Input() message = new Message;
   @Input() editAnswerMessage: boolean;
   @Input() sourceThread: boolean;
   @Output() closeEditMessage = new EventEmitter<boolean>();
-  showEdit = false;
-  showEmojiBoard = false;
-  messageParser = inject(MessageParserService);
-  messageText = '';
+
   messageItems: string[] = [];
 
+  showEdit = false;
+  showEmojiBoard = false;
+  messageText = '';
 
-  constructor(public firebase: FirebaseMessengerService, private threadService: ThreadService, public messengerService: MessengerService) {  
-  }
 
-/**
- * Angular lifecycle hook that is called after data-bound properties
- * of a directive are initialized. Invokes the getMessageText method
- * to parse and extract links and text from the current message content
- * when the component is initialized.
- */
-  ngOnInit() {
+  /**
+   * Angular lifecycle hook that is called after data-bound properties
+   * of a directive are initialized. Invokes the getMessageText method
+   * to parse and extract links and text from the current message content
+   * when the component is initialized.
+   */
+  ngOnInit(): void {
     this.getMessageText();
   }
 
@@ -59,10 +61,11 @@ export class EditMessageComponent implements OnInit {
    * extract links and text. It then calls the extractLinksAndText method
    * to process the parsed message content.
    */
-  getMessageText() {
+  getMessageText(): void {
     const parsedMessage = this.messageParser.parseMessage(this.message.content);
     this.extractLinksAndText(parsedMessage);
   }
+
 
   /**
    * Extracts links and text from a parsed message content.
@@ -73,19 +76,20 @@ export class EditMessageComponent implements OnInit {
    * the final message text.
    * @param text The parsed message content to extract links and text from.
    */
-  extractLinksAndText(text: string) {
+  extractLinksAndText(text: string): void {
     const anchorTagRegex = /<a\s+[^>]+>(.*?)<\/a>/g;
     let match;
     let lastIndex = 0;
     let messageText = '';
     while ((match = anchorTagRegex.exec(text)) !== null) {
       messageText += text.substring(lastIndex, match.index);
-      this.processAnchorTag(match[0]); 
-      lastIndex = anchorTagRegex.lastIndex; 
+      this.processAnchorTag(match[0]);
+      lastIndex = anchorTagRegex.lastIndex;
     }
-    this.messageText = messageText + text.substring(lastIndex).trim(); 
+    this.messageText = messageText + text.substring(lastIndex).trim();
     this.messengerService.editMessageContent = this.messageText;
   }
+
 
   /**
    * Processes an anchor tag by extracting the image URL and its file extension.
@@ -94,7 +98,7 @@ export class EditMessageComponent implements OnInit {
    * message items array. Otherwise, it does nothing.
    * @param currentTag The anchor tag to process.
    */
-  private processAnchorTag(currentTag: string) {
+  processAnchorTag(currentTag: string): void {
     const imageTagRegex = /<img\s+[^>]*src="([^"]+)"[^>]*>/g;
     const imageTagMatch = imageTagRegex.exec(currentTag);
     if (imageTagMatch) {
@@ -108,13 +112,14 @@ export class EditMessageComponent implements OnInit {
     }
   }
 
+
   /**
    * Toggles the emoji board visibility.
    *
    * If the emoji board is currently not visible, it sets its visibility to true.
    * If the emoji board is currently visible, it sets its visibility to false.
    */
-  closeOrOpenEmojisBoard() {
+  closeOrOpenEmojisBoard():void {
     if (!this.showEmojiBoard) {
       this.showEmojiBoard = true;
     } else {
@@ -122,16 +127,18 @@ export class EditMessageComponent implements OnInit {
     }
   }
 
-/**
- * Emits an event to close the edit message component.
- *
- * This function emits a boolean value indicating the visibility
- * state of the edit message component, which is used to close
- * the edit interface.
- */
-  closeEdit() {
+
+  /**
+   * Emits an event to close the edit message component.
+   *
+   * This function emits a boolean value indicating the visibility
+   * state of the edit message component, which is used to close
+   * the edit interface.
+   */
+  closeEdit(): void {
     this.closeEditMessage.emit(this.showEdit);
   }
+
 
   /**
    * Updates the message content with the edited text and images.
@@ -142,7 +149,7 @@ export class EditMessageComponent implements OnInit {
    * content. If the message is not an answer, it updates the message content.
    * Finally, it closes the edit message interface.
    */
-  checkWithMessageShouldUptade() {
+  checkWithMessageShouldUptade(): void {
     const imageTags = this.messageItems.map(item => item).join(' ');
     this.message.content = `${this.messengerService.editMessageContent} ${imageTags}`.trim();
     if (this.editAnswerMessage) {
@@ -155,12 +162,13 @@ export class EditMessageComponent implements OnInit {
     this.closeEdit();
   }
 
+
   /**
    * Deletes an image from the message items array.
    *
    * @param item The image string to delete from the message items array.
    */
-  deleteImage(item: string) {
+  deleteImage(item: string): void {
     const index = this.messageItems.indexOf(item);
     if (index > -1) {
       this.messageItems.splice(index, 1);

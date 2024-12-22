@@ -26,7 +26,7 @@ export class FilteredListComponent {
    * 
    * @param user - The user object to be added.
    */
-  addUser(user: UserInterface) {
+  addUser(user: UserInterface):void {
     this.userSelected.emit(user);
   }
 }

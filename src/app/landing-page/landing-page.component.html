@@ -1,4 +1,4 @@
-<section>
+<section [ngClass]="{'p-bottom-safari' : browserTypeOnTouchService.isSafari() && browserTypeOnTouchService.isTouch(), 'p-bottom130': browserTypeOnTouchService.isChrome() && browserTypeOnTouchService.isTouch()}">
   <app-start-animation *ngIf="showAnimation"></app-start-animation> 
   <div class="logo-section" >
     <div *ngIf="!showLogo" style="width: 300px; color: transparent;">Hallo</div>

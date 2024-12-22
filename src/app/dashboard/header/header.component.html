@@ -32,11 +32,11 @@
                     <div [ngClass]="{'status-busy-icon': userStatus == 'busy'}"></div>
                 </div>
                 <mat-icon fontIcon="expand_more" class="profile-menu-icon"></mat-icon>
+                <mat-menu #menu="matMenu" xPosition="before">
+                    <app-menu class="menu-contain" [(userStatus)]="userStatus" [(isProfileMenuOpen)]="isProfileMenuOpen"
+                        [(isUnderMenuOpen)]="isUnderMenuOpen" [(isOpenEditEditor)]="isOpenEditEditor"></app-menu>
+                </mat-menu>
             </div>
         </div>
-        <mat-menu #menu="matMenu" xPosition="before">
-            <app-menu class="menu-contain" [(userStatus)]="userStatus" [(isProfileMenuOpen)]="isProfileMenuOpen"
-                [(isUnderMenuOpen)]="isUnderMenuOpen" [(isOpenEditEditor)]="isOpenEditEditor"></app-menu>
-        </mat-menu>
     </div>
 </header>

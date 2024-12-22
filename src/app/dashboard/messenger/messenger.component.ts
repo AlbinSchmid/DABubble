@@ -59,12 +59,13 @@ export class MessengerComponent implements AfterViewInit {
   usersListAll: UserInterface[] = [];
   usersInChannel: any[] = [];
 
-  resizeObserver!: ResizeObserver;
   userListSubscription: any;
-  reversedMessge: any;
+
+  resizeObserver!: ResizeObserver;
   dateContent: string;
   dateTodayString: string;
   hoveredMessage: number;
+
   hoveredMenu = false;
   sourceThread = false;
   isEditChannelOpen = false;
@@ -81,7 +82,7 @@ export class MessengerComponent implements AfterViewInit {
    * Sets the scrollContainer in the messenger service to the ElementRef of the ViewChild with the name 'content'.
    * This is necessary because the ViewChild is not yet available in the constructor or ngOnInit.
    */
-  ngAfterViewInit() {
+  ngAfterViewInit():void {
     if (this.nameHeadline !== undefined) {
       this.resizeObserver = new ResizeObserver(() => this.checkTextStatus());
       this.resizeObserver.observe(this.nameHeadline.nativeElement);
@@ -93,7 +94,7 @@ export class MessengerComponent implements AfterViewInit {
   /**
    * Unsubscribes from the channel user list and the list of all users when the component is destroyed.
    */
-  ngOnDestoy() {
+  ngOnDestoy():void {
     this.userListSubscription;
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
@@ -104,7 +105,7 @@ export class MessengerComponent implements AfterViewInit {
   /**
    * Closes the edit channel dialog.
    */
-  closeEditChannel() {
+  closeEditChannel():void {
     this.editChannelIsOpen = false;
   }
 
@@ -114,7 +115,7 @@ export class MessengerComponent implements AfterViewInit {
    * If the text is not wrapped and the name has been shortened, it sets the name back to the full name.
    * @private
    */
-  checkTextStatus() {
+  checkTextStatus():void {
     if (this.nameHeadline !== undefined) {
       const element = this.nameHeadline.nativeElement;
       const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
@@ -136,7 +137,7 @@ export class MessengerComponent implements AfterViewInit {
    * Saves the current width of the window and sets a flag to indicate that the name has been shortened.
    * @private
    */
-  getTheShortTxtOfName() {
+  getTheShortTxtOfName():void {
     this.windowWith = this.viewportService.width;
     this.checkTextSenderName = true;
     this.messengerService.messageName = `${this.messengerService.getFirstWord(this.messengerService.user.username)}. ${this.messengerService.getSecondWordFirstLetter(this.messengerService.user.username)}`;
@@ -164,7 +165,7 @@ export class MessengerComponent implements AfterViewInit {
   /**
    * We controll if the interaction menu should be hide or not
    */
-  showOrHideMenu() {
+  showOrHideMenu():void {
     if (this.hoveredMenu == false) {
       this.hoveredMenu = true;
     } else {
@@ -176,7 +177,7 @@ export class MessengerComponent implements AfterViewInit {
   /**
    * Open the detail View of the channel or person
    */
-  openDialog() {
+  openDialog():void {
     this.messengerService.showMessageBtn = false;
     this.dialog.open(DetailPersonComponent, {
       data: {
@@ -195,7 +196,7 @@ export class MessengerComponent implements AfterViewInit {
    * Sets showAddPersonDialogDirect to true and toggles 
    * the showAddPerson state.
    */
-  openDialogAddPersonDirect() {
+  openDialogAddPersonDirect():void {
     this.showAddPersonDialogDirect = true;
     this.showAddPerson = !this.showAddPerson;
   }

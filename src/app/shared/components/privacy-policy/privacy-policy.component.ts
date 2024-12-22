@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { LogoComponent } from "../../../landing-page/landing-shared/logo/logo.component";
+import { BrowserTypeOnTouchService } from '../../services/browser-type-on-touch.service';
+import { CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-privacy-policy',
@@ -11,11 +14,11 @@ import { LogoComponent } from "../../../landing-page/landing-shared/logo/logo.co
     MatCardModule,
     RouterLink,
     MatIconModule,
-    LogoComponent
-],
+    CommonModule,
+  ],
   templateUrl: './privacy-policy.component.html',
   styleUrl: './privacy-policy.component.scss'
 })
 export class PrivacyPolicyComponent {
-
+  browserTypeOnTouchService = inject(BrowserTypeOnTouchService);
 }

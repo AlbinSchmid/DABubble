@@ -34,7 +34,6 @@ export class ThreadComponent implements AfterViewInit {
   messengerService = inject(MessengerService)
   parser = inject(MessageParserService);
 
-
   @ViewChild('content') scrollContainer: ElementRef;
   @ViewChild('headerName') headerName: ElementRef;
   @ViewChild('messageToReplayName') messageToReplayName: ElementRef;
@@ -43,6 +42,7 @@ export class ThreadComponent implements AfterViewInit {
   resizeObserverMessage!: ResizeObserver;
   windowWithMessage: number;
   windowWith: number;
+
   isTextWrapped = false;
   isTextWrappedMessage = false;
   checkTextSenderName = false;
@@ -52,7 +52,6 @@ export class ThreadComponent implements AfterViewInit {
   sourceThread = true;
 
 
-
   /**
    * After the view is initialized, this function assigns the scroll container
    * to the thread service and sets up resize observers to monitor changes in
@@ -60,9 +59,7 @@ export class ThreadComponent implements AfterViewInit {
    * These observers trigger the `checkTextStatusHeader` and `checkTextStatus`
    * methods respectively to handle any necessary layout adjustments.
    */
-  ngAfterViewInit() {
-    console.log('dsahfjkdsah');
-    
+  ngAfterViewInit():void {
     this.threadService.scrollContainer = this.scrollContainer;
     this.resizeObserverMessage = new ResizeObserver(() => this.checkTextStatusHeader());
     this.resizeObserverHeader = new ResizeObserver(() => this.checkTextStatus());
@@ -76,7 +73,7 @@ export class ThreadComponent implements AfterViewInit {
    * If the window size is greater or equal to 1550px, the thread side nav is closed and the messenger component is reset.
    * If the window size is less than 1550px, the thread side nav is closed, the messenger component is reset and opened.
    */
-  closeThread() {
+  closeThread():void {
     if (this.viewportService.width >= 1550) {
       this.threadService.showThreadSideNav = false;
       this.messengerService.showDate1Count = false;
@@ -97,7 +94,7 @@ export class ThreadComponent implements AfterViewInit {
    * If the text is not wrapped and the name has been shortened, it sets the name back to the full name.
    * @private
    */
-  checkTextStatusHeader() {
+  checkTextStatusHeader():void {
     const element = this.messageToReplayName.nativeElement;
     const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
     const headerNameHeight = element.offsetHeight;
@@ -119,7 +116,7 @@ export class ThreadComponent implements AfterViewInit {
    * and marks that the name has been shortened.
    * @private
    */
-  getShortTextOfNameHeader() {
+  getShortTextOfNameHeader():void {
     this.windowWithMessage = this.viewportService.width;
     this.checkTextSenderNameMessage = true;
     this.threadService.messageToReplaySenderName = `${this.messengerService.getFirstWord(this.threadService.messageToReplyTo.senderName)}. ${this.messengerService.getSecondWordFirstLetter(this.threadService.messageToReplyTo.senderName)}`;
@@ -134,7 +131,7 @@ export class ThreadComponent implements AfterViewInit {
    * and marks that the name has been shortened.
    * @private
    */
-  getShortTextOfName() {
+  getShortTextOfName():void {
     this.windowWith = this.viewportService.width;
     this.checkTextSenderName = true;
     this.threadService.headerSenderName = `${this.messengerService.getFirstWord(this.threadService.senderUser[0].username)}. ${this.messengerService.getSecondWordFirstLetter(this.threadService.senderUser[0].username)}`;
@@ -146,7 +143,7 @@ export class ThreadComponent implements AfterViewInit {
    * If the text is not wrapped and the name has been shortened, it sets the name back to the full name.
    * @private
    */
-  checkTextStatus() {
+  checkTextStatus():void {
     const element = this.headerName.nativeElement;
     const lineHeight = parseFloat(getComputedStyle(element).lineHeight || '0');
     const headerNameHeight = element.offsetHeight;
@@ -165,7 +162,7 @@ export class ThreadComponent implements AfterViewInit {
    * Disconnects the ResizeObservers for the header and the message.
    * Also parses the message content for the message parser.
    */
-  ngOnDestroy() {
+  ngOnDestroy():void {
     this.parser.parseMessage(this.firebaseMessenger.content);
     if (this.resizeObserverHeader) {
       this.resizeObserverHeader.disconnect();

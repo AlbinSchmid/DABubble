@@ -28,7 +28,7 @@
             ({{ getDuplicateChannelsNumber(channel) }})
         </span>
     </button>
-    <button (click)="openDialog()" class="add-channel-btn"
+    <button (click)="openDialog()" class="add-channel-btn" *ngIf="authService.currentUserSig()?.username !== 'Neuer Gast'"
         [ngStyle]="{'animation-delay': getAnimationDelayAddChannel() + 's'}"
         [ngClass]="{'blob-in': this.channelAnimationService.isChannelOpen, 'blob-out': !this.channelAnimationService.isChannelOpen}">
         <mat-icon class="add-channel-icon" fontIcon="maps_ugc"></mat-icon>Channel hinzufügen

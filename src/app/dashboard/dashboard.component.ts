@@ -56,8 +56,12 @@ export class DashboardComponent {
   errorMessage: string | null = null;
 
 
-  constructor() { }
-
+  /**
+   * Lifecycle hook that is called after the component's data-bound properties are initialized.
+   * Subscribes to the authentication state changes to handle user login and logout.
+   * If a user is authenticated, the handleUserLogin method is called, otherwise, the current user is set to null.
+   * Additionally, initiates a user search process.
+   */
   ngOnInit(): void {
     onAuthStateChanged(this.authService.firebaseAuth, (user) => {
       if (user) {
@@ -66,6 +70,16 @@ export class DashboardComponent {
         this.authService.setCurrentUser(null);
       }
     });
+    this.searchUser();
+  }
+
+
+  /**
+   * Listens to the user observable and sets the userFound flag as soon as a user is found.
+   * If no user is found within 5 seconds, the userLoaded flag is set to false.
+   * If an error occurs, the error is handled with a delay.
+   */
+  searchUser(): void {
     this.authService.user$
       .pipe(
         timeout(5000), takeUntil(this.userFound$)
@@ -82,15 +96,17 @@ export class DashboardComponent {
       );
   }
 
+
   /**
    * Sets the userLoaded flag to true and completes the userFound$ observable
    * to indicate that the user stream has been loaded and observed.
    */
-  setUserFound() {
+  setUserFound(): void {
     this.isUserLoaded = true;
     this.userFound$.next();
     this.userFound$.complete();
   }
+
 
   /**
    * Handles errors that occur during the authentication and user loading process.
@@ -99,7 +115,7 @@ export class DashboardComponent {
    * the home page and shows an alert with the error message.
    * @param {any} err The error object to be handled.
    */
-  handleErrorWithDelay(err: any) {
+  handleErrorWithDelay(err: any): void {
     const errorMessage = err.name === 'TimeoutError' ? 'Zeitüberschreitung, versuchen Sie es bitte erneut!' : 'Ein unerwarteter Fehler ist aufgetreten: ' + err.message;
     this.errorMessage = errorMessage;
     timer(2000).subscribe(() => {
@@ -107,6 +123,7 @@ export class DashboardComponent {
       this.router.navigate(['']);
     });
   }
+
 
   /**
    * Toggles the side navigation drawer and updates its open/close state.
@@ -116,6 +133,7 @@ export class DashboardComponent {
     setTimeout(() => this.isSideNavOpen = !this.isSideNavOpen, 100);
   }
 
+
   /**
    * OnDestroy lifecycle hook. Completes the userFound subject to clean up resources.
    */
@@ -123,8 +141,17 @@ export class DashboardComponent {
     this.userFound$.complete();
   }
 
+
   @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  /*************  ✨ Codeium Command ⭐  *************/
+  /**
+   * Reinitializes the current user based on the current user authenticated with the Firebase Authentication service
+   * whenever the window is resized. This is necessary because the user's status is not updated automatically
+   * when the user's window size changes.
+   * @param event The window resize event.
+  */
+  /******  813f4125-627b-475c-9822-d85353630a86  *******/
+  onResize(event: any): void {
     this.authService.reinitializeUser();
   }
 }

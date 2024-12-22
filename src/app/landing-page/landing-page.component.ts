@@ -8,6 +8,7 @@ import { SessionService } from './services/session.service';
 import { LogoComponent } from "./landing-shared/logo/logo.component";
 import { LandingLoginRegisterButtonComponent } from './landing-login-register-button/landing-login-register-button.component';
 import { AuthserviceService } from './services/authservice.service';
+import { BrowserTypeOnTouchService } from '../shared/services/browser-type-on-touch.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -20,7 +21,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
   showAnimation: boolean = true; 
   showLogo: boolean = false; 
   authService = inject(AuthserviceService);
-  constructor(private sessionService: SessionService) { }
+  browserTypeOnTouchService = inject(BrowserTypeOnTouchService); 
+   constructor(private sessionService: SessionService) { }
 
   /**
    * Sets the showAnimation and showLogo variables based on whether the user is

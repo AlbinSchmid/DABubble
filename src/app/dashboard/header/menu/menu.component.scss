@@ -67,7 +67,6 @@ button {
 .log-out-btn {
     border: none;
     background-color: transparent;
-    font-size: 24px !important;
     font-weight: 600 !important;
     line-height: 32.74px !important;
     width: 100%;
@@ -218,7 +217,6 @@ mat-icon {
     flex-direction: column;
     gap: 30px;
     width: 100vw;
-    height: 100vh;
     max-width: 215px;
     max-height: 239px;
     padding: 15px 10px 15px 10px;
@@ -243,15 +241,10 @@ mat-icon {
 
     img {
         object-fit: cover;
-        object-position: top;
+        object-position: center;
         width: 200px;
         height: 200px;
         border-radius: 100%;
-
-        @media(max-width:545px) {
-            width: 160px;
-            height: 160px;
-        }
     }
 }
 
@@ -292,6 +285,7 @@ mat-icon {
 
     div {
         display: flex;
+        align-items: center;
         gap: 15px;
     }
 
@@ -340,10 +334,10 @@ mat-icon {
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        width: 40px !important;
-        height: 40px !important;
+        width: 35px !important;
+        height: 35px !important;
         color: black !important;
-        font-size: 30px !important;
+        font-size: 20px !important;
         overflow: visible !important;
         font-weight: 100 !important;
         background-color: #ECEEFE !important;
@@ -410,7 +404,7 @@ mat-icon {
 }
 
 .email-icon {
-    font-size: 28px !important;
+    font-size: 28px;
     pointer-events: none !important;
     border-radius: 0px !important;
 }
@@ -452,7 +446,7 @@ mat-icon {
     text-align: left;
 
     @media(max-width:460px) {
-        padding-left: 45px;
+        padding-left: 35px;
     }
 }
 
@@ -479,4 +473,56 @@ mat-icon {
         width: 62px;
         border-radius: 23px;
     }
+}
+
+@media screen and (max-width: 1020px) {
+    .profile-menu-top {
+        span {
+            font-size: clamp(1.25rem, 1.1357rem + 0.5714vw, 1.5rem); // 20px - 24px
+        }
+    }
+
+    .back-to-menu {
+        font-size: clamp(1.25rem, 1.1357rem + 0.5714vw, 1.5rem); // 20px - 24px
+    }
+
+    .profile-menu-contain {
+        gap: clamp(1rem, 0.6rem + 2vw, 1.875rem); // 16px - 30px
+        img {
+            width: clamp(6.25rem, 3.3929rem + 14.2857vw, 12.5rem); // 100px - 200px
+            height: clamp(6.25rem, 3.3929rem + 14.2857vw, 12.5rem); // 100px - 200px
+        }
+    }
+
+    .user-name {
+        font-size: clamp(1.25rem, 0.9071rem + 1.7143vw, 2rem); // 20px - 32px
+    }
+
+    .email-icon {
+        font-size: clamp(1.25rem, 1.0214rem + 1.1429vw, 1.75rem); // 20px - 28px
+    }
+
+    .email-menu-contain {
+        gap: clamp(0.625rem, 0.3393rem + 1.4286vw, 1.25rem); // 10px - 20px
+        .email-wrapper {
+            gap: clamp(0.625rem, 0.3393rem + 1.4286vw, 1.25rem); // 10px - 20px
+        }
+
+        div {
+            .email-title {
+                font-size: clamp(1rem, 0.8857rem + 0.5714vw, 1.25rem); // 16px - 20px
+            }
+        }
+    }
+
+    .user-email {
+        font-size: clamp(1rem, 0.9429rem + 0.2857vw, 1.125rem); // 16px - 18px
+    }
+
+    // bis 460px
+
+    button {
+        font-size: clamp(1.25rem, 1.1357rem + 0.5714vw, 1.5rem); // 20px - 24px
+    }
+
 }

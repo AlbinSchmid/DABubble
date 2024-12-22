@@ -1,11 +1,18 @@
+$purple: #444DF2;
+
+@mixin d-flex($align: center, $justify: center, $direction: row, $display: flex) {
+    display: $display;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+}
+
 * {
     user-select: none !important;
     box-sizing: border-box;
     margin: 0;
     font-family: 'Nunito', sans-serif !important;
 }
-
-$purple: #444DF2;
 
 html,
 body {
@@ -33,15 +40,14 @@ html {
 }
 
 button {
-
     &.default {
         overflow: hidden !important;
-        font-size: 18px !important;
+        font-size: 18px;
         font-weight: 700 !important;
         line-height: 24.55px !important;
         transition: background-color 140ms ease, color 140ms ease !important;
-        min-width: 116px !important;
-        min-height: 49px !important;
+        min-width: 116px;
+        min-height: 49px;
     }
 
     &.primary {
@@ -83,9 +89,9 @@ button {
 
 mat-icon {
     display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    border-radius: 100% !important;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
     font-family: 'Material Icons Outlined' !important;
 
     &:hover {
@@ -166,43 +172,43 @@ mat-card {
     transition: background-color 130ms ease-in-out, opacity 130ms ease-in-out, visibility 0s 130ms;
 }
 
-.cdk-overlay-backdrop {
-    opacity: 1;
-    visibility: visible;
-    transition: background-color 130ms ease-in-out, opacity 130ms ease-in-out, visibility 0s 130ms;
-}
+// .cdk-overlay-backdrop {
+//     opacity: 1;
+//     visibility: visible;
+//     transition: background-color 130ms ease-in-out, opacity 130ms ease-in-out, visibility 0s 130ms;
+// }
 
-.cdk-overlay-connected-position-bounding-box {
-    top: 112px !important;
+// .cdk-overlay-connected-position-bounding-box {
+//     top: 112px !important;
 
-    @media(max-width:460px) {
-        top: unset !important;
-        right: 0 !important;
-        left: 0 !important;
-        bottom: 0 !important;
-        width: 100%;
-    }
-}
+//     @media(max-width:460px) {
+//         top: unset !important;
+//         right: 0 !important;
+//         left: 0 !important;
+//         bottom: 0 !important;
+//         width: 100%;
+//     }
+// }
 
 .mat-mdc-dialog-container {
     min-width: 100px !important;
     max-width: none !important;
 }
 
-.cdk-overlay-pane {
+// .cdk-overlay-pane {
 
-    @media(max-width:460px) {
-        // width: 100vw !important;
-        top: unset !important;
-        bottom: 0 !important;
-        border-radius: 30px;
-        box-shadow: 0px -3px 10px 0px #00000033;
-    }
+//     @media(max-width:460px) {
+//         // width: 100vw !important;
+//         top: unset !important;
+//         bottom: 0 !important;
+//         border-radius: 30px;
+//         box-shadow: 0px -3px 10px 0px #00000033;
+//     }
 
-    .mat-mdc-dialog-panel {
-        max-width: none !important;
-    }
-}
+//     .mat-mdc-dialog-panel {
+//         max-width: none !important;
+//     }
+// }
 
 .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: none !important;
@@ -498,6 +504,37 @@ mat-card {
 
 .openMobileMenu {
     animation: openMobileMenu 0.15s ease-out forwards;
+}
+
+.p-bottom130 {
+    padding-bottom: 100px !important;
+}
+
+.p-bottom-safari {
+    padding-bottom: 97px !important;
+}
+
+@media screen and (max-width: 1020px) {
+
+    .status-online-txt,
+    .status-offline-txt,
+    .status-busy-txt {
+        font-size: clamp(1.0625rem, 0.9768rem + 0.4286vw, 1.25rem); // 16px - 20px
+    }
+
+    .status-busy-icon,
+    .status-offline-icon,
+    .status-online-icon {
+        width: clamp(0.75rem, 0.6357rem + 0.5714vw, 1rem); // 12px - 16px
+        height: clamp(0.75rem, 0.6357rem + 0.5714vw, 1rem); // 12px - 16px
+    }
+}
+
+@media screen and (max-width: 460px) {
+    .openMobileMenu {
+        bottom: 0 !important;
+        top: auto !important;
+    }
 }
 
 .closeMobileMenu {

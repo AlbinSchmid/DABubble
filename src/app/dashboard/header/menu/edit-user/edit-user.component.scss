@@ -3,13 +3,14 @@ button {
     pointer-events: all;
 }
 
-button {
-    height: 49px;
-}
-
 mat-icon {
     font-size: 28px !important;
     border-radius: 0px !important;
+}
+
+button {
+    padding: 23px 30px;
+    font-size: 18px;
 }
 
 span {
@@ -23,7 +24,6 @@ input {
     background-color: transparent;
     width: 100%;
     max-width: 420px;
-    height: 52px;
     font-size: 18px;
     color: #686868;
     border: 1px solid #ADB0D9;
@@ -79,14 +79,6 @@ input {
     justify-content: center;
     width: 100%;
     gap: 32px;
-
-    .secondary {
-        width: 141px;
-    }
-
-    .primary {
-        width: 133px;
-    }
 }
 
 .error-container {
@@ -117,5 +109,26 @@ input {
 
     100% {
         transform: translateX(0);
+    }
+}
+
+@media screen and (max-width: 1020px) { 
+    span {
+        font-size: clamp(1.125rem, 1.0679rem + 0.2857vw, 1.25rem);  // 18px - 20px
+    }
+
+    mat-icon {
+        font-size: clamp(1.375rem, 1.2036rem + 0.8571vw, 1.75rem); // 22px - 28px
+    }
+
+    input {
+        font-size: clamp(0.875rem, 0.7607rem + 0.5714vw, 1.125rem); // 14px - 18px
+        padding: clamp(0.625rem, 0.4821rem + 0.7143vw, 0.9375rem) clamp(0.9375rem, 0.7946rem + 0.7143vw, 1.25rem);; // 10px - 15px, 15px - 20px
+    } 
+
+    button {
+        font-size: clamp(0.875rem, 0.7607rem + 0.5714vw, 1.125rem); // 14px - 18px
+        padding: clamp(1rem, 0.8rem + 1vw, 1.4375rem) clamp(1.125rem, 0.7821rem + 1.7143vw, 1.875rem); // 16px - 23px, 18px - 30px
+
     }
 }

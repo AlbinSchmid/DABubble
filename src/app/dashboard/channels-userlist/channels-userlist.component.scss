@@ -1,3 +1,5 @@
+
+
 mat-card {
     display: flex;
     flex-direction: column;
@@ -6,20 +8,17 @@ mat-card {
     height: 100%;
     padding: 32px 30px 32px 30px;
     color: black;
+    background-color: white;
+    border-radius: 25px;
+    // @media(max-width:1020px) {
+    //     align-items: center;
+    //     width: 100%;
+    //     height: 100%;
+    // }
 
-    @media(max-width:1020px) {
-        align-items: center;
-        width: 100%;
-        height: 100%;
-    }
-
-    @media(max-width:460px) {
-        padding: 16px;
-    }
-}
-
-mat-card-content {
-    padding: 0 !important;
+    // @media(max-width:460px) {
+    //     padding: 16px;
+    // }
 }
 
 .devspace-header {
@@ -307,6 +306,15 @@ app-channel-list {
 }
 
 @media screen and (max-width: 1020px) {
+
+    .arrow-tab-title-contain {
+        gap: clamp(0rem, -0.4286rem + 2.1429vw, 0.9375rem) !important;
+    }
+
+    mat-card {
+        width: 100%;
+    }
+
     .channels-title-contain {
         span {
             font-size: clamp(1.125rem, 1.0679rem + 0.2857vw, 1.25rem); // 18px - 20px

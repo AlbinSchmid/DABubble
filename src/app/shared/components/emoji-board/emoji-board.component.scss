@@ -54,10 +54,10 @@ section {
 
 @media screen and (max-width: 1020px) {
     section {
-        width: clamp(15.625rem, 14.1964rem + 7.1429vw, 18.75rem) !important; // 250px - 300px
+        width: clamp(15.625rem, 14.1964rem + 7.1429vw, 18.75rem) !important;
     }
 
     .emoji {
-        padding: clamp(0.125rem, 0.0393rem + 0.4286vw, 0.3125rem) !important; // 2px - 5px
+        padding: clamp(0.125rem, 0.0393rem + 0.4286vw, 0.3125rem) !important;
     }
 }

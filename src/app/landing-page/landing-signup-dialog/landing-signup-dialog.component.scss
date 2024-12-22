@@ -1,7 +1,6 @@
 @import '../shared-landing-styles.scss';
 
 
-
 section{
   width: 100vw;
   max-width: 100%;
@@ -105,6 +104,24 @@ label a{
 .bg-white{
   background-color: white;
   padding-left: 24px;
+}
+
+@media screen and (max-width: 650px) {
+  app-logo {
+    height: clamp(2.5rem, 1.2879rem + 6.0606vw, 3.75rem);
+  }
+
+  h1 {
+    font-size: clamp(1.25rem, 1.0076rem + 1.2121vw, 1.5rem) !important;
+  }
+
+  .arrow-back {
+    font-size: clamp(1.25rem, 0.5227rem + 3.6364vw, 2rem);
+  }
+
+  .error-message {
+    top: clamp(2.8125rem, 2.0852rem + 3.6364vw, 3.5625rem);
+ }
 }
 
 @media (max-width: 500px){

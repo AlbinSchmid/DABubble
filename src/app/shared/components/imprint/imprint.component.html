@@ -1,33 +1,68 @@
-<section>
-    <app-logo></app-logo>
-    <mat-card appearance="outlined">
-        <div>
-            <mat-icon fontIcon="arrow_back" [routerLink]="['..']"></mat-icon>
-        </div>
-        <mat-card-content>
-            <div class="imprint-contain">
-                <h1>Impressum</h1>
-                <div class="imprint-info">
-                    <p>Ivan Paul <br />
-                        Hauptstraße 30 <br />
-                        4222 Langenstein
-                    </p>
-                    <p>Albin Schmid <br />
-                        Oberried 60 <br />
-                        6444 Längenfeld
-                    </p>
-                    <p>René Theis <br />
-                        Forstweg 23b <br />
-                        28850 Norderstedt
-                    </p>
-                </div>
-            </div>
-            <div class="contact-contain">
-                <h2>Contact:</h2>
-                <a href="mailto:info&#64;paul-ivan.com">Email: info&#64;paul-ivan.com</a>
-                <a href="mailto:schmidalbin15&#64;gmail.com">Email: schmidalbin15&#64;gmail.com</a>
-                <a href="mailto:contact&#64;rene-theis.de">Email: contact&#64;rene-theis.de</a>
-            </div>
-        </mat-card-content>
-    </mat-card>
+<section [ngClass]="{'p-bottom-safari' : browserTypeOnTouchService.isSafari() && browserTypeOnTouchService.isTouch(), 'p-bottom130': browserTypeOnTouchService.isChrome() && browserTypeOnTouchService.isTouch()}">
+    <header>
+        <img src="assets/img/logo-with-text.png" alt="logo">
+        <mat-icon fontIcon="arrow_back" [routerLink]="['..']"></mat-icon>
+    </header>
+    <div class="content">
+        <h1>Impressum</h1>
+        <h5>Informationen und Offenlegung gemäß §5 (1) ECG, § 25 MedienG, § 63 GewO und § 14 UGB</h5>
+        <span [ngClass]="{'flex-direction-column': viewportService.width < 600}">
+            <h6>Webseitenbetreiber:</h6>
+            <p>Albin Schmid, Ivan Paul und René Theis</p>
+        </span>
+        <span>
+            <h6>Anschrift:</h6>
+            <p>Oberried 60, 6444 Längenfeld</p>
+        </span>
+        <span class="flex-direction-column">
+            <h6>Kontaktdaten Albin Schmid:</h6>
+            <p>Telefon: <a href="tel:+4369911345685">+49 (0) 699 113456 85</a> <br> E-Mail: <a
+                    href="mailto:webdeveloper&#64;albin-schmid.com">webdeveloper&#64;albin-schmid.com</a></p>
+        </span>
+        <span class="flex-direction-column">
+            <h6>Kontaktdaten Ivan Paul:</h6>
+            <p>E-Mail: <a href="mailto:info&#64;albin-schmid.com">info&#64;paul-ivan.com</a></p>
+        </span>
+        <span class="flex-direction-column">
+            <h6>Kontaktdaten Rene Theis:</h6>
+            <p>E-Mail: <a href="mailto:contact&#64;albin-schmid.com">contact&#64;rene-theis.com</a></p>
+        </span>
+        <span [ngClass]="{'flex-direction-column': viewportService.width < 600}">
+            <h6>Anwendbare Rechtsvorschrift:</h6>
+            <a href="https://www.ris.bka.gv.at/">www.ris.bka.gv.at</a>
+        </span>
+        <span class="flex-direction-column">
+            <h6>Online Streitbeilegung:</h6>
+            <p>Verbraucher, welche in Österreich oder in einem sonstigen Vertragsstaat der ODR-VO niedergelassen sind,
+                haben die Möglichkeit Probleme bezüglich dem entgeltlichen Kauf von Waren oder Dienstleistungen im
+                Rahmen einer Online-Streitbeilegung (nach OS, AStG) zu lösen. Die Europäische Kommission stellt eine
+                Plattform hierfür bereit: <a
+                    href="https://ec.europa.eu/consumers/odr">https://ec.europa.eu/consumers/odr</a>
+            </p>
+        </span>
+        <span class="flex-direction-column">
+            <h6>Urheberrecht:</h6>
+            <p>Die Inhalte dieser Webseite unterliegen, soweit dies rechtlich möglich ist, diversen Schutzrechten (z.B
+                dem Urheberrecht). Jegliche Verwendung/Verbreitung von bereitgestelltem Material, welche
+                urheberrechtlich untersagt ist, bedarf schriftlicher Zustimmung des Webseitenbetreibers.
+            </p>
+        </span>
+        <span class="flex-direction-column">
+            <h6>Haftungsausschluss:</h6>
+            <p>Trotz sorgfältiger inhaltlicher Kontrolle übernimmt der Webseitenbetreiber dieser Webseite keine Haftung
+                für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber
+                verantwortlich. Sollten Sie dennoch auf ausgehende Links aufmerksam werden, welche auf eine Webseite mit
+                rechtswidriger Tätigkeit/Information verweisen, ersuchen wir um dementsprechenden Hinweis, um diese nach
+                § 17 Abs. 2 ECG umgehend zu entfernen.
+                Die Urheberrechte Dritter werden vom Betreiber dieser Webseite mit größter Sorgfalt beachtet. Sollten
+                Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden
+                Hinweis. Bei Bekanntwerden derartiger Rechtsverletzungen werden wir den betroffenen Inhalt umgehend
+                entfernen.
+            </p>
+        </span>
+        <span>
+            <h6>Quelle:</h6>
+            <a href="https://www.fairesrecht.at/kostenlos-impressum-erstellen-generator.php">Impressum Generator Österreich</a>
+        </span>
+    </div>
 </section>

@@ -55,6 +55,9 @@ export class MenuComponent {
   closeThreadAndMessenger(): void {
     this.messengerService.showMessenger = false;
     this.threadService.showThread = false;
+    this.threadService.showThreadSideNav = false;
+    this.messengerService.openNewMessage = false;
+    this.messengerService.openMessenger = false;
   }
 
   /**
